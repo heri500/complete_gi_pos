@@ -1,0 +1,2156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6fe2c211-812b-4cf4-9fad-ff907f8ba638" name="Default" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
+      <file leaf-file-name="server_processing.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="462">
+              <caret line="2193" column="35" lean-forward="false" selection-start-line="2193" selection-start-column="29" selection-end-line="2193" selection-end-column="35" />
+              <folding>
+                <marker date="1538268739830" expanded="true" signature="4525:4565" ph="SELECT COUNT... pelanggan" />
+                <marker date="1538268739830" expanded="true" signature="12042:12078" ph="SELECT COUNT... product" />
+                <marker date="1538268739830" expanded="true" signature="18666:18747" ph="SELECT COUNT... penjualan" />
+                <marker date="1538268739830" expanded="true" signature="18843:18943" ph="SELECT COUNT... penjualan" />
+                <marker date="1538268739830" expanded="true" signature="24502:24695" ph="SELECT COUNT... detailpenjualan" />
+                <marker date="1538268739830" expanded="true" signature="28410:28755" ph="SELECT COUNT... detailpenjualan" />
+                <marker date="1538268739830" expanded="true" signature="34667:34758" ph="SELECT COUNT... titipanlaundry" />
+                <marker date="1538268739830" expanded="true" signature="42041:42114" ph="SELECT COUNT... customer_order" />
+                <marker date="1538268739830" expanded="true" signature="44748:44793" ph="SELECT COUNT... cms_kategoripengeluaran" />
+                <marker date="1538268739830" expanded="true" signature="48647:48684" ph="SELECT COUNT... cms_pengeluaran" />
+                <marker date="1538268739830" expanded="true" signature="52456:52491" ph="SELECT COUNT... cms_pemasukan" />
+                <marker date="1538268739830" expanded="true" signature="54414:54442" ph="SELECT COUNT... " />
+                <marker date="1538268739830" expanded="true" signature="56421:56462" ph="SELECT COUNT... detailcustomerorder" />
+                <marker date="1538268739830" expanded="true" signature="56848:57076" ph="SELECT idpro... product" />
+                <marker date="1538268739830" expanded="true" signature="57462:57543" ph="SELECT besar... diskonkategori" />
+                <marker date="1538268739830" expanded="true" signature="58302:58518" ph="SELECT idpro... product" />
+                <marker date="1538268739830" expanded="true" signature="58895:58976" ph="SELECT besar... diskonkategori" />
+                <marker date="1538268739830" expanded="true" signature="61722:61756" ph="SELECT COUNT... " />
+                <marker date="1538268739830" expanded="true" signature="64022:64065" ph="SELECT COUNT... detailpenjualan" />
+                <marker date="1538268739830" expanded="true" signature="64421:64488" ph="SELECT idkat... kategori" />
+                <marker date="1538268739830" expanded="true" signature="64788:65111" ph="SELECT idpro... product" />
+                <marker date="1538268739830" expanded="true" signature="65155:65339" ph="SELECT idpro... product" />
+                <marker date="1538268739830" expanded="true" signature="65592:65673" ph="SELECT besar... diskonkategori" />
+                <marker date="1538268739830" expanded="true" signature="66125:66224" ph="SELECT idpro... product" />
+                <marker date="1538268739830" expanded="true" signature="66471:66552" ph="SELECT besar... diskonkategori" />
+                <marker date="1538268739830" expanded="true" signature="66950:67009" ph="SELECT id,ba... meja" />
+                <marker date="1538268739830" expanded="true" signature="67182:67353" ph="SELECT idpro... product" />
+                <marker date="1538268739830" expanded="true" signature="67600:67681" ph="SELECT besar... diskonkategori" />
+                <marker date="1538268739830" expanded="true" signature="70161:70424" ph="INSERT INTO customer_order... " />
+                <marker date="1538268739830" expanded="true" signature="70665:70712" ph="SELECT id FR... customer_order" />
+                <marker date="1538268739830" expanded="true" signature="71312:71544" ph="INSERT INTO detailcustomerorder... " />
+                <marker date="1538268739830" expanded="true" signature="73587:73642" ph="SELECT idkat... kategori" />
+                <marker date="1538268739830" expanded="true" signature="73848:73897" ph="SELECT idkat... product" />
+                <marker date="1538268739830" expanded="true" signature="74094:74143" ph="SELECT idkat... product" />
+                <marker date="1538268739830" expanded="true" signature="74231:74318" ph="SELECT idsub... subkategori" />
+                <marker date="1538268739830" expanded="true" signature="74545:74597" ph="SELECT idsub... product" />
+                <marker date="1538268739830" expanded="true" signature="74797:74863" ph="SELECT id, k... grup_menu" />
+                <marker date="1538268739830" expanded="true" signature="75059:75110" ph="SELECT id_gr... product" />
+                <marker date="1538268739830" expanded="true" signature="75383:75438" ph="SELECT uid F... cms_users" />
+                <marker date="1538268739830" expanded="true" signature="75698:75739" ph="SELECT satua... satuan" />
+                <marker date="1538268739830" expanded="true" signature="75912:75957" ph="SELECT satua... product" />
+                <marker date="1538268739830" expanded="true" signature="79564:79623" ph="SELECT idsup... supplier" />
+                <marker date="1538268739830" expanded="true" signature="79806:79864" ph="SELECT idsup... product_supplier" />
+                <marker date="1538268739830" expanded="true" signature="89051:89132" ph="SELECT COUNT... pembelian" />
+                <marker date="1538268739830" expanded="true" signature="89297:89396" ph="SELECT COUNT... pembelian" />
+                <marker date="1538268739830" expanded="true" signature="94885:95078" ph="SELECT COUNT... detailpembelian" />
+                <marker date="1538268739830" expanded="true" signature="97046:97080" ph="SELECT COUNT... " />
+                <marker date="1538268739830" expanded="true" signature="99539:99582" ph="SELECT COUNT... detailpembelian" />
+                <marker date="1538268739830" expanded="true" signature="102108:102163" ph="SELECT uid F... cms_users" />
+                <marker date="1538268739830" expanded="true" signature="102358:102406" ph="SELECT timez... cms_users" />
+                <marker date="1538268739830" expanded="true" signature="102898:102965" ph="SELECT idpen... penjualan" />
+                <marker date="1538268739830" expanded="true" signature="103938:104158" ph="INSERT INTO penjualan... " />
+                <marker date="1538268739830" expanded="true" signature="104341:104392" ph="SELECT idpen... penjualan" />
+                <marker date="1538268739830" expanded="true" signature="105173:105312" ph="INSERT INTO detailpenjualan... " />
+                <marker date="1538268739830" expanded="true" signature="105516:105586" ph="SELECT type_... product" />
+                <marker date="1538268739830" expanded="true" signature="105856:105905" ph="UPDATE produ... " />
+                <marker date="1538268739830" expanded="true" signature="106019:106169" ph="INSERT INTO transaksistock... " />
+                <marker date="1538268739830" expanded="true" signature="107299:107375" ph="UPDATE produ... " />
+                <marker date="1538268739830" expanded="true" signature="107486:107571" ph="INSERT INTO historyhargajual... " />
+                <marker date="1538268739830" expanded="true" signature="107864:107907" ph="SELECT stok product" />
+                <marker date="1538268739830" expanded="true" signature="107963:108034" ph="UPDATE produ... " />
+                <marker date="1538268739830" expanded="true" signature="108349:108476" ph="INSERT INTO transaksistock... " />
+                <marker date="1538268739830" expanded="true" signature="108699:108825" ph="INSERT INTO transaksistock... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dataproduk.module" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="588">
+              <caret line="632" column="45" lean-forward="false" selection-start-line="632" selection-start-column="45" selection-end-line="632" selection-end-column="45" />
+              <folding>
+                <marker date="1538310025859" expanded="true" signature="9422:9470" ph="SELECT lead_... product" />
+                <marker date="1538310025859" expanded="true" signature="15129:15215" ph="SELECT SUM(s... product" />
+                <marker date="1538310025859" expanded="true" signature="16290:16355" ph="SELECT idpro... product" />
+                <marker date="1538310025859" expanded="true" signature="16609:16664" ph="SELECT COUNT... product" />
+                <marker date="1538310025859" expanded="true" signature="16912:16962" ph="UPDATE produ... " />
+                <marker date="1538310025859" expanded="true" signature="17162:17224" ph="SELECT idpro... product" />
+                <marker date="1538310025859" expanded="true" signature="17548:17630" ph="SELECT idpro... product" />
+                <marker date="1538310025859" expanded="true" signature="17890:17964" ph="SELECT COUNT... product_supplier" />
+                <marker date="1538310025859" expanded="true" signature="18128:18192" ph="INSERT INTO product_supplier... " />
+                <marker date="1538310025859" expanded="true" signature="18602:18697" ph="SELECT ps.id... product_supplier" />
+                <marker date="1538310025859" expanded="true" signature="20363:20438" ph="SELECT konve... konversisatuan" />
+                <marker date="1538310025859" expanded="true" signature="20565:20640" ph="SELECT konve... konversisatuan" />
+                <marker date="1538310025859" expanded="true" signature="26303:26379" ph="SELECT besar... diskonkategori" />
+                <marker date="1538310025859" expanded="true" signature="26522:26571" ph="SELECT idkat... product" />
+                <marker date="1538310025859" expanded="true" signature="26707:26806" ph="SELECT besar... diskonkategori" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>export_stok_to_xls</find>
+      <find>dpm</find>
+      <find>ubah_harga_produk(</find>
+      <find>dialogubahharga2</find>
+      <find>carabayar</find>
+      <find>print_faktur</find>
+      <find>penjualan/exportfaktur</find>
+      <find>ucf</find>
+      <find>idpenjualangh</find>
+      <find>detailpembelian</find>
+      <find>SOft</find>
+      <find>printKasirOrder(</find>
+      <find>elected-product-print</find>
+      <find>stdC</find>
+      <find>ean13</find>
+      <find>dialogtambahpelanggan</find>
+      <find>hapuspe</find>
+      <find>hapus_penjualan</find>
+      <find>Total</find>
+      <find>Total Packing Ulang</find>
+      <find>penjualanandroid</find>
+      <find>number</find>
+      <find>dataproduk/editproduk</find>
+      <find>edit_data_produk</find>
+      <find>dataproduk/simpanproduk</find>
+      <find>simpan_produk</find>
+      <find>serverSidePerubahanHargaAndroid</find>
+      <find>tampiltabelbelidetail</find>
+      <find>detail_pembelian</find>
+      <find>pembelian/detailpembelian</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>toFixed(dDigit)</replace>
+    </replaceStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/sites/all/libraries/images-update/id_pembayaran_supplier.sql" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datasupplier/datasupplier.module" />
+        <option value="$PROJECT_DIR$/sites/all/libraries/jeditable.datepicker/jquery.jeditable.datepicker.js" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_15.php" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapelanggan/datapelanggan.module" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapelanggan/datapelanggan.api.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapelanggan/globalpos.pelanggan.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapelanggan/js/datapelanggan.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/attachplugins.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.update.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.retur.jual.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/price.checker.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/phpexcel/phpexcel.api.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.module" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/kasir.form.new.js" />
+        <option value="$PROJECT_DIR$/sites/all/themes/cti_flex/css/custom-style.css" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/ghorder.barcode.js" />
+        <option value="$PROJECT_DIR$/sites/default/settings.php" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/price.checker.inc" />
+        <option value="$PROJECT_DIR$/sites/all/libraries/images-update/barcode_type_field.sql" />
+        <option value="$PROJECT_DIR$/sites/all/modules/pembelian/js/pembelian.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/pembelian/globalpos.pembelian.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/customerorder.form.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.customerorder.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/tabelproduknew.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.api.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/editproduct.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/productlogo.barcode.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/labelBarcode.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.penjualan.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.module" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.penjualan.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapremis/kumpulankata.json.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/reproduksi/js/kasirrepro.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.kasir.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/reproduksi/globalpos.reproduksi.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/reproduksi/globalpos.kasirrepro.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/reproduksi/globalpos.kasirhasilrepro.inc" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_16.php" />
+        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php" />
+        <option value="$PROJECT_DIR$/sites/all/modules/pembelian/js/tabel.pembelian.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datasupplier/globalpos.supplier.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datasupplier/js/supplier.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1938" />
+    <option name="height" value="1048" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="default" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="themes" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="themes" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cti_flex" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="themes" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cti_flex" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pembelian" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pembelian" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datasupplier" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datasupplier" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dataproduk" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datapremis" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datapelanggan" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="datapelanggan" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="images-update" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chosen_old" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chosen" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chosen" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chosen" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chosen" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="chosen.css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.NestingTreeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="complete_gi_pos" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="barcode" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="complete_gi_pos">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="PHP" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="CodeceptionConfigurationType" factoryName="Codeception">
+      <PhpTestRunnerSettings />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerJest" factoryName="Jest">
+      <node-interpreter value="project" />
+      <working-dir value="" />
+      <envs />
+      <scope-kind value="ALL" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
+      <config-file value="" />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" working-dir="">
+      <method />
+    </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpBehatConfigurationType" factoryName="Behat">
+      <BehatRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpSpecConfigurationType" factoryName="PHPSpec">
+      <PhpTestRunnerSettings />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="mocha-javascript-test-runner" factoryName="Mocha">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <working-directory />
+      <pass-parent-env>true</pass-parent-env>
+      <envs />
+      <ui />
+      <extra-mocha-options />
+      <test-kind>DIRECTORY</test-kind>
+      <test-directory />
+      <recursive>false</recursive>
+      <method />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6fe2c211-812b-4cf4-9fad-ff907f8ba638" name="Default" comment="" />
+      <created>1522200184308</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1522200184308</updated>
+      <workItem from="1522200185575" duration="3877000" />
+      <workItem from="1522461059053" duration="2278000" />
+      <workItem from="1522501978236" duration="2900000" />
+      <workItem from="1522676662485" duration="3324000" />
+      <workItem from="1522714630500" duration="4652000" />
+      <workItem from="1526611522842" duration="45000" />
+      <workItem from="1528095656133" duration="4037000" />
+      <workItem from="1533685608402" duration="4553000" />
+      <workItem from="1534249160256" duration="8477000" />
+      <workItem from="1534692045968" duration="2136000" />
+      <workItem from="1534736378344" duration="696000" />
+      <workItem from="1534770157201" duration="24000" />
+      <workItem from="1534771533420" duration="730000" />
+      <workItem from="1534806258054" duration="18301000" />
+      <workItem from="1535010317149" duration="2700000" />
+      <workItem from="1535027319702" duration="12676000" />
+      <workItem from="1535079009705" duration="9299000" />
+      <workItem from="1535153788684" duration="1491000" />
+      <workItem from="1535156797779" duration="1303000" />
+      <workItem from="1535468245941" duration="603000" />
+      <workItem from="1535508839666" duration="12788000" />
+      <workItem from="1535588637376" duration="2331000" />
+      <workItem from="1535598999590" duration="9712000" />
+      <workItem from="1535620693924" duration="3219000" />
+      <workItem from="1535727027558" duration="315000" />
+      <workItem from="1535779643134" duration="357000" />
+      <workItem from="1535976072611" duration="3238000" />
+      <workItem from="1536111441298" duration="105000" />
+      <workItem from="1536111560300" duration="1254000" />
+      <workItem from="1536115705213" duration="3659000" />
+      <workItem from="1536188871051" duration="45000" />
+      <workItem from="1536188934364" duration="8996000" />
+      <workItem from="1536724052127" duration="592000" />
+      <workItem from="1536891797961" duration="1038000" />
+      <workItem from="1536915824129" duration="12813000" />
+      <workItem from="1536992525728" duration="598000" />
+      <workItem from="1537322654621" duration="706000" />
+      <workItem from="1537325529337" duration="299000" />
+      <workItem from="1537458704507" duration="300000" />
+      <workItem from="1537517840677" duration="8395000" />
+      <workItem from="1537690225082" duration="2050000" />
+      <workItem from="1537856898704" duration="1504000" />
+      <workItem from="1537925539936" duration="1505000" />
+      <workItem from="1537998308425" duration="1519000" />
+      <workItem from="1538000525770" duration="5814000" />
+      <workItem from="1538023043857" duration="14000" />
+      <workItem from="1538094714122" duration="8015000" />
+      <workItem from="1538105726776" duration="5481000" />
+      <workItem from="1538184625440" duration="10121000" />
+      <workItem from="1538223997908" duration="1250000" />
+      <workItem from="1538226769139" duration="1597000" />
+      <workItem from="1538263202970" duration="3889000" />
+      <workItem from="1538297580843" duration="4333000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="201954000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-9" y="-9" width="1938" height="1048" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26154673" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="processedProjectFiles" value="true" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/return.form.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.retur.jual.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="28" column="9" lean-forward="false" selection-start-line="28" selection-start-column="9" selection-end-line="28" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/price.checker.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="20" column="28" lean-forward="false" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/datapelanggan.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="7" column="42" lean-forward="false" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/filedownload.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/libraries/PHPExcel/PHPExcel/Writer/CSV.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="90" column="20" lean-forward="false" selection-start-line="90" selection-start-column="20" selection-end-line="90" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/file.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="31">
+          <caret line="461" column="9" lean-forward="false" selection-start-line="461" selection-start-column="9" selection-end-line="461" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/libraries/PHPExcel/PHPExcel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-347">
+          <caret line="117" column="20" lean-forward="false" selection-start-line="117" selection-start-column="20" selection-end-line="117" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_5.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="885" column="9" lean-forward="false" selection-start-line="885" selection-start-column="9" selection-end-line="885" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/standard/standard_6.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="669" column="9" lean-forward="false" selection-start-line="669" selection-start-column="9" selection-end-line="669" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/phpexcel/phpexcel.api.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="148" column="9" lean-forward="false" selection-start-line="148" selection-start-column="9" selection-end-line="148" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="619">
+          <caret line="409" column="9" lean-forward="false" selection-start-line="409" selection-start-column="9" selection-end-line="409" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/kasir.form.new.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="135" column="56" lean-forward="false" selection-start-line="135" selection-start-column="56" selection-end-line="135" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/themes/cti_flex/css/custom-style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20349">
+          <caret line="969" column="15" lean-forward="false" selection-start-line="969" selection-start-column="11" selection-end-line="969" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/ghorder.barcode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="12" column="9" lean-forward="false" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/default/settings.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
+          <caret line="91" column="48" lean-forward="false" selection-start-line="91" selection-start-column="48" selection-end-line="91" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../indogasweb/sites/default/settings.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-945">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/price.checker.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="23" column="25" lean-forward="false" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/libraries/barcode/JsBarcode.all.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="713" column="9" lean-forward="false" selection-start-line="713" selection-start-column="4" selection-end-line="713" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/pembelian/js/pembelian.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4704">
+          <caret line="224" column="5" lean-forward="false" selection-start-line="224" selection-start-column="5" selection-end-line="224" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/customerorder.form.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="598">
+          <caret line="315" column="11" lean-forward="false" selection-start-line="315" selection-start-column="11" selection-end-line="315" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/attachplugins.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="451">
+          <caret line="41" column="39" lean-forward="false" selection-start-line="41" selection-start-column="9" selection-end-line="41" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.customerorder.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="23" column="34" lean-forward="false" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/barcode_type_field.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="33" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/labelBarcode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="22" column="9" lean-forward="false" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/productlogo.barcode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="35" column="9" lean-forward="false" selection-start-line="23" selection-start-column="8" selection-end-line="35" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.api.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="777">
+          <caret line="1496" column="26" lean-forward="false" selection-start-line="1496" selection-start-column="26" selection-end-line="1496" selection-end-column="26" />
+          <folding>
+            <marker date="1538004708717" expanded="true" signature="491:894" ph="SELECT a.idt... titipanlaundry" />
+            <marker date="1538004708717" expanded="true" signature="1243:1547" ph="SELECT iddet... detaillaundry" />
+            <marker date="1538004708717" expanded="true" signature="1971:2440" ph="SELECT idpen... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="4004:4365" ph="SELECT iddet... detailpenjualan" />
+            <marker date="1538004708717" expanded="true" signature="5647:5653" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="5898:5945" ph="UPDATE custo... " />
+            <marker date="1538004708717" expanded="true" signature="6473:6512" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="6613:6707" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="6789:6852" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="6867:6878" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="6950:6972" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="6974:6980" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="7020:7032" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="7109:7131" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="7133:7139" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="7164:7170" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="7170:7176" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="7245:7279" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="7325:7331" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="7331:7337" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="7404:7438" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="7452:7475" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="7499:7522" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="7573:7579" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="7579:7585" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="7658:7692" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="7706:7729" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="7757:7780" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="7814:7820" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="7820:7826" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="7959:7993" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="8007:8030" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="8056:8079" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="8094:8106" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="8151:8164" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="8199:8205" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="8352:8417" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="8431:8454" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="8481:8504" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="8519:8531" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="8575:8588" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="8610:8616" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="8876:8910" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="9074:9105" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="9182:9226" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="9528:9572" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="9667:9737" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="9752:9764" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="9789:9802" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="9875:9881" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="10364:10426" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="10472:10551" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="10566:10578" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="10603:10616" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="10660:10666" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="10800:10834" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="10882:10933" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="10948:10960" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="10985:10998" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="11041:11047" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="11159:11193" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="11239:11290" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="11305:11317" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="11342:11355" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="11397:11403" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="11510:11575" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="11620:11702" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="11717:11729" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="11754:11767" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="11819:11825" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="11933:11968" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="11993:11999" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="11999:12005" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="12725:12759" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="12854:12888" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="12978:13012" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="13093:13127" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="13855:13894" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="13995:14082" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="14151:14261" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="14343:14408" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="14433:14439" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="14439:14445" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="14666:14701" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="14716:14727" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="14752:14764" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="14800:14806" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="14806:14812" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="14932:14967" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="14982:14993" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="15021:15033" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="15076:15082" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="15082:15088" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="15157:15222" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="15237:15248" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="15277:15289" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="15331:15337" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="15337:15343" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="15450:15515" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="15530:15541" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="15622:15634" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="15687:15693" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="15693:15699" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="15765:15830" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="15845:15856" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="15892:15904" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="15967:15973" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="15973:15979" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="16199:16233" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="16354:16406" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="16514:16566" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="16673:16725" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="16815:16821" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="16821:16827" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="17146:17226" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="17241:17252" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="17279:17291" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="17354:17360" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="17360:17366" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="17455:17508" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="17523:17534" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="17579:17591" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="17652:17658" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="17658:17664" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="17730:17783" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="17798:17809" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="17840:17852" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="17917:17923" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="17923:17929" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="17998:18051" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="18066:18077" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="18148:18160" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="18237:18243" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="18243:18249" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="18534:18587" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="18602:18613" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="18647:18659" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="18719:18725" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="18725:18731" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="18886:18920" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="19094:19147" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="19162:19173" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="19230:19242" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="19321:19327" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="19327:19333" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="19402:19464" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="19535:19570" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="19653:19715" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="19811:19864" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="19879:19890" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="19962:19984" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="19986:19992" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="20032:20044" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="20121:20143" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="20145:20151" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="20176:20182" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="20182:20188" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="20253:20318" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="21561:21659" ph="SELECT SUM($... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="21749:21828" ph="SELECT SUM($... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="21969:22087" ph="SELECT SUM($... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="22190:22327" ph="SELECT SUM($... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="22468:22536" ph="SELECT SUM(b... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="22727:22795" ph="SELECT SUM(b... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="23187:23257" ph="SELECT SUM(k... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="23446:23516" ph="SELECT SUM(k... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="23878:23991" ph="SELECT SUM($... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="24105:24237" ph="SELECT SUM($... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="24485:24590" ph="SELECT SUM($... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="24704:24828" ph="SELECT SUM($... penjualan" />
+            <marker date="1538004708717" expanded="true" signature="25298:25491" ph="SELECT SUM($... detailpenjualan" />
+            <marker date="1538004708717" expanded="true" signature="25597:25881" ph="SELECT SUM($... detailpenjualan" />
+            <marker date="1538004708717" expanded="true" signature="26334:26433" ph="SELECT SUM($... customer_order" />
+            <marker date="1538004708717" expanded="true" signature="26527:26607" ph="SELECT SUM($... customer_order" />
+            <marker date="1538004708717" expanded="true" signature="26748:26867" ph="SELECT SUM($... customer_order" />
+            <marker date="1538004708717" expanded="true" signature="26974:27112" ph="SELECT SUM($... customer_order" />
+            <marker date="1538004708717" expanded="true" signature="27257:27326" ph="SELECT SUM(b... customer_order" />
+            <marker date="1538004708717" expanded="true" signature="27523:27592" ph="SELECT SUM(b... customer_order" />
+            <marker date="1538004708717" expanded="true" signature="28007:28078" ph="SELECT SUM(k... customer_order" />
+            <marker date="1538004708717" expanded="true" signature="28273:28344" ph="SELECT SUM(k... customer_order" />
+            <marker date="1538004708717" expanded="true" signature="28716:28830" ph="SELECT SUM($... customer_order" />
+            <marker date="1538004708717" expanded="true" signature="28948:29081" ph="SELECT SUM($... customer_order" />
+            <marker date="1538004708717" expanded="true" signature="30510:30549" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="30716:30735" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="31632:31671" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="31754:31793" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="31883:31899" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="31901:31907" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="32155:32167" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="32301:32320" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="32426:32445" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="32460:32472" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="32474:32480" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="32480:32486" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="32486:32492" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="32546:32559" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="32657:32663" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="32663:32669" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="32669:32675" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="33634:33673" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="33756:33795" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="33897:33912" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="33914:33920" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="34325:34337" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="35617:35656" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="35742:35781" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="35885:35900" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="35902:35908" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="36319:36331" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="37535:37574" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="37657:37696" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="37798:37813" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="37815:37821" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="38215:38227" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="39519:39558" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="39641:39680" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="39782:39797" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="39799:39805" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="40211:40223" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="41234:41240" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="41296:41302" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="41476:41523" ph="UPDATE custo... " />
+            <marker date="1538004708717" expanded="true" signature="42132:42138" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="42194:42200" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="42380:42427" ph="UPDATE custo... " />
+            <marker date="1538004708717" expanded="true" signature="43436:43442" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="43493:43540" ph="UPDATE custo... " />
+            <marker date="1538004708717" expanded="true" signature="44082:44121" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="44255:44342" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="44411:44521" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="44616:44681" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="44706:44712" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="44712:44718" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="44942:44974" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="45105:45140" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="45288:45323" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="45338:45349" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="45377:45389" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="45420:45426" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="45426:45432" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="45569:45622" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="45637:45648" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="45674:45686" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="45813:45878" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="45893:45904" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="45976:45988" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="46265:46281" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="46492:46539" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="46813:46893" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="46908:46919" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="46946:46958" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="47314:47367" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="47382:47393" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="47446:47458" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="47606:47659" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="47674:47685" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="47724:47736" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="47898:47951" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="47966:47977" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="48004:48016" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="48176:48229" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="48244:48255" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="48330:48342" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="48504:48566" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="48770:48805" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="48897:48959" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="49058:49111" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="49205:49216" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="49562:49574" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="49931:49944" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="50917:50930" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="51517:51552" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="51681:51716" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="51731:51742" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="51770:51782" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="51813:51819" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="51819:51825" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="51943:51996" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="52011:52022" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="52048:52060" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="52168:52203" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="52218:52229" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="52301:52313" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="52545:52561" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="52774:52821" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="53062:53115" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="53130:53141" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="53168:53180" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="53521:53574" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="53589:53600" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="53653:53665" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="53794:53847" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="53862:53873" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="53912:53924" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="54067:54120" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="54135:54146" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="54173:54185" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="54326:54379" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="54394:54405" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="54480:54492" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="54635:54670" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="54855:54890" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="54963:54998" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="55078:55131" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="55225:55236" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="55584:55596" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="55953:55966" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="57088:57127" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="57249:57336" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="57672:57737" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="57762:57768" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="57768:57774" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="58016:58051" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="58066:58077" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="58102:58114" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="58150:58156" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="58156:58162" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="58297:58332" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="58347:58358" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="58386:58398" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="58441:58447" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="58447:58453" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="58534:58599" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="58614:58625" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="58697:58709" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="58751:58757" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="58757:58763" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="58885:58950" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="58965:58976" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="59057:59069" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="59122:59128" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="59128:59134" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="59209:59274" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="59289:59300" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="59336:59348" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="59411:59417" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="59417:59423" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="59688:59722" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="59870:59922" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="60042:60094" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="60210:60262" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="60355:60361" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="60361:60367" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="60713:60793" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="60808:60819" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="60846:60858" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="60921:60927" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="60927:60933" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="61022:61075" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="61090:61101" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="61170:61182" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="61244:61250" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="61250:61256" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="61322:61375" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="61390:61401" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="61456:61468" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="61533:61539" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="61539:61545" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="61620:61673" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="61688:61699" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="61770:61782" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="61859:61865" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="61865:61871" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="62180:62233" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="62248:62259" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="62293:62305" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="62365:62371" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="62371:62377" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="62559:62593" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="62788:62841" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="62856:62867" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="62970:62982" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="63061:63067" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="63067:63073" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="63154:63216" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="63293:63328" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="63417:63479" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="63574:63627" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="63663:63674" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="64389:64395" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="64460:64466" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="64522:64528" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="64579:64618" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="64717:64770" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="64785:64796" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="64826:64838" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="64944:64997" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="65012:65023" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="65054:65066" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="65165:65218" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="65233:65244" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="65270:65282" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="65391:65456" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="65471:65482" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="65511:65523" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="65756:65772" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="65868:65932" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="66463:66469" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="66534:66540" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="66596:66602" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="66653:66692" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="66791:66844" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="66859:66870" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="66900:66912" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="67018:67071" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="67086:67097" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="67128:67140" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="67239:67292" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="67307:67318" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="67344:67356" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="67465:67530" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="67545:67556" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="67631:67643" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="67876:67892" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="67988:68052" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="68371:68431" ph="SELECT id, b... meja" />
+            <marker date="1538004708717" expanded="true" signature="77704:77751" ph="UPDATE custo... " />
+            <marker date="1538004708717" expanded="true" signature="78187:78226" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="78325:78378" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="78393:78404" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="78434:78446" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="78552:78605" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="78620:78631" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="78662:78674" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="78773:78826" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="78841:78852" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="78878:78890" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="78999:79064" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="79079:79090" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="79165:79177" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="79424:79440" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="79536:79600" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="79747:79812" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="79827:79838" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="79870:79882" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="80042:80048" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="80175:80181" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="81344:81383" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="81522:81561" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="81689:81704" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="81706:81712" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="82048:82060" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="84348:84363" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="84365:84371" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="85276:85287" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="85289:85295" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="85790:85801" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="85803:85809" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="86264:86275" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="86277:86283" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="89146:89157" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="89159:89165" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="89716:89727" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="89729:89735" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="90497:90508" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="90510:90516" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="90979:90990" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="90992:90998" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="92201:92408" ph="SELECT iddet... detailpembelian" />
+            <marker date="1538004708717" expanded="true" signature="93147:93202" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="93341:93380" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="93522:93528" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="94049:94061" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="94083:94089" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="94089:94095" ph=" " />
+            <marker date="1538004708717" expanded="true" signature="95148:95199" ph="SELECT nonot... reproduksi" />
+            <marker date="1538004708717" expanded="true" signature="95286:95344" ph="SELECT tglre... reproduksi" />
+            <marker date="1538004708717" expanded="true" signature="95464:95519" ph="..." />
+            <marker date="1538004708717" expanded="true" signature="95955:95967" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/ssp.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/update-reproduksi.sql.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="1" column="79" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="448">
+          <caret line="727" column="63" lean-forward="false" selection-start-line="727" selection-start-column="63" selection-end-line="727" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/reproduksi/js/kasirrepro.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4116">
+          <caret line="196" column="48" lean-forward="false" selection-start-line="196" selection-start-column="48" selection-end-line="196" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.kasir.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="18" column="44" lean-forward="false" selection-start-line="18" selection-start-column="44" selection-end-line="18" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/reproduksi/globalpos.reproduksi.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1743">
+          <caret line="83" column="54" lean-forward="false" selection-start-line="83" selection-start-column="54" selection-end-line="83" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/reproduksi/globalpos.kasirrepro.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="735">
+          <caret line="35" column="26" lean-forward="false" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/reproduksi/globalpos.kasirhasilrepro.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="39" column="129" lean-forward="false" selection-start-line="39" selection-start-column="129" selection-end-line="39" selection-end-column="129" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapremis/kumpulankata.json.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="693">
+          <caret line="83" column="18" lean-forward="false" selection-start-line="83" selection-start-column="5" selection-end-line="83" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_16.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" column="61" lean-forward="false" selection-start-line="6" selection-start-column="61" selection-end-line="6" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/tabelproduknew.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="26" column="117" lean-forward="false" selection-start-line="26" selection-start-column="111" selection-end-line="26" selection-end-column="117" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.penjualan.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2037">
+          <caret line="97" column="27" lean-forward="false" selection-start-line="97" selection-start-column="27" selection-end-line="97" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.penjualan.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12159">
+          <caret line="579" column="35" lean-forward="false" selection-start-line="579" selection-start-column="35" selection-end-line="579" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/editproduct.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6405">
+          <caret line="305" column="9" lean-forward="false" selection-start-line="305" selection-start-column="9" selection-end-line="305" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../latihan/mobil.htm">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17367">
+          <caret line="827" column="9" lean-forward="false" selection-start-line="816" selection-start-column="8" selection-end-line="827" selection-end-column="9" />
+          <folding>
+            <marker date="1538224601703" expanded="true" signature="2404:2434" ph="..." />
+            <marker date="1538224601703" expanded="true" signature="2651:2735" ph="SELECT idkat... kategori" />
+            <marker date="1538224601703" expanded="true" signature="3308:3434" ph="SELECT idsub... subkategori" />
+            <marker date="1538224601703" expanded="true" signature="3967:4059" ph="SELECT idsup... supplier" />
+            <marker date="1538224601703" expanded="true" signature="4507:4548" ph="SELECT satua... satuan" />
+            <marker date="1538224601703" expanded="true" signature="5107:5191" ph="SELECT idkat... kategori" />
+            <marker date="1538224601703" expanded="true" signature="9748:9763" ph="..." />
+            <marker date="1538224601703" expanded="true" signature="11225:11231" ph=" " />
+            <marker date="1538224601703" expanded="true" signature="11231:11237" ph=" " />
+            <marker date="1538224601703" expanded="true" signature="11332:11338" ph=" " />
+            <marker date="1538224601703" expanded="true" signature="11338:11344" ph=" " />
+            <marker date="1538224601703" expanded="true" signature="11432:11438" ph=" " />
+            <marker date="1538224601703" expanded="true" signature="11438:11444" ph=" " />
+            <marker date="1538224601703" expanded="true" signature="11793:11799" ph=" " />
+            <marker date="1538224601703" expanded="true" signature="11799:11805" ph=" " />
+            <marker date="1538224601703" expanded="true" signature="12083:12089" ph=" " />
+            <marker date="1538224601703" expanded="true" signature="12089:12095" ph=" " />
+            <marker date="1538224601703" expanded="true" signature="12716:12728" ph="..." />
+            <marker date="1538224601703" expanded="true" signature="12939:12951" ph="..." />
+            <marker date="1538224601703" expanded="true" signature="15943:15982" ph="..." />
+            <marker date="1538224601703" expanded="true" signature="16068:16074" ph=" " />
+            <marker date="1538224601703" expanded="true" signature="17661:17737" ph="SELECT COUNT... product" />
+            <marker date="1538224601703" expanded="true" signature="18062:18149" ph="SELECT idsub... subkategori" />
+            <marker date="1538224601703" expanded="true" signature="18670:18726" ph="..." />
+            <marker date="1538224601703" expanded="true" signature="18695:18726" ph="..." />
+            <marker date="1538224601703" expanded="true" signature="19627:19656" ph="..." />
+            <marker date="1538224601703" expanded="true" signature="19761:19817" ph="..." />
+            <marker date="1538224601703" expanded="true" signature="19786:19817" ph="..." />
+            <marker date="1538224601703" expanded="true" signature="20416:20495" ph="SELECT ${$na... ${$namatabel}" />
+            <marker date="1538224601703" expanded="true" signature="20665:20724" ph="SELECT COUNT... satuan" />
+            <marker date="1538224601703" expanded="true" signature="20831:20863" ph="INSERT INTO satuan... " />
+            <marker date="1538224601703" expanded="true" signature="21037:21098" ph="SELECT COUNT... product" />
+            <marker date="1538224601703" expanded="true" signature="21402:21496" ph="SELECT COUNT... product" />
+            <marker date="1538224601703" expanded="true" signature="21521:21602" ph="SELECT COUNT... product" />
+            <marker date="1538224601703" expanded="true" signature="22210:22300" ph="SELECT idkat... product" />
+            <marker date="1538224601703" expanded="true" signature="22614:22669" ph="SELECT kodek... kategori" />
+            <marker date="1538224601703" expanded="true" signature="22783:22847" ph="SELECT kodes... subkategori" />
+            <marker date="1538224601703" expanded="true" signature="23903:24273" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="24781:24866" ph="INSERT INTO historyhargabeli... " />
+            <marker date="1538224601703" expanded="true" signature="24952:24999" ph="DELETE FROM " />
+            <marker date="1538224601703" expanded="true" signature="25216:25280" ph="INSERT INTO product_supplier... " />
+            <marker date="1538224601703" expanded="true" signature="25482:25820" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="26270:26355" ph="INSERT INTO historyhargabeli... " />
+            <marker date="1538224601703" expanded="true" signature="26441:26488" ph="DELETE FROM " />
+            <marker date="1538224601703" expanded="true" signature="26705:26769" ph="INSERT INTO product_supplier... " />
+            <marker date="1538224601703" expanded="true" signature="27183:27311" ph="INSERT INTO transaksistock... " />
+            <marker date="1538224601703" expanded="true" signature="27539:27666" ph="INSERT INTO transaksistock... " />
+            <marker date="1538224601703" expanded="true" signature="27936:28270" ph="INSERT INTO product... " />
+            <marker date="1538224601703" expanded="true" signature="28667:28715" ph="SELECT idpro... product" />
+            <marker date="1538224601703" expanded="true" signature="28984:29048" ph="INSERT INTO product_supplier... " />
+            <marker date="1538224601703" expanded="true" signature="29297:29423" ph="INSERT INTO transaksistock... " />
+            <marker date="1538224601703" expanded="true" signature="31555:31623" ph="UPDATE subka... " />
+            <marker date="1538224601703" expanded="true" signature="31669:31733" ph="UPDATE subka... " />
+            <marker date="1538224601703" expanded="true" signature="31779:31842" ph="UPDATE subka... " />
+            <marker date="1538224601703" expanded="true" signature="31888:31951" ph="UPDATE subka... " />
+            <marker date="1538224601703" expanded="true" signature="31976:32040" ph="SELECT kodek... kategori" />
+            <marker date="1538224601703" expanded="true" signature="32344:32613" ph="SELECT idsup... product" />
+            <marker date="1538224601703" expanded="true" signature="33679:33763" ph="SELECT idkat... kategori" />
+            <marker date="1538224601703" expanded="true" signature="34792:34884" ph="SELECT idsup... supplier" />
+            <marker date="1538224601703" expanded="true" signature="35526:35567" ph="SELECT satua... satuan" />
+            <marker date="1538224601703" expanded="true" signature="36152:36236" ph="SELECT idkat... kategori" />
+            <marker date="1538224601703" expanded="true" signature="44094:44160" ph="SELECT stok,... product" />
+            <marker date="1538224601703" expanded="true" signature="44365:44420" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="44457:44506" ph="SELECT kateg... kategori" />
+            <marker date="1538224601703" expanded="true" signature="44564:44622" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="44659:44717" ph="SELECT subka... subkategori" />
+            <marker date="1538224601703" expanded="true" signature="44773:44848" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="44895:44971" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="45018:45097" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="45144:45222" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="45344:45429" ph="INSERT INTO historyhargabeli... " />
+            <marker date="1538224601703" expanded="true" signature="45515:45569" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="45690:45775" ph="INSERT INTO historyhargajual... " />
+            <marker date="1538224601703" expanded="true" signature="45860:45932" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="46157:46284" ph="INSERT INTO transaksistock... " />
+            <marker date="1538224601703" expanded="true" signature="46438:46564" ph="INSERT INTO transaksistock... " />
+            <marker date="1538224601703" expanded="true" signature="46669:46716" ph="DELETE FROM " />
+            <marker date="1538224601703" expanded="true" signature="46800:46864" ph="INSERT INTO product_supplier... " />
+            <marker date="1538224601703" expanded="true" signature="47056:47129" ph="SELECT GROUP... product_supplier" />
+            <marker date="1538224601703" expanded="true" signature="47399:47456" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="47493:47536" ph="SELECT nama_... grup_menu" />
+            <marker date="1538224601703" expanded="true" signature="47601:47652" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="47674:47719" ph="SELECT satua... product" />
+            <marker date="1538224601703" expanded="true" signature="48036:48114" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="48407:48534" ph="INSERT INTO transaksistock... " />
+            <marker date="1538224601703" expanded="true" signature="48724:48850" ph="INSERT INTO transaksistock... " />
+            <marker date="1538224601703" expanded="true" signature="49356:49434" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="49924:49998" ph="SELECT COUNT... product_supplier" />
+            <marker date="1538224601703" expanded="true" signature="50276:50351" ph="UPDATE produ... " />
+            <marker date="1538224601703" expanded="true" signature="50473:50537" ph="INSERT INTO product_supplier... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/js/datapelanggan.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2835">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/pembelian/js/tabel.pembelian.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="385" column="36" lean-forward="true" selection-start-line="382" selection-start-column="4" selection-end-line="385" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datasupplier/globalpos.supplier.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="12" column="63" lean-forward="true" selection-start-line="12" selection-start-column="63" selection-end-line="12" selection-end-column="63" />
+          <folding>
+            <marker date="1538299512205" expanded="true" signature="2809:2825" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="2960:2976" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="3052:3063" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="4489:4549" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="4516:4549" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="4655:4668" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="5052:5094" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="5096:5206" ph="SELECT idsup... supplier" />
+            <marker date="1538299512205" expanded="true" signature="5336:5453" ph="SELECT besar... hutang" />
+            <marker date="1538299512205" expanded="true" signature="7188:7204" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="7224:7230" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="7230:7236" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="7275:7292" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="7381:7387" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="7387:7393" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="7615:7713" ph="INSERT INTO supplier... " />
+            <marker date="1538299512205" expanded="true" signature="7872:7949" ph="SELECT idsup... supplier" />
+            <marker date="1538299512205" expanded="true" signature="8336:8395" ph="UPDATE suppl... " />
+            <marker date="1538299512205" expanded="true" signature="8441:8500" ph="UPDATE suppl... " />
+            <marker date="1538299512205" expanded="true" signature="8546:8597" ph="UPDATE suppl... " />
+            <marker date="1538299512205" expanded="true" signature="8643:8696" ph="UPDATE suppl... " />
+            <marker date="1538299512205" expanded="true" signature="8742:8794" ph="UPDATE suppl... " />
+            <marker date="1538299512205" expanded="true" signature="9046:9175" ph="INSERT INTO pembayaranhutang... " />
+            <marker date="1538299512205" expanded="true" signature="9375:9472" ph="UPDATE hutan... " />
+            <marker date="1538299512205" expanded="true" signature="9931:9944" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="10231:10437" ph="SELECT a.ids... detailhutang" />
+            <marker date="1538299512205" expanded="true" signature="11640:11656" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="11676:11682" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="11682:11688" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="11726:11743" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="11822:11828" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="11828:11834" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="11872:11889" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="11963:11969" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="11969:11975" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="12013:12030" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="12108:12114" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="12114:12120" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="12718:12724" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="12997:13124" ph="SELECT id, i... pembayaranhutang" />
+            <marker date="1538299512205" expanded="true" signature="13986:14002" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="14010:14016" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="14016:14022" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="14076:14093" ph="..." />
+            <marker date="1538299512205" expanded="true" signature="14170:14176" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="14176:14182" ph=" " />
+            <marker date="1538299512205" expanded="true" signature="14652:14692" ph="DELETE FROM " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datasupplier/js/supplier.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="205" column="39" lean-forward="false" selection-start-line="205" selection-start-column="39" selection-end-line="205" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/pembelian/globalpos.pembelian.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="546">
+          <caret line="425" column="4" lean-forward="true" selection-start-line="425" selection-start-column="4" selection-end-line="425" selection-end-column="63" />
+          <folding>
+            <marker date="1537857801449" expanded="true" signature="1638:1675" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="2223:2266" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="4088:4102" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="4660:4678" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="5708:5739" ph="SELECT carab... carabayar" />
+            <marker date="1537857801449" expanded="true" signature="6481:6495" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="6834:6848" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="7325:7392" ph="SELECT idpem... pembelian" />
+            <marker date="1537857801449" expanded="true" signature="8134:8322" ph="INSERT INTO pembelian... " />
+            <marker date="1537857801449" expanded="true" signature="8518:8688" ph="INSERT INTO pembelian... " />
+            <marker date="1537857801449" expanded="true" signature="8998:9085" ph="INSERT INTO detailhutang... " />
+            <marker date="1537857801449" expanded="true" signature="9189:9254" ph="SELECT idsup... hutang" />
+            <marker date="1537857801449" expanded="true" signature="9503:9568" ph="UPDATE hutan... " />
+            <marker date="1537857801449" expanded="true" signature="9687:9755" ph="INSERT INTO hutang... " />
+            <marker date="1537857801449" expanded="true" signature="10238:10294" ph="SELECT harga... product" />
+            <marker date="1537857801449" expanded="true" signature="10625:10799" ph="INSERT INTO detailpembelian... " />
+            <marker date="1537857801449" expanded="true" signature="10971:11056" ph="INSERT INTO historyhargabeli... " />
+            <marker date="1537857801449" expanded="true" signature="11143:11198" ph="UPDATE produ... " />
+            <marker date="1537857801449" expanded="true" signature="11310:11359" ph="UPDATE produ... " />
+            <marker date="1537857801449" expanded="true" signature="11450:11599" ph="INSERT INTO transaksistock... " />
+            <marker date="1537857801449" expanded="true" signature="12563:12679" ph="SELECT prod.... product_supplier" />
+            <marker date="1537857801449" expanded="true" signature="13011:13146" ph="SELECT idpro... product" />
+            <marker date="1537857801449" expanded="true" signature="13587:13652" ph="SELECT prod.... product_supplier" />
+            <marker date="1537857801449" expanded="true" signature="14020:14147" ph="SELECT barco... product" />
+            <marker date="1537857801449" expanded="true" signature="25577:25593" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="25613:25619" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="25619:25625" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="25668:25685" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="25687:25693" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="25693:25699" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="25742:25759" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="25761:25767" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="25767:25773" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="25816:25833" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="25835:25841" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="25841:25847" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="25890:25907" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="25909:25915" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="25915:25921" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="25969:25975" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="26411:26417" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="26697:26703" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="27022:27039" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="27041:27047" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="27087:27093" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="28134:28150" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="28170:28176" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="28176:28182" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="28246:28263" ph="..." />
+            <marker date="1537857801449" expanded="true" signature="28316:28322" ph=" " />
+            <marker date="1537857801449" expanded="true" signature="28322:28328" ph=" " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/pembelian/pembelian.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="25" column="44" lean-forward="false" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="44" />
+          <folding>
+            <marker date="1527951884071" expanded="true" signature="6724:6827" ph="SELECT SUM($... pembelian" />
+            <marker date="1527951884071" expanded="true" signature="6952:7092" ph="SELECT SUM($... pembelian" />
+            <marker date="1527951884071" expanded="true" signature="7175:7336" ph="SELECT SUM(b... pembelian" />
+            <marker date="1527951884071" expanded="true" signature="7462:7597" ph="SELECT SUM($... pembelian" />
+            <marker date="1527951884071" expanded="true" signature="7894:8105" ph="SELECT SUM($... detailpembelian" />
+            <marker date="1527951884071" expanded="true" signature="8348:8417" ph="SELECT COUNT... detailpembelian" />
+            <marker date="1527951884071" expanded="true" signature="8479:8534" ph="SELECT COUNT... product" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="2193" column="35" lean-forward="false" selection-start-line="2193" selection-start-column="29" selection-end-line="2193" selection-end-column="35" />
+          <folding>
+            <marker date="1538268739830" expanded="true" signature="4525:4565" ph="SELECT COUNT... pelanggan" />
+            <marker date="1538268739830" expanded="true" signature="12042:12078" ph="SELECT COUNT... product" />
+            <marker date="1538268739830" expanded="true" signature="18666:18747" ph="SELECT COUNT... penjualan" />
+            <marker date="1538268739830" expanded="true" signature="18843:18943" ph="SELECT COUNT... penjualan" />
+            <marker date="1538268739830" expanded="true" signature="24502:24695" ph="SELECT COUNT... detailpenjualan" />
+            <marker date="1538268739830" expanded="true" signature="28410:28755" ph="SELECT COUNT... detailpenjualan" />
+            <marker date="1538268739830" expanded="true" signature="34667:34758" ph="SELECT COUNT... titipanlaundry" />
+            <marker date="1538268739830" expanded="true" signature="42041:42114" ph="SELECT COUNT... customer_order" />
+            <marker date="1538268739830" expanded="true" signature="44748:44793" ph="SELECT COUNT... cms_kategoripengeluaran" />
+            <marker date="1538268739830" expanded="true" signature="48647:48684" ph="SELECT COUNT... cms_pengeluaran" />
+            <marker date="1538268739830" expanded="true" signature="52456:52491" ph="SELECT COUNT... cms_pemasukan" />
+            <marker date="1538268739830" expanded="true" signature="54414:54442" ph="SELECT COUNT... " />
+            <marker date="1538268739830" expanded="true" signature="56421:56462" ph="SELECT COUNT... detailcustomerorder" />
+            <marker date="1538268739830" expanded="true" signature="56848:57076" ph="SELECT idpro... product" />
+            <marker date="1538268739830" expanded="true" signature="57462:57543" ph="SELECT besar... diskonkategori" />
+            <marker date="1538268739830" expanded="true" signature="58302:58518" ph="SELECT idpro... product" />
+            <marker date="1538268739830" expanded="true" signature="58895:58976" ph="SELECT besar... diskonkategori" />
+            <marker date="1538268739830" expanded="true" signature="61722:61756" ph="SELECT COUNT... " />
+            <marker date="1538268739830" expanded="true" signature="64022:64065" ph="SELECT COUNT... detailpenjualan" />
+            <marker date="1538268739830" expanded="true" signature="64421:64488" ph="SELECT idkat... kategori" />
+            <marker date="1538268739830" expanded="true" signature="64788:65111" ph="SELECT idpro... product" />
+            <marker date="1538268739830" expanded="true" signature="65155:65339" ph="SELECT idpro... product" />
+            <marker date="1538268739830" expanded="true" signature="65592:65673" ph="SELECT besar... diskonkategori" />
+            <marker date="1538268739830" expanded="true" signature="66125:66224" ph="SELECT idpro... product" />
+            <marker date="1538268739830" expanded="true" signature="66471:66552" ph="SELECT besar... diskonkategori" />
+            <marker date="1538268739830" expanded="true" signature="66950:67009" ph="SELECT id,ba... meja" />
+            <marker date="1538268739830" expanded="true" signature="67182:67353" ph="SELECT idpro... product" />
+            <marker date="1538268739830" expanded="true" signature="67600:67681" ph="SELECT besar... diskonkategori" />
+            <marker date="1538268739830" expanded="true" signature="70161:70424" ph="INSERT INTO customer_order... " />
+            <marker date="1538268739830" expanded="true" signature="70665:70712" ph="SELECT id FR... customer_order" />
+            <marker date="1538268739830" expanded="true" signature="71312:71544" ph="INSERT INTO detailcustomerorder... " />
+            <marker date="1538268739830" expanded="true" signature="73587:73642" ph="SELECT idkat... kategori" />
+            <marker date="1538268739830" expanded="true" signature="73848:73897" ph="SELECT idkat... product" />
+            <marker date="1538268739830" expanded="true" signature="74094:74143" ph="SELECT idkat... product" />
+            <marker date="1538268739830" expanded="true" signature="74231:74318" ph="SELECT idsub... subkategori" />
+            <marker date="1538268739830" expanded="true" signature="74545:74597" ph="SELECT idsub... product" />
+            <marker date="1538268739830" expanded="true" signature="74797:74863" ph="SELECT id, k... grup_menu" />
+            <marker date="1538268739830" expanded="true" signature="75059:75110" ph="SELECT id_gr... product" />
+            <marker date="1538268739830" expanded="true" signature="75383:75438" ph="SELECT uid F... cms_users" />
+            <marker date="1538268739830" expanded="true" signature="75698:75739" ph="SELECT satua... satuan" />
+            <marker date="1538268739830" expanded="true" signature="75912:75957" ph="SELECT satua... product" />
+            <marker date="1538268739830" expanded="true" signature="79564:79623" ph="SELECT idsup... supplier" />
+            <marker date="1538268739830" expanded="true" signature="79806:79864" ph="SELECT idsup... product_supplier" />
+            <marker date="1538268739830" expanded="true" signature="89051:89132" ph="SELECT COUNT... pembelian" />
+            <marker date="1538268739830" expanded="true" signature="89297:89396" ph="SELECT COUNT... pembelian" />
+            <marker date="1538268739830" expanded="true" signature="94885:95078" ph="SELECT COUNT... detailpembelian" />
+            <marker date="1538268739830" expanded="true" signature="97046:97080" ph="SELECT COUNT... " />
+            <marker date="1538268739830" expanded="true" signature="99539:99582" ph="SELECT COUNT... detailpembelian" />
+            <marker date="1538268739830" expanded="true" signature="102108:102163" ph="SELECT uid F... cms_users" />
+            <marker date="1538268739830" expanded="true" signature="102358:102406" ph="SELECT timez... cms_users" />
+            <marker date="1538268739830" expanded="true" signature="102898:102965" ph="SELECT idpen... penjualan" />
+            <marker date="1538268739830" expanded="true" signature="103938:104158" ph="INSERT INTO penjualan... " />
+            <marker date="1538268739830" expanded="true" signature="104341:104392" ph="SELECT idpen... penjualan" />
+            <marker date="1538268739830" expanded="true" signature="105173:105312" ph="INSERT INTO detailpenjualan... " />
+            <marker date="1538268739830" expanded="true" signature="105516:105586" ph="SELECT type_... product" />
+            <marker date="1538268739830" expanded="true" signature="105856:105905" ph="UPDATE produ... " />
+            <marker date="1538268739830" expanded="true" signature="106019:106169" ph="INSERT INTO transaksistock... " />
+            <marker date="1538268739830" expanded="true" signature="107299:107375" ph="UPDATE produ... " />
+            <marker date="1538268739830" expanded="true" signature="107486:107571" ph="INSERT INTO historyhargajual... " />
+            <marker date="1538268739830" expanded="true" signature="107864:107907" ph="SELECT stok product" />
+            <marker date="1538268739830" expanded="true" signature="107963:108034" ph="UPDATE produ... " />
+            <marker date="1538268739830" expanded="true" signature="108349:108476" ph="INSERT INTO transaksistock... " />
+            <marker date="1538268739830" expanded="true" signature="108699:108825" ph="INSERT INTO transaksistock... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="632" column="45" lean-forward="false" selection-start-line="632" selection-start-column="45" selection-end-line="632" selection-end-column="45" />
+          <folding>
+            <marker date="1538310025859" expanded="true" signature="9422:9470" ph="SELECT lead_... product" />
+            <marker date="1538310025859" expanded="true" signature="15129:15215" ph="SELECT SUM(s... product" />
+            <marker date="1538310025859" expanded="true" signature="16290:16355" ph="SELECT idpro... product" />
+            <marker date="1538310025859" expanded="true" signature="16609:16664" ph="SELECT COUNT... product" />
+            <marker date="1538310025859" expanded="true" signature="16912:16962" ph="UPDATE produ... " />
+            <marker date="1538310025859" expanded="true" signature="17162:17224" ph="SELECT idpro... product" />
+            <marker date="1538310025859" expanded="true" signature="17548:17630" ph="SELECT idpro... product" />
+            <marker date="1538310025859" expanded="true" signature="17890:17964" ph="SELECT COUNT... product_supplier" />
+            <marker date="1538310025859" expanded="true" signature="18128:18192" ph="INSERT INTO product_supplier... " />
+            <marker date="1538310025859" expanded="true" signature="18602:18697" ph="SELECT ps.id... product_supplier" />
+            <marker date="1538310025859" expanded="true" signature="20363:20438" ph="SELECT konve... konversisatuan" />
+            <marker date="1538310025859" expanded="true" signature="20565:20640" ph="SELECT konve... konversisatuan" />
+            <marker date="1538310025859" expanded="true" signature="26303:26379" ph="SELECT besar... diskonkategori" />
+            <marker date="1538310025859" expanded="true" signature="26522:26571" ph="SELECT idkat... product" />
+            <marker date="1538310025859" expanded="true" signature="26707:26806" ph="SELECT besar... diskonkategori" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

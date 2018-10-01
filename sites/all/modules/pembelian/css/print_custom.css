@@ -1,0 +1,16 @@
+.exp-date{
+    -webkit-transform: rotate(-90deg);
+    font-size: 8px !important;
+    width: 20px !important;
+}
+.exp-cell{
+    width: 20px !important;
+    font-size: 8px !important;
+    padding-bottom: 9px;
+}
+.barcode-font{
+    font-size: 10px !important;
+}
+.space-kosong{
+    font-size: 8px !important;
+}

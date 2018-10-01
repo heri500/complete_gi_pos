@@ -1,0 +1,19 @@
+<?php
+
+function returnpenjualan_install() {
+    $success = drupal_install_schema('returnpenjualan');
+    if ($success) {
+        drupal_set_message(st('Module Return Penjualan berhasil diinstall.'));
+    }
+    else {
+        drupal_set_message(st('Module Return Penjualan gagal diinstall.'), 'error');
+    }
+}
+
+function returnpenjualan_schema(){
+    require 'returnpenjualan.schema.inc';
+    return $schema;
+}
+function returnpenjualan_uninstall() {
+    drupal_uninstall_schema('returnpenjualan');
+}

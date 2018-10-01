@@ -1,0 +1,212 @@
+<?php
+
+function datasupplier_menu()
+{
+    $items['datasupplier/supplier'] = array(
+        'title' => t('Data Supplier'),
+        'description' => 'Manajemen Data Supplier',
+        'page callback' => 'data_supplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Supplier'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.supplier.inc'
+    );
+    $items['datasupplier/detailhutang'] = array(
+        'title' => t('Detail Hutang ke Supplier'),
+        'description' => 'Detail Hutang ke Supplier',
+        'page callback' => 'detail_hutang',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Supplier'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.supplier.inc'
+    );
+    $items['datasupplier/detailpembayaran'] = array(
+        'title' => t('Detail Pembayaran ke Supplier'),
+        'description' => 'Detail Pembayaran ke Supplier',
+        'page callback' => 'detail_pembayaran_hutang',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Supplier'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.supplier.inc'
+    );
+    $items['datasupplier/pembayaran'] = array(
+        'title' => t('Form Pembayaran Hutang ke Supplier'),
+        'description' => 'Form Pembayaran Hutang ke Supplier',
+        'page callback' => 'bayar_hutang_supplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Supplier'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.supplier.inc'
+    );
+    $items['datasupplier/simpansupplier'] = array(
+        'title' => t('Simpan Data Supplier'),
+        'description' => 'Simpan Data Supplier',
+        'page callback' => 'simpan_supplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Supplier'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.supplier.inc'
+    );
+    $items['datasupplier/updatesupplier'] = array(
+        'title' => t('Update Data Supplier'),
+        'description' => 'Update Data Supplier',
+        'page callback' => 'update_supplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Supplier'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.supplier.inc'
+    );
+    $items['datasupplier/cpsupplier'] = array(
+        'title' => t('Contact Person Supplier'),
+        'description' => 'Manajemen Contact Person Supplier',
+        'page callback' => 'data_cpsupplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Contact Person Supplier'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.cpsupplier.inc'
+    );
+    $items['datasupplier/simpancpsupplier'] = array(
+        'title' => t('Simpan Contact Person Supplier'),
+        'description' => 'Simpan Contact Person Supplier',
+        'page callback' => 'simpan_cpsupplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Contact Person Supplier'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.cpsupplier.inc'
+    );
+    $items['datasupplier/updatecpsupplier'] = array(
+        'title' => t('Update Contact Person Supplier'),
+        'description' => 'Update Contact Person Supplier',
+        'page callback' => 'update_cpsupplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Contact Person Supplier'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.cpsupplier.inc'
+    );
+    $items['datasupplier/deletepembayaran'] = array(
+        'title' => t('Delete pembayaran supplier'),
+        'description' => 'Delete pembayaran supplier',
+        'page callback' => 'delete_pembayaran_supplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Supplier'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.supplier.inc'
+    );
+    $items['datasupplier/synchutang'] = array(
+        'title' => t('Sync Hutang Supplier'),
+        'description' => 'Sync Hutang Supplier',
+        'page callback' => 'sync_hutang_supplier_rest',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Supplier'),
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+} // end hook menu
+
+function datasupplier_perm() {
+	return array('Admin Data Supplier','Admin Contact Person Supplier');
+}
+function do_pembayaran_hutang($variables = null){
+	if (!empty($variables) && count($variables)){
+		if (isset($variables["idsupplier"]) && isset($variables["hutang"])
+			&& isset($variables["pembayaran"]) && isset($variables["tglbayar"])){
+			global $user;
+			if ($variables['simpanpembayaran']){
+				db_query("INSERT INTO pembayaranhutang (idsupplier, hutangsebelumbayar,
+						pembayaran, uid, tglbayar, keterangan) VALUES ('%d', '%f', '%f', '%d', '%s','%s')",
+						$variables['idsupplier'],$variables['hutang'],$variables['pembayaran'],
+						$user->uid,$variables['tglbayar'], $variables['keterangan']);
+			}
+			$sisahutang = $variables['hutang'] - $variables['pembayaran'];
+			$tglsekarang = date('Y-m-d H:i:s');
+			if (!$variables['simpanpembayaran']){
+				$variables['pembayaran'] = 0;
+			}
+			db_query("UPDATE hutang SET besarhutang='%f',pembayaranterakhir='%f',last_update='%s'
+			WHERE idsupplier='%d'",$sisahutang,$variables['pembayaran'],$tglsekarang,
+					 $variables['idsupplier']);
+		}
+	}
+}
+function createSupplierSelection($defaultValue = null, $emptyText = null, $inisialUlang = true){
+	if ($inisialUlang){
+		$pilihsupplier = '<select id="idsupplier" name="idsupplier" onchange="inisialulangautocomplete()">';
+	}else{
+		$pilihsupplier = '<select id="idsupplier" name="idsupplier">';
+	}
+	if (!empty($emptyText)){
+		if (empty($defaultValue)){
+			$pilihsupplier .= '<option value="0" selected>'.$emptyText.'</option>';
+		}else{
+			$pilihsupplier .= '<option value="0">'.$emptyText.'</option>';
+		}
+	}
+	$resultsupplier = db_query("SELECT idsupplier,namasupplier FROM supplier");
+	while ($datasupplier = db_fetch_object($resultsupplier)){
+		if (!empty($defaultValue) && $datasupplier->idsupplier == $defaultValue){
+			$pilihsupplier .= '<option value="'.$datasupplier->idsupplier.'" selected>'.$datasupplier->namasupplier.'</option>';
+		}else{
+			$pilihsupplier .= '<option value="'.$datasupplier->idsupplier.'">'.$datasupplier->namasupplier.'</option>';
+		}
+	}
+	$pilihsupplier .= '</select>';
+	return $pilihsupplier;
+}
+function getTotalPembayaranSupplier($idSupplier = null, $periode = null){
+	$totalpembayaran = 0;
+	if (!empty($idSupplier)){
+		if (empty($periode)) {
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM pembayaranhutang WHERE idsupplier='%d'", $idSupplier)
+			);
+		}else if (!empty($periode) && isset($periode['awal']) && isset($periode['akhir'])){
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM pembayaranhutang WHERE idsupplier='%d' AND tglbayar BETWEEN '%s' AND '%s' ", $idSupplier, $periode['awal'], $periode['akhir'])
+			);
+		}
+		$totalpembayaran = $result;
+	}else{
+		if (empty($periode)) {
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM pembayaranhutang")
+			);
+		}else if (!empty($periode) && isset($periode['awal']) && isset($periode['akhir'])){
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM pembayaranhutang WHERE tglbayar BETWEEN '%s' AND '%s' ", $periode['awal'], $periode['akhir'])
+			);
+		}
+		$totalpembayaran = $result;
+	}
+	return $totalpembayaran;
+}
+function syncHutangSupplier($idSupplier = null){
+    if (!empty($idSupplier)){
+        $totalHutang = db_result(db_query("SELECT SUM(besarhutang) FROM detailhutang WHERE idsupplier=%d", $idSupplier));
+        $totalBayar = db_result(db_query("SELECT SUM(pembayaran) FROM pembayaranhutang WHERE idsupplier=%d", $idSupplier));
+        db_query("UPDATE hutang SET besarhutang='%f' WHERE idsupplier=%d", ($totalHutang - $totalBayar), $idSupplier);
+        $ReturnData[] = array($totalHutang - $totalBayar);
+        return $ReturnData;
+    }else{
+        $StrSql = 'SELECT idsupplier FROM supplier';
+        $result = db_query($StrSql);
+        $DataHutangSupplier = array();
+        while ($data = db_fetch_object($result)){
+            $idSupplier = $data->idsupplier;
+            $totalHutang = db_result(db_query("SELECT SUM(besarhutang) FROM detailhutang WHERE idsupplier=%d", $idSupplier));
+            $totalBayar = db_result(db_query("SELECT SUM(pembayaran) FROM pembayaranhutang WHERE idsupplier=%d", $idSupplier));
+            db_query("UPDATE hutang SET besarhutang='%f' WHERE idsupplier=%d", ($totalHutang - $totalBayar), $idSupplier);
+            $DataHutangSupplier[$idSupplier] = ($totalHutang - $totalBayar);
+        }
+        return $DataHutangSupplier;
+    }
+}
+function sync_hutang_supplier_rest(){
+    if (isset($_POST['idsupplier']) && !empty($_POST['idsupplier'])){
+        $IdSupplier = $_POST['idsupplier'];
+        $ReturnData = syncHutangSupplier($IdSupplier);
+    }else{
+        $ReturnData = syncHutangSupplier();
+    }
+    print json_encode($ReturnData);
+    exit();
+}

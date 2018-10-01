@@ -1,0 +1,5 @@
+;$Id$
+name = dataproduk
+description = Data Produk by Ikhwan IT
+package = globalpos
+core = 6.x

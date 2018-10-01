@@ -1,0 +1,13 @@
+; $Id$
+name = globalpos
+description = Tableless, Custom Themes For Global Point Of Sales System.
+version = VERSION
+core = 6.x
+engine = phptemplate
+version = "6.20"
+
+regions[content] = Content
+regions[header] = Header
+regions[footer] = Footer
+
+base theme = garland

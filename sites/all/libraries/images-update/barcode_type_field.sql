@@ -1,0 +1,1 @@
+ALTER TABLE `product` ADD `barcode_type` VARCHAR(50) NOT NULL DEFAULT 'ean13' AFTER `barcode`;

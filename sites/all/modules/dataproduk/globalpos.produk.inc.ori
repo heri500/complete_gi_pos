@@ -1,0 +1,664 @@
+<?php
+
+function data_produk(){
+	$path = drupal_get_path('theme', 'cti_flex');
+ 	$form_style = $path.'/css/custom-style.css';
+ 	drupal_add_css($form_style, 'theme', 'all', FALSE);
+ 	$variables['styles'] = drupal_get_css();
+	drupal_add_css('misc/media/datatables/css/demo_table_jui.css');
+	drupal_add_css('sites/all/libraries/uploadify/uploadify.css');
+	drupal_add_css('misc/media/datatables/css/TableTools.css');
+	drupal_add_css('misc/media/datatables/themes/smoothness/jquery-ui-1.8.4.custom.css');
+	drupal_add_css('misc/media/datatables/css/ColVis.css');
+	drupal_add_css('misc/media/css/validationEngine.jquery.css');
+	drupal_add_js('misc/media/jquery-1.4.4.min.js');
+	drupal_add_js('misc/media/jquery.validationEngine-en.js');
+	drupal_add_js('misc/media/jquery.validationEngine.js');
+	drupal_add_js('misc/media/jquery-ui-1.8.custom.min.js');
+	drupal_add_js('misc/media/datatables/js/jquery.dataTables.min.js');
+	drupal_add_js('misc/media/datatables/js/ColVis.min.js');
+	drupal_add_js('misc/media/datatables/ZeroClipboard/ZeroClipboard.js');
+	drupal_add_js('misc/media/datatables/js/TableTools.min.js');
+	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
+	drupal_add_js('sites/all/libraries/uploadify/jquery.uploadify.v2.1.0.min.js');
+	drupal_add_js('sites/all/libraries/uploadify/swfobject.js');
+	$files_path = base_path().file_directory_path().'/';
+	php_to_drupal_settings(array('filepath' => $files_path));
+	if (cekUserRoles()){
+		php_to_drupal_settings(array('adminislogin' => true));
+	}else{
+		php_to_drupal_settings(array('adminislogin' => false));
+	}
+	$modulepath = drupal_get_path('module', 'dataproduk');
+	drupal_add_js($modulepath.'/tabelproduk.js');
+	if (cekUserRoles()){
+		drupal_set_title('<span style="float: left;margin-right: 6px;">Data Produk</span><button id="tambahprodukbaru" class="tombolutama">Tambah Produk</button><button id="refreshprodukbaru" class="tombolutama">Refresh Tabel Produk</button>');
+	}
+	//Pilihan Kategori
+	$result = db_query("SELECT idkategori,kodekategori,kategori FROM kategori ORDER BY kodekategori,kategori");
+	$pilihankategori = '<select id="idkategori" name="idkategori" onkeyup="filtersubkategori();" onchange="filtersubkategori();">';
+	$i = 0;
+	while ($data = db_fetch_object($result)){
+		if ($i == 0){
+			$idkategoriawal = $data->idkategori;
+		}
+		$pilihankategori .= '<option value="'.$data->idkategori.'">'.$data->kodekategori.'-'.$data->kategori.'</option>';
+		$i++;
+	}
+	$pilihankategori .= '</select>';
+	$buttonadd = '<img id="addkategori" title="Tambah Kategori Baru" src="'.base_path().'misc/media/images/add-small.ico">';
+	//Pilihan Sub Kategori
+	$result = db_query("SELECT idsubkategori,kodesubkategori,subkategori FROM subkategori WHERE idkategori='%d' 
+	ORDER BY kodesubkategori,subkategori",$idkategoriawal);
+	$pilihansubkategori = '<select id="idsubkategori" name="idsubkategori" onkeyup="ubahkodebarang();" onchange="ubahkodebarang();">';
+	while ($data = db_fetch_object($result)){
+		$pilihansubkategori .= '<option value="'.$data->idsubkategori.'">'.$data->kodesubkategori.'-'.$data->subkategori.'</option>';
+	}
+	$pilihansubkategori .= '</select>';
+	$buttonadd2 = '<img id="addsubkategori" title="Tambah Subkategori Baru" src="'.base_path().'misc/media/images/add-small.ico">';
+	//Pilihan Supplier
+	$result = db_query("SELECT idsupplier,kodesupplier,namasupplier FROM supplier ORDER BY kodesupplier,namasupplier");
+	$pilihansupplier = '<select id="idsupplier" name="idsupplier" >';
+	while ($data = db_fetch_object($result)){
+		$pilihansupplier .= '<option value="'.$data->idsupplier.'">'.$data->kodesupplier.'-'.$data->namasupplier.'</option>';
+	}
+	$pilihansupplier .= '</select>';
+	$buttonadd3 = '<img id="addsupplier" title="Tambah Supplier Baru" src="'.base_path().'misc/media/images/add-small.ico">';
+	//Pilihan Satuan
+	$result = db_query("SELECT satuan FROM satuan ORDER BY satuan");
+	$pilihansatuan = '<select id="satuan" name="satuan" style="margin-bottom: 4px;">';
+	while ($data = db_fetch_object($result)){
+		if ($data->satuan == "PCS"){
+			$pilihansatuan .= '<option selected value="'.$data->satuan.'">'.$data->satuan.'</option>';
+		}else{
+			$pilihansatuan .= '<option value="'.$data->satuan.'">'.$data->satuan.'</option>';
+		}
+	}
+	$pilihansatuan .= '</select>';
+	$buttonadd4 = '<img id="addsatuan" title="Tambah satuan Baru" src="'.base_path().'misc/media/images/add-small.ico">';
+	//Pilihan Kategori untuk Dialog Box Tambah Sub kategori
+	$result = db_query("SELECT idkategori,kodekategori,kategori FROM kategori ORDER BY kodekategori,kategori");
+	$pilihankategori2 = '<select disabled="disabled" id="idkategori2" name="idkategori2">';
+	while ($data = db_fetch_object($result)){
+		$pilihankategori2 .= '<option value="'.$data->idkategori.'">'.$data->kodekategori.'-'.$data->kategori.'</option>';
+	}
+	$pilihankategori2 .= '</select>';
+	//idsupplier,idkategori,idsubkategori,barcode,alt_code,namaproduct,hargapokok,hargajual,margin,minstok,maxstok,stok,satuan,berat,keterangan
+	$barcloseform = '<div id="formpenambahanproduk"><div id="barplace"><div id="barcloseform" onclick="tutupformtambahproduk();" title="Tutup form penambahan data produk">Tutup Form</div></div>';
+	$viewtabelproduk = $barcloseform.'<div id="formplace" class="produk"><form id="formproduk" action="'.base_path().'dataproduk/simpanproduk" method="post">';
+	$viewtabelproduk .= '<label>BARCODE</label><input type="text" id="barcode" name="barcode">'; //class="validate[required,funcCall[cek_barcode]]" <div id="validating"></div>';
+	$viewtabelproduk .= '<label>KODE ALTERNATIF</label><input readonly="readonly" type="text" id="kodepoduk" name="kodeproduk">';
+	$viewtabelproduk .= '<label>KATEGORI</label>'.$pilihankategori.$buttonadd;
+	$viewtabelproduk .= '<label>SUBKATEGORI</label>'.$pilihansubkategori.$buttonadd2;
+	$viewtabelproduk .= '<label>SUPPLIER</label>'.$pilihansupplier.$buttonadd3;
+	$viewtabelproduk .= '<label>NAMA PRODUK</label><input type="text" class="validate[required]" id="namaproduk" name="namaproduk">';
+	$viewtabelproduk .= '<label>HARGA POKOK</label><input type="text" class="validate[required]" id="hargapokok" name="hargapokok" onkeyup="hitungmargin(\'hargapokok\')">';
+	$viewtabelproduk .= '<label>HARGA JUAL</label><input type="text" class="validate[required]" id="hargajual" name="hargajual" onkeyup="hitungmargin(\'hargajual\')">';
+	$viewtabelproduk .= '<label>MARGIN HARGA</label><input type="text" maxlength="2" id="margin" name="margin" onkeyup="hitungmargin(\'margin\')">';
+	$pilihantype = '<select id="type_product" name="type_product">';
+	$pilihantype .= '<option value="0">Produk</option>';
+	$pilihantype .= '<option value="1">Jasa</option>';
+	$pilihantype .= '</select>';
+	$viewtabelproduk .= '<label>TYPE ITEM</label>'.$pilihantype;
+	$viewtabelproduk .= '<label>LEAD TIME (JAM)</label><input type="text" id="lead_time" name="lead_time">';
+	$pilihanjamkerja = '<select id="ikut_jam_kerja" name="ikut_jam_kerja">';
+	$pilihanjamkerja .= '<option value="0">Tidak</option>';
+	$pilihanjamkerja .= '<option value="1">Ya</option>';
+	$pilihanjamkerja .= '</select>';
+	$viewtabelproduk .= '<label>IKUT JAM KERJA</label>'.$pilihanjamkerja;
+	$pilihansebelumzuhur = '<select id="sebelum_zuhur" name="sebelum_zuhur">';
+	$pilihansebelumzuhur .= '<option value="0">Tidak</option>';
+	$pilihansebelumzuhur .= '<option value="1">Ya</option>';
+	$pilihansebelumzuhur .= '</select>';
+	$viewtabelproduk .= '<label>BERLAKU SEBELUM JAM 12</label>'.$pilihansebelumzuhur;
+	$viewtabelproduk .= '<label>MINIMUM STOK</label><input type="text" id="minstok" name="minstok">';
+	$viewtabelproduk .= '<label>MAKSIMUM STOK</label><input type="text" id="maxstok" name="maxstok">';
+	$viewtabelproduk .= '<label>STOK SAAT INI</label><input type="text" id="stok" name="stok">';
+	$viewtabelproduk .= '<label>SATUAN</label>'.$pilihansatuan.$buttonadd4;
+	$viewtabelproduk .= '<label>GAMBAR</label><input id="uploadify" name="uploadify" type="file">';
+	$viewtabelproduk .= '<label>KETERANGAN</label><input type="text" id="keteranganproduk" name="keteranganproduk">';
+	$viewtabelproduk .= '</form><div><button onclick="save_produk();" style="font-size:12px;">Tambah Produk</button></div></div></div>';
+	$pilihanstatus = '<div id="pilihanstatus">';
+	$pilihanstatus .= '<img onclick="view_status(\'minimum\')" title="Klik untuk melihat produk dengan stok dibawah minimum" src="'.base_path().'misc/media/images/statusmerah.png">';
+	$pilihanstatus .= '<img onclick="view_status(\'maksimum\')" title="Klik untuk melihat produk dengan stok diatas maksimum" src="'.base_path().'misc/media/images/statuskuning.png">';
+	$pilihanstatus .= '<img onclick="view_status(\'aman\')" title="Klik untuk melihat produk dengan stok aman" src="'.base_path().'misc/media/images/statushijau.png">';
+	$pilihanstatus .= '</div>';
+	if ($_GET["statusstok"]){
+		$STATUSTOK = $_GET["statusstok"];
+		$viewtabelproduk .= $pilihanstatus.'<div id="tempattabel" style="width: 100%;">'.tabel_produk($STATUSTOK).'</div>';
+	}else{
+		$viewtabelproduk .= $pilihanstatus.'<div id="tempattabel" style="width: 100%;">'.tabel_produk().'</div>';
+	}
+	$viewtabelproduk .= '
+	<div id="dialogtambahkategori" title="TAMBAH KATEGORI PRODUK">
+	<form id="tambahkategoriform">
+		<div>
+			<label>KODE</label><input type="text" class="validate[required]" id="kodekategori" name="kodekategori">
+		</div>
+		<div>
+			<label>KATEGORI</label><input class="validate[required]" type="text" id="kategori" name="kategori">
+		</div>
+		<div>
+			<label>KETERANGAN</label><input type="text" id="keterangan" name="keterangan">
+		</div>
+	</form>
+	<div><button id="tambahkategori" onclick="simpankategori();">Tambah Kategori</button></div>
+	</div>';
+	$viewtabelproduk .= '<div id="dialogtambahsubkategori" title="TAMBAH SUBKATEGORI PRODUK">';
+	$viewtabelproduk .= '<form id="tambahsubkategoriform"><div>';
+	$viewtabelproduk .= '<div><label>KATEGORI</label>'.$pilihankategori2.'</div>';
+	$viewtabelproduk .= '<div><label>KODE SUBKATEGORI</label><input type="text" class="validate[required]" id="kodesubkategori" name="kodesubkategori"></div>';
+	$viewtabelproduk .= '<div><label>SUBKATEGORI</label><input type="text" class="validate[required]" id="subkategori" name="subkategori"></div>';
+	$viewtabelproduk .= '<div><label>KETERANGAN</label><input type="text" id="keterangansub" name="keterangansub"></div></div></form>';
+	$viewtabelproduk .= '<div><button id="tambahsubkategori" onclick="simpansubkategori();">Tambah Sub Kategori</button></div>';
+	$viewtabelproduk .= '</div>';
+	$viewtabelproduk .= '<div id="dialogtambahsupplier" title="TAMBAH SUPPLIER">';
+	$viewtabelproduk .= '<form id="tambahsupplierform"><div><label>KODE SUPPLIER</label><input type="text" class="validate[required]" id="kodesupplier" name="kodesupplier"></div>';
+	$viewtabelproduk .= '<div><label>NAMA SUPPLIER</label><input class="validate[required]" type="text" id="namasupplier" name="namasupplier"></div>';
+	$viewtabelproduk .= '<div><label>TELP</label><input type="text" id="telp" name="telp"></div>';
+	$viewtabelproduk .= '<div><label>ALAMAT</label><input type="text" id="alamat" name="alamat"></div>';
+	$viewtabelproduk .= '<div><label>EMAIL</label><input type="text" id="email" name="email"></div>';
+	$viewtabelproduk .= '</form>';
+	$viewtabelproduk .= '<div><button id="tambahsupplier" onclick="simpansupplier();">Tambah Supplier</button></div></div>';
+	$viewtabelproduk .= '<div id="dialogtambahsatuan" title="TAMBAH SATUAN">';
+	$viewtabelproduk .= '<form id="tambahsatuanform"><div><label>SATUAN</label><input type="text" class=\"validate[required]\" id="namasatuan" name="namasatuan"></div>';
+	$viewtabelproduk .= '</form>';
+	$viewtabelproduk .= '<div><button id="tambahsatuan" onclick="simpansatuan();">Tambah Satuan</button></div>';
+	$viewtabelproduk .= '</div>';
+	return $viewtabelproduk;
+}
+function cek_kode_alt($kodealt = null){
+	if ($_POST["kodealternatif"] OR !(is_null($kodealt))){
+		if (is_null($kodealt)){
+			$katacari = '%'.$_POST["kodealternatif"].'%';
+		}else{
+			$katacari = '%'.$kodealt.'%';
+		}
+		$result = db_query("SELECT COUNT(*) AS jumlahproduk FROM product WHERE alt_code LIKE '$katacari'");
+		$data = db_fetch_object($result);
+		if ($data->jumlahproduk){
+			$jumlahkode = (($data->jumlahproduk)*1) + 1;
+		}else{
+			$jumlahkode = 1;
+		}
+		if (is_null($kodealt)){
+			print $jumlahkode;
+			exit();
+			}else{
+		return $kodealt.'-'.$jumlahkode;
+		}
+	}
+	
+}
+function filter_kategori(){
+	if ($_POST["idkategori"]){
+		$result = db_query("SELECT idsubkategori,kodesubkategori,subkategori FROM subkategori WHERE idkategori='%d'",
+		$_POST["idkategori"]);
+		$tambahanpilihan = '';
+		while($data = db_fetch_object($result)){
+			$tambahanpilihan .= '<option value="'.$data->idsubkategori.'">'.$data->kodesubkategori.'-'.$data->subkategori.'</option>';	
+		}
+		print $tambahanpilihan;
+	}
+	exit();	
+}
+
+function tabel_produk($statusstok = null){
+	$type_product = ARRAY_TYPE_ITEM();
+	$tabelproduk = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_produk">';
+	$tabelproduk .= '<thead>';
+	$tabelproduk .= '<tr>';
+	if (cekUserRoles()){
+		$tabelproduk .= '<th class="tablebutton"></th>';
+	}
+	$tabelproduk .= '<th>KATEGORI</th>';
+	$tabelproduk .= '<th>SUPPLIER</th>';
+	$tabelproduk .= '<th>BARCODE</th>';
+	$tabelproduk .= '<th>KODE ALT</th>';
+	$tabelproduk .= '<th>NAMA</th>';
+	$tabelproduk .= '<th>TYPE</th>';
+	if (cekUserRoles()){
+		$tabelproduk .= '<th>H.POKOK</th>';
+	}
+	$tabelproduk .= '<th>H.JUAL</th>';
+	if (cekUserRoles()){
+		$tabelproduk .= '<th>MARGIN</th>';
+		$tabelproduk .= '<th>MIN</th>';
+		$tabelproduk .= '<th>MAX</th>';
+	}
+	$tabelproduk .= '<th>LEAD TIME(JAM)</th>';
+	$tabelproduk .= '<th>STOK</th>';
+	$tabelproduk .= '<th>STATUS</th>';
+	$tabelproduk .= '<th>SATUAN</th>';
+	$tabelproduk .= '<th>KETERANGAN</th>';
+	$tabelproduk .= '</tr>';
+	$tabelproduk .= '</thead>';
+	$tabelproduk .= '<tbody>';
+	if ($statusstok == 'minimum'){
+		$result = db_query("SELECT idproduct,idsupplier,idkategori,idsubkategori,barcode,alt_code,namaproduct,type_product,
+		hargapokok,hargajual,margin,minstok,maxstok,stok,satuan,berat,keterangan,lead_time 
+		FROM product WHERE stok < minstok");
+	}elseif ($statusstok == 'maksimum'){
+		$result = db_query("SELECT idproduct,idsupplier,idkategori,idsubkategori,barcode,alt_code,namaproduct,type_product,
+		hargapokok,hargajual,margin,minstok,maxstok,stok,satuan,berat,keterangan,lead_time 
+		FROM product WHERE stok > maxstok");
+	}elseif ($statusstok == 'aman'){
+		$result = db_query("SELECT idproduct,idsupplier,idkategori,idsubkategori,barcode,alt_code,namaproduct,type_product,
+		hargapokok,hargajual,margin,minstok,maxstok,stok,satuan,berat,keterangan,lead_time 
+		FROM product WHERE stok >= minstok AND stok <= maxstok");
+	}else{
+		$result = db_query("SELECT idproduct,idsupplier,idkategori,idsubkategori,barcode,alt_code,namaproduct,type_product,
+		hargapokok,hargajual,margin,minstok,maxstok,stok,satuan,berat,keterangan,lead_time 
+		FROM product");
+	}
+	while ($data = db_fetch_object($result)){
+		$editproduk = '<img title="Edit Produk '.$data->namaproduct.'" src="'.base_path().'misc/media/images/edit.ico" onclick="editproduk(\''.$data->idproduct.'\')">';
+		$tabelproduk .= '<tr id="'.$data->idproduct.'">';
+		if (cekUserRoles()){
+			$tabelproduk .= '<td class="center">'.$editproduk.'</td>';
+		}
+		$tabelproduk .= '<td class="center">'.nama_field($data->idkategori,"idkategori","kategori","kategori").'</td>';
+		//$tabelproduk .= '<td class="center">'.nama_field($data->idsubkategori,"idsubkategori","subkategori","subkategori").'</td>';
+		$tabelproduk .= '<td class="center">'.nama_field($data->idsupplier,"idsupplier","namasupplier","supplier").'</td>';
+		$tabelproduk .= '<td class="center">'.$data->barcode.'</td>';
+		$tabelproduk .= '<td class="center">'.$data->alt_code.'</td>';
+		$tabelproduk .= '<td>'.$data->namaproduct.'</td>';
+		$tabelproduk .= '<td>'.$type_product[$data->type_product].'</td>';
+		if (cekUserRoles()){
+			$tabelproduk .= '<td class="angka">'.number_format($data->hargapokok,0,",",".").'</td>';
+		}
+		$tabelproduk .= '<td class="angka">'.number_format($data->hargajual,0,",",".").'</td>';
+		if (cekUserRoles()){
+			$tabelproduk .= '<td class="angka">'.number_format($data->margin,0,",",".").'</td>';
+			$tabelproduk .= '<td class="center">'.number_format($data->minstok,0,",",".").'</td>';
+			$tabelproduk .= '<td class="center">'.number_format($data->maxstok,0,",",".").'</td>';
+		}
+		$tabelproduk .= '<td class="center">'.number_format($data->stok,0,",",".").'</td>';
+		if ($data->stok < $data->minstok){
+			$statusstok = '<img title="Stok dibawah minimum" src="'.base_path().'misc/media/images/statusmerah.png">';	
+		}elseif ($data->stok > $data->maxstok){
+			$statusstok = '<img title="Stok berlebihan/diatas maksimum stok" src="'.base_path().'misc/media/images/statuskuning.png">';	
+		}elseif ($data->stok <= $data->maxstok AND $data->stok >= $data->minstok){
+			$statusstok = '<img title="Stok aman" src="'.base_path().'misc/media/images/statushijau.png">';	
+		}
+		$tabelproduk .= '<td class="center">'.$data->lead_time.'</td>';
+		$tabelproduk .= '<td class="center" valign="middle">'.$statusstok.'</td>';
+		$tabelproduk .= '<td class="center">'.$data->satuan.'</td>';
+		$tabelproduk .= '<td>'.$data->keterangan.'</td>';
+		$tabelproduk .= '</tr>';
+	}
+	$tabelproduk .= '</tbody>';
+	$tabelproduk .= '</table>';
+	if ($_POST["asal"]){
+		print $tabelproduk;
+	}else{
+		return $tabelproduk;
+	}
+}
+function nama_field($field_id = null,$namafield_id = null,$nama_field = null,$namatabel = null){
+	if ($field_id AND $namatabel AND $nama_field){
+		$result = db_query("SELECT $nama_field AS namafield FROM $namatabel WHERE $namafield_id='$field_id'");
+		$data = db_fetch_object($result);
+		return $data->namafield;
+	}else{
+		return "-";
+	}
+}
+function simpan_satuan(){
+	if ($_POST["namasatuan"]){
+		$result = db_query("SELECT COUNT(*) AS jumlahsama FROM satuan WHERE satuan='%s'",$_POST["namasatuan"]);
+		$data = db_fetch_object($result);
+		if (!($data->jumlahsama > 0)){
+			db_query("INSERT INTO satuan VALUES ('%s')",$_POST["namasatuan"]);
+			print $_POST["namasatuan"];
+		}else{
+			print "error";	
+		}
+	}
+	exit();	
+}
+function cek_barcode(){
+	if ($_POST["barcode"]){
+		$result = db_query("SELECT COUNT(*) AS jumlahsama FROM product WHERE barcode='%s'",$_POST["barcode"]);
+		$data = db_fetch_object($result);
+		if ($data->jumlahsama > 0){
+			print "sama";	
+		}else{
+			print "taksama";
+		}	
+	}	
+	exit();
+}
+function cek_barcode2(){
+	if ($_POST["barcode"] AND $_POST["idproduk"]){
+		$BARCODE = $_POST["barcode"];
+		$IDPRODUK = $_POST["idproduk"];
+		$sql = "SELECT COUNT(*) AS jumlahsama FROM product WHERE barcode='$BARCODE' AND idproduct<>'$IDPRODUK'";
+		$result = db_query("SELECT COUNT(*) AS jumlahsama FROM product WHERE barcode='%s' AND idproduct<>'%d'",$_POST["barcode"],$_POST["idproduk"]);
+		$data = db_fetch_object($result);
+		if ($data->jumlahsama > 0){
+			print "sama";	
+		}else{
+			print "taksama";
+		}	
+	}
+	//print $_POST["idproduk"]." ".$_POST["barcode"];
+	exit();
+}
+function simpan_produk(){
+	/*idsupplier,idkategori,idsubkategori,barcode,alt_code,namaproduct,hargapokok,
+	hargajual,margin,minstok,maxstok,stok,satuan,berat,keterangan*/
+	global $user;
+	if ($_POST["idproduk"]){
+		//Tambahkan barcode pada toko yang perlu
+		//$_POST["barcode"] AND 
+
+		if (isset($_POST["namaproduk"])){
+			$result = db_query("SELECT idkategori,idsubkategori,stok,hargapokok FROM product WHERE idproduct='%d'",$_POST["idproduk"]);
+			$data = db_fetch_object($result);
+			$STOKSEBELUM = $data->stok;
+			$HARGAPOKOK = $data->hargapokok;
+			print $data->idkategori.' '.$_POST["idkategori"].' ';
+			if (!($data->idkategori == $_POST["idkategori"])){
+				$resultkategori = db_query("SELECT kodekategori FROM kategori WHERE idkategori='%d'",$_POST["idkategori"]);
+				$datakategori = db_fetch_object($resultkategori);
+				//$resultsubkategori = db_query("SELECT kodesubkategori FROM subkategori WHERE idsubkategori='%d'",$_POST["idsubkategori"]);
+				//$datasubkategori = db_fetch_object($resultsubkategori);
+				$kodealt = $datakategori->kodekategori;//."-".$datasubkategori->kodesubkategori
+				$kodealternatif = cek_kode_alt($kodealt);
+				print 'DISINI';
+				db_query("UPDATE product SET idsupplier='%d',idkategori='%d',idsubkategori='%d',barcode='%s',alt_code='%s',
+				namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',
+				keterangan='%s', type_product='%d', lead_time='%d', aturan_jam_kerja='%d',berlaku_sebelum_zuhur='%d' WHERE idproduct='%d'",
+				$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],$_POST["barcode"],$kodealternatif,
+				$_POST["namaproduk"],$_POST["hargapokok"],$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],$_POST["stok"],
+				$_POST["satuan"],$_POST["keterangan"],$_POST["type_product"],$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],$_POST["idproduk"]);
+				if ($_POST["hargapokok"] <> $HARGAPOKOK){
+					global $user;
+					db_query("INSERT INTO historyhargabeli (hargasebelum, hargasesudah, uid) VALUES('%f','%f','%d')",
+					$HARGAPOKOK,$_POST["hargapokok"],$user->uid);
+				}
+			}else{
+				db_query("UPDATE product SET idsupplier='%d',barcode='%s',
+				namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s',
+				idkategori='%d', type_product='%d',lead_time='%d', aturan_jam_kerja='%d',berlaku_sebelum_zuhur='%d' WHERE idproduct='%d'",
+				$_POST["idsupplier"],$_POST["barcode"],
+				$_POST["namaproduk"],$_POST["hargapokok"],$_POST["hargajual"],$_POST["margin"],
+				$_POST["minstok"],$_POST["maxstok"],$_POST["stok"],
+				$_POST["satuan"],$_POST["keterangan"],$_POST["idkategori"],$_POST["type_product"],
+				$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],$_POST["idproduk"]);
+				if ($_POST["hargapokok"] <> $HARGAPOKOK){
+					global $user;
+					db_query("INSERT INTO historyhargabeli (hargasebelum, hargasesudah, uid) VALUES('%f','%f','%d')",
+					$HARGAPOKOK,$_POST["hargapokok"],$user->uid);
+				}
+			}
+			if ($_POST["type_product"] == 0){
+				$SELISIHSTOK = ($_POST["stok"]*1) - $STOKSEBELUM;
+				if ($SELISIHSTOK < 0){
+					$KELUAR = abs($SELISIHSTOK);
+					$KETERANGAN = 'Perubahan Stock-Stok Berkurang';
+					db_query("INSERT INTO transaksistock (idproduk, stocksebelum, keluar, stocksetelah, keterangan) VALUES 
+					('%d', '%f', '%f', '%f', '%s')",$_POST["idproduk"],$STOKSEBELUM,$KELUAR,$_POST["stok"],$KETERANGAN);
+				}else{
+					$MASUK = $SELISIHSTOK;
+					$KETERANGAN = 'Perubahan Stock-Stok Bertambah';
+					db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
+					('%d', '%f', '%f', '%f', '%s')",$_POST["idproduk"],$STOKSEBELUM,$MASUK,$_POST["stok"],$KETERANGAN);
+				}
+			}
+		}
+	}else{
+		//Tambahkan barcode pada toko yang perlu
+		//$_POST["barcode"] AND 
+		if ($_POST["namaproduk"]){
+			db_query("INSERT INTO product(idsupplier,idkategori,idsubkategori,barcode,alt_code,
+			namaproduct,hargapokok,hargajual,margin,minstok,maxstok,stok,satuan,keterangan,type_product,
+			lead_time, aturan_jam_kerja,berlaku_sebelum_zuhur) VALUES(
+			'%d','%d','%d','%s','%s',
+			'%s','%f','%f','%f','%d','%d','%d','%s','%s','%d','%d','%d','%d')",
+			$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],$_POST["barcode"],$_POST["alt_code"],
+			$_POST["namaproduk"],$_POST["hargapokok"],$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],
+			$_POST["maxstok"],$_POST["stok"],$_POST["satuan"],$_POST["keterangan"],$_POST["type_product"],
+			$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"]);
+			$result = db_query("SELECT idproduct FROM product WHERE alt_code='%s'",$_POST["alt_code"]);
+			$data = db_fetch_object($result);
+			$IDPRODUK = $data->idproduct;
+			$KETERANGAN = 'Inisialisasi Stock';
+			if ($_POST["type_product"] == 0){
+				db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
+				('%d', '%f', '%f', '%f', '%s')",$IDPRODUK,0,$_POST["stok"],$_POST["stok"],$KETERANGAN);
+			}
+			if (trim($_POST['namafile']) != 'tanpafile'){	
+				$node = new stdClass();
+				$node->title = $_POST["namaproduk"];
+				$node->body = $_POST["keterangan"];
+				$node->type = 'gambar_produk';
+				$node->created = time();
+				$node->changed = $node->created;
+				$node->status = 1;          // Published?
+				$node->promote = 0;       // Display on front page?
+				$node->sticky = 0;          // Display top of page?
+				$node->format = 0;         // Filtered HTML?
+				$node->uid = $user->uid;	             //  Content owner uid (author)?
+				$node->name = $user->name;
+				$node->field_id_produk[0]['value'] = $IDPRODUK;
+				$files_path = file_directory_path().'/';
+				$file = $files_path.$_POST['namafile'];
+				$details = stat($file);
+		    $filesize = $details['size'];
+		    $name = basename($file);
+		    $file_obj = new stdClass();
+		    $file_obj->filename = $name;
+		    $file_obj->filepath = $file;
+		    $file_obj->filemime = file_get_mimetype($name);
+		    $file_obj->filesize = $filesize;
+		    $file_obj->filesource = $name;
+		    // You can change this to the UID you want
+		    $file_obj->uid = $user->uid;
+		    $file_obj->status = FILE_STATUS_TEMPORARY;
+		    $file_obj->timestamp = time();
+		    $file_obj->list = 1;
+		    $file_obj->new = true;
+		
+		    // Save file to files table
+		    drupal_write_record('files', $file_obj);
+		    file_set_status($file_obj,1);
+		
+		    // Attach the file object to your node
+		    $node->field_gambar_file = array(
+			    array(
+			      'fid' => $file_obj->fid,
+			      'title' => $name,
+			      'filename' => $file_obj->filename,
+			      'filepath' => $file_obj->filepath,
+			      'filesize' => $file_obj->filesize,
+			      'mimetype' => file_get_mimetype($name),
+			      'description' => $name,
+			      'list' => 1,
+			    ),
+			  );
+		    //$node->files[$file_obj->fid] = $file_obj;
+		    node_save($node);
+			}
+		}
+	}
+	exit();	
+}
+
+function update_subkategori(){
+	$NILAI = $_POST['value'];
+	$KOLOM = $_POST['kol_id'];
+	$SUBKATEGORI_ID = $_POST['row_id'];
+	$NILAITAMPIL = $NILAI;
+	if ($KOLOM == "1"){
+		$NILAI = strtoupper($NILAI);
+		$sql_update = "UPDATE subkategori SET kodesubkategori='%s' WHERE idsubkategori='%d'";
+	}elseif ($KOLOM == "2"){
+		$sql_update = "UPDATE subkategori SET subkategori='%s' WHERE idsubkategori='%d'";
+	}elseif ($KOLOM == "3"){
+		$sql_update = "UPDATE subkategori SET keterangan='%s' WHERE idsubkategori='%d'";
+	}elseif ($KOLOM == "0"){
+		$sql_update = "UPDATE subkategori SET idkategori='%d' WHERE idsubkategori='%d'";
+		$result = db_query("SELECT kodekategori,kategori FROM kategori WHERE idkategori='%d'",$NILAI);
+		$data = db_fetch_object($result);
+		$NILAITAMPIL = $data->kodekategori."-".$data->kategori;	
+	}
+	db_query($sql_update,$NILAI,$SUBKATEGORI_ID);
+	echo $NILAITAMPIL;
+	exit();	
+}
+
+function edit_data_produk(){
+	$path = drupal_get_path('theme', 'cti_flex');
+ 	$form_style = $path.'/css/custom-style.css';
+ 	drupal_add_css($form_style, 'theme', 'all', FALSE);
+ 	$variables['styles'] = drupal_get_css();
+	if ($_GET["idproduk"]){
+		$IDPRODUK = $_GET["idproduk"];
+		$resultproduk = db_query("SELECT idsupplier, idkategori, idsubkategori, barcode, 
+		alt_code, namaproduct, hargapokok, hargajual, margin, minstok, maxstok, stok, satuan, 
+		keterangan, type_product, lead_time,aturan_jam_kerja,berlaku_sebelum_zuhur FROM product 
+		WHERE idproduct='%d'",$IDPRODUK);
+		$dataproduk = db_fetch_object($resultproduk);
+		drupal_add_css('misc/media/datatables/themes/smoothness/jquery-ui-1.8.4.custom.css');
+		drupal_add_css('misc/media/css/validationEngine.jquery.css');
+		drupal_add_js('misc/media/jquery-1.4.4.min.js');
+		drupal_add_js('misc/media/jquery.validationEngine-en.js');
+		drupal_add_js('misc/media/jquery.validationEngine.js');
+		drupal_add_js('misc/media/jquery-ui-1.8.custom.min.js');
+		drupal_add_js('misc/media/jquery.autotab-1.1b.js');
+		$filePath = base_path().file_directory_path();
+		$idSubKategori = $dataproduk->idsubkategori;
+		drupal_add_js(
+			array(
+				'filePath' => $filePath,
+				'idSubKategori' => $idSubKategori,
+			), 
+		'setting');
+		$js_path = drupal_get_path('module','dataproduk').'/editproduct.js';
+		drupal_add_js($js_path);
+		//Pilihan Kategori
+		$result = db_query("SELECT idkategori,kodekategori,kategori FROM kategori ORDER BY kodekategori,kategori");
+		$pilihankategori = '<select id="idkategori" name="idkategori" onkeypress="filtersubkategori();" onchange="filtersubkategori();">';
+		while ($data = db_fetch_object($result)){
+			if ($data->idkategori == $dataproduk->idkategori){
+				$pilihankategori .= '<option selected value="'.$data->idkategori.'">'.$data->kodekategori.'-'.$data->kategori.'</option>';
+			}else{
+				$pilihankategori .= '<option value="'.$data->idkategori.'">'.$data->kodekategori.'-'.$data->kategori.'</option>';
+			}
+		}
+		$pilihankategori .= '</select>';
+		$buttonadd = '<img id="addkategori" title="Tambah Kategori Baru" src="'.base_path().'misc/media/images/add-small.ico">';
+		//Pilihan Sub Kategori
+		$pilihansubkategori = '<select id="idsubkategori" name="idsubkategori" onkeypress="ubahkodebarang();" onchange="ubahkodebarang();">';
+		$pilihansubkategori .= '</select>';
+		$buttonadd2 = '<img id="addsubkategori" title="Tambah Subkategori Baru" src="'.base_path().'misc/media/images/add-small.ico">';
+		//Pilihan Supplier
+		$result = db_query("SELECT idsupplier,kodesupplier,namasupplier FROM supplier ORDER BY kodesupplier,namasupplier");
+		$pilihansupplier = '<select id="idsupplier" name="idsupplier" >';
+		while ($data = db_fetch_object($result)){
+			if ($data->idsupplier == $dataproduk->idsupplier){
+				$pilihansupplier .= '<option selected value="'.$data->idsupplier.'">'.$data->kodesupplier.'-'.$data->namasupplier.'</option>';
+			}else{
+				$pilihansupplier .= '<option value="'.$data->idsupplier.'">'.$data->kodesupplier.'-'.$data->namasupplier.'</option>';
+			}
+		}
+		$pilihansupplier .= '</select>';
+		$buttonadd3 = '<img id="addsupplier" title="Tambah Supplier Baru" src="'.base_path().'misc/media/images/add-small.ico">';
+		//Pilihan Satuan
+		$result = db_query("SELECT satuan FROM satuan ORDER BY satuan");
+		$pilihansatuan = '<select id="satuan" name="satuan" >';
+		while ($data = db_fetch_object($result)){
+			if ($data->satuan == $dataproduk->satuan){
+				$pilihansatuan .= '<option selected value="'.$data->satuan.'">'.$data->satuan.'</option>';
+			}else{
+				$pilihansatuan .= '<option value="'.$data->satuan.'">'.$data->satuan.'</option>';
+			}
+		}
+		$pilihansatuan .= '</select>';
+		$buttonadd4 = '<img id="addsatuan" title="Tambah satuan Baru" src="'.base_path().'misc/media/images/add-small.ico">';
+		//Pilihan Kategori untuk Dialog Box Tambah Sub kategori
+		$result = db_query("SELECT idkategori,kodekategori,kategori FROM kategori ORDER BY kodekategori,kategori");
+		$pilihankategori2 = '<select disabled="disabled" id="idkategori2" name="idkategori2">';
+		while ($data = db_fetch_object($result)){
+			$pilihankategori2 .= '<option value="'.$data->idkategori.'">'.$data->kodekategori.'-'.$data->kategori.'</option>';
+		}
+		$pilihankategori2 .= '</select>';
+		//idsupplier,idkategori,idsubkategori,barcode,alt_code,namaproduct,hargapokok,hargajual,margin,minstok,maxstok,stok,satuan,berat,keterangan
+		$editproduk = '<div id="formplace" class="produk"><form id="formproduk">';
+		$editproduk .= '<label>BARCODE</label><input type="text"  id="barcode" name="barcode" value="'.$dataproduk->barcode.'"><div id="validating"></div>';//class="validate[required,funcCall[cek_barcode]]"
+		$editproduk .= '<input type="hidden" id="barcodelama" name="barcodelama" value="'.$dataproduk->barcode.'">';
+		$editproduk .= '<input type="hidden" id="kodepoduk" name="kodeproduk" value="'.$dataproduk->alt_code.'">';
+		$editproduk .= '<label>KATEGORI</label>'.$pilihankategori.$buttonadd;
+		$editproduk .= '<label>SUBKATEGORI</label>'.$pilihansubkategori.$buttonadd2;
+		$editproduk .= '<label>SUPPLIER</label>'.$pilihansupplier.$buttonadd3;
+		$editproduk .= '<label>NAMA PRODUK</label><input type="text" class="validate[required]" id="namaproduk" name="namaproduk" value="'.$dataproduk->namaproduct.'">';
+		if ($dataproduk->type_product == 0){
+			$selectedproduct = 'selected';	
+			$selectedjasa = '';	
+		}else{
+			$selectedproduct = '';	
+			$selectedjasa = 'selected';		
+		}
+		$pilihantype = '<select id="type_product" name="type_product">';
+		$pilihantype .= '<option value="0" '.$selectedproduct.'>Produk</option>';
+		$pilihantype .= '<option value="1" '.$selectedjasa.'>Jasa</option>';
+		$pilihantype .= '</select>';
+		$editproduk .= '<label>TYPE ITEM</label>'.$pilihantype;
+		$editproduk .= '<label>HARGA POKOK</label><input type="text" class="validate[required]" id="hargapokok" name="hargapokok" onkeyup="hitungmargin(\'hargapokok\')" value="'.$dataproduk->hargapokok.'">';
+		$editproduk .= '<label>HARGA JUAL</label><input type="text" class="validate[required]" id="hargajual" name="hargajual" onkeyup="hitungmargin(\'hargajual\')" value="'.$dataproduk->hargajual.'">';
+		$editproduk .= '<label>MARGIN HARGA</label><input type="text" maxlength="2" id="margin" name="margin" onkeyup="hitungmargin(\'margin\')" value="'.$dataproduk->margin.'">';
+		$editproduk .= '<label>MINIMUM STOK</label><input type="text" id="minstok" name="minstok" value="'.$dataproduk->minstok.'">';
+		$editproduk .= '<label>MAKSIMUM STOK</label><input type="text" id="maxstok" name="maxstok" value="'.$dataproduk->maxstok.'">';
+		$editproduk .= '<label>STOK SAAT INI</label><input type="text" id="stok" name="stok" value="'.$dataproduk->stok.'">';
+		$editproduk .= '<label>LEAD TIME (JAM)</label><input type="text" id="lead_time" name="lead_time" value="'.$dataproduk->lead_time.'">';
+		$selected_no = ($dataproduk->aturan_jam_kerja == 0) ? 'selected' : '';
+		$selected_yes = ($dataproduk->aturan_jam_kerja == 1) ? 'selected' : '';
+		$pilihanjamkerja = '<select id="ikut_jam_kerja" name="ikut_jam_kerja">';
+		$pilihanjamkerja .= '<option value="0" '.$selected_no.'>Tidak</option>';
+		$pilihanjamkerja .= '<option value="1" '.$selected_yes.'>Ya</option>';
+		$pilihanjamkerja .= '</select>';
+		$editproduk .= '<label>IKUT JAM KERJA</label>'.$pilihanjamkerja;
+		$selected_no = ($dataproduk->berlaku_sebelum_zuhur == 0) ? 'selected' : '';
+		$selected_yes = ($dataproduk->berlaku_sebelum_zuhur == 1) ? 'selected' : '';
+		$pilihansebelumzuhur = '<select id="sebelum_zuhur" name="sebelum_zuhur">';
+		$pilihansebelumzuhur .= '<option value="0" '.$selected_no.'>Tidak</option>';
+		$pilihansebelumzuhur .= '<option value="1" '.$selected_yes.'>Ya</option>';
+		$pilihansebelumzuhur .= '</select>';
+		$editproduk .= '<label>BERLAKU SEBELUM JAM 12</label>'.$pilihansebelumzuhur;
+		$editproduk .= '<label>SATUAN</label>'.$pilihansatuan.$buttonadd4;
+		$editproduk .= '<label>KETERANGAN</label><input type="text" id="keteranganproduk" name="keteranganproduk" value="'.$dataproduk->keterangan.'">';
+		$editproduk .= '<input type="hidden" id="idproduk" name="idproduk" value="'.$IDPRODUK.'"></form><div><button onclick="simpanproduk();" style="font-size:12px;border: 1px solid blue;">Update Produk</button><button onclick="batal();" style="font-size:12px;margin-left: 6px;border: 1px solid red;">Batal</button></div></div></div>';
+		$editproduk .= '<div id="dialogtambahkategori" title="TAMBAH KATEGORI PRODUK">';
+		$editproduk .= '<form id="tambahkategoriform"><div><label>KODE</label><input type="text" class="validate[required]" id="kodekategori" name="kodekategori"></div>';
+		$editproduk .= '<div><label>KATEGORI</label><input class="validate[required]" type="text" id="kategori" name="kategori"></div>';
+		$editproduk .= '<div><label>KETERANGAN</label><input type="text" id="keterangan" name="keterangan"></div></form>';
+		$editproduk .= '<div><button id="tambahkategori" onclick="simpankategori();">Tambah Kategori</button></div>';
+		$editproduk .= '</div>';
+		$editproduk .= '<div id="dialogtambahsubkategori" title="TAMBAH SUBKATEGORI PRODUK">';
+		$editproduk .= '<form id="tambahsubkategoriform"><div>';
+		$editproduk .= '<div><label>KATEGORI</label>'.$pilihankategori2.'</div>';
+		$editproduk .= '<div><label>KODE SUBKATEGORI</label><input type="text" class="validate[required]" id="kodesubkategori" name="kodesubkategori"></div>';
+		$editproduk .= '<div><label>SUBKATEGORI</label><input type="text" class="validate[required]" id="subkategori" name="subkategori"></div>';
+		$editproduk .= '<div><label>KETERANGAN</label><input type="text" id="keterangansub" name="keterangansub"></div></div></form>';
+		$editproduk .= '<div><button id="tambahsubkategori" onclick="simpansubkategori();">Tambah Sub Kategori</button></div>';
+		$editproduk .= '</div>';
+		$editproduk .= '<div id="dialogtambahsupplier" title="TAMBAH SUPPLIER">';
+		$editproduk .= '<form id="tambahsupplierform"><div><label>KODE SUPPLIER</label><input type="text" class="validate[required]" id="kodesupplier" name="kodesupplier"></div>';
+		$editproduk .= '<div><label>NAMA SUPPLIER</label><input class="validate[required]" type="text" id="namasupplier" name="namasupplier"></div>';
+		$editproduk .= '<div><label>TELP</label><input type="text" id="telp" name="telp"></div>';
+		$editproduk .= '<div><label>ALAMAT</label><input type="text" id="alamat" name="alamat"></div>';
+		$editproduk .= '<div><label>EMAIL</label><input type="text" id="email" name="email"></div>';
+		$editproduk .= '</form>';
+		$editproduk .= '<div><button id="tambahsupplier" onclick="simpansupplier();">Tambah Supplier</button></div>';
+		$editproduk .= '<div id="dialogtambahsatuan" title="TAMBAH SATUAN">';
+		$editproduk .= '<form id="tambahsatuanform"><div><label>SATUAN</label><input type="text" class=\"validate[required]\" id="namasatuan" name="namasatuan"></div>';
+		$editproduk .= '</form>';
+		$editproduk .= '<div><button id="tambahsatuan" onclick="simpansatuan();">Tambah Satuan</button></div>';
+		$editproduk .= '</div>';
+		return $editproduk;
+	}else{
+		drupal_goto("dataproduk/produk");
+	}
+}

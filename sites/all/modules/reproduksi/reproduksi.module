@@ -1,0 +1,109 @@
+<?php
+
+function reproduksi_menu() {
+	$items['reproduksi/kasir'] = array(
+    'title' => t('From Packing Ulang'),
+    'description' => 'From Packing Ulang',
+		'page callback' => 'reproduksi',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Reproduksi Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasirrepro.inc'
+	);
+	$items['hasilreproduksi/kasir'] = array(
+    'title' => t('Form Hasil Packing Ulang'),
+    'description' => 'Form Hasil Packing Ulang',
+		'page callback' => 'hasilreproduksi',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Reproduksi Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasirhasilrepro.inc'
+	);
+	$items['reproduksi/viewreproduksi'] = array(
+    'title' => t('Data Packing Ulang'),
+    'description' => 'Data Reproduksi',
+		'page callback' => 'view_tabel_reproduksi',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Reproduksi'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.reproduksi.inc'
+	);
+	$items['reproduksi/detailreproduksi'] = array(
+    'title' => t('Detail Reproduksi'),
+    'description' => 'Detail Reproduksi',
+		'page callback' => 'detail_reproduksi',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Reproduksi'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.reproduksi.inc'
+	);
+	$items['hasilreproduksi/detailhasilreproduksi'] = array(
+    'title' => t('Detail Hasil Reproduksi'),
+    'description' => 'Detail Hasil Reproduksi',
+		'page callback' => 'detail_hasilreproduksi',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Reproduksi'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.reproduksi.inc'
+	);
+	$items['reproduksi/cariproduk'] = array(
+    'title' => t('Pencarian Produk'),
+    'description' => 'Pencarian Produk',
+		'page callback' => 'cari_produk',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Reproduksi Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasirrepro.inc'
+	);
+	$items['reproduksi/autocaribarang'] = array(
+    'title' => t('Pencarian Produk'),
+    'description' => 'Pencarian Produk',
+		'page callback' => 'cari_barang',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Reproduksi Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasirrepro.inc'
+	);
+	$items['reproduksi/simpanreproduksi'] = array(
+    'title' => t('Simpan Reproduksi'),
+    'description' => 'Simpan Reproduksi',
+		'page callback' => 'simpan_reproduksi',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Reproduksi Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasirrepro.inc'
+	);
+	//MENU HASIL REPRODUKSI
+	$items['hasilreproduksi/cariproduk'] = array(
+    'title' => t('Pencarian Produk'),
+    'description' => 'Pencarian Produk',
+		'page callback' => 'cari_produk',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Reproduksi Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasirhasilrepro.inc'
+	);
+	$items['hasilreproduksi/autocaribarang'] = array(
+    'title' => t('Pencarian Produk'),
+    'description' => 'Pencarian Produk',
+		'page callback' => 'cari_barang',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Reproduksi Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasirhasilrepro.inc'
+	);
+	$items['hasilreproduksi/simpanhasilreproduksi'] = array(
+    'title' => t('Simpan Reproduksi'),
+    'description' => 'Simpan Reproduksi',
+		'page callback' => 'simpan_hasilreproduksi',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Reproduksi Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasirhasilrepro.inc'
+	);
+	return $items;
+} // end hook menu
+
+function reproduksi_perm() {
+	return array('Admin Reproduksi Produk','Admin Data Reproduksi');
+}

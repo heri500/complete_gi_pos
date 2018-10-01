@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * The module file.
+ *
+ * Defines the settings callback and form for phpexcel.
+ *
+ * To use PHPExcel, include phpexcel.api.inc in your module for exporting to
+ * excel:
+ * @code
+ *   module_load_include('inc', 'phpexcel', 'phpexcel.api');
+ * @endcode
+ */
+
+/**
+ * Implements hook_menu()
+ */
+function phpexcel_menu() {
+  return array(
+    'admin/settings/phpexcel' => array(
+      'title' => 'PHPExcel settings',
+      'access arguments' => array('administer phpexcel'),
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('phpexcel_settings_form'),
+    )
+  );
+}
+
+/**
+ * Implements hook_perm()
+ */
+function phpexcel_perm() {
+  return array('administer phpexcel');
+}
+
+/**
+ * Settings form
+ */
+function phpexcel_settings_form() {
+  $form = array(
+    'phpexcel_memcache' => array(
+      '#title' => t("Memcache server"),
+      '#description' => t("The PHPExcel library can use Memcache for better performance. If you plan on exporting very large Excel files, PHP could run out of memory. By default, phpexcel will gzip all data in memory to increase performance, but if you have Memcache, specify it's location here (usually 'localhost')."),
+      '#type' => 'textfield',
+      '#default_value' => variable_get('phpexcel_memcache', '')
+    )
+  );
+  
+  return system_settings_form($form);
+}

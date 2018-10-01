@@ -1,0 +1,205 @@
+<?php
+
+function pembelian_menu()
+{
+    $items['pembelian/kasir'] = array(
+        'title' => t('Kasir Pembelian Global POS'),
+        'description' => 'Kasir pembelian global pos',
+        'page callback' => 'pembelian',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pembelian.inc'
+    );
+    $items['pembelian/viewpembelian'] = array(
+        'title' => t('Data Pembelian'),
+        'description' => 'Data Pembelian',
+        'page callback' => 'view_tabel_pembelian',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pembelian.inc'
+    );
+    $items['pembelian/detailpembelian'] = array(
+        'title' => t('Detail Pembelian'),
+        'description' => 'Detail Pembelian',
+        'page callback' => 'detail_pembelian',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pembelian.inc'
+    );
+    $items['pembelian/cariproduk'] = array(
+        'title' => t('Pencarian Produk'),
+        'description' => 'Pencarian Produk',
+        'page callback' => 'cari_produk_pembelian',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pembelian.inc'
+    );
+    $items['pembelian/autocaribarang'] = array(
+        'title' => t('Pencarian Produk'),
+        'description' => 'Pencarian Produk',
+        'page callback' => 'cari_barang_pembelian',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pembelian.inc'
+    );
+    $items['pembelian/simpanpembelian'] = array(
+        'title' => t('Simpan Pembelian'),
+        'description' => 'Simpan Pembelian',
+        'page callback' => 'simpan_pembelian',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pembelian.inc'
+    );
+    $items['pembelian/updatepembelian'] = array(
+        'title' => t('Update Pembelian'),
+        'description' => t('Update Pembelian'),
+        'page callback' => 'update_pembelian',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'pembelian.update.inc'
+    );
+    $items['pembelian/deletepembelian'] = array(
+        'title' => t('Delete Pembelian'),
+        'description' => t('Delete Pembelian'),
+        'page callback' => 'delete_pembelian',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'pembelian.delete.inc'
+    );
+    $items['return/kasir'] = array(
+        'title' => t('Kasir Return'),
+        'description' => 'Kasir return global pos',
+        'page callback' => 'returnsupplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Return Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.return.inc'
+    );
+    $items['pembelian/simpanreturn'] = array(
+        'title' => t('Simpan Return'),
+        'description' => 'Simpan return supplier',
+        'page callback' => 'simpan_returnsupplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Return Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.return.inc'
+    );
+    $items['pembelian/viewreturnsupplier'] = array(
+        'title' => t('Data Return Supplier'),
+        'description' => 'Data return ke supplier',
+        'page callback' => 'view_tabel_returnsupplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Return Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.tabelreturn.inc'
+    );
+    $items['pembelian/detailreturnsupplier'] = array(
+        'title' => t('Detail Return'),
+        'description' => 'Detail return supplier',
+        'page callback' => 'detail_returnsupplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Return Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.tabelreturn.inc'
+    );
+    $items['pembelian/updatedetailpembelian'] = array(
+        'title' => t('Update Detail Pembelian'),
+        'description' => 'Update detail pembelian',
+        'page callback' => 'update_detail_pembelian',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'pembelian.update.inc'
+    );
+    $items['pembelian/deletedetailpembelian'] = array(
+        'title' => t('Delete Detail Pembelian'),
+        'description' => 'Delete detail pembelian',
+        'page callback' => 'delete_detail_pembelian_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'pembelian.delete.inc'
+    );
+    $items['pembelian/simpandetailpembelian'] = array(
+        'title' => t('Insert Detail Pembelian'),
+        'description' => 'Insert detail pembelian',
+        'page callback' => 'insert_detail_pembelian',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'pembelian.update.inc'
+    );
+    $items['pembelian/deletereturnsupplier'] = array(
+        'title' => t('Delete Return Supplier'),
+        'description' => 'Delete return supplier',
+        'page callback' => 'delete_return_supplier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'pembelian.delete.inc'
+    );
+    return $items;
+} // end hook menu
+
+function pembelian_perm() {
+	return array('Admin Pembelian Produk','Admin Data Pembelian Produk');
+}
+
+
+function remove_utf8_bom($text)
+{
+	$bom = '%EF%BB%BF';
+	$text = preg_replace("/^$bom/", '', $text);
+	return $text;
+}
+
+function getTotalPembelian($field_name = null, $tglAwal = null, $tglAkhir = null, $carabayar = 0){
+	if (!empty($field_name) && !empty($tglAwal) && !empty($tglAkhir)){
+		$tglAwal = $tglAwal.' 00:00';
+		$tglAkhir = $tglAkhir.' 23:59';
+		if ($carabayar == 0){
+			$totalPembelian = db_result(db_query("SELECT SUM($field_name) FROM pembelian WHERE (tglpembelian BETWEEN '%s' AND '%s') AND status_supplier=0",$tglAwal,$tglAkhir));
+		}else if ($carabayar == 1){
+			//Pembayaran Tunai atau DP
+			$totalPembelian = db_result(db_query("SELECT SUM($field_name) FROM pembelian WHERE tglpembelian BETWEEN '%s' AND '%s' AND carabayar='TUNAI' AND kembali >= 0 AND status_supplier=0",$tglAwal,$tglAkhir));
+			$totalPembelian = $totalPembelian + db_result(db_query("SELECT SUM(bayar) FROM pembelian WHERE tglpembelian BETWEEN '%s' AND '%s' AND ((carabayar='TUNAI' AND kembali < 0) OR (carabayar='HUTANG')) AND status_supplier=0",$tglAwal,$tglAkhir));
+		}else if($carabayar == 2){
+			//Pembayaran Debit Atau Giro
+			$totalPembelian = db_result(db_query("SELECT SUM($field_name) FROM pembelian WHERE tglpembelian BETWEEN '%s' AND '%s' AND carabayar IN ('DEBIT','GIRO') AND status_supplier=0",$tglAwal,$tglAkhir));
+		}
+	}
+	return $totalPembelian;
+}
+function getTotalPembelian2($field_name1 = null, $field_name2 = null, $tglAwal = null, $tglAkhir = null){
+	if (!empty($field_name1) && !empty($field_name2) && !empty($tglAwal) && !empty($tglAkhir)){
+		$totalPembelian = db_result(db_query("SELECT SUM($field_name1*$field_name2) FROM detailpembelian AS detail
+		LEFT JOIN pembelian AS penj ON detail.idpembelian = penj.idpembelian
+		WHERE (penj.tglpembelian BETWEEN '%s' AND '%s') AND status_supplier=0",$tglAwal,$tglAkhir));
+	}
+	return $totalPembelian;
+}
+
+function create_barcode_batch()
+{
+    $newBarcode = createEAN13Code(getRandomString(9));
+    $barcodeExists = true;
+    while ($barcodeExists){
+        $barcodeCount = db_result(db_query("SELECT COUNT(*) FROM detailpembelian WHERE barcode_batch='%s' LIMIT 1",$newBarcode));
+        $barcodeCount2 = db_result(db_query("SELECT COUNT(*) FROM product WHERE barcode='%s' LIMIT 1",$newBarcode));
+        if ($barcodeCount || $barcodeCount2){
+            $newBarcode = createEAN13Code(getRandomString(9));
+            $barcodeExists = true;
+        }else{
+            $barcodeExists = false;
+        }
+    }
+    return $newBarcode;
+}

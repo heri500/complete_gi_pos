@@ -1,0 +1,5 @@
+;$Id$
+name = Return Penjualan
+description = Return Penjualan by Ikhwan IT
+package = globalpos
+core = 6.x

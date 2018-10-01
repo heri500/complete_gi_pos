@@ -1,0 +1,117 @@
+<?php
+
+function datapremis_install() {
+    $success = drupal_install_schema('datapremis');
+    if ($success) {
+        drupal_set_message(st('Module data premis berhasil diinstall.'));
+    }
+    else {
+        drupal_set_message(st('Module data premis gagal diinstall.'), 'error');
+    }
+}
+
+function datapremis_schema(){
+    require 'datapremis.schema.inc';
+    return $schema;
+}
+function datapremis_uninstall() {
+    drupal_uninstall_schema('datapremis');
+}
+function datapremis_update_1() {
+    $ppn_value = array(
+        'type' => 'int',
+        'default' => 0,
+        'description' => 'PPN untuk penjualan, default 0.',
+    );
+    db_add_field($return, 'datapremis', 'ppn_value', $ppn_value);
+    return $return;
+}
+
+function datapremis_update_2() {
+    $currency_code = array(
+        'type' => 'varchar',
+        'length' => 3,
+        'not null' => TRUE,
+        'default' => 'IDR',
+        'description' => t('Currency code.'),
+    );
+    db_add_field($return, 'datapremis', 'currency_code', $currency_code);
+    return $return;
+}
+
+function datapremis_update_3() {
+    $currency_symbol = array(
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+        'default' => 'Rp.',
+        'description' => t('Currency symbol.'),
+    );
+    db_add_field($return, 'datapremis', 'currency_symbol', $currency_symbol);
+    return $return;
+}
+
+function datapremis_update_4() {
+    $thousand_separator = array(
+        'type' => 'varchar',
+        'length' => 1,
+        'not null' => TRUE,
+        'default' => '.',
+        'description' => t('Thousand separator character.'),
+    );
+    db_add_field($return, 'datapremis', 'thousand_separator', $thousand_separator);
+    return $return;
+}
+
+function datapremis_update_5() {
+    $decimal_separator = array(
+        'type' => 'varchar',
+        'length' => 1,
+        'not null' => TRUE,
+        'default' => ',',
+        'description' => t('Decimal separator character.'),
+    );
+    db_add_field($return, 'datapremis', 'decimal_separator', $decimal_separator);
+    return $return;
+}
+
+function datapremis_update_6() {
+    $gstSymbol = array(
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+        'default' => 'PPN',
+        'description' => t('PPN/GST Symbols.'),
+    );
+    db_add_field($return, 'datapremis', 'ppn_symbol', $gstSymbol);
+    return $return;
+}
+function datapremis_update_7() {
+    $KritikSaran = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => 'KRITIK/SARAN DAN PESAN ANTAR HUBUNGI',
+        'description' => t('Tulisan keterangan paling bawah resi penjualan/order.'),
+    );
+    db_add_field($return, 'datapremis', 'kritik_saran', $KritikSaran);
+    return $return;
+}
+function datapremis_update_8() {
+    $Bahasa = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => 'Indonesia',
+        'description' => t('Pilihan bahasa untuk resi penjualan/order.'),
+    );
+    db_add_field($return, 'datapremis', 'bahasa', $Bahasa);
+    return $return;
+}
+function datapremis_update_9() {
+    $DecimalCount = array(
+        'type' => 'int',
+        'default' => 0,
+        'description' => 'Desimal digit setelah angka, default 0.',
+    );
+    db_add_field($return, 'datapremis', 'decimal_digit', $DecimalCount);
+    return $return;
+}

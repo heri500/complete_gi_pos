@@ -1,0 +1,624 @@
+<?php
+
+function datapremis_menu() {
+    $items['datapremis'] = array(
+        'title' => t('Informasi Premis'),
+        'description' => 'Manajemen data premis',
+        'page callback' => 'data_premis',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Premis'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['datapremis/generatepremisid'] = array(
+        'title' => t('Generate ID Premis'),
+        'description' => 'Generate ID Premis',
+        'page callback' => 'generate_premis_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Premis'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['datapremis/uploaddata'] = array(
+        'title' => t('Upload Data Premis'),
+        'description' => 'Upload data premis',
+        'page callback' => 'do_upload_premisdata',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Premis'),
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+} // end hook menu
+
+function datapremis_perm() {
+    return array('Access Data Premis','Admin Data Premis');
+}
+
+require_once 'datapremis.api.inc';
+
+function array_zone_gisb(){
+    return array(
+        '001' => 'PERLIS/CHINA1',
+        '002' => 'KEDAH/ INDIA',
+        '003' => 'PKBM/RUSSIA',
+        '004' => 'PENANG 1',
+        '005' => 'PERAK 1/ SPORE',
+        '006' => 'PERAK2/ AFRIKA U',
+        '007' => 'SELANGOR 1',
+        '008' => 'PUSAT/BANGLADESH',
+        '009' => 'TENGAH/SCANDI',
+        '010' => 'UTAMA/ CHINA II',
+        '011' => 'EKSEKUTIF',
+        '012' => 'YAYASAN',
+        '013' => 'NEGERI 9',
+        '014' => 'MELAKA',
+        '015' => 'JOHOR 1',
+        '016' => 'JOHOR 2',
+        '017' => 'PAHANG 1/ BRAZIL',
+        '018' => 'PAHANG 2',
+        '019' => 'TERENGGANU',
+        '020' => 'KELANTAN 1',
+        '021' => 'SABAH 1',
+        '022' => 'SABAH 2',
+        '023' => 'SARAWAK 1',
+        '024' => 'SARAWAK 2/ SUDAN',
+        '025' => 'LABUAN/ MEGA',
+        '026' => 'THAILAND 1',
+        '027' => 'THAI 2/ BANGKOK',
+        '028' => 'THAI 3/ CHIANGMAI',
+        '029' => 'PEND INSANIAH',
+        '030' => 'PENANG 2',
+        '031' => 'AUSTRALIA TIMUR/ UZBEKISTAN',
+        '032' => 'AUSTRALIA BARAT/ NEW ZEALAND',
+        '033' => 'TURKI/ EROPAH',
+        '034' => 'SUMATERA 1',
+        '035' => 'SUMATERA 2',
+        '036' => 'SUMATERA 3',
+        '037' => 'JAWA 1',
+        '038' => 'JAWA 3',
+        '039' => 'MAKASSAR',
+        '040' => 'PAPUA',
+        '041' => 'SYAM',
+        '042' => 'HARAMAIN/SEPANG',
+        '043' => 'PAHANG 3 (TEMERLOH)',
+        '044' => 'PAHANG 4 (LIPIS)',
+        '050' => 'MESIR',
+        '051' => 'SELANGOR 2',
+        '052' => 'KELANTAN 2',
+        '053' => 'SELANGOR 3',
+        '054' => 'JAWA 2',
+    );
+}
+function data_premis(){
+    _addCustomCSS();
+    drupal_add_js('misc/media/datatables.1.10/media/js/jquery.js');
+    $js_path = drupal_get_path('module','datapremis').'/js/datapremis.js';
+    drupal_add_js($js_path);
+    $formPremis = drupal_get_form('datapremis_input_form');
+    return $formPremis;
+}
+function datapremis_input_form(&$form_state){
+    $dataPremis = get_data_premis();
+    $PpnType = variable_get('ppn_type',1);
+    $Madah = variable_get('madah_slogan','INGAT MAKAN INGAT TUHAN');
+    if (!count($dataPremis)){
+        $idPremis = createEAN13PemisCode();
+        $zonePremis = 0;
+        $namaPremis = '';
+        $alamatPremis = '';
+        $telepon = '';
+        $whatsapp = '';
+        $bbm = '';
+        $telegram = '';
+        $email = '';
+        $website = '';
+        $ppn = 0;
+        $currency_code = 'IDR';
+        $currency_symbol = 'Rp';
+        $thousand_separator = '.';
+        $decimal_separator = ',';
+        $ppn_symbol = 'PPN';
+        $Bahasa = 'Indonesia';
+        $KritikSaran = 'KRITIK/SARAN DAN PESAN ANTAR HUBUNGI';
+        $DecimalDigit = 0;
+    }else{
+        $idPremis = $dataPremis->id;
+        $zonePremis = $dataPremis->zone;
+        $namaPremis = $dataPremis->nama;
+        $alamatPremis = $dataPremis->alamat;
+        $telepon = $dataPremis->telepon;
+        $whatsapp = $dataPremis->whatsapp;
+        $bbm = $dataPremis->bbm;
+        $telegram = $dataPremis->telegram;
+        $email = $dataPremis->email;
+        $website = $dataPremis->website;
+        $ppn = $dataPremis->ppn_value;
+        $currency_code = $dataPremis->currency_code;
+        $currency_symbol = $dataPremis->currency_symbol;
+        $thousand_separator = $dataPremis->thousand_separator;
+        $decimal_separator = $dataPremis->decimal_separator;
+        $ppn_symbol = $dataPremis->ppn_symbol;
+        $Bahasa = $dataPremis->bahasa;
+        $KritikSaran = $dataPremis->kritik_saran;
+        $DecimalDigit = $dataPremis->decimal_digit;
+    }
+    $form['#attributes'] = array('class' => 'form-item-lined-up');
+    $form['zone'] = array(
+        '#type' => 'select',
+        '#title' => t('Zone Premis'),
+        '#options' => array_zone_gisb(),
+        '#description' => t('Pilih zone premis.'),
+        '#default_value' => $zonePremis,
+    );
+    $form['id'] = array(
+        '#title' => t('id'),
+        '#type' => 'textfield',
+        '#description' => t('auto generated berdasarkan zone'),
+        '#default_value' => $idPremis,
+    );
+    $form['nama'] = array(
+        '#title' => t('Nama Premis'),
+        '#type' => 'textfield',
+        '#description' => t('Isi nama premis'),
+        '#default_value' => $namaPremis,
+    );
+    $form['alamat'] = array(
+        '#title' => t('Alamat Premis'),
+        '#type' => 'textarea',
+        '#cols' => 40,
+        '#rows' => 3,
+        '#default_value' => $alamatPremis,
+        '#description' => t('Input alamat premis disini.'),
+    );
+    $form['telepon'] = array(
+        '#title' => t('No. Telepon'),
+        '#type' => 'textfield',
+        '#default_value' => $telepon,
+        '#description' => t('Isi nomer telepon premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['whatsapp'] = array(
+        '#title' => t('No. Whatsapp'),
+        '#type' => 'textfield',
+        '#default_value' => $whatsapp,
+        '#description' => t('Isi nomer whatsapp premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['bbm'] = array(
+        '#title' => t('Pin BBM'),
+        '#type' => 'textfield',
+        '#default_value' => $bbm,
+        '#description' => t('Isi pin bbm premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['telegram'] = array(
+        '#title' => t('No. Telegram'),
+        '#type' => 'textfield',
+        '#default_value' => $telegram,
+        '#description' => t('Isi nomer telegram premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['email'] = array(
+        '#title' => t('Email'),
+        '#type' => 'textfield',
+        '#default_value' => $email,
+        '#description' => t('Isi email premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['website'] = array(
+        '#title' => t('Website'),
+        '#type' => 'textfield',
+        '#default_value' => $website,
+        '#description' => t('Isi website premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['ppn_symbol'] = array(
+        '#title' => t('PPN/GST Title'),
+        '#type' => 'textfield',
+        '#default_value' => $ppn_symbol,
+        '#description' => t('Isi dengan judul PPN/GST, Indonesia sebut PPN, Malaysia sebut GST'),
+    );
+    $form['ppn_value'] = array(
+        '#title' => t('PPN/GST'),
+        '#type' => 'textfield',
+        '#default_value' => $ppn,
+        '#description' => t('Isi dengan PPN/GST, jika tidak menggunakan PPN/GST isi dengan 0 saja..!!'),
+    );
+    $form['ppn_type'] = array(
+        '#type' => 'select',
+        '#title' => t('PPN/GST Include/Exlude'),
+        '#options' => array_ppn_type(),
+        '#description' => t('Pilih jenis ppn, include/exlude, include harga dikurangi ppn, exlude harga ditambah ppn.'),
+        '#default_value' => $PpnType,
+    );
+    $form['currency_code'] = array(
+        '#title' => t('Currency Code'),
+        '#type' => 'textfield',
+        '#default_value' => $currency_code,
+        '#description' => t('Isi dengan kode currency yang digunakan, contoh: IDR untuk Indonesia, MYR untuk malaysia'),
+    );
+    $form['currency_symbol'] = array(
+        '#title' => t('Currency Symbol'),
+        '#type' => 'textfield',
+        '#default_value' => $currency_symbol,
+        '#description' => t('Isi dengan simbol currency yang digunakan, contoh: Rp untuk Indonesia, RM untuk malaysia'),
+    );
+    $form['thousand_separator'] = array(
+        '#title' => t('Thousand Separator'),
+        '#type' => 'textfield',
+        '#default_value' => $thousand_separator,
+        '#description' => t('Isi dengan karakter pemisah ribuan, contoh: .(titik) untuk Indonesia, ,(koma) untuk malaysia'),
+    );
+    $form['decimal_separator'] = array(
+        '#title' => t('Decimal Separator'),
+        '#type' => 'textfield',
+        '#default_value' => $decimal_separator,
+        '#description' => t('Isi dengan karakter pemisah decimal, contoh: ,(koma) untuk Indonesia, .(titik) untuk malaysia'),
+    );
+    $form['decimal_digit'] = array(
+        '#title' => t('Decimal Digit/Count'),
+        '#type' => 'textfield',
+        '#default_value' => $DecimalDigit,
+        '#description' => t('Isi dengan digit desimal(jumlah angka dibelakang koma), default 0'),
+    );
+    $form['bahasa'] = array(
+        '#type' => 'select',
+        '#title' => t('Bahasa di Resi'),
+        '#options' => array_bahasa_premis(),
+        '#description' => t('Pilih bahasa di resi.'),
+        '#default_value' => $Bahasa,
+    );
+    $form['madah'] = array(
+        '#title' => t('Madah/Slogan'),
+        '#type' => 'textfield',
+        '#default_value' => $Madah,
+        '#description' => t('Isi dengan madah atau slogan'),
+    );
+    $form['kritik_saran'] = array(
+        '#title' => t('Tulisan Kritik/Saran di Resi'),
+        '#type' => 'textfield',
+        '#default_value' => $KritikSaran,
+        '#description' => t('Isi dengan kata kata saranan atau tempahan'),
+    );
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Simpan')
+    );
+    return $form;
+}
+function datapremis_input_form_validate($form, &$form_state) {
+    if ($form_state['values']['zone'] == '') {
+        form_set_error('', t('Harus memilih zone terlebih dulu.'));
+    }
+}
+function datapremis_input_form_submit($form, &$form_state) {
+    global $user;
+    $formValues = $form_state['values'];
+    variable_set('ppn_type', $formValues['ppn_type']);
+    variable_set('madah_slogan', $formValues['madah']);
+    if (cek_data_premis_exists()){
+        $formValues['uid'] = $user->uid;
+        $formValues['changed'] = time();
+        $premisSchema = drupal_get_schema('datapremis');
+        $fieldArray = $premisSchema['fields'];
+        $fieldList = '';
+        foreach($fieldArray as $fieldName => $fieldData){
+            if ($fieldName != 'created'){
+                if (empty($fieldList)){
+                    $fieldList = "$fieldName = '".$formValues[$fieldName]."'";
+                }else{
+                    $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+                }
+            }
+        }
+        $fieldName = 'ppn_value';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'currency_code';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'currency_symbol';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'thousand_separator';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'decimal_separator';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'ppn_symbol';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'bahasa';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'kritik_saran';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'decimal_digit';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        db_query("UPDATE {datapremis} SET $fieldList");
+        drupal_set_message(t('Data premis berhasil diupdate.'));
+    }else{
+        $formValues['uid'] = $user->uid;
+        $formValues['created'] = time();
+        $formValues['changed'] = null;
+        $premisSchema = drupal_get_schema('datapremis');
+        $fieldArray = $premisSchema['fields'];
+        $fieldList = '';
+        $fieldValue = '';
+        foreach($fieldArray as $fieldName => $fieldData){
+            if (empty($fieldList)){
+                $fieldList = $fieldName;
+            }else{
+                $fieldList .= ','.$fieldName;
+            }
+            if (empty($fieldValue)){
+                $fieldValue = "'".$formValues[$fieldName]."'";
+            }else{
+                $fieldValue .= ",'".$formValues[$fieldName]."'";
+            }
+        }
+        $fieldName = 'ppn_value';
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
+        $fieldName = 'currency_code';
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
+        $fieldName = 'currency_symbol';
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
+        $fieldName = 'thousand_separator';
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
+        $fieldName = 'decimal_separator';
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
+        $fieldName = 'ppn_symbol';
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
+        $fieldName = 'bahasa';
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
+        $fieldName = 'kritik_saran';
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
+        $fieldName = 'decimal_digit';
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
+        db_query("INSERT INTO {datapremis} ($fieldList) VALUES ($fieldValue)");
+        drupal_set_message(t('Data premis berhasil dibuat.'));
+    }
+}
+function cek_data_premis_exists(){
+    $dataPremisExists = false;
+    $countDataPremis = db_result(db_query("SELECT COUNT(*) FROM {datapremis}"));
+    if ($countDataPremis > 0){
+        $dataPremisExists = true;
+    }
+    return $dataPremisExists;
+}
+function get_data_premis($AddJs = true){
+    global $db_prefix;
+    $arrayData = array();
+    $premisSchema = drupal_get_schema('datapremis');
+    $fieldArray = $premisSchema['fields'];
+    $fieldList = '';
+    foreach($fieldArray as $fieldName => $fieldData){
+        if (empty($fieldList)){
+            $fieldList = $fieldName;
+        }else{
+            $fieldList .= ','.$fieldName;
+        }
+    }
+    $fieldList .= ',ppn_value,currency_code,currency_symbol,thousand_separator,';
+    $fieldList .= 'decimal_separator,ppn_symbol,bahasa,kritik_saran,decimal_digit';
+    if (cek_data_premis_exists()) {
+        $strSQL = 'SELECT ' . $fieldList . ' FROM ' . $db_prefix . 'datapremis LIMIT 1';
+        $result = db_query($strSQL);
+        $arrayData = db_fetch_object($result);
+        if ($AddJs) {
+            drupal_add_js(
+                array(
+                    'data_premis' => $arrayData,
+                ),
+                'setting');
+        }
+    }
+    return $arrayData;
+}
+function createRandomCode($length=13)
+{
+    $key = '';
+    $keys = array_merge(range(0, 9));
+    for ($i = 0; $i < $length; $i++) {
+        mt_srand((double)microtime() * 10000000);
+        $key .= $keys[array_rand($keys)];
+    }
+    return $key;
+}
+function createEAN13PemisCode($premisCode = null, $number = null){
+    if (empty($premisCode)) $premisCode = '001';
+    if (empty($number)) $number = createRandomCode(6);
+    $code = '899' . $premisCode. str_pad($number, 6, '0');
+    $weightflag = true;
+    $sum = 0;
+    // Weight for a digit in the checksum is 3, 1, 3.. starting from the last digit.
+    // loop backwards to make the loop length-agnostic. The same basic functionality
+    // will work for codes of different lengths.
+    for ($i = strlen($code) - 1; $i >= 0; $i--)
+    {
+        $sum += (int)$code[$i] * ($weightflag?3:1);
+        $weightflag = !$weightflag;
+    }
+    $code .= (10 - ($sum % 10)) % 10;
+    return $code;
+}
+function generate_premis_ajax(){
+    $jsonPremis = null;
+    if (isset($_POST['zone']) && !empty($_POST['zone'])){
+        $jsonPremis[] = createEAN13PemisCode($_POST['zone']);
+    }
+    print json_encode($jsonPremis);
+    exit();
+}
+function get_data_premis_uploaded(){
+    global $db_prefix;
+    $arrayData = array();
+    $premisSchema = drupal_get_schema('datapremis');
+    $fieldArray = $premisSchema['fields'];
+    $fieldList = '';
+    foreach($fieldArray as $fieldName => $fieldData){
+        if (empty($fieldList)){
+            $fieldList = $fieldName;
+        }else{
+            $fieldList .= ','.$fieldName;
+        }
+    }
+    if (cek_data_premis_exists()){
+        $strSQL = 'SELECT '.$fieldList.' FROM '.$db_prefix.'datapremis LIMIT 1';
+        $result = db_query($strSQL);
+        $arrayData = db_fetch_array($result);
+    }
+    return $arrayData;
+}
+function do_upload_premisdata(){
+    return 'Test';
+}
+function do_upload_premisdata_bak(){
+    $resultview = '';
+    if (is_connected()) {
+        //copy data premis();
+        $url = 'http://report.ikhwanit.com/importdatapremis';
+        /* Process Upload Product Data */
+        $totalRecord = db_result(db_query("SELECT COUNT(*) AS total_record FROM product WHERE uploaded = 0"));
+        $totalUploadProcess = floor($totalRecord / 40) + 1;
+        if ($totalUploadProcess > 40) {
+            $totalUploadProcess = 40;
+        }
+        $dataPremis = get_data_premis_uploaded();
+        $dataProduct = get_updated_product();
+        $uploadproses = 1;
+        for ($i = 0; $i < $totalUploadProcess; $i++) {
+            $startJ = ($i * 40);
+            $endRecord = ($i * 40) + 40;
+            if ($endRecord > $totalRecord) {
+                $endRecord = $totalRecord;
+            }
+            $postproduct = array();
+            for ($j = $startJ; $j < $endRecord; $j++) {
+                if (isset($dataProduct[$j])) {
+                    $postproduct[] = $dataProduct[$j];
+                }
+            }
+            $postdata = array('premisuser' => 'ikhwanmart', 'premispssword' => '@abuya313', 'datapremis' => $dataPremis);
+            $postdata['product'] = $postproduct;
+            $fields_string2 = http_build_query($postdata, '', '&');
+            $ch = curl_init();
+            //set the url, number of POST vars, POST data
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string2);
+            curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
+            $result = curl_exec($ch);
+            $arrayProdUploaded = json_decode($result);
+            $resultview .= '<p>' . $uploadproses . '. Record : ' . $startJ . ' to ' . $endRecord . ' Product successfully uploaded[' . count($arrayProdUploaded) . '] : <ul>';
+            for ($k = 0; $k < count($arrayProdUploaded); $k++) {
+                $prod_id = $arrayProdUploaded[$k]->idproduct_old;
+                $proses = $arrayProdUploaded[$k]->proses;
+                db_query("UPDATE product SET uploaded = 1 WHERE idproduct='%d'", $prod_id);
+                $productName = $arrayProdUploaded[$k]->namaproduct;
+                $productBarcode = $arrayProdUploaded[$k]->barcode;
+                $resultview .= '<li>ID : ' . $prod_id . ', Barcode : ' . $productBarcode . ', Product Name : ' . $productName . ', Proses : ' . $proses . '</li>';
+            }
+            $resultview .= '</ul></p>';
+            curl_close($ch);
+            $uploadproses++;
+        }
+        /* End Process Upload Product Data */
+        /* Process Upload Penjualan Data */
+        $totalRecord = db_result(db_query("SELECT COUNT(*) AS total_record FROM penjualan WHERE uploaded = 0"));
+        $totalUploadProcess = floor($totalRecord / 50) + 1;
+        if ($totalUploadProcess > 40) {
+            $totalUploadProcess = 40;
+        }
+        $dataPremis = get_data_premis_uploaded();
+        $dataPenjualan = get_updated_penjualan();
+        $uploadproses = 1;
+        for ($i = 0; $i < $totalUploadProcess; $i++) {
+            $startJ = ($i * 50);
+            $endRecord = ($i * 50) + 50;
+            if ($endRecord > $totalRecord) {
+                $endRecord = $totalRecord;
+            }
+            $postpenjualan = array();
+            for ($j = $startJ; $j < $endRecord; $j++) {
+                if (isset($dataPenjualan[$j])) {
+                    $postpenjualan[] = $dataPenjualan[$j];
+                }
+            }
+            $postdata = array('premisuser' => 'ikhwanmart', 'premispssword' => '@abuya313', 'datapremis' => $dataPremis);
+            $postdata['penjualan'] = $postpenjualan;
+            $fields_string2 = http_build_query($postdata, '', '&');
+            $ch = curl_init();
+            //set the url, number of POST vars, POST data
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string2);
+            curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
+            $result = curl_exec($ch);
+            $arrayPenjualanUploaded = json_decode($result);
+            $resultview .= '<p>' . $uploadproses . '. Penjualan successfully uploaded[' . count($arrayPenjualanUploaded) . '] : <ul>';
+            for ($k = 0; $k < count($arrayPenjualanUploaded); $k++) {
+                $penj_id = $arrayPenjualanUploaded[$k]->idpenjualan;
+                $proses = $arrayPenjualanUploaded[$k]->proses;
+                db_query("UPDATE penjualan SET uploaded = 1 WHERE idpenjualan='%d'", $penj_id);
+                $noNota = $arrayPenjualanUploaded[$k]->nonota;
+                $tglPenjualan = $arrayPenjualanUploaded[$k]->tglpenjualan;
+                $resultview .= '<li>ID : ' . $penj_id . ', No. Nota : ' . $noNota . ', Tgl Penjualan : ' . $tglPenjualan . ', Proses : ' . $proses . '</li>';
+            }
+            $resultview .= '</ul></p>';
+            curl_close($ch);
+            $uploadproses++;
+        }
+        /* End Process Upload Penjualan Data */
+    }
+    return $resultview;
+}
+function is_connected(){
+    $connected = @fsockopen("report.ikhwanit.com", 80);
+    //website, port  (try 80 or 443)
+    if ($connected){
+        $is_conn = true; //action when connected
+        fclose($connected);
+    }else{
+        $is_conn = false; //action in connection failure
+    }
+    return $is_conn;
+
+}
+function get_number_format(&$currencySym, &$thousandSep, &$decimalSep, $addJs = true){
+    $dataPremis = get_data_premis();
+    if (!empty($dataPremis)){
+        $currencySym = $dataPremis->currency_symbol;
+        $thousandSep = trim($dataPremis->thousand_separator);
+        $decimalSep = trim($dataPremis->decimal_separator);
+    }else{
+        $currencySym = 'Rp.';
+        $thousandSep = '.';
+        $decimalSep = ',';
+    }
+    if ($addJs){
+        drupal_add_js(
+            array(
+                'currSym' => $currencySym,
+                'tSep' => $thousandSep,
+                'dSep' => $decimalSep,
+            ),
+            'setting');
+    }
+    return $dataPremis;
+}
+function get_gst_symbols()
+{
+    $dataPremis = get_data_premis();
+    if (!empty($dataPremis)) {
+        $gstSym = $dataPremis->ppn_symbol;
+    } else {
+        $gstSym = 'PPN';
+    }
+    return $gstSym;
+}
+
+function set_default_time_zone(){
+    $defaultTimeZone = date_default_timezone_get();
+    if ($defaultTimeZone != 'Asia/Jakarta'){
+        date_default_timezone_set('Asia/Jakarta');
+    }
+}

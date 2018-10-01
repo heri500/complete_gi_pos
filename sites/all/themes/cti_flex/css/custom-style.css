@@ -1,0 +1,975 @@
+button.tombolutama{
+	font-size: 11px;
+	margin-left: 6px;
+}
+#main table {
+	font-size: 9pt;	
+}
+#main table th{
+	text-transform: uppercase;
+	font-weight: bold;
+	text-align: center;
+}
+/*KASIR CSS*/
+table th{
+	text-align: center;	
+	font-weight: bold;
+}
+#tempattabelkasir table.display thead th div.DataTables_sort_wrapper{
+	font-weight: bold;
+	font-size: 14px;
+}
+#dialogwarning{
+	font-size: 12px;
+	font-weight: bold;
+	color: red;	
+}
+#dialogdetailhutang table tfoot th{
+	font-weight: bold;	
+}
+table th.tablebutton{
+	width: 30px;
+}
+table th.diskon{
+	width: 90px;	
+}
+table th.diskon2{
+	width: 50px;	
+}
+table th.tanggal{
+	width: 130px;
+}
+table th.qty{
+	width: 80px;
+}
+table th.subtotal{
+	width: 180px;
+}
+#tabel_kasir th,#tabel_kasir td{
+	font-size: 14px;
+	font-weight: bold;	
+}
+table td.angka, table th.angka{
+	text-align: right !important;
+	padding-right: 10px !important;
+}
+table td img{
+	cursor: pointer;	
+}
+#tempattabelkasir{
+	width: 726px;
+	border: 1px solid #AAA;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-o-border-radius: 6px;
+	border-radius: 6px;
+	float: left;	
+}
+#tempattombolkasir{
+	width: 150px;
+	height: 290px;
+	padding: 5px;
+	margin-left: 6px;
+	border: 1px solid #666;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	-o-border-radius: 8px;
+	border-radius: 8px;
+	float: left;	
+}
+/*#tempattombolkasir a{
+	border: 1px solid #999;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+	width: 140px;
+	float: left;
+	text-decoration: none;
+	font-size: 14px;
+	padding: .8em .3em;
+	-webkit-box-shadow: 2px 2px 2px #BBB;
+	-moz-box-shadow: 2px 2px 2px #BBB;
+	box-shadow: 2px 2px 2px #BBB;
+	margin-top: 7px;
+	text-align: left;
+	cursor: pointer;
+}*/
+#tempattombolkasir a{
+	border: 1px solid #999;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+	width: 140px;
+	float: left;
+	text-decoration: none;
+	font-size: 14px;
+	padding: .62em .3em;
+	-webkit-box-shadow: 2px 2px 2px #BBB;
+	-moz-box-shadow: 2px 2px 2px #BBB;
+	box-shadow: 2px 2px 2px #BBB;
+	margin-top: 7px;
+	text-align: left;
+	cursor: pointer;
+}
+#newqty,#newqty2,#newharga{
+	width: 60px;	
+}
+#tempattombolkasir a.cari{
+	background-color: #0066FF;
+	color: white;
+	text-shadow: 1px 1px 1px #999;
+}
+#tempattombolkasir a.buttonqty{
+	background-color: #3399FF;
+	color: white;
+	text-shadow: 1px 1px 1px #999;
+}
+#tempattombolkasir a.buttonubah{
+	background-color: #FF6600;
+	color: white;
+	text-shadow: 1px 1px 1px #999;
+}
+#tempattombolkasir a.buttonhapus{
+	background-color: red;
+	color: white;
+	text-shadow: 1px 1px 1px #999;
+}
+#tempattombolkasir a.buttonselesai{
+	background-color: #FF6600;
+	color: white;
+	text-shadow: 1px 1px 1px #999;
+}
+#pilihanstatus{
+	float: left;
+	width: 99%;
+    margin-bottom: 10px;
+}
+#pilihanstatus img{
+	float: left;
+	margin-right: 10px;
+	cursor: pointer;
+	outline: none;
+}
+#tempattombolkasir a.buttontutup{
+	background-color: red;
+	color: white;
+	text-shadow: 1px 1px 1px #999;
+}
+#tempattombolkasir a.buttonomset{
+	background-color: blue;
+	color: white;
+	text-shadow: 1px 1px 1px #999;
+}
+#tempattombolkasir a.buttonprint{
+	background-color: lightblue;
+	color: #222;
+	text-shadow: 1px 1px 1px #999;
+}
+#tempattombolkasir a:hover{
+	color: #CCC;
+}
+#tempattombolkasir a:active{
+	background-color: #fff;
+	color: #333;
+}
+#tempattotal{
+	float: left;
+	width: 100%;
+    margin-top: 20px;
+}
+#totalbelanja{
+	float: left;
+	margin: 0 15px 8px 0;
+	font-size: 28px;
+	font-weight: bold;
+	color: blue;
+	text-shadow: 1px 1px 1px #DDD;
+	text-transform: uppercase;	
+}
+#dialogdetail,#dialogdetailhutang,#diskonpelanggan{
+	font-size: 12px;	
+}
+div.toolbar3,#dialogdetail div.toolbar,#dialogdetailhutang div.toolbar,#dialogdetailhutang div.toolbar2{
+	float: left;
+	width: 45%;
+	font-weight: bold;	
+}
+#pilihanperiode{
+	float: left;
+	width: 100%;
+    margin-bottom: 10px;
+}
+#pilihanperiode label, #pilihanperiode input[type="text"],#pilihanperiode select{
+	float: left;
+	font-size: 12px;
+	font-weight: bold;
+	height: 20px;
+}
+#pilihanperiode select{
+	margin-right: 6px;
+	height: 26px;
+	padding: .4em;
+}
+#pilihanperiode button{
+	float: left;
+	font-size: 12px;
+	font-weight: bold;
+}
+#pilihanperiode label{
+	width: 200px;
+	margin-left: 6px;	
+}
+#pilihanperiode input[type="text"]{
+	width: 100px;
+	margin-right: 10px;
+}
+div.barisbayar{
+	font-size: 22px;
+	font-weight: bold;
+	width: 100%;
+	float: left;
+	color: #111;	
+}
+div.barisbayar label{
+	float: left;
+	width: 200px;
+	margin-top: 8px;	
+}
+div.barisbayar input[type="text"], div.barisbayar select{
+	float: left;
+	width: 300px;
+	margin-top: 8px;
+	font-weight: bold;
+}
+div.barisbayar select{
+	width: 306px;
+}
+#barcode_place{
+	float: left;
+	width: 100%;
+	padding: 10px 0;	
+}
+#info-kasir-waktu{
+	float: left;
+	width: 98%;
+	padding: .5em;
+	background-color: whitesmoke;
+	border: 1px solid #999;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: 2px 2px 2px #BBB;
+	-moz-box-shadow: 2px 2px 2px #BBB;
+	box-shadow: 2px 2px 2px #BBB;
+}
+#info-kasir-waktu label, #info-kasir-waktu input[type="text"],#info-kasir-waktu div{
+	float: left;
+	font-size: 12px;
+	font-weight: bold;
+	margin-top: 4px;
+}
+#info-kasir-waktu label{
+	width: 120px;	
+}
+#info-kasir-waktu #tempattanggalkasir{
+	width: 35%;
+	margin-bottom: 10px;
+}
+#info-kasir-waktu #tempatjam{
+	width: 20%;
+	height: 50px;
+	font-size: 26px;
+	font-weight: bold;
+	margin-top: 15px;
+	margin-bottom: 10px;
+	border: 1px solid #999;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+	background-color: #0066FF;
+	color: white;
+}
+#info-kasir-waktu #tempatjam span{
+	margin-top: 8px;
+	margin-left: 20px;
+	float: left;
+}
+#info-kasir-waktu #tempatkosong{
+	width: 40%;
+}
+#info-kasir-waktu #tempatnamakasir{
+	width: 100%;
+}
+#info-kasir-waktu #tempattanggal,#info-kasir-waktu #tempatsupplier,#info-kasir-waktu #tempatsupplier2{
+	margin-top: 8px;
+	width: 100%;
+}
+#tempatsupplier2 select{
+	float: left;
+	width: 300px;
+	height: 25px;
+	font-weight: bold;
+	padding: 3px;	
+}
+#info-kasir-waktu #tempatsupplier,#info-kasir-waktu #tempatsupplier2{
+	margin-left: 8px;
+}
+/*PELANGGAN*/
+#detailpiutang,#detailpembayaran{
+	float: left;
+	margin-right: 10px;	
+}
+#detailpiutang{
+	width: 59%;
+}
+#detailpembayaran{
+	width: 38%;
+}
+#tempatnilaihutang,#totalhutangpelanggan {
+	float: left;
+	width: 99%;
+	font-size: 14px;
+	font-weight: bold;
+	color: orangered;
+	margin-bottom: 10px;
+}
+div.baris{
+	float: left;
+	width: 99%;
+	font-size: 12px;
+	margin-bottom: 4px;	
+}
+div.baris label{
+	float: left;
+	width: 120px;
+	margin-left: 8px;	
+}
+div.baris input[type="text"]{
+	float: left;
+	width: 180px;
+}
+#diskonpelanggan div.baris input[type="text"]{
+	width: 80px;
+}
+#diskonpelanggan div.baris label{
+	width: 158px;
+}
+#diskonpelanggan table.display{
+	font-size: 12px;
+}
+/*Auto Complete Jquery UI*/
+.ui-autocomplete {
+	max-height: 350px;
+	overflow-y: auto;
+	/* prevent horizontal scrollbar */
+	overflow-x: hidden;
+	/* add padding to account for vertical scrollbar */
+	padding-right: 20px;
+}
+/* IE 6 doesn't support max-height
+ * we use height instead, but this forces the menu to always be this tall
+ */
+* html .ui-autocomplete {
+	height: 350px;
+}
+input[type="text"].barcodekasir{
+	width: 500px;
+	font-size: 14px;
+	font-weight: bold;
+	padding: .3em;	
+	text-transform: uppercase;
+}
+/*END KASIR CSS*/
+#viewpenjualan{
+	width: 99%;	
+}
+#main table td img{
+	border: 0;
+	cursor: pointer;
+	outline: none;
+}
+#main #formplace{
+	padding: .6em;
+	border: 1px solid red;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	-o-border-radius: 6px;
+	border-radius: 6px;
+	-webkit-box-shadow: 2px 2px 2px #DADADA;
+	-moz-box-shadow: 2px 2px 2px #DADADA;
+	box-shadow: 2px 2px 2px #DADADA;
+	width: 850px;
+	background-color: whitesmoke;
+	float: left;
+    margin-bottom: 20px;
+}
+#main #formplace.subkategori{
+	width: 925px;
+	margin-bottom: 10px;
+}
+#main #formplace.supplier{
+	width: 720px;
+	margin-bottom: 10px;
+}
+#main #formplace.pelanggan{
+	width: 720px;
+	margin-bottom: 10px;
+}
+#main #formplace.subkategori button{
+	margin-top: 10px;
+	float: left;
+}
+#main #formplace label{
+	font-size: 12px;
+	margin-right: 6px;
+}
+#main #formplace.supplier label,#main #formplace.pelanggan label{
+	width: 75px;
+	margin-bottom: 6px;
+	float: left;
+	padding-top: 4px;
+}
+#main #formplace input[type="text"] {
+	margin-right: 10px;
+	height: 20px;
+	margin-top:0;
+}
+#main #formplace.supplier input[type="text"],#main #formplace.pelanggan input[type="text"]{
+	margin-bottom: 4px;
+	float: left;
+}
+#main #formplace.subkategori label{
+	font-size: 12px;
+	float: left;	
+	margin-top:2px;
+	margin-right: 6px;
+}
+#main #formplace.subkategori input[type="text"] {
+	margin-right: 10px;
+	height: 20px;
+	float: left;
+	margin-top:0;
+}
+#main #formplace.subkategori select{
+	margin-right: 10px;
+	margin-top:0;
+	height: 25px;
+	float: left;
+}
+#main #formplace.produk{
+	width: 450px;	
+}
+#main #formplace.produk label{
+	font-size: 12px;
+	float: left;	
+	margin-top:4px;
+	margin-right: 6px;
+	width: 45%;
+}
+#main #formplace.produk button{
+	float: left;	
+	margin-top:4px;
+	font-size:10px;
+}
+#main #formplace.produk input[type="text"] {
+	margin-right: 10px;
+	height: 20px;
+	float: left;
+	margin-top:4px;
+	width: 50%;
+}
+#main #formplace.produk img{
+	float: left;
+	cursor: pointer;
+	outline: none;
+	margin-top: 4px;	
+}
+.space{
+	margin-left: 8px;
+	float: right;	
+}
+.TableTools_Button {
+    height: 33px;
+}
+#main #formplace.produk select{
+	margin-right: 4px;
+	margin-top:4px;
+	height: 25px;
+	float: left;
+	width: 45%;
+}
+#dialogtambahkategori div,#dialogtambahsubkategori div,#dialogtambahsupplier div,#dialogtambahsatuan div{
+	float: left;	
+}
+#dialogtambahkategori button,#dialogtambahsubkategori button,#dialogtambahsupplier button,#dialogtambahsatuan button{
+	font-size: 12px;
+	margin-top: 10px;
+	float: left;
+	border: 1px solid orangered;	
+}
+#dialogtambahkategori label,#dialogtambahsubkategori label,#dialogtambahsupplier label,#dialogtambahsatuan label{
+	font-size: 12px;
+	width: 120px;
+	float: left;	
+	margin-top: 6px;
+}
+#dialogtambahsubkategori label{
+	width: 150px;	
+}
+#dialogtambahkategori input[type="text"],#dialogtambahsubkategori input[type="text"],#dialogtambahsupplier input[type="text"],#dialogtambahsatuan input[type="text"]{
+	float: left;
+	height: 20px;
+	margin-top: 6px;
+	font-size: 12px;
+}
+#dialogtambahsubkategori select{
+	float: left;
+	width: 143px;
+	height: 25px;
+	margin-top: 6px;
+	font-size: 12px;
+}
+#formplace.subkategori select{
+	float: left;
+	height: 25px;
+	margin-top: 6px;
+	font-size: 12px;
+	width: 102px;	
+}
+#validating{
+	display: none;
+	width: 20px;
+	float: left;
+	margin-top: 7px;
+	margin-left: -30px;
+}
+#main #tambahprodukbaru, #main #refreshprodukbaru{
+	font-size:10px;font-weight: bold;float:left;
+}
+#main td.angka, #main th.angka{
+	text-align: right !important;
+}
+#menuutama{
+	float: left;
+	width: 100%;
+	margin-top: 35px;
+	height: 36px;
+	background-color:	#d4d5d5;
+}
+#barcloseform{
+	background-color: #DADADA;
+	width: 450px;
+	height: 25px;
+	border: 1px solid orangered;
+	font-size: 12px;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px #222;
+	color: white;
+	text-transform: uppercase;
+	float: left;
+	margin-bottom: -10px;
+	padding: .3em .6em .7em .6em;
+	-webkit-box-shadow: 2px 2px 2px #DADADA;
+	-moz-box-shadow: 2px 2px 2px #DADADA;
+	box-shadow: 2px 2px 2px #DADADA;
+	cursor: pointer;
+}
+#formpenambahanproduk{
+	display: none;
+	float: left;
+  margin-bottom: 15px;	
+}
+#barcloseform:hover{
+	background-color: #BBB;
+}
+#barplace{
+	float: left;
+	width: 100%;	
+}
+div.titletable{
+	font-size: 14px;
+	font-weight: bold;
+	margin-bottom: 8px;
+}
+/* SUPERFISH MENU */
+/*** ESSENTIAL STYLES ***/
+.sf-menu, .sf-menu * {
+	margin:			0;
+	padding:		0;
+	list-style:		none;
+}
+.sf-menu {
+	line-height:	1.0;
+}
+.sf-menu ul {
+	position:		absolute;
+	top:			-999em;
+	width:			10em; /* left offset of submenus need to match (see below) */
+}
+.sf-menu ul li {
+	width:			100%;
+}
+.sf-menu li:hover {
+	visibility:		inherit; /* fixes IE7 'sticky bug' */
+}
+.sf-menu li {
+	float:			left;
+	position:		relative;
+}
+.sf-menu a {
+	display:		block;
+	position:		relative;
+}
+.sf-menu li:hover ul,
+.sf-menu li.sfHover ul {
+	left:			0;
+	top:			2.25em; /* match top ul list item height */
+	z-index:		99;
+}
+ul.sf-menu li:hover li ul,
+ul.sf-menu li.sfHover li ul {
+	top:			-999em;
+}
+ul.sf-menu li li:hover ul,
+ul.sf-menu li li.sfHover ul {
+	left:			10em; /* match ul width */
+	top:			0;
+}
+ul.sf-menu li li:hover li ul,
+ul.sf-menu li li.sfHover li ul {
+	top:			-999em;
+}
+ul.sf-menu li li li:hover ul,
+ul.sf-menu li li li.sfHover ul {
+	left:			10em; /* match ul width */
+	top:			0;
+}
+
+/*** DEMO SKIN ***/
+.sf-menu {
+	float:			left;
+}
+.sf-menu a {
+	border-left:	1px solid #fff;
+	border-top:		1px solid #d4d5d5;
+	padding: 		.75em 1em;
+	text-decoration:none;
+	font-size: 14px;
+	color: #343434;
+	text-shadow: 1px 1px 1px #777;
+}
+.sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
+	color:			#343434;
+}
+.sf-menu li {
+	background:		#d4d5d5;
+}
+.sf-menu li li {
+	background:		#AABDE6;
+}
+.sf-menu li li li {
+	background:		#9AAEDB;
+}
+.sf-menu li:hover, .sf-menu li.sfHover,
+.sf-menu a:focus, .sf-menu a:hover, .sf-menu a:active {
+	background:		#CFDEFF;
+	outline:		0;
+}
+
+/*** arrows **/
+.sf-menu a.sf-with-ul {
+	padding-right: 	2.25em;
+	min-width:		1px; /* trigger IE7 hasLayout so spans position accurately */
+}
+.sf-sub-indicator {
+	position:		absolute;
+	display:		block;
+	right:			.75em;
+	top:			1.05em; /* IE6 only */
+	width:			10px;
+	height:			10px;
+	text-indent: 	-999em;
+	overflow:		hidden;
+	background:		url('images/arrows-ffffff.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
+}
+a > .sf-sub-indicator {  /* give all except IE6 the correct values */
+	top:			.8em;
+	background-position: 0 -100px; /* use translucent arrow for modern browsers*/
+}
+/* apply hovers to modern browsers */
+a:focus > .sf-sub-indicator,
+a:hover > .sf-sub-indicator,
+a:active > .sf-sub-indicator,
+li:hover > a > .sf-sub-indicator,
+li.sfHover > a > .sf-sub-indicator {
+	background-position: -10px -100px; /* arrow hovers for modern browsers*/
+}
+
+/* point right for anchors in subs */
+.sf-menu ul .sf-sub-indicator { background-position:  -10px 0; }
+.sf-menu ul a > .sf-sub-indicator { background-position:  0 0; }
+/* apply hovers to modern browsers */
+.sf-menu ul a:focus > .sf-sub-indicator,
+.sf-menu ul a:hover > .sf-sub-indicator,
+.sf-menu ul a:active > .sf-sub-indicator,
+.sf-menu ul li:hover > a > .sf-sub-indicator,
+.sf-menu ul li.sfHover > a > .sf-sub-indicator {
+	background-position: -10px 0; /* arrow hovers for modern browsers*/
+}
+
+/*** shadows for all but IE6 ***/
+.sf-shadow ul {
+	background:	url('images/shadow.png') no-repeat bottom right;
+	padding: 0 8px 9px 0;
+	-moz-border-radius-bottomleft: 17px;
+	-moz-border-radius-topright: 17px;
+	-webkit-border-top-right-radius: 17px;
+	-webkit-border-bottom-left-radius: 17px;
+}
+.sf-shadow ul.sf-shadow-off {
+	background: transparent;
+}
+/*.ui-button{
+	font-size: 11px;
+	font-weight: bold;	
+}*/
+
+/*h1.title{
+	float: left;
+	width: 100%;	
+}*/
+input.jam{
+	width: 60px !important;	
+}
+input.hasDatepicker{
+	width: 90px;	
+}
+.align-left{
+	text-align: left !important;	
+}
+.small-table-wrapper{
+	width: 60%;	
+	display: table-cell;
+	padding-right: 10px;
+	vertical-align: top;
+}
+.small-form-wrapper{
+	width: 20%;	
+	display: table-cell;
+	vertical-align: top;
+}
+#keuangan-input-kategori-form .form-item,
+#keuangan-input-form .form-item,
+#keuangan-input-pemasukan-form .form-item{
+	margin: 0;	
+}
+.chosen-container-single .chosen-search{
+	width: 98% !important;	
+}
+.form-add-dialog {
+	font-size: 12px;	
+}
+.form-add-dialog label{
+	width: 120px;	
+	float: left;
+	font-weight: bold;
+}
+.form-add-dialog .form-row{
+	margin-bottom : 6px;	
+}
+.form-add-dialog .form-row button{
+	font-weight: bold;	
+}
+table.dataTable tbody th, table.dataTable tbody td{
+	padding: 3px 10px 0 !important;	
+}
+table.dataTable thead th, table.dataTable thead td{
+	padding: 5px 8px 0 !important;	
+	text-align: center !important;
+}
+button.dt-button, div.dt-button, a.dt-button{
+	/*padding: 2px 8px !important;*/
+	margin-right: 2px !important;
+}
+table.display td.center,table.display th.center {
+	text-align: center !important;
+}
+table.display td.left, table.display th.left {
+	text-align: left !important;
+}
+table.display td.right, table.display th.right {
+	text-align: right !important;
+}
+table.display thead th{
+	cursor: pointer;
+  padding: 3px 0 3px 10px;
+}
+table.dataTable thead th div.DataTables_sort_wrapper span{
+	right: 2px !important;	
+}
+.button-div{
+	float: left;
+    margin: 6px 10px -6px 6px;
+}
+.page-dataproduk-produk h1.title{
+    float: left;
+    width: 100%;
+}
+.button-sync{
+	width: 100%;float: left;margin-bottom: 15px;
+}
+.col_angka{
+	width: 150px;
+}
+.col_angka2{
+	width: 95px;
+}
+table.dataTable tfoot th, table.dataTable tfoot td{
+padding: 10px 10px 6px 6px !important;
+}
+.kolom-pemasukan{
+	width: 48%;
+	float: left;
+	padding: 10px;
+}
+.kolom-pengeluaran{
+	width: 48%;
+	float: left;
+	padding: 10px;
+}
+#tempat-report{
+	float: left;
+	width: 100%;
+}
+.kolom-grand-total{
+	width: 98%;
+	float: left;
+	padding: 10px;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 16px;
+}
+.kolom-grand-total-2{
+	width: 98%;
+	float: left;
+	padding: 4px 10px;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 13px;
+}
+body.lightbox-processed{
+	margin: 8px 0 !important;
+}
+.float-right{
+	float: right !important;
+}
+tr.selected td {
+	background: #ffc none repeat scroll 0 0 !important;
+}
+.barcode-scan{
+	width: 20%;
+	float: left;
+	padding: 4px;
+}
+.production-table{
+	width: 78%;
+	float: left;
+	padding: 4px;
+}
+.ui-dialog-title{
+	font-size: 85% !important;
+}
+#add-new-item {
+	margin-top: 10px;
+	padding: 6px;
+	float: left;
+	width: 98.5%;
+	border: 1px solid #999;
+	border-radius: 6px;
+}
+#add-new-item label{
+	width: 120px;
+	float: left;
+	height: 27px;
+	padding-top: 4px;
+}
+label.small-label{
+	width: 40px !important;
+	height: 21px;
+	float: left;
+}
+#add-new-item input{
+	float: left;
+	margin-right: 6px;
+	height: 21px;
+}
+#add-new-item h5{
+	padding : 0 0 8px;
+}
+.no-margin{
+	margin : 0 !important;
+}
+ul.ui-autocomplete {
+	position:absolute;
+	cursor:default;
+	z-index:2001 !important
+}
+#print-slip{
+	margin-top: 10px;
+}
+form.form-item-lined-up, .form-item-lined-up{
+	display: inline-block !important;
+}
+.form-item-lined-up .form-item label{
+	display: inline-block !important;
+	width: 150px !important;
+}
+.form-item-lined-up .form-item select, .form-item-lined-up .form-item input
+.form-item-lined-up .form-item textarea{
+	display: inline-block;
+}
+.form-item-lined-up .form-item textarea,
+.form-item-lined-up .resizable-textarea{
+	width: 100% !important;
+}
+.checkbox-ppn{
+	-moz-transform: scale(2.3);
+	float: right;
+	margin: 9px 8px 0 0;
+}
+#keterangan-wrapper{
+	float: left;
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+.keterangan-div{
+	height: 150px !important;
+	overflow-y: auto;
+}
+.keterangan-div label{
+	font-size: 16px !important;
+}
+.keterangan-div input{
+	width: auto !important;
+}
+.page-dataproduk-produk h1.title {
+	float: left;
+	width: 100%;
+}
+#katdiv {
+	float: left;
+	margin-left: 10px;
+}
+.file-selection{
+	margin-right: 5px;
+	height: 28px;
+	float: left;
+}
+.button-prod-table{
+	float: left;
+	margin-right: 5px;
+}

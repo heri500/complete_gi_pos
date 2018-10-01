@@ -1,0 +1,741 @@
+<?php
+
+function penjualan_menu()
+{
+    $items['penjualan/kasir'] = array(
+        'title' => t('Kasir Global POS'),
+        'description' => 'Kasir Global POS',
+        'page callback' => 'penjualan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Form Kasir'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.kasir.inc'
+    );
+    $items['penjualan/laundry'] = array(
+        'title' => t('Laundry Masuk'),
+        'description' => 'Form laundry masuk',
+        'page callback' => 'laundry',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Laundry'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.laundry.inc'
+    );
+    $items['penjualan/customerorder'] = array(
+        'title' => t('Customer Order'),
+        'description' => 'Form customer order',
+        'page callback' => 'customerorder',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/viewpenjualan'] = array(
+        'title' => t('Data Penjualan'),
+        'description' => 'Data Penjualan',
+        'page callback' => 'view_tabel_penjualan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.penjualan.inc'
+    );
+    $items['penjualan/viewlaundry'] = array(
+        'title' => t('Data Laundry'),
+        'description' => 'Data Laundry',
+        'page callback' => 'view_tabel_laundry',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.tabellaundry.inc'
+    );
+    $items['penjualan/detailpenjualan'] = array(
+        'title' => t('Detail Penjualan'),
+        'description' => 'Detail Penjualan',
+        'page callback' => 'detail_penjualan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.penjualan.inc'
+    );
+    $items['penjualan/detaillaundry'] = array(
+        'title' => t('Detail Laundry'),
+        'description' => 'Detail Laundry',
+        'page callback' => 'detail_laundry',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.tabellaundry.inc'
+    );
+    $items['penjualan/cariproduk'] = array(
+        'title' => t('Pencarian Produk'),
+        'description' => 'Pencarian Produk',
+        'page callback' => 'cari_produk',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.kasir.inc'
+    );
+    $items['penjualan/autocaribarang'] = array(
+        'title' => t('Pencarian Produk'),
+        'description' => 'Pencarian Produk',
+        'page callback' => 'cari_barang',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.kasir.inc'
+    );
+    $items['penjualan/autocarimeja'] = array(
+        'title' => t('Pencarian Meja'),
+        'description' => 'Pencarian Meja',
+        'page callback' => 'cari_meja',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/simpanpenjualan'] = array(
+        'title' => t('Simpan Penjualan'),
+        'description' => 'Simpan Penjualan',
+        'page callback' => 'simpan_penjualan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.kasir.inc'
+    );
+    $items['penjualan/simpanlaundry'] = array(
+        'title' => t('Simpan Laundry Masuk'),
+        'description' => 'Simpan laundry masuk',
+        'page callback' => 'simpan_laundry',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Laundry'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.laundry.inc'
+    );
+    $items['penjualan/simpancustomerorder'] = array(
+        'title' => t('Simpan Customer Order'),
+        'description' => 'Simpan customer order',
+        'page callback' => 'simpan_customerorder',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/hitungomset'] = array(
+        'title' => t('Hitung Omset'),
+        'description' => 'Hitung Omset',
+        'page callback' => 'hitung_omset',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.kasir.inc'
+    );
+    $items['penjualan/updatepenjualan'] = array(
+        'title' => t('Update Penjualan'),
+        'description' => t('Update Penjualan'),
+        'page callback' => 'update_penjualan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'penjualan.update.inc'
+    );
+    $items['penjualan/updatelaundry'] = array(
+        'title' => t('Update Laundry'),
+        'description' => t('Update Laundry'),
+        'page callback' => 'update_laundry',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'penjualan.update.inc'
+    );
+    $items['penjualan/deletepenjualan'] = array(
+        'title' => t('Delete Penjualan'),
+        'description' => t('Delete Penjualan'),
+        'page callback' => 'delete_penjualan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'penjualan.delete.inc'
+    );
+    $items['penjualan/deletelaundry'] = array(
+        'title' => t('Delete Laundry'),
+        'description' => t('Delete Laundry'),
+        'page callback' => 'delete_laundry',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'penjualan.delete.inc'
+    );
+    $items['penjualan/getrandomstring'] = array(
+        'title' => t('Get Random String'),
+        'description' => t('Get Random String'),
+        'page callback' => 'getRandomStringAjax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['penjualan/viewcustomerorder'] = array(
+        'title' => t('Data Customer Order'),
+        'description' => 'Data customer order',
+        'page callback' => 'view_tabel_customerorder',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.tabelcustomerorder.inc'
+    );
+    $items['penjualan/deletecustomerorder/%'] = array(
+        'title' => t('Delete Customer Order'),
+        'description' => t('Delete Customer Order'),
+        'page callback' => 'delete_customer_order',
+        'page arguments' => array(2),
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'penjualan.delete.inc'
+    );
+    $items['penjualan/detailcustomerorder'] = array(
+        'title' => t('Detail Customer Order'),
+        'description' => 'Detail customer order',
+        'page callback' => 'detail_customerorder',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.tabelcustomerorder.inc'
+    );
+    $items['penjualan/laundrykeluar'] = array(
+        'title' => t('Pengambilan Laundry'),
+        'description' => 'Form laundry keluar',
+        'page callback' => 'laundry_keluar',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Laundry'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.laundry.inc'
+    );
+    $items['penjualan/carinotalaundry'] = array(
+        'title' => t('Pencarian Nota Laundry'),
+        'description' => 'Pencarian Nota Laundry',
+        'page callback' => 'cari_nota_laundry',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Laundry'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.laundry.inc'
+    );
+    $items['penjualan/updateraklaundry'] = array(
+        'title' => t('Update Nomer Rak Laundry'),
+        'description' => 'Update nomer rak laundry',
+        'page callback' => 'update_no_rak_laundry',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Laundry'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.tabellaundry.inc'
+    );
+    $items['penjualan/orderkeluar'] = array(
+        'title' => t('Pengambilan Order/Pesanan'),
+        'description' => 'Form pengambilan order/pesanan',
+        'page callback' => 'order_keluar',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/carinotaorder'] = array(
+        'title' => t('Pencarian Nota Order'),
+        'description' => 'Pencarian Nota Order',
+        'page callback' => 'cari_nota_order',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/orderselesai'] = array(
+        'title' => t('Input Hasil Produksi'),
+        'description' => 'Form input hasil produksi',
+        'page callback' => 'order_selesai',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/carinotaproduksi'] = array(
+        'title' => t('Pencarian Nota Produksi'),
+        'description' => 'Pencarian Nota Produksi',
+        'page callback' => 'cari_nota_produksi',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/simpanhasilproduksi'] = array(
+        'title' => t('Simpan Hasil Produksi'),
+        'description' => 'Simpan hasil produksi',
+        'page callback' => 'simpan_hasil_produksi',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/updatedetailcustomerorder'] = array(
+        'title' => t('Update Detail Customer Order'),
+        'description' => 'Update detail customer order',
+        'page callback' => 'update_detail_customer_order',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'penjualan.update.inc'
+    );
+    $items['penjualan/simpandetailorder'] = array(
+        'title' => t('Insert Detail Customer Order'),
+        'description' => 'Insert detail customer order',
+        'page callback' => 'insert_detail_customer_order',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'penjualan.update.inc'
+    );
+    $items['penjualan/deletedetailorder'] = array(
+        'title' => t('Delete Detail Customer Order'),
+        'description' => 'Delete detail customer order',
+        'page callback' => 'delete_detail_customer_order_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'penjualan.delete.inc'
+    );
+    $items['penjualan/updatedetailpenjualan'] = array(
+        'title' => t('Update Detail Penjualan'),
+        'description' => 'Update detail penjualan',
+        'page callback' => 'update_detail_penjualan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'penjualan.update.inc'
+    );
+    $items['penjualan/deletedetailpenjualan'] = array(
+        'title' => t('Delete Detail Penjualan'),
+        'description' => 'Delete detail penjualan',
+        'page callback' => 'delete_detail_penjualan_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'penjualan.delete.inc'
+    );
+    $items['penjualan/simpandetailpenjualan'] = array(
+        'title' => t('Insert Detail Penjualan'),
+        'description' => 'Insert detail penjualan',
+        'page callback' => 'insert_detail_penjualan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'penjualan.update.inc'
+    );
+    $items['penjualan/getpelanggandiskon'] = array(
+        'title' => t('Get Diskon Pelanggan'),
+        'description' => 'Fungsi untuk mendapatkan diskon pelanggan',
+        'page callback' => 'get_pelanggan_diskon',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.kasir.inc'
+    );
+    $items['penjualan/customerorderpostdata'] = array(
+        'title' => t('Simpan Customer Order'),
+        'description' => 'Simpan customer order from android',
+        'page callback' => 'simpan_customerorder_android',
+        'access callback' => 'user_access',
+        'access arguments' => array('Rest Insert Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.rest.customerorder.inc'
+    );
+    //$items['penjualan/
+    $items['penjualan/getnewandroidorderandroid'] = array(
+        'title' => t('Nota Order Android Terbaru'),
+        'description' => 'Pencarian Nota Order Android Terbaru',
+        'page callback' => 'cari_nota_order_android',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/getnewandroidorderpending'] = array(
+        'title' => t('Nota Order Android Pending'),
+        'description' => 'Pencarian Nota Order Android Terbaru',
+        'page callback' => 'cari_nota_order_android_pending',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/getcoarrayprinter'] = array(
+        'title' => t('Get Customer Order Array Printer'),
+        'description' => 'Pengambilan customer order printer',
+        'page callback' => 'get_customer_order_printer',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/updatetableco'] = array(
+        'title' => t('Update opened table customer order'),
+        'description' => 'Update opened table customer order',
+        'page callback' => 'update_opened_customer_order_table',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['penjualan/gettablecoopen'] = array(
+        'title' => t('Get total opened table customer order'),
+        'description' => 'Get total opened table customer order',
+        'page callback' => 'total_opened_customer_order_table_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['penjualan/resettablecoopen'] = array(
+        'title' => t('Reset total opened table customer order'),
+        'description' => 'Reset total opened table customer order',
+        'page callback' => 'reset_total_opened_customer_order_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['panggilpelanggan'] = array(
+        'title' => t('Panggil pelanggan'),
+        'description' => 'Panggil pelanggan',
+        'page callback' => 'panggil_pelanggan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Access Data Customer Order'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['penjualan/return'] = array(
+        'title' => t('Return Penjualan'),
+        'description' => 'Kasir return penjualan',
+        'page callback' => 'return_penjualan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Return Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.retur.jual.inc'
+    );
+    $items['penjualan/simpanreturn'] = array(
+        'title' => t('Simpan Return Pelanggan'),
+        'description' => 'Simpan return pelanggan',
+        'page callback' => 'simpan_return_penjualan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Return Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.retur.jual.inc'
+    );
+    $items['penjualan/viewreturn'] = array(
+        'title' => t('Data Return Pelanggan'),
+        'description' => 'Data return pelanggan',
+        'page callback' => 'view_tabel_returnpelanggan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Return Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'table.return.pelanggan.inc'
+    );
+    $items['penjualan/detailreturn'] = array(
+        'title' => t('Detail Return Pelanggan'),
+        'description' => 'Detail return pelanggan',
+        'page callback' => 'detail_returnpelanggan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'table.return.pelanggan.inc'
+    );
+    $items['penjualan/pricecheck'] = array(
+        'title' => t('Price Checker'),
+        'description' => 'Price checker page',
+        'page callback' => 'price_checker',
+        'access callback' => 'user_access',
+        'access arguments' => array('Access Check Product'),
+        'type' => MENU_CALLBACK,
+        'file' => 'price.checker.inc'
+    );
+    $items['penjualan/exportfaktur/%'] = array(
+        'title' => t('Export faktur ke xls'),
+        'description' => 'Export faktur ke xls',
+        'page callback' => 'create_faktur_in_excel',
+        'page arguments' => array(2),
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['penjualan/hapuspenjualan'] = array(
+        'title' => t('Delete data penjualan'),
+        'description' => 'delete data penjualan',
+        'page callback' => 'hapus_penjualan',
+        'page arguments' => array(2),
+        'access callback' => 'user_access',
+        'access arguments' => array('Delete Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+} // end hook menu
+
+function penjualan_perm() {
+	return array(
+		'Admin Penjualan Produk','Admin Data Penjualan Produk',
+		'Input Laundry','Input Customer Order','Admin Data Customer Order',
+		'Access Data Customer Order','Rest Insert Customer Order',
+        'Admin Form Kasir','Access Check Product','Delete Data Penjualan Produk'
+	);
+}
+
+require_once 'attachplugins.inc';
+require_once 'penjualan.api.inc';
+
+function getRandomStringAjax(){
+	print createEAN13Code(getRandomString(9));
+	exit();
+}
+function get_updated_penjualan(){
+	$strSQL = 'SELECT idpenjualan, nonota, idtitipanlaundry, idcustomerorder, tglpenjualan, idpemakai, ';
+	$strSQL .= 'idpelanggan, total, totalmodal, carabayar, bayar, kembali, perlakuankembalian, ';
+	$strSQL .= 'nokartu, keterangan, insert_date ';
+	$strSQL .= 'FROM penjualan WHERE uploaded=0';
+	$result = db_query($strSQL);
+	$dataPenjualan = array();
+	while ($data = db_fetch_array($result)){
+		$dataPenjualan[] = $data;
+	}
+	return $dataPenjualan;
+}
+function update_opened_customer_order_table(){
+    $Count = isset($_GET['count']) ? $_GET['count'] : 1;
+    $CurrentCOunter = db_result(db_query('SELECT table_open FROM cust_view_open LIMIT 1'));
+    $UpdatedCount = $CurrentCOunter + $Count;
+    if ($UpdatedCount < 0){
+        $UpdatedCount = 0;
+    }
+    db_query('UPDATE cust_view_open SET table_open = '. $UpdatedCount);
+}
+function total_opened_customer_order_table(){
+    $TotalOpen = db_result(db_query('SELECT table_open FROM cust_view_open LIMIT 1'));
+    return $TotalOpen;
+}
+function total_opened_customer_order_table_ajax(){
+    $TotalOpen = total_opened_customer_order_table();
+    print $TotalOpen;
+    exit();
+}
+function reset_total_opened_customer_order_ajax(){
+    db_query('UPDATE cust_view_open SET table_open = 0');
+    exit();
+}
+function panggil_pelanggan($nomerpanggil = null){
+    $SoundPath = base_path().drupal_get_path('module','penjualan').'/sound/';
+    $js_path = drupal_get_path('module','penjualan').'/js/soundplay.js';
+    drupal_add_js($js_path);
+    $SoundPlay = 'No Sound';
+    if (!empty($nomerpanggil)){
+        $SoundPlay = '<ul id="playlist">';
+        for ($i = 0;$i < strlen($nomerpanggil);$i++){
+            $NumberSound = 'a'.$nomerpanggil[$i].'.mp3';
+            $SoundPlay .= '<li song="'.$SoundPath.$NumberSound.'"></li>';
+        }
+        $SoundPlay .= '<li song="'.$SoundPath.'last_sound.mp3"></li>';
+        $SoundPlay .= '</ul>';
+    }
+    return $SoundPlay;
+}
+function create_faktur_in_excel($idpenjualan = 0){
+    $namafile = '';
+    if (!empty($idpenjualan)){
+        get_number_format($currencySym, $thousandSep, $decimalSep, false);
+        $dataPremis = getPremisInformation();
+        $DecDigit = $dataPremis->decimal_digit;
+        if (function_exists('arrayBulan')){
+            $bulan = arrayBulan();
+        }else{
+            $bulan = array(
+                1 => 'Januari',
+                2 => 'Februari',
+                3 => 'Maret',
+                4 => 'April',
+                5 => 'Mei',
+                6 => 'Juni',
+                7 => 'Juli',
+                8 => 'Agustus',
+                9 => 'September',
+                10 => 'Oktober',
+                11 => 'November',
+                12 => 'Desember',
+            );
+        }
+        $dataPremis = getPremisInformation();
+        $dataPenjualan = getDataPenjualan($idpenjualan);
+        if (!file_check_location('sites/all/libraries/PHPExcel/PHPExcel.php', 'sites/all/libraries/PHPExcel')) {
+            watchdog('phpexcel', "Couldn't find the PHPExcel library! ", array(), WATCHDOG_ERROR);
+            return FALSE;
+        }
+        require_once 'sites/all/libraries/PHPExcel/PHPExcel.php';
+        $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+        $objPHPExcel = $objReader->load("sites/default/files/templates/template-faktur.xlsx");
+        /*
+         * A2: Alamat Premis A3: Telepon Premis
+         * B5 : Nomer Nota, B6: Nama Pelanggan, B7 : Alamat Pelanggan, I5: Tanggal (format 01 Januari 2017), I6: Cara pembayaran
+        */
+
+        /* Set Style */
+        $BStyle = array(
+            'borders' => array(
+                'outline' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            )
+        );
+        $alignmentStyle = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+            )
+        );
+        $alignmentStyle2 = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_TOP,
+            )
+        );
+        $alignmentLeft = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT
+            )
+        );
+        $styleBg1 = array(
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => 'FFC7CE')
+            )
+        );
+        $styleBg2 = array(
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => 'C6EFCE')
+            )
+        );
+        $styleBg3 = array(
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => 'FFEB9C')
+            )
+        );
+
+        /* Select Sheet 1 */
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', strtoupper($dataPremis->nama));
+        $objPHPExcel->getActiveSheet()->setCellValue('A2','Alamat :');
+        $objPHPExcel->getActiveSheet()->mergeCells('B2:D2');
+        $objPHPExcel->getActiveSheet()->setCellValue('B2',$dataPremis->alamat);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:D2')->applyFromArray($alignmentStyle2);
+        $objPHPExcel->getActiveSheet()->getStyle('B2:D2')->getAlignment()->setWrapText(true);
+        $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(45);
+        $objPHPExcel->getActiveSheet()->setCellValue('A3',ucfirst(trans('ongkir', $dataPremis->bahasa)).' : '.$dataPremis->telepon);
+        $objPHPExcel->getActiveSheet()->setCellValue('A4',strtoupper(trans('faktur', $dataPremis->bahasa)));
+        $objPHPExcel->getActiveSheet()->setCellValue('B5',':  '.$dataPenjualan['info']->nonota);
+        $objPHPExcel->getActiveSheet()->setCellValue('B6',':  '.strtoupper($dataPenjualan['info']->namapelanggan));
+        $objPHPExcel->getActiveSheet()->setCellValue('B7',':  '.strtoupper($dataPenjualan['info']->alamat));
+        $explodeTgl = explode(' ',$dataPenjualan['info']->tglpenjualan);
+        $explodeTglJual = explode('-',$explodeTgl[0]);
+        $tglJual = $explodeTglJual[2].' '.$bulan[(int)$explodeTglJual[1]].' '.$explodeTglJual[0];
+        $objPHPExcel->getActiveSheet()->setCellValue('H5',strtoupper(trans('tanggal', $dataPremis->bahasa)));
+        $objPHPExcel->getActiveSheet()->setCellValue('I5',':  '.$tglJual);
+        $objPHPExcel->getActiveSheet()->setCellValue('H6',strtoupper(trans('trem', $dataPremis->bahasa)));
+        $objPHPExcel->getActiveSheet()->setCellValue('I6',':  '.$dataPenjualan['info']->carabayar);
+        $objPHPExcel->getActiveSheet()->setCellValue('H9',strtoupper(trans('diskon', $dataPremis->bahasa)).' %');
+        //$objPHPExcel->getActiveSheet()->setCellValue('H13',strtoupper(trans('ongkir', $dataPremis->bahasa)).' %');
+        $alphas = range('A', 'Z');
+        $rownumber = 10;
+        /*
+         * A10: Nomer, B10: Nama Barang, C10: Barcode, D10: Qty, E10: Satuan, F10: Harga, G10: Diskon,  H10: Subtotal
+        */
+        $jumlahTotal = 0;
+        for ($i = 0; $i < count($dataPenjualan['detail']);$i++){
+            $detailPenjualan = $dataPenjualan['detail'][$i];
+            $colnumber = 0;
+            $objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, ($i + 1));
+            $colnumber++;
+            $objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, trim(strtoupper($detailPenjualan['namaproduct'])));
+            $colnumber++;
+            $ukuran = !empty($detailPenjualan->ukuran) ? $detailPenjualan['ukuran'] : '-';
+            $objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $ukuran);
+            $colnumber++;
+            $barcode = !empty($detailPenjualan->barcode) ? $detailPenjualan['barcode'] : '-';
+            $objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, trim(strtoupper($barcode)));
+            $colnumber++;
+            $objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $detailPenjualan['jumlah']);
+            $colnumber++;
+            $objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, strtoupper($detailPenjualan['satuan']));
+            $colnumber++;
+            $objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $detailPenjualan['hargajual']);
+            $objPHPExcel->getActiveSheet()->getStyle($alphas[$colnumber].$rownumber)->getNumberFormat()->setFormatCode('_("'.$currencySym.'"* #,##0.00_);_("'.$currencySym.'"* \(#,##0.00\);_("'.$currencySym.'"* "-"??_);_(@_)');
+            $colnumber++;
+            $objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $detailPenjualan->diskon.'%');
+            $colnumber++;
+            $subTotal = ($detailPenjualan['hargajual'] - ($detailPenjualan['hargajual']*$detailPenjualan['diskon']/100))*$detailPenjualan['jumlah'];
+            $objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $subTotal);
+            $objPHPExcel->getActiveSheet()->getStyle($alphas[$colnumber].$rownumber)->getNumberFormat()->setFormatCode('_("'.$currencySym.'"* #,##0.00_);_("'.$currencySym.'"* \(#,##0.00\);_("'.$currencySym.'"* "-"??_);_(@_)');
+            $rownumber++;
+            $jumlahTotal = $jumlahTotal + $subTotal;
+        }
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            )
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('A10:I'.($rownumber - 1))->applyFromArray($styleArray);
+        unset($styleArray);
+        $objPHPExcel->getActiveSheet()->mergeCells('A'.$rownumber.':B'.($rownumber + 1));
+        $objPHPExcel->getActiveSheet()->setCellValue('A'.$rownumber, strtoupper($dataPremis->nama));
+        $objPHPExcel->getActiveSheet()->getStyle('A'.$rownumber.':B'.($rownumber + 1))->applyFromArray($alignmentStyle);
+        $objPHPExcel->getActiveSheet()->mergeCells('A'.($rownumber + 4).':B'.($rownumber + 4));
+        $objPHPExcel->getActiveSheet()->setCellValue('A'.($rownumber + 4), '.....................................');
+        $objPHPExcel->getActiveSheet()->getStyle('A'.($rownumber + 4).':B'.($rownumber + 4))->applyFromArray($alignmentStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A'.$rownumber.':B'.($rownumber + 4))->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->mergeCells('C'.$rownumber.':G'.($rownumber + 4));
+        $objPHPExcel->getActiveSheet()->setCellValue('C'.$rownumber, 'KETERANGAN : ');
+        $objPHPExcel->getActiveSheet()->getStyle('C'.$rownumber.':G'.($rownumber + 4))->applyFromArray($alignmentStyle2);
+        $objPHPExcel->getActiveSheet()->getStyle('C'.$rownumber.':G'.($rownumber + 4))->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->setCellValue('H'.$rownumber, 'TOTAL');
+        $objPHPExcel->getActiveSheet()->setCellValue('I'.$rownumber, $jumlahTotal);
+        $objPHPExcel->getActiveSheet()->getStyle('I'.$rownumber)->getNumberFormat()->setFormatCode('_("'.$currencySym.'"* #,##0.00_);_("'.$currencySym.'"* \(#,##0.00\);_("'.$currencySym.'"* "-"??_);_(@_)');
+        $objPHPExcel->getActiveSheet()->getStyle('H'.$rownumber.':I'.$rownumber)->applyFromArray($styleBg1);
+        $objPHPExcel->getActiveSheet()->setCellValue('H'.($rownumber + 1), strtoupper(trans('ongkir', $dataPremis->bahasa)));
+        $objPHPExcel->getActiveSheet()->getStyle('H'.($rownumber + 1).':I'.($rownumber + 1))->applyFromArray($styleBg2);
+        $objPHPExcel->getActiveSheet()->setCellValue('H'.($rownumber + 2), 'JUMLAH');
+        $objPHPExcel->getActiveSheet()->mergeCells('H'.($rownumber + 3).':I'.($rownumber + 4));
+        $objPHPExcel->getActiveSheet()->setCellValue('H'.($rownumber + 3), $jumlahTotal);
+        $objPHPExcel->getActiveSheet()->getStyle('H'.($rownumber + 3))->getNumberFormat()->setFormatCode('_("'.$currencySym.'"* #,##0.00_);_("'.$currencySym.'"* \(#,##0.00\);_("'.$currencySym.'"* "-"??_);_(@_)');
+        $objPHPExcel->getActiveSheet()->getStyle('H'.$rownumber.':H'.($rownumber + 2))->applyFromArray($alignmentLeft);
+        $objPHPExcel->getActiveSheet()->getStyle('H'.$rownumber.':I'.($rownumber + 4))->applyFromArray($BStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('H'.($rownumber + 3))->getFont()->setSize(16);
+        $objPHPExcel->getActiveSheet()->getStyle('H'.($rownumber + 3))->getFont()->setBold(true);
+        $objPHPExcel->getActiveSheet()->getStyle('H'.($rownumber + 2).':I'.($rownumber + 3))->applyFromArray($styleBg3);
+        $waktu = time();
+        $namafile = 'penjualan-'.$dataPenjualan['info']->nonota.'-'.$waktu.'.xlsx';
+        $objWriter->save('sites/default/files/'.$namafile);
+    }
+    print $namafile;
+    exit();
+}
+
+function hapus_penjualan(){
+    if (isset($_POST['idpenjualan']) && !empty($_POST['idpenjualan'])){
+        $IdPenjualan = $_POST['idpenjualan'];
+        $DataPenjualan = getDataPenjualan($IdPenjualan);
+        for ($i = 0; $i < count($DataPenjualan['detail']);$i++){
+            $IdProduct = $DataPenjualan['detail'][$i]->idproduct;
+            $IdDetail = $DataPenjualan['detail'][$i]->iddetail;
+            $CurrentStok = db_result(db_query('SELECT stok FROM product WHERE idproduct = %d', $IdProduct));
+            $Qty = $DataPenjualan['detail'][$i]->jumlah;
+            $UpdatedStok = $CurrentStok + $Qty;
+            db_query("UPDATE product SET stok='%f' WHERE idproduct='%d'",$UpdatedStok,$IdProduct);
+            $Keterangan = 'Hapus Penjualan';
+            db_query("INSERT INTO transaksistock (idproduk, idpenjualan, stocksebelum, keluar, stocksetelah, keterangan) VALUES 
+				('%d', '%d', '%f', '%f', '%f', '%s')",$IdProduct,$IdPenjualan,$CurrentStok,$Qty,$UpdatedStok,$Keterangan);
+            db_query('DELETE FROM detailpenjualan WHERE iddetail = %d', $IdDetail);
+        }
+        db_query('DELETE FROM penjualan WHERE idpenjualan = %d', $IdPenjualan);
+    }
+    exit();
+}
