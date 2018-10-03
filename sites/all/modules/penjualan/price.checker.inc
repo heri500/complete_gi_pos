@@ -17,7 +17,7 @@ function price_checker(){
     drupal_add_js($js_path);
     $PriceChecker = '<input type="text" style="height: 25px;width: 100%;" placeholder="scan barcode here" id="barcode-check">';
     $PriceChecker .= '<div align="center" style="width: 100%;min-height: 400px;">';
-    $PriceChecker .= '<div id="product-name" style="font-size: 100px;padding: 20px;line-height: 1;"></div>';
+    $PriceChecker .= '<div id="product-name" style="font-size: 100px;padding: 20px;line-height:1;"></div>';
     $PriceChecker .= '<svg id="barcode-place" class="barcode"></svg>';
     $PriceChecker .= '<div id="product-price" style="font-size: 125px;padding: 50px;font-weight: bold;"></div>';
     $PriceChecker .= '</div>';

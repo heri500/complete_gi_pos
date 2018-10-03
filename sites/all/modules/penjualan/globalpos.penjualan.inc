@@ -142,7 +142,7 @@ function tabel_penjualan($tgl1,$tgl2,$idPelanggan){
 	$tabelpenjualan .= '<th>'.strtoupper($gstSym).'</th>';
 	$tabelpenjualan .= '<th>TOTAL+'.strtoupper($gstSym).'</th>';
 	$tabelpenjualan .= '<th>MODAL</th>';
-	$tabelpenjualan .= '<th>LABA</th>';
+	$tabelpenjualan .= '<th>'.strtoupper(trans('laba', $dataPremis->bahasa)).'</th>';
 	$tabelpenjualan .= '<th>CARA BAYAR</th>';
 	$tabelpenjualan .= '<th>BAYAR</th>';
 	$tabelpenjualan .= '<th>'.strtoupper(trans('kembali', $dataPremis->bahasa)).'</th>';

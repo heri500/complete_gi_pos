@@ -6,9 +6,9 @@ $(document).ready(function(){
         barWidth: 1.5,
         barHeight: 30
     };
-    /*$(".barcode-place").each(function(){
+    $(".barcode-place").each(function(){
         barcode_value = $(this).attr('id');
         $(this).barcode(barcode_value, btype, settings);
         //$(this).css('width','186px');
-    });*/
+    });
 })

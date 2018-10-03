@@ -81,6 +81,11 @@ $TerjemahKata = array(
         'Malaysia' => 'yakin',
         'English' => 'are you sure',
     ),
+    'kode' => array(
+        'Indonesia' => 'kode',
+        'Malaysia' => 'kod',
+        'English' => 'code',
+    ),
     'packing ulang' => array(
         'Indonesia' => 'packing ulang',
         'Malaysia' => 'bungkus semula',

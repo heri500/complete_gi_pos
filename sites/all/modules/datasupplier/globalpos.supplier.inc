@@ -5,41 +5,32 @@ function data_supplier(){
  	$form_style = $path.'/css/custom-style.css';
  	drupal_add_css($form_style, 'theme', 'all', FALSE);
  	$variables['styles'] = drupal_get_css();
-    get_number_format($currencySym, $thousandSep, $decimalSep);
-    $gstSym = get_gst_symbols();
     $dataPremis = get_data_premis();
     $DecDigit = $dataPremis->decimal_digit;
-    drupal_add_css('misc/media/datatables.1.10/jquery/jquery-ui.css');
-    drupal_add_css('misc/media/datatables.1.10/media/css/dataTables.jqueryui.css');
-    drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.dataTables.css');
-    drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.jqueryui.css');
-    drupal_add_js('misc/media/datatables.1.10/media/js/jquery.js');
-    drupal_add_js('misc/media/jqueryValidate/js/jquery.validationEngine-en.js');
-    drupal_add_js('misc/media/jqueryValidate/js/jquery.validationEngine.js');
-    drupal_add_js('misc/media/datatables.1.10/jquery/jquery-ui.js');
-    _addJeditablePlugins();
-    _addTimePickerPlugins();
-    _addAutotabPlugins();
-    drupal_add_js('misc/media/datatables.1.10/media/js/jquery.dataTables.js');
-    drupal_add_js('misc/media/datatables.1.10/media/js/dataTables.jqueryui.js');
-    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/dataTables.buttons.js');
-    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.flash.js');
-    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.html5.js');
-    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.print.js');
-    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.colVis.min.js');
+	drupal_add_css('misc/media/datatables/css/demo_table_jui.css');
+	drupal_add_css('misc/media/datatables/css/TableTools.css');
+	drupal_add_css('misc/media/datatables/themes/smoothness/jquery-ui-1.8.4.custom.css');
+	drupal_add_css('misc/media/datatables/css/ColVis.css');
+	drupal_add_css('misc/media/css/validationEngine.jquery.css');
+	drupal_add_js('misc/media/jquery-1.4.4.min.js');
+	drupal_add_js('misc/media/jquery.validationEngine-en.js');
+	drupal_add_js('misc/media/jquery.validationEngine.js');
+	drupal_add_js('misc/media/jquery-ui-1.8.custom.min.js');
+	drupal_add_js('misc/media/datatables/js/jquery.dataTables.min.js');
+	drupal_add_js('misc/media/datatables/ZeroClipboard/ZeroClipboard.js');
+	drupal_add_js('misc/media/datatables/js/TableTools.min.js');
+	drupal_add_js('misc/media/jquery.jeditable.js');
+	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
 	drupal_add_js(
 		array(
 			'filePath' => file_directory_path(),
-            'gstSym' => $gstSym,
-            'dDigit' => $DecDigit,
 		),
 		'setting');
-    drupal_add_js('misc/media/datatables/js/number.format.js');
 	$modulePath = drupal_get_path('module','datasupplier');
 	$jsPath = $modulePath.'/js/supplier.js';
 	drupal_add_js($jsPath);
 	$viewtabelsupplier = '<form id="formsupplier" action="'.base_path().'datasupplier/simpansupplier" method="post"><div id="formplace" class="supplier">';
-	$viewtabelsupplier .= '<label>KODE</label><input type="text" class=\"validate[required]\" id="kodesupplier" name="kodesupplier">';
+	$viewtabelsupplier .= '<label>'.strtoupper(trans('kode', $dataPremis->bahasa)).'</label><input type="text" class=\"validate[required]\" id="kodesupplier" name="kodesupplier">';
 	$viewtabelsupplier .= '<label>SUPPLIER</label><input class=\"validate[required]\" type="text" id="namasupplier" name="namasupplier">';
 	$viewtabelsupplier .= '<label>TELEPON</label><input type="text" id="telp" name="telp">';
 	$viewtabelsupplier .= '<label>ALAMAT</label><input type="text" id="alamat" name="alamat">';
@@ -62,12 +53,13 @@ function data_supplier(){
 
 function tabel_supplier(){
 	get_number_format($currencySym, $thousandSep, $decimalSep);
+    $dataPremis = get_data_premis();
 	$tabelsupplier ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_supplier">';
 	$tabelsupplier .= '<thead>';
 	$tabelsupplier .= '<tr>';
 	$tabelsupplier .= '<th class="tablebutton"></th>';
 	$tabelsupplier .= '<th class="tablebutton"></th>';
-	$tabelsupplier .= '<th style="width: 150px;">KODE</th>';
+	$tabelsupplier .= '<th style="width: 150px;">'.strtoupper(trans('kode', $dataPremis->bahasa)).'</th>';
 	$tabelsupplier .= '<th>NAMA SUPPLIER</th>';
 	$tabelsupplier .= '<th>TELP</th>';
 	$tabelsupplier .= '<th>ALAMAT</th>';
@@ -172,7 +164,7 @@ function detail_hutang(){
 		$tabelhutang .= '<th>TOTAL</th>';
 		$tabelhutang .= '<th>DP</th>';
 		$tabelhutang .= '<th>HUTANG</th>';
-		$tabelhutang .= '<th class="tanggal">TGL JUAL</th>';
+		$tabelhutang .= '<th class="tanggal">TRH JUAL</th>';
 		$tabelhutang .= '</tr>';
 		$tabelhutang .= '</thead>';
 		$tabelhutang .= '<tbody>';
@@ -221,7 +213,7 @@ function detail_pembayaran_hutang(){
 		$tabelpembayaran .= '<thead>';
 		$tabelpembayaran .= '<tr>';
         $tabelpembayaran .= '<th class="tablebutton">&nbsp;</th>';
-		$tabelpembayaran .= '<th class="tanggal">TGL BAYAR</th>';
+		$tabelpembayaran .= '<th class="tanggal">TRH BAYAR</th>';
 		$tabelpembayaran .= '<th>KETERANGAN</th>';
 		$tabelpembayaran .= '<th>NILAI</th>';
 		$tabelpembayaran .= '</tr>';

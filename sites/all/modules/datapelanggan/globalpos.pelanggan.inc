@@ -40,7 +40,7 @@ function data_pelanggan(){
 	$jsPath = $modulePath.'/js/datapelanggan.js';
 	drupal_add_js($jsPath);
 	$viewtabelpelanggan = '<form id="formpelanggan" action="'.base_path().'datapelanggan/simpanpelanggan" method="post"><div id="formplace" class="pelanggan">';
-	$viewtabelpelanggan .= '<label>KODE</label><input type="text" class=\"validate[required]\" id="kodepelanggan" name="kodepelanggan">';
+	$viewtabelpelanggan .= '<label>'.strtoupper(trans('kode', $dataPremis->bahasa)).'</label><input type="text" class=\"validate[required]\" id="kodepelanggan" name="kodepelanggan">';
 	$viewtabelpelanggan .= '<label>PELANGGAN</label><input class=\"validate[required]\" type="text" id="namapelanggan" name="namapelanggan">';
 	$viewtabelpelanggan .= '<label>TELEPON</label><input type="text" id="telp" name="telp">';
 	$viewtabelpelanggan .= '<label>ALAMAT</label><input type="text" id="alamat" name="alamat">';
@@ -228,7 +228,7 @@ function tabel_pelanggan($dataPremis = null){
 	$tabelPelanggan .= '<th class="tablebutton"></th>';
 	$tabelPelanggan .= '<th class="tablebutton"></th>';
 	$tabelPelanggan .= '<th class="tablebutton"></th>';
-	$tabelPelanggan .= '<th style="width: 150px;">KODE</th>';
+	$tabelPelanggan .= '<th style="width: 150px;">KOD</th>';
 	$tabelPelanggan .= '<th>PELANGGAN</th>';
 	$tabelPelanggan .= '<th>TELP</th>';
 	$tabelPelanggan .= '<th>ALAMAT</th>';
@@ -306,7 +306,7 @@ function detail_piutang_old(){
 		$tabelpiutang .= '<th>TOTAL</th>';
 		$tabelpiutang .= '<th>DP</th>';
 		$tabelpiutang .= '<th>PIUTANG</th>';
-		$tabelpiutang .= '<th>TGL JUAL</th>';
+		$tabelpiutang .= '<th>TRH JUAL</th>';
 		$tabelpiutang .= '</tr>';
 		$tabelpiutang .= '</thead>';
 		$tabelpiutang .= '<tbody>';

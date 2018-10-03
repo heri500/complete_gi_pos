@@ -308,7 +308,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<th>SUBKATEGORI</th>';
 	$tabelproduk .= '<th>SUPPLIER</th>';
 	$tabelproduk .= '<th>BARCODE</th>';
-	$tabelproduk .= '<th>KODE ALT</th>';
+	$tabelproduk .= '<th>KOD ALT</th>';
 	$tabelproduk .= '<th>NAMA</th>';
 	$tabelproduk .= '<th>H.POKOK</th>';
 	$tabelproduk .= '<th>H.JUAL</th>';

@@ -77,7 +77,7 @@ function tabel_reproduksi($tgl1,$tgl2){
 	$tabelreproduksi .= '<th class="tanggal">JAM</th>';
 	$tabelreproduksi .= '<th>TOTAL</th>';
 	$tabelreproduksi .= '<th>MODAL</th>';
-	$tabelreproduksi .= '<th>LABA</th>';
+	$tabelreproduksi .= '<th>'.strtoupper(trans('laba', $dataPremis->bahasa)).'</th>';
 	$tabelreproduksi .= '<th title="Total nilai jual hasil packing">T. HASIL</th>';
 	$tabelreproduksi .= '<th title="Total nilai modal hasil packing">M. HASIL</th>';
 	$tabelreproduksi .= '<th title="Total nilai laba hasil packing">L. HASIL</th>';

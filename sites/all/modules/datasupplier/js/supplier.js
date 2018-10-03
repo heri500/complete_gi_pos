@@ -4,11 +4,6 @@ var oTable3;
 var oTable4;
 var pathutama = '';
 var pathfile = '';
-var selectedPembelian = 0;
-var currSym = '';
-var tSep = '.';
-var dSep = ',';
-var dDigit = 0;
 function tampilkantabelsupplier(){
     oTable = $('#tabel_supplier').dataTable( {
         'bJQueryUI': true,
@@ -64,7 +59,7 @@ function view_detail_hutang(idsupplier,namasupplier,besarhutang){
         }
     });
 }
-/*function tampiltabelbelidetail(){
+function tampiltabelbelidetail(){
     oTable3 = $('#tabel_detail_pembelian').dataTable( {
         'bJQueryUI': true,
         'bAutoWidth': false,
@@ -74,61 +69,7 @@ function view_detail_hutang(idsupplier,namasupplier,besarhutang){
         'aaSorting': [[0, 'asc']],
         'sDom': '<"H"<"toolbar">fr>t<"F"ip>'
 });
-}*/
-
-function tampiltabelbelidetail(){
-    oTable2 = $("#tabel_detail_pembelian").dataTable( {
-        'bJQueryUI': true,
-        'bAutoWidth': false,
-        'bPaginate': false,
-        'bLengthChange': false,
-        'scrollY': '330px',
-        'scrollCollapse': true,
-        'bInfo': false,
-        'aaSorting': [[1, 'asc']],
-        'sDom': '<"H"<"toolbar">fr>t<"F"ip>',
-        'aoColumnDefs': [
-            { 'bSortable': false, 'aTargets': [ 0 ] }
-        ],
-        'processing': true,
-        'serverSide': true,
-        'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?asal=pembelian&request_data=detailpembelian&idpembelian=' + selectedPembelian,
-        'createdRow': function ( row, data, index ) {
-            row.id = data[(data.length - 1)];
-            $('td', row).eq(1).addClass('center');
-            $('td', row).eq(3).addClass('angka');
-            $('td', row).eq(4).addClass('angka');
-            $('td', row).eq(5).addClass('angka');
-        },
-        'footerCallback': function ( row, data, start, end, display ) {
-            var api = this.api(), data;
-            // Remove the formatting to get integer data for summation
-            var intVal = function ( i ) {
-                if (typeof i === 'string') {
-                    i = i.split(tSep).join('');
-                    i = i.split(dSep).join('.');
-                }else if (typeof i === 'number'){
-                    i = i;
-                }else{
-                    i = 0;
-                }
-                return parseFloat(i);
-            };
-            // Total over all pages
-            total = api
-                .column( 5 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-            // Update footer
-            $( api.column( 5 ).footer() ).html(
-                currSym +' '+ number_format(total,dDigit,dSep,tSep)
-            ).addClass('angka');
-        },
-    });
 }
-
 function tampiltabelpembayaran(){
     oTable4 = $('#history_pembayaran').dataTable( {
         'bJQueryUI': true,
@@ -143,7 +84,6 @@ function tampiltabelpembayaran(){
 }
 function view_detail(idpembelian,nonota){
     var request = new Object();
-    selectedPembelian = idpembelian;
     request.idpembelian = idpembelian;
     alamat = pathutama + 'pembelian/detailpembelian';
     $.ajax({
@@ -200,14 +140,8 @@ function delete_pembayaran(idpembayaran, idsupplier){
 $(document).ready(function() {
     pathutama = Drupal.settings.basePath;
     pathfile = Drupal.settings.basePath + Drupal.settings.filePath;
-    //TableToolsInit.sSwfPath = pathutama +'misc/media/datatables/swf/ZeroClipboard.swf';
+    TableToolsInit.sSwfPath = pathutama +'misc/media/datatables/swf/ZeroClipboard.swf';
     alamatupdate = pathutama + 'datasupplier/updatesupplier';
-
-    currSym = Drupal.settings.currSym[0];
-    tSep = Drupal.settings.tSep[0];
-    dSep = Drupal.settings.dSep[0];
-    dDigit = Drupal.settings.dDigit;
-
     $('#tabel_supplier tbody .editable').editable(alamatupdate, {
         'callback': function( sValue, y ) {
             var aPos = oTable.fnGetPosition( this );
