@@ -578,7 +578,7 @@ $(document).ready(function(){
     $("#tgljual").css("width","177px");
     $("#carabayar").change(function(){
         var total_plus_ppn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
-        if ($(this).val() == 'DEBIT' || $(this).val() == 'GIRO'){
+        if ($(this).val() == 'DEBIT' || $(this).val() == 'GIRO' || $(this).val() == 'KAD KREDIT'){
             $("#field_no_kartu").show();
             $("#field_bayar").show();
             $("#nilaibayar").val(total_plus_ppn).attr('readonly','readonly').removeAttr('disabled');

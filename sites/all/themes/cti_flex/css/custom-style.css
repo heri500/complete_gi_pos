@@ -973,3 +973,6 @@ form.form-item-lined-up, .form-item-lined-up{
 	float: left;
 	margin-right: 5px;
 }
+#carabayar_chosen.chosen-container span{
+	font-size: 1.4em !important;
+}

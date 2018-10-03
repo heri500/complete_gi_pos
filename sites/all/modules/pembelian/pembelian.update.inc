@@ -42,10 +42,10 @@ function update_detail_pembelian(){
             /* End Update Pembelian */
             /* Update Stok Product */
             $idproduct = db_result(db_query('SELECT idproduct FROM detailpembelian WHERE iddetail=%d', $iddetailpembelian[1]));
-            $stokproduct = db_result(db_query('SELECT stok FROM product WHERE idproduct=%d',$idproduct));
-            $stoksekarang = $stockproduct + $selisih;
             if (!empty($idproduct)){
-                db_query("UPDATE product SET stok = stok + '%f', uploaded=0, changed=1 WHERE idproduct='%d'",$selisih,$idproduct);
+                $stokproduct = db_result(db_query("SELECT stok FROM product WHERE idproduct='%d'",$idproduct));
+                $stoksekarang = $stokproduct - $selisih;
+                db_query("UPDATE product SET stok = stok - '%f', uploaded=0, changed=1 WHERE idproduct='%d'",$selisih,$idproduct);
                 $keterangan = 'Revisi Pembelian';
                 db_query("INSERT INTO transaksistock (idproduk, idpembelian, stocksebelum, keluar, stocksetelah, keterangan) VALUES
 				('%d', '%d', '%f', '%f', '%f', '%s')",$idproduct,$idPembelian,$stokproduct,$selisih,$stoksekarang,$keterangan);
@@ -136,9 +136,9 @@ function insert_detail_pembelian(){
             $totalModal = db_result(db_query($strSQL,$_POST['idpembelian']));
             $strSQL = 'UPDATE pembelian SET total=\'%f\' WHERE idpembelian=%d';
             db_query($strSQL,$totalModal,$_POST['idpembelian']);
-            $stokproduct = db_result(db_query('SELECT stok FROM product WHERE idproduct=%d',$_POST['idproduk']));
-            $stoksekarang = $stockproduct + $_POST['qty'];
             if (!empty($idproduct)){
+                $stokproduct = db_result(db_query('SELECT stok FROM product WHERE idproduct=%d',$_POST['idproduk']));
+                $stoksekarang = $stokproduct + $_POST['qty'];
                 db_query("UPDATE product SET stok = stok + '%f', uploaded=0, changed=1 WHERE idproduct='%d'",$_POST['qty'],$_POST['idproduk']);
                 $keterangan = 'Revisi Penjualan - Tambah Detail Pembelian';
                 db_query("INSERT INTO transaksistock (idproduk, idpembelian, stocksebelum, keluar, stocksetelah, keterangan) VALUES

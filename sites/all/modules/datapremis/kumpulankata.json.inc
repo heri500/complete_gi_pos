@@ -91,4 +91,9 @@ $TerjemahKata = array(
         'Malaysia' => 'bungkus semula',
         'English' => 'repacking',
     ),
+    'simpan' => array(
+        'Indonesia' => 'simpan',
+        'Malaysia' => 'simpan',
+        'English' => 'save',
+    ),
 );

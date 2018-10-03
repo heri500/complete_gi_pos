@@ -20,8 +20,9 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	drupal_add_css('misc/media/datatables/css/demo_table_jui.css');
 	drupal_add_css('misc/media/themes/jquery-ui-1.8.11.custom.css');
 	drupal_add_css('misc/media/css/validationEngine.jquery.css');
-	drupal_add_js('misc/media/jquery-1.4.4.min.js');
-	drupal_add_js('misc/media/jqClock.min.js');
+	//drupal_add_js('misc/media/jquery-1.4.4.min.js');
+    _addJqueryPlugins();
+    drupal_add_js('misc/media/jqClock.min.js');
 	drupal_add_js('misc/media/jquery.validationEngine-en.js');
 	drupal_add_js('misc/media/jquery.validationEngine.js');
 	drupal_add_js('misc/media/jquery-ui-1.8.11.custom.min.js');
@@ -29,6 +30,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	drupal_add_js('misc/media/datatables/js/dataTables.addtr.js');
 	drupal_add_js('misc/media/datatables/js/number.format.js');
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
+    _addBlockUiPlugins(true);
     _add_chosen_jquery_plugins_old();
     _addJeditablePlugins();
 	$idPelanggan = 0;
@@ -193,7 +195,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$penjualan .= '<label>Qty Baru : </label><input type="text" id="newqty2" name="newqty2">';
 	$penjualan .= '</div>';
 	$penjualan .= '<div title="PEMBAYARAN" id="dialogbayar">';
-	$carabayar = '<select id="carabayar" name="carabayar">';
+	$carabayar = '<select id="carabayar" name="carabayar" multiple="multiple" style="font-size: 1.4em !important;font-weight: bold;margin-top: 10px;">';
 	$result = db_query("SELECT carabayar FROM carabayar");
 	$i = 0;
 	while($data = db_fetch_object($result)){
@@ -228,9 +230,13 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 		$i++;
 	}
 	$pelanggan .= '</select>';*/
-	$nilaibayar = '<input type="text" id="nilaibayar" name="nilaibayar">';
+    $nokartudebit = '<input type="text" id="nomerkartu" name="nomerkartu" tabindex="1">';
+    $nokartukredit = '<input type="text" id="nomer_kartu_kredit" name="nomer_kartu_kredit" tabindex="2">';
+    $nilaibayar = '<input type="text" id="nilaibayar" name="nilaibayar" tabindex="3">';
+    $NilaiBayarHutang = '<input type="text" id="nilai_bayar_hutang" name="nilai_bayar_hutang" tabindex="4">';
+    $NilaiBayarDebit = '<input type="text" id="nilai_bayar_debit" name="nilai_bayar_debit" tabindex="5">';
+    $NilaiBayarKredit = '<input type="text" id="nilai_bayar_kredit" name="nilai_bayar_kredit" tabindex="6">';
 	$depositpelanggan = '<input type="text" id="depositpelanggan" name="depositpelanggan" readonly="readonly">';
-	$nokartudebit = '<input type="text" id="nomerkartu" name="nomerkartu">';
 	$kembali = '<input readonly="readonly" type="text" id="kembali" name="kembali">';
 	$totalbelanja = '<input type="text" id="totalbelanjauser" name="totalbelanjauser">';
 	//$penjualan .= '<div class="barisbayar"><label>Pelanggan</label>'.$pelanggan.'</div>';
@@ -242,19 +248,24 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
         $meja .= '<input type="hidden" id="idmeja" name="idmeja">';
     }
     //$penjualan .= '<div class="barisbayar"><label>Meja</label>'.$meja.'</div>';
-	$penjualan .= '<div class="barisbayar"><label>Total Belanja</label>'.$totalbelanja.'</div>';
+	$penjualan .= '<div class="barisbayar"><label style="width: 250px;">TOTAL</label>'.$totalbelanja.'</div>';
 	$totalppn = '<input type="hidden" id="ppn_value" name="ppn_value" value="'.$dataPremis->ppn_value.'">';
 	$totalppn .= '<input type="text" id="total_ppn" name="total_ppn" value="0" disabled="disabled">';
 	$ceklistPpn = '<input type="checkbox" id="use-ppn" name="use-ppn" value="1" checked="checked" class="checkbox-ppn">';
-	$penjualan .= '<div class="barisbayar"><label>'.$gstSym.' ('.$dataPremis->ppn_value.'%)&nbsp;'.$ceklistPpn.'</label>'.$totalppn.'</div>';
+	$penjualan .= '<div class="barisbayar"><label style="width: 250px;" >'.$gstSym.' ('.$dataPremis->ppn_value.'%)&nbsp;'.$ceklistPpn.'</label>'.$totalppn.'</div>';
 	$totalplusppn = '<input type="text" id="total_plus_ppn" name="total_plus_ppn" value="0" disabled="disabled">';
-	$penjualan .= '<div class="barisbayar"><label>TOTAL + '.$gstSym.'</label>'.$totalplusppn.'</div>';
-	$penjualan .= '<div class="barisbayar"><label>Cara Bayar</label>'.$carabayar.'</div>';
-	$penjualan .= '<div id="field_no_kartu" class="barisbayar" style="display: none;"><label>No. Kartu/Giro</label>'.$nokartudebit.'</div>';
-	$penjualan .= '<div id="baris-deposit" class="barisbayar"><label id="label-deposit">Deposit</label>'.$depositpelanggan.'</div>';
-	$penjualan .= '<div class="barisbayar"><label>Pembayaran</label>'.$nilaibayar.'</div>';
-	$penjualan .= '<div id="field_kembali" class="barisbayar"><label>Kembali</label>'.$kembali.'</div>';
-	$penjualan .= '<div id="field_kembalian" class="barisbayar" style="display: none;"><label>Kembalian</label>'.$perlakuankembalian.'</div>';
+	$penjualan .= '<div class="barisbayar"><label style="width: 250px;">TOTAL + '.$gstSym.'</label>'.$totalplusppn.'</div>';
+	$penjualan .= '<div class="barisbayar"><label style="width: 250px;">CARA BAYAR</label>'.$carabayar.'</div>';
+	$penjualan .= '<div id="field_no_kartu_debit" class="barisbayar" style="display: none;"><label style="width: 250px;">NO. KAD DEBIT</label>'.$nokartudebit.'</div>';
+    $penjualan .= '<div id="field_no_kartu_kredit" class="barisbayar" style="display: none;"><label style="width: 250px;">NO. KAD KREDIT</label>'.$nokartukredit.'</div>';
+	$penjualan .= '<div id="baris-deposit" class="barisbayar"><label id="label-deposit" style="width: 250px;">Deposit</label>'.$depositpelanggan.'</div>';
+	$penjualan .= '<div id="baris_bayar_tunai" class="barisbayar"><label style="width: 250px;">TUNAI</label>'.$nilaibayar.'</div>';
+    $penjualan .= '<div id="baris_bayar_hutang" class="barisbayar" style="display: none;"><label style="width: 250px;">HUTANG</label>'.$NilaiBayarHutang.'</div>';
+    $penjualan .= '<div id="baris_bayar_debit" class="barisbayar" style="display: none;"><label style="width: 250px;">KAD DEBIT</label>'.$NilaiBayarDebit.'</div>';
+    $penjualan .= '<div id="baris_bayar_kredit" class="barisbayar" style="display: none;"><label style="width: 250px;">KAD KREDIT</label>'.$NilaiBayarKredit.'</div>';
+	$penjualan .= '<div id="field_kembali" class="barisbayar"><label style="width: 250px;">'.strtoupper(trans('kembali', $dataPremis->bahasa)).'</label>'.$kembali.'</div>';
+	$penjualan .= '<div id="field_kembalian" class="barisbayar" style="display: none;"><label style="width: 250px;">Kembalian</label>'.$perlakuankembalian.'</div>';
+    $penjualan .= '<div align="center"><button id="simpan-transaksi">'.strtoupper(trans('simpan', $dataPremis->bahasa)).'</button>&nbsp;&nbsp;<button id="selesai-transaksi">SELESAI</button></div>';
 	$penjualan .= '</div>';
 	return $penjualan;
 }
@@ -599,10 +610,15 @@ function cari_produk(){
             }
         }else {
             $KATACARI = '%' . $_POST["katacari"] . '%';
-            //$sql = "SELECT idproduct,idkategori,namaproduct,hargajual FROM product WHERE alt_code LIKE '$KATACARI' OR barcode LIKE '$KATACARI' OR namaproduct LIKE '$KATACARI'";
-            $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
-		    berlaku_sebelum_zuhur, barcode FROM product WHERE (alt_code LIKE '%s' OR barcode LIKE '%s' 
-		    OR UPPER(namaproduct) LIKE '%s') AND status_product = 1 LIMIT 50", $KATACARI, $KATACARI, $KATACARI);
+            if (isset($_POST['freshproduct']) && !empty($_POST['freshproduct'])){
+                $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
+		        berlaku_sebelum_zuhur, barcode FROM product WHERE barcode = '%s'AND status_product = 1 LIMIT 1", $_POST["katacari"]);
+            }else {
+                //$sql = "SELECT idproduct,idkategori,namaproduct,hargajual FROM product WHERE alt_code LIKE '$KATACARI' OR barcode LIKE '$KATACARI' OR namaproduct LIKE '$KATACARI'";
+                $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
+		        berlaku_sebelum_zuhur, barcode FROM product WHERE (alt_code LIKE '%s' OR barcode LIKE '%s' 
+		        OR UPPER(namaproduct) LIKE '%s') AND status_product = 1 LIMIT 50", $KATACARI, $KATACARI, $KATACARI);
+            }
             $data = db_fetch_object($result);
             if ($data->idproduct) {
                 if (isset($_POST["idpelanggan"]) && !empty($_POST['idpelanggan'])) {

@@ -69,3 +69,6 @@ function _addBarcodePlugins(){
 function _addBarcodePlugins2(){
     drupal_add_js('sites/all/libraries/barcode/JsBarcode.all.min.js');
 }
+function _addJqueryPlusAsTabPlugins(){
+    drupal_add_js('sites/all/libraries/plusastab/plusastab.joelpurra.js');
+}
