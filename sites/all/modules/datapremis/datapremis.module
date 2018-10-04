@@ -99,6 +99,8 @@ function datapremis_input_form(&$form_state){
     $dataPremis = get_data_premis();
     $PpnType = variable_get('ppn_type',1);
     $Madah = variable_get('madah_slogan','INGAT MAKAN INGAT TUHAN');
+    $JumlahLorong = variable_get('jumlah_lorong',10);
+    $JumlahTingkat = variable_get('jumlah_tingkat',10);
     if (!count($dataPremis)){
         $idPremis = createEAN13PemisCode();
         $zonePremis = 0;
@@ -272,6 +274,18 @@ function datapremis_input_form(&$form_state){
         '#default_value' => $KritikSaran,
         '#description' => t('Isi dengan kata kata saranan atau tempahan'),
     );
+    $form['jumlah_lorong'] = array(
+        '#title' => t('Jumlah Lorong Pada Pasaraya/Store'),
+        '#type' => 'textfield',
+        '#default_value' => $JumlahLorong,
+        '#description' => t('Jumlah lorong dalam pasaraya/store'),
+    );
+    $form['jumlah_tingkat'] = array(
+        '#title' => t('Jumlah Tingkat Pada Rak/Gondola'),
+        '#type' => 'textfield',
+        '#default_value' => $JumlahTingkat,
+        '#description' => t('Jumlah tingkat pada Rak/Gondola'),
+    );
     $form['submit'] = array(
         '#type' => 'submit',
         '#value' => t('Simpan')
@@ -288,6 +302,8 @@ function datapremis_input_form_submit($form, &$form_state) {
     $formValues = $form_state['values'];
     variable_set('ppn_type', $formValues['ppn_type']);
     variable_set('madah_slogan', $formValues['madah']);
+    variable_set('jumlah_lorong', $formValues['jumlah_lorong']);
+    variable_set('jumlah_tingkat', $formValues['jumlah_tingkat']);
     if (cek_data_premis_exists()){
         $formValues['uid'] = $user->uid;
         $formValues['changed'] = time();

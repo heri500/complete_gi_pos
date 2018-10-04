@@ -231,6 +231,14 @@ function dataproduk_menu() {
         'access arguments' => array('Admin Data Produk'),
         'type' => MENU_CALLBACK,
     );
+    $items['dataproduk/calculatenilai'] = array(
+        'title' => t('Calculate total nilai product'),
+        'description' => 'Calculate total niai product berdasarkan harga jual',
+        'page callback' => 'calculate_total_nilai_barang_rest',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Produk'),
+        'type' => MENU_CALLBACK,
+    );
 	return $items;
 } // end hook menu
 
@@ -388,6 +396,21 @@ function calculateTotalNilaiBarang($statusstok = null, $statusProduct = 1){
 	$totalNilaiBarang = db_result(db_query($strSQL,$statusProduct));
 	return $totalNilaiBarang;
 }
+
+function calculate_total_nilai_barang_rest(){
+    $StatusStok = null;
+    if (isset($_POST['status_stok'])){
+        $StatusStok = $_POST['status_stok'];
+    }
+    $StatusProduct = 1;
+    if (isset($_POST['status_product'])){
+        $StatusProduct = $_POST['status_product'];
+    }
+    $TotalNilai = calculateTotalNilaiBarang($StatusStok, $StatusProduct);
+    print $TotalNilai;
+    exit();
+}
+
 function get_updated_product(){
 	$strSQL = 'SELECT idproduct, idsupplier, idkategori, idsubkategori, barcode, ';
 	$strSQL .= 'alt_code, namaproduct, type_product, hargapokok, hargajual, margin, minstok, ';

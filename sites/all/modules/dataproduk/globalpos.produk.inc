@@ -2,6 +2,8 @@
 
 function data_produk(){
     get_number_format($currencySym, $tSep, $dSep);
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
     $path = drupal_get_path('theme', 'cti_flex');
     $form_style = $path.'/css/custom-style.css';
     drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -28,6 +30,7 @@ function data_produk(){
     drupal_add_js('sites/all/libraries/barcode/jquery-barcode.min.js');
 	drupal_add_js('sites/all/libraries/uploadify/jquery.uploadify.v2.1.0.min.js');
 	drupal_add_js('sites/all/libraries/uploadify/swfobject.js');
+    drupal_add_js('misc/media/datatables/js/number.format.js');
     _addChosenJqueryPlugins();
 	$filePath = base_path().file_directory_path();
     $IdKategori = 0;
@@ -38,6 +41,7 @@ function data_produk(){
 		array(
 			'filePath'  => $filePath,
             'idkategori' => $IdKategori,
+            'dec_digit' => $DecDigit,
 		),
 		'setting'
 	);

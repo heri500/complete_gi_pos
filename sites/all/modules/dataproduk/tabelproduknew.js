@@ -15,6 +15,7 @@ var statusproduct = 1;
 var currSym = '';
 var tSep = '.';
 var dSep = ',';
+var dDigit = 0;
 
 function tampilkantabelproduk(){
     oTable = $('#tabel_produk').DataTable( {
@@ -150,7 +151,20 @@ function tampilkantabelproduk(){
                 'submit': 'Ok',
                 'select': true,
                 'indicator': 'Menyimpan...',
-                'tooltip': 'Klik untuk mengubah...'
+                'tooltip': 'Klik untuk mengubah...',
+                'callback' : function(value, settings){
+                    oTable.draw(false);
+                    var AlamatCalculateNilai = Drupal.settings.basePath + 'dataproduk/calculatenilai';
+                    $.ajax({
+                        type: 'POST',
+                        url: AlamatCalculateNilai,
+                        cache: false,
+                        success: function (data) {
+                            var ReturnVal = parseFloat(data.trim());
+                            $('#total-nilai-barang').html(currSym +" "+ number_format(ReturnVal,dDigit,dSep,tSep));
+                        }
+                    });
+                }
             });
             $('td', row).eq(9).addClass('angka').editable(alamatupdate, {
                 'submitdata': function ( value, settings ) {
@@ -569,14 +583,17 @@ function export_data(){
 $(document).ready(function() {
     //jsPrintSetup.getPrintersList();
     //jsPrintSetup.setPrinter();
-    currSym = Drupal.settings.currSym;
+    currSym = Drupal.settings.currSym[0];
     tSep = Drupal.settings.tSep[0];
     dSep = Drupal.settings.dSep[0];
+    dDigit = Drupal.settings.dec_digit;
+
     pathutama = Drupal.settings.basePath;
     pathfile = Drupal.settings.filePath;
     alamatupdate = Drupal.settings.basePath + 'dataproduk/updateproduk';
     statusstok = Drupal.settings.statusstokfilter;
     statusproduct = Drupal.settings.statusproduct;
+
     $('#dialogtambahkategori').dialog({
         modal: true,
         width: 350,
