@@ -96,4 +96,9 @@ $TerjemahKata = array(
         'Malaysia' => 'simpan',
         'English' => 'save',
     ),
+    'tutup' => array(
+        'Indonesia' => 'tutup',
+        'Malaysia' => 'tutup',
+        'English' => 'close',
+    ),
 );

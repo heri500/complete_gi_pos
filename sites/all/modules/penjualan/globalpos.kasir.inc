@@ -120,6 +120,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$tombollihatomset = '<a class="buttonomset" onclick="hitung_omset();">F8:TOTAL</a>';
     $tombollihatpelanggan = '<a class="buttonpelanggan" onclick="pilih_pelanggan();">F9:PELANGGAN</a>';
 	$penjualan = '<button onclick="munculkankasir();" style="font-size:12px;border: 1px solid orangered;">Klik untuk memunculkan '.trans('kasir', $dataPremis->bahasa).'</button>';
+    $penjualan .= '&nbsp;&nbsp;<button onclick="close_kasir();" style="font-size:12px;border: 1px solid orangered;">'.strtoupper(trans('tutup', $dataPremis->bahasa)).' '.strtoupper(trans('kasir', $dataPremis->bahasa)).'</button>';
 	$penjualan .= '<div id="dialogkasir" style="font-size: 12px;" title="GLOBAL POS '.strtoupper(trans('kasir', $dataPremis->bahasa)).' ['.$tanggal.']">';
 	$penjualan .= '<div id="info-kasir-waktu">';
 	$penjualan .= '<div id="tempattanggalkasir">';

@@ -1721,6 +1721,88 @@ function printBarcodeProduksi()
     return $tablePrint;
 }
 
+function get_close_cashier_data($user_id = null){
+    if (empty($user_id)) {
+        global $user;
+    }else{
+        $user = user_load($user_id);
+    }
+    date_default_timezone_set($user->timezone_name);
+    $UserPettyCash = db_result(
+        db_query(
+            'SELECT petty_cash FROM user_petty_cash WHERE login=%d AND uid=%d',
+            $user->login, $user->uid
+        )
+    );
+    $StrSql = "SELECT total_plus_ppn, bayar_multiple, kembali, bayar FROM penjualan ";
+    $StrSql .= "WHERE idpemakai=%d AND (tglpenjualan >= '%s' AND tglpenjualan <= '%s')";
+    $LastLogin = date('Y-m-d H:i:s', $user->login);
+    $CurrentTime = date('Y-m-d H:i:s');
+    $result = db_query($StrSql,$user->uid, $LastLogin,$CurrentTime);
+    $DataReport = new stdClass();
+    $DataReport->petty_cash = $UserPettyCash;
+    $DataReport->total = 0;
+    $DataReport->total_cash = 0;
+    $DataReport->total_kad_kredit = 0;
+    $DataReport->total_kad_debit = 0;
+    $DataReport->total_hutang = 0;
+    while ($data = db_fetch_object($result)){
+        $DataReport->total = $DataReport->total + $data->total_plus_ppn;
+        $ExplodeBayar = explode(';', $data->bayar_multiple);
+        for ($i = 0;$i < count($ExplodeBayar);$i++){
+            $ExplodeDetail = explode(':',$ExplodeBayar[$i]);
+            $NilaiBayar = $ExplodeDetail[1]*1;
+            if (trim($ExplodeDetail[0]) == 'TUNAI'){
+                $DataReport->total_cash = $DataReport->total_cash + $NilaiBayar;
+            }else if(trim($ExplodeDetail[0]) == 'KAD KREDIT'){
+                $DataReport->total_kad_kredit = $DataReport->total_kad_kredit + $NilaiBayar;
+            }else if(trim($ExplodeDetail[0]) == 'DEBIT'){
+                $DataReport->total_kad_debit = $DataReport->total_kad_debit + $NilaiBayar;
+            }else if(trim($ExplodeDetail[0]) == 'HUTANG'){
+                $DataReport->total_hutang = $DataReport->total_hutang + ($data->total_plus_ppn - $data->bayar);
+            }
+        }
+    }
+    return $DataReport;
+}
+
+function printCloseCashier()
+{
+    global $user;
+    date_default_timezone_set($user->timezone_name);
+    $js_path = drupal_get_path('module', 'penjualan') . '/js/direct.print.js';
+    drupal_add_js($js_path);
+    get_number_format($currencySym, $thousandSep, $decimalSep);
+    $dataPremis = getPremisInformation();
+    $DecDigit = $dataPremis->decimal_digit;
+    $printHeader = true;
+    $pathLogo = createLogoImagePath();
+    $ClosedData = get_close_cashier_data();
+    if (!empty($ClosedData)) {
+        $tablePrint = '<table style="width: 305px;border-collapse: collapse;" >';
+        $tablePrint .= '<tbody>';
+        if ($printHeader) {
+            $tablePrint .= '<tr><td rowspan="3" style="border-bottom: 1px solid #000;border-top: 1px solid #000;width:50px;text-align: center;"><img height="48" src="' . $pathLogo . '" /></td><td colspan="2" style="font-size: 14px;font-weight: bold;text-align: center;border-bottom: 1px solid #000;border-top: 1px solid #000;">' . $dataPremis->nama . '</td></tr>';
+            $tablePrint .= '<tr><td colspan="2" style="font-size: 11px;text-align: center;border-bottom: 1px solid #000;">' . $dataPremis->alamat . '&nbsp;&nbsp;</td></tr>';
+        }
+        $tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: center;"><strong>LAPORAN TUTUP CASHIER</strong></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: left;"><span style="float: left"><strong>USER ID</strong></span><span style="float: right"><strong>' . $user->name . '</strong></span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">LOGIN</span><span style="float: right">' . date('d-m-Y H:i', $user->login) . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">CLOSE</span><span style="float: right">' . date('d-m-Y H:i') . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">TOTAL</span><span style="float: right">' . number_format($ClosedData->total, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">CASH</span><span style="float: right">' . number_format($ClosedData->total_cash, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">KAD KREDIT</span><span style="float: right">' . number_format($ClosedData->total_kad_kredit, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">KAD DEBIT</span><span style="float: right">' . number_format($ClosedData->total_kad_debit, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">HUTANG</span><span style="float: right">' . number_format($ClosedData->total_hutang, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">PETTY CASH</span><span style="float: right">' . number_format($ClosedData->petty_cash, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">CASH</span><span style="float: right">' . number_format($ClosedData->total_cash, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">TOTAL CASH</span><span style="float: right">' . number_format($ClosedData->total_cash + $ClosedData->petty_cash, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
+        $tablePrint .= '</tbody>';
+        $tablePrint .= '</table>';
+    }
+    return $tablePrint;
+}
+
 function cekPrinterCommand(){
 	$printOut = '';
 	if (isset($_GET['nidlaundry'])){
@@ -1777,6 +1859,8 @@ function cekPrinterCommand(){
         $printOut = printLabelHarga();
     }else if (isset($_GET['idreproduksi'])){
         $printOut = printBarcodeProduksi();
+    }else if (isset($_GET['close_cashier'])){
+        $printOut = printCloseCashier();
     }
 	return $printOut;
 }

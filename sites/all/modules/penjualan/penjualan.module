@@ -467,6 +467,15 @@ function penjualan_menu()
         'access arguments' => array('Delete Data Penjualan Produk'),
         'type' => MENU_CALLBACK,
     );
+    $items['penjualan/pettycash'] = array(
+        'title' => t('Input Petty Cash'),
+        'description' => 'Input petty cash page',
+        'page callback' => 'petty_cash_input',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Form Kasir'),
+        'type' => MENU_CALLBACK,
+        'file' => 'pettycash.input.inc'
+    );
     return $items;
 } // end hook menu
 
