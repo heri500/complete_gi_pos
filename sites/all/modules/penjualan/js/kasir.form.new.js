@@ -13,6 +13,7 @@ var currSym = '';
 var tSep = '.';
 var dSep = ',';
 var dDigit = 0;
+var IdPenjualan = 0;
 
 function tampilkantabelkasir(){
 	oTable = $("#tabel_kasir").dataTable( {
@@ -309,8 +310,24 @@ function akhiri_belanja(cetak){
 	request.ppn = $("#ppn_value").val();
 	var totalbelanjappn = (totalbelanja * ($("#ppn_value").val()/100)) + totalbelanja;
 	request.totalbelanjappn = totalbelanjappn;
-	request.carabayar = $("#carabayar").val();
-	request.bayar = $("#nilaibayar").val();
+	request.carabayar = $("#carabayar").val().join();
+	var BayarMultiple = new Array;
+	var CaraBayar = $("#carabayar").val();
+	var TotalCounter = CaraBayar.length;
+	for (var i = 0;i < TotalCounter;i++){
+		if (CaraBayar[i] == 'TUNAI'){
+            BayarMultiple.push(CaraBayar[i] +':'+ $('#nilaibayar').val());
+		}else if (CaraBayar[i] == 'DEBIT'){
+            BayarMultiple.push(CaraBayar[i] +':'+ $('#nilai_bayar_debit').val());
+		}else if (CaraBayar[i] == 'KAD KREDIT'){
+            BayarMultiple.push(CaraBayar[i] +':'+ $('#nilai_bayar_kredit').val());
+		}else if (CaraBayar[i] == 'HUTANG'){
+            BayarMultiple.push(CaraBayar[i] +':'+ $('#nilai_bayar_hutang').val());
+        }
+	}
+	request.bayar_multiple = BayarMultiple.join(';');
+	var TotalBayar = calculate_total_bayar();
+    request.bayar = TotalBayar;
 	var kembalian = request.bayar - totalbelanja;
 	if (kembalian > 0){
 		request.perlakuankembalian = $("#kembalian").val();
@@ -330,6 +347,8 @@ function akhiri_belanja(cetak){
 			success: function(data){
 				var returndata = data.trim();
 				if (returndata != "error"){
+                    IdPenjualan = returndata;
+                    $('#dialogbayar').parent().unblock();
                     $('#selesai-transaksi').button("enable");
                     $('#selesai-transaksi').focus();
 				}else{
@@ -424,6 +443,78 @@ function ubahharga(){
 function ubah_harga_produk(posisi,nTr,idproduk){
     barisrubah = nTr;
     $("#dialogubahharga2").dialog("open");
+}
+
+function calculate_total_bayar(){
+	var TotalBayar = 0;
+	if ($('#nilaibayar').is(':visible')){
+		if ($('#nilaibayar').val() != ''){
+            TotalBayar = TotalBayar + parseFloat($('#nilaibayar').val());
+		}
+	}
+    if ($('#nilai_bayar_kredit').is(':visible')){
+		if ($('#nilai_bayar_kredit').val() != ''){
+            TotalBayar = TotalBayar + parseFloat($('#nilai_bayar_kredit').val());
+		}
+    }
+    if ($('#nilai_bayar_hutang').is(':visible')){
+    	if ($('#nilai_bayar_hutang').val() != ''){
+            TotalBayar = TotalBayar + parseFloat($('#nilai_bayar_hutang').val());
+		}
+    }
+    if ($('#nilai_bayar_debit').is(':visible')){
+        if ($('#nilai_bayar_debit').val() != '') {
+            TotalBayar = TotalBayar + parseFloat($('#nilai_bayar_debit').val());
+        }
+    }
+	return TotalBayar;
+}
+
+function next_tab(InputObj, KeyObj){
+    if (KeyObj.keyCode == 13){
+        var last_tab_index = parseInt(InputObj.attr("tabindex"));
+        var ntabindex = parseInt(InputObj.attr("tabindex")) + 1;
+        while ($("[tabindex=" + ntabindex + "]").is(":hidden") && ntabindex <= 6){
+            ntabindex++;
+            if ($("[tabindex=" + ntabindex + "]").is(":visible")){
+                last_tab_index = ntabindex;
+            }
+        }
+        if ($("[tabindex=" + ntabindex + "]").is(":visible")){
+            $("[tabindex=" + ntabindex + "]").focus();
+        }else{
+            var TotalBayar = calculate_total_bayar();
+            var TotalPlusPpn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
+
+            var CaraBayar = $("#carabayar").val();
+            var TotalCounter = CaraBayar.length;
+            var Hutang = false;
+            for (var i = 0;i < TotalCounter;i++){
+                if (CaraBayar[i] == 'HUTANG'){
+                    Hutang = true;
+                }
+            }
+
+            if (TotalBayar >= TotalPlusPpn) {
+                $("#status-message").removeClass('message-error').html('');
+                $('#simpan-transaksi').button('enable').focus();
+            }else{
+            	if (Hutang){
+                    $("#status-message").removeClass('message-error').html('');
+                    $('#simpan-transaksi').button('enable').focus();
+				}else {
+                    $("#status-message").addClass('message-error').html("<blink>Pembayaran kurang dari total, mohon key in pembayaran dengan betul...!!?</blink>");
+                    $("[tabindex=" + last_tab_index + "]").focus();
+                }
+            }
+        }
+        return false;
+    }else{
+        var TotalBayar = calculate_total_bayar();
+        var TotalPlusPpn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
+        var Kembali = TotalBayar - TotalPlusPpn;
+        $('#kembali').val(number_format(Kembali,dDigit,dSep,tSep));
+    }
 }
 
 $(document).ready(function(){
@@ -821,7 +912,7 @@ $(document).ready(function(){
 		var SplitCaraBayar = $(this).val();
 		if (SplitCaraBayar.indexOf('DEBIT') != -1){
 			$("#field_no_kartu_debit,#baris_bayar_debit").show();
-            $("#nomerkartu").select();
+            $("#nomerkartu").focus();
 		}else{
             $("#field_no_kartu_debit,#baris_bayar_debit").hide();
 		}
@@ -834,16 +925,17 @@ $(document).ready(function(){
         if (SplitCaraBayar.indexOf('TUNAI') != -1){
             $("#baris_bayar_tunai").show();
             $("#nilaibayar").removeAttr('readonly').removeAttr('disabled');
-            $("#nilaibayar").select();
+            $("#nilaibayar").focus();
         }else{
             $("#baris_bayar_tunai").hide();
         }
         if (SplitCaraBayar.indexOf('HUTANG') != -1){
             $("#baris_bayar_hutang").show();
-            $("#nilai_bayar_hutang").select();
+            $("#nilai_bayar_hutang").focus();
         }else{
             $("#baris_bayar_hutang").hide();
         }
+    });
 		/*if ($(this).val() == 'DEBIT' || $(this).val() == 'KAD KREDIT' || $(this).val() == 'GIRO'){
 			$("#field_no_kartu").show();
 			$("#field_bayar").show();
@@ -864,7 +956,7 @@ $(document).ready(function(){
 			$("#nilaibayar").removeAttr('readonly').removeAttr('disabled');
 			$("#nilaibayar").select();
 		}*/
-	});
+
 	if (typeof Drupal.settings.idtitipanlaundry != 'undefined'){
 		//$("#idpelanggan").attr("disabled","disabled");
 	}
@@ -903,31 +995,36 @@ $(document).ready(function(){
     $('#simpan-transaksi').button("disable").on('click', function() {
         $('#dialogbayar').parent().block();
         $('#simpan-transaksi').off('click');
+        akhiri_belanja(cetakstruk);
     });
 	$('#selesai-transaksi').button("disable").on('click', function(){
-        if (cetak == 1){
-            window.open(pathutama + "print/6?idpenjualangh="+ returndata);
+    	if (cetakstruk == 1) {
+            window.open(pathutama + "print/6?idpenjualangh=" + IdPenjualan);
         }
         if (typeof Drupal.settings.idtitipanlaundry != 'undefined' && Drupal.settings.idtitipanlaundry > 0){
             window.location = pathutama + 'penjualan/' + alamatasal;
         }else{
-            window.location = pathutama + "penjualan/kasir?tanggal="+ request.tgljual +'&afterinsert=1';
+            window.location = pathutama + "penjualan/kasir?afterinsert=1";
         }
 	});
-    $('#nomerkartu,#nomer_kartu_kredit,#nilaibayar,#nilai_bayar_kredit,#nilai_bayar_hutang,#nilai_bayar_debit').on('keyup', function(e){
-		if (e.keyCode == 13){
-            var ntabindex = parseInt($(this).attr("tabindex")) + 1;
-			while ($("[tabindex=" + ntabindex + "]").is(":hidden") && ntabindex <= 6){
-                ntabindex++;
-			}
-            if ($("[tabindex=" + ntabindex + "]").is(":visible")){
-                $("[tabindex=" + ntabindex + "]").focus();
-			}else{
-                $('#simpan-transaksi').button('enable').focus();
-			}
-            return false;
-		}
+    $('#nomerkartu').on('keyup', function(e){
+        next_tab($(this), e);
 	});
+    $('#nomer_kartu_kredit').on('keyup', function(e){
+        next_tab($(this), e);
+    });
+    $('#nilaibayar').on('keyup', function(e){
+        next_tab($(this), e);
+    });
+    $('#nilai_bayar_kredit').on('keyup', function(e){
+        next_tab($(this), e);
+    });
+    $('#nilai_bayar_hutang').on('keyup', function(e){
+        next_tab($(this), e);
+    });
+    $('#nilai_bayar_debit').on('keyup', function(e){
+        next_tab($(this), e);
+    });
     /*$('#nomormeja').autocomplete({
         source: pathutama + "penjualan/autocarimeja",
         select: function (event, ui) {

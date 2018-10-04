@@ -976,3 +976,17 @@ form.form-item-lined-up, .form-item-lined-up{
 #carabayar_chosen.chosen-container span{
 	font-size: 1.4em !important;
 }
+.message-error{
+	color: red;
+	padding: 10px;
+	border: 1px solid yellow;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+blink {
+    animation: blinker 0.6s linear infinite;
+}
+@keyframes blinker {
+    50% { opacity: 0; }
+}

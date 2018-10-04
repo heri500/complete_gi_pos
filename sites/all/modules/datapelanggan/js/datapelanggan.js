@@ -7,17 +7,8 @@ var pathutama = '';
 var pathfile = '';
 var alamatupdate = '';
 var selectedPenjualan = 0;
-function addCommas(nStr){
-    nStr += "";
-    x = nStr.split(".");
-    x1 = x[0];
-    x2 = x.length > 1 ? "," + x[1] : "";
-    var rgx = /(\d+)(\d{3})/;
-    while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, "$1" + "." + "$2");
-    }
-    return x1 + x2;
-}
+var selectedPelanggan = 0;
+
 function tampilkantabelpelanggan(){
     oTable = $('#tabel_pelanggan').DataTable( {
         'bJQueryUI': true,
@@ -92,7 +83,7 @@ function tampilkantabelpelanggan(){
         'sDom': '<"button-div"B><"H"lfr>t<"F"ip>',
     });
 }
-function tampiltabelhutangdetail(){
+/*function tampiltabelhutangdetail(){
     oTable2 = $('#tabel_detail_hutang').dataTable( {
         'bJQueryUI': true,
         'bAutoWidth': false,
@@ -108,9 +99,82 @@ function tampiltabelhutangdetail(){
         'aaSorting': [[1, 'asc']],
         'sDom': '<"H"<"toolbar">fr>t<"F"ip>'
     });
+}*/
+function tampiltabelhutangdetail(){
+    oTable2 = $('#tabel_detail_hutang').dataTable( {
+        'bJQueryUI': true,
+        'bAutoWidth': false,
+        'lengthMenu': [[100, 200, 500, -1], [100, 200, 500, 'All']],
+        'processing': true,
+        'serverSide': true,
+        'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=datahutang&idpelanggan='+ selectedPelanggan,
+        'createdRow': function ( row, data, index ) {
+            $('td', row).eq(0).addClass('tablebutton');
+            $('td', row).eq(1).addClass('center');
+            $('td', row).eq(2).addClass('angka');
+            $('td', row).eq(3).addClass('angka');
+            $('td', row).eq(4).addClass('angka');
+            $('td', row).eq(5).addClass('center');
+        },
+        'bFilter': true,
+        'scrollY': '330px',
+        'scrollCollapse': true,
+        'aoColumnDefs': [
+            { 'bSortable': false, 'aTargets': [ 0 ] }
+        ],
+        'aaSorting': [[1, 'desc']],
+        'sDom': '<"H"<"toolbar">fr>t<"F"lip>',
+        'footerCallback': function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                if (typeof i === 'string') {
+                    i = i.split(tSep).join('');
+                    i = i.split(dSep).join('.');
+                }else if (typeof i === 'number'){
+                    i = i;
+                }else{
+                    i = 0;
+                }
+                return parseFloat(i);
+            };
+            // Total over all pages
+            total = api
+                .column( 2 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            // Update footer
+            $( api.column( 2 ).footer() ).html(
+                currSym +' '+ number_format(total,dDigit,dSep,tSep)
+            ).addClass('angka');
+            total = api
+                .column( 3 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            // Update footer
+            $( api.column( 3 ).footer() ).html(
+                currSym +' '+ number_format(total,dDigit,dSep,tSep)
+            ).addClass('angka');
+            total = api
+                .column( 4 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            // Update footer
+            $( api.column( 4 ).footer() ).html(
+                currSym +' '+ number_format(total,dDigit,dSep,tSep)
+            ).addClass('angka');
+        },
+    });
 }
 function view_detail_hutang(idpelanggan,namapelanggan,besarhutang){
-    var tampilhutang = 'HUTANG SAAT INI : Rp. '+ addCommas(besarhutang);
+    selectedPelanggan = idpelanggan;
+    var tampilhutang = 'HUTANG SAAT INI : '+ currSym +' '+ number_format(besarhutang,dDigit,dSep,tSep);
     $('#tempatnilaihutang').html(tampilhutang);
     var request = new Object();
     request.idpelanggan = idpelanggan;
@@ -168,10 +232,15 @@ function tampiltabeljualdetail(){
             var api = this.api(), data;
             // Remove the formatting to get integer data for summation
             var intVal = function ( i ) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$.]/g, '')*1 :
-                    typeof i === 'number' ?
-                        i : 0;
+                if (typeof i === 'string') {
+                    i = i.split(tSep).join('');
+                    i = i.split(dSep).join('.');
+                }else if (typeof i === 'number'){
+                    i = i;
+                }else{
+                    i = 0;
+                }
+                return parseFloat(i);
             };
             // Total over all pages
             total = api
@@ -182,7 +251,7 @@ function tampiltabeljualdetail(){
                 }, 0 );
             // Update footer
             $( api.column( 6 ).footer() ).html(
-                'Rp. '+ addCommas(total)
+                currSym +' '+ number_format(total,dDigit,dSep,tSep)
             ).addClass('angka');
             total = api
                 .column( 7 )
@@ -192,7 +261,7 @@ function tampiltabeljualdetail(){
                 }, 0 );
             // Update footer
             $( api.column( 7 ).footer() ).html(
-                'Rp. '+ addCommas(total)
+                currSym +' '+ number_format(total,dDigit,dSep,tSep)
             ).addClass('angka');
             total = api
                 .column( 8 )
@@ -202,7 +271,7 @@ function tampiltabeljualdetail(){
                 }, 0 );
             // Update footer
             $( api.column( 8 ).footer() ).html(
-                'Rp. '+ addCommas(total)
+                currSym +' '+ number_format(total,dDigit,dSep,tSep)
             ).addClass('angka');
         },
     });
@@ -254,7 +323,7 @@ function view_detail(idpenjualan,nonota){
     });
 }
 function pembayaran(idpelanggan,namapelanggan,besarhutang,nilaihutang){
-    var tampilhutang = 'HUTANG '+ namapelanggan +' SAAT INI : Rp. '+ besarhutang;
+    var tampilhutang = 'HUTANG '+ namapelanggan +' SAAT INI : '+ currSym +' '+ number_format(besarhutang,dDigit,dSep,tSep);
     $('#nilaipembayaran').val(parseInt(nilaihutang));
     $('#tothutang').val(parseInt(nilaihutang));
     $('#idpelangganbayar').val(idpelanggan);
@@ -489,6 +558,12 @@ $(document).ready(function() {
     pathfile = pathutama + Drupal.settings.filepath;
     alamatupdate = pathutama + 'datapelanggan/updatepelanggan';
     AlamatUpdateDiskon = pathutama + 'datapelanggan/updatediskon';
+
+    currSym = Drupal.settings.currSym;
+    tSep = Drupal.settings.tSep[0];
+    dSep = Drupal.settings.dSep[0];
+    dDigit = Drupal.settings.dec_digit;
+
     $('#tabel_pelanggan tbody .editable').editable(alamatupdate, {
         'callback': function( sValue, y ) {
             var aPos = oTable.fnGetPosition( this );

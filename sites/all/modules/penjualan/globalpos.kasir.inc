@@ -248,6 +248,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
         $meja .= '<input type="hidden" id="idmeja" name="idmeja">';
     }
     //$penjualan .= '<div class="barisbayar"><label>Meja</label>'.$meja.'</div>';
+    $penjualan .= '<div id="status-message"></div>';
 	$penjualan .= '<div class="barisbayar"><label style="width: 250px;">TOTAL</label>'.$totalbelanja.'</div>';
 	$totalppn = '<input type="hidden" id="ppn_value" name="ppn_value" value="'.$dataPremis->ppn_value.'">';
 	$totalppn .= '<input type="text" id="total_ppn" name="total_ppn" value="0" disabled="disabled">';
@@ -304,11 +305,11 @@ function simpan_penjualan(){
             $PpnValue = $_POST["totalbelanjappn"] - ($_POST["totalbelanja"] / ((100 + $_POST["ppn"])/100));
         }
 		db_query("INSERT INTO penjualan (nonota, idpemakai, total, bayar, kembali, tglpenjualan, idpelanggan, 
-        carabayar, idtitipanlaundry, perlakuankembalian, ppn, total_plus_ppn, ppn_value) 
-		VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%d', '%s', '%d', '%d', '%f', '%f', '%f')",
+        carabayar, idtitipanlaundry, perlakuankembalian, ppn, total_plus_ppn, ppn_value,bayar_multiple) 
+		VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%d', '%s', '%d', '%d', '%f', '%f', '%f', '%s')",
 		$no_nota, $user->uid, $_POST["totalbelanja"], $_POST["bayar"], $kembali, $waktujual,
 		$_POST["idpelanggan"],$_POST["carabayar"], $idtitipanlaundry,$perkuankembalian,
-        $_POST["ppn"],$_POST["totalbelanjappn"],$PpnValue);
+        $_POST["ppn"],$_POST["totalbelanjappn"],$PpnValue,$_POST["bayar_multiple"]);
 		$next_id = db_last_insert_id('penjualan', 'idpenjualan');
 		print $next_id;
 		if ($kembali > 0 && $perkuankembalian == 2){
