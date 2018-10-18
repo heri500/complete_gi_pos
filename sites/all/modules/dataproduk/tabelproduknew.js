@@ -435,17 +435,17 @@ function hitungmargin(asal){
     if (asal == 'hargapokok'){
         if ($('#margin').val() > 0 && $('#hargapokok').val() > 0){
             var hargajual = $('#hargapokok').val() * (100/(100-$('#margin').val()));
-            $('#hargajual').val(Math.Math.round10(hargajual,-2));
+            $('#hargajual').val(Math.Math.round10(hargajual,(dDigit * -1)));
         }
     }else if (asal == 'hargajual'){
         if ($('#hargapokok').val() > 0 && $('#hargajual').val() > 0){
             var margin = (($('#hargajual').val() - $('#hargapokok').val())/$('#hargajual').val())*100;
-            $('#margin').val(Math.round10(margin,-2));
+            $('#margin').val(Math.round10(margin,(dDigit * -1)));
         }
     }else if (asal == 'margin'){
         if ($('#hargapokok').val() > 0 && $('#margin').val() > 0){
             var hargajual = $('#hargapokok').val() * (100/(100-$('#margin').val()));
-            $('#hargajual').val(Math.round10(hargajual,-2));
+            $('#hargajual').val(Math.round10(hargajual,(dDigit * -1)));
         }
     }
 }
