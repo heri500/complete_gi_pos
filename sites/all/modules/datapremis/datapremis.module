@@ -621,9 +621,9 @@ function get_number_format(&$currencySym, &$thousandSep, &$decimalSep, $addJs = 
     }
     return $dataPremis;
 }
-function get_gst_symbols()
+function get_gst_symbols($AddJs = true)
 {
-    $dataPremis = get_data_premis();
+    $dataPremis = get_data_premis($AddJs);
     if (!empty($dataPremis)) {
         $gstSym = $dataPremis->ppn_symbol;
     } else {

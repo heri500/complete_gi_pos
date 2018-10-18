@@ -14,8 +14,10 @@
 $(document).ready(function(){
     var TotalInRow = Drupal.settings.TotalInRow;
     var BarWidth = 1.7;
+    var BarHeigth = 35;
     if (TotalInRow > 1){
         BarWidth = 1.1;
+        BarHeigth = 12;
     }
     for (var i = 0; i < Drupal.settings.dataProduct.length;i++) {
         var barcode_number = Drupal.settings.dataProduct[i].barcode;
@@ -38,7 +40,7 @@ $(document).ready(function(){
             format: barcode_type,
             flat: true,
             width: BarWidth,
-            height: 35,
+            height: BarHeigth,
             margin: 0,
             displayValue: false
         });

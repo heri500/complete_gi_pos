@@ -101,4 +101,14 @@ $TerjemahKata = array(
         'Malaysia' => 'tutup',
         'English' => 'close',
     ),
+    'return' => array(
+        'Indonesia' => 'return',
+        'Malaysia' => 'pemulangan',
+        'English' => 'return',
+    ),
+    'periode' => array(
+        'Indonesia' => 'periode',
+        'Malaysia' => 'period',
+        'English' => 'periode',
+    ),
 );

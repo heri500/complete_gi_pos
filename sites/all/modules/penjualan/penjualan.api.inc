@@ -1447,8 +1447,10 @@ function printProductBarcodeNew()
         $TotalInRow = 1;
         $ColSpan = '';
     }
+    $PrintBlack = false;
     if ($TotalInRow > 1) {
         $ColumnWidth = round($StickerWidth / $TotalInRow, 0) - 11;
+        $PrintBlack = true;
     } else {
         $ColumnWidth = round($StickerWidth / $TotalInRow, 0);
     }
@@ -1466,9 +1468,26 @@ function printProductBarcodeNew()
             if (count($dataProduct) && $totalPrint > 0) {
                 for ($j = 0; $j < $totalPrint; $j++) {
                     $tablePrint .= '<div>';
-                    $tablePrint .= '<table style="width: ' . $StickerWidth . 'px;border-collapse: collapse;" >';
+                    if ($j == 0){
+                        $tablePrint .= '<table style="width: ' . $StickerWidth . 'px;border-collapse: collapse;margin-top: -3px;" >';
+                    }else{
+                        $tablePrint .= '<table style="width: ' . $StickerWidth . 'px;border-collapse: collapse;" >';
+                    }
                     $tablePrint .= '<tbody>';
-                    $tablePrint .= '<tr><td ' . $ColSpan . ' style="font-size: 8px;">&nbsp;</td></tr>';
+
+                    if ($PrintBlack){
+                        $tablePrint .= '<tr>';
+                        for ($k = 0; $k < $TotalInRow; $k++) {
+                            $tablePrint .= '<td style="background-color: #000000;text-align: center;width: ' . $ColumnWidth . 'px;height: 23px;">&nbsp;';
+                            $tablePrint .= '</td>';
+                            if ($TotalInRow > 1 && ($k < $TotalInRow - 1)) {
+                                $tablePrint .= '<td style="width:11px;">&nbsp;</td>';
+                            }
+                        }
+                        $tablePrint .= '</tr>';
+                    }else{
+                        $tablePrint .= '<tr><td ' . $ColSpan . ' style="font-size: 8px;">&nbsp;</td></tr>';
+                    }
                     $tablePrint .= '<tr>';
                     for ($k = 0; $k < $TotalInRow; $k++) {
                         $tablePrint .= '<td style="text-align: center;width: ' . $ColumnWidth . 'px;">';
@@ -1487,14 +1506,18 @@ function printProductBarcodeNew()
                     $tablePrint .= '</tr>';
                     $tablePrint .= '<tr class="standard-font">';
                     for ($k = 0; $k < $TotalInRow; $k++) {
-                        $tablePrint .= '<td align="center" style="width: ' . $ColumnWidth . 'px;">' . $dataProduct['info']->barcode . '</td>';
+                        $tablePrint .= '<td align="center" style="width: ' . $ColumnWidth . 'px;font-size: 10px;">' . $dataProduct['info']->barcode . '</td>';
                         if ($TotalInRow > 1 && ($k < $TotalInRow - 1)) {
                             $tablePrint .= '<td style="width:11px;">&nbsp;</td>';
                         }
                     }
                     $tablePrint .= '<tr class="standard-font">';
                     for ($k = 0; $k < $TotalInRow; $k++) {
-                        $tablePrint .= '<td align="center" style="width: ' . $ColumnWidth . 'px;">' . $dataProduct['info']->namaproduct . '</td>';
+                        if ($k == 0){
+                            $tablePrint .= '<td align="center" style="width: ' . $ColumnWidth . 'px;font-size: 10px;">&nbsp;' . $dataProduct['info']->namaproduct . '</td>';
+                        }else {
+                            $tablePrint .= '<td align="center" style="width: ' . $ColumnWidth . 'px;font-size: 10px;">' . $dataProduct['info']->namaproduct . '</td>';
+                        }
                         if ($TotalInRow > 1 && ($k < $TotalInRow - 1)) {
                             $tablePrint .= '<td style="width:11px;">&nbsp;</td>';
                         }
@@ -1746,6 +1769,7 @@ function get_close_cashier_data($user_id = null){
     $DataReport->total_kad_kredit = 0;
     $DataReport->total_kad_debit = 0;
     $DataReport->total_hutang = 0;
+    $DataReport->total_kembali = 0;
     while ($data = db_fetch_object($result)){
         $DataReport->total = $DataReport->total + $data->total_plus_ppn;
         $ExplodeBayar = explode(';', $data->bayar_multiple);
@@ -1762,6 +1786,7 @@ function get_close_cashier_data($user_id = null){
                 $DataReport->total_hutang = $DataReport->total_hutang + ($data->total_plus_ppn - $data->bayar);
             }
         }
+        $DataReport->total_kembali = $DataReport->total_kembali + $data->kembali;
     }
     return $DataReport;
 }
@@ -1790,13 +1815,13 @@ function printCloseCashier()
         $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">LOGIN</span><span style="float: right">' . date('d-m-Y H:i', $user->login) . '</span></td></tr>';
         $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">CLOSE</span><span style="float: right">' . date('d-m-Y H:i') . '</span></td></tr>';
         $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">TOTAL</span><span style="float: right">' . number_format($ClosedData->total, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
-        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">CASH</span><span style="float: right">' . number_format($ClosedData->total_cash, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">CASH</span><span style="float: right">' . number_format(($ClosedData->total_cash - $ClosedData->total_kembali), $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
         $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">KAD KREDIT</span><span style="float: right">' . number_format($ClosedData->total_kad_kredit, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
         $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">KAD DEBIT</span><span style="float: right">' . number_format($ClosedData->total_kad_debit, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
         $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">HUTANG</span><span style="float: right">' . number_format($ClosedData->total_hutang, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
         $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">PETTY CASH</span><span style="float: right">' . number_format($ClosedData->petty_cash, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
-        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">CASH</span><span style="float: right">' . number_format($ClosedData->total_cash, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
-        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">TOTAL CASH</span><span style="float: right">' . number_format($ClosedData->total_cash + $ClosedData->petty_cash, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">CASH</span><span style="float: right">' . number_format($ClosedData->total_cash - $ClosedData->total_kembali, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">TOTAL CASH</span><span style="float: right">' . number_format($ClosedData->total_cash - $ClosedData->total_kembali + $ClosedData->petty_cash, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
         $tablePrint .= '</tbody>';
         $tablePrint .= '</table>';
     }

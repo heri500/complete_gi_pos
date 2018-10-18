@@ -22,6 +22,7 @@ function return_penjualan(){
 	drupal_add_js('misc/media/datatables/js/dataTables.addtr.js');
 	drupal_add_js('misc/media/datatables/js/number.format.js');
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
+	drupal_set_title(strtoupper(trans('return', $dataPremis->bahasa)).' PRODUCT');
     _add_chosen_jquery_plugins_old();
     _addJeditablePlugins();
 	$tglsekarang = date("Y-m-d");
@@ -51,17 +52,17 @@ function return_penjualan(){
 	$tombolselesai = '<a class="buttonselesai" onclick="kirim_data(1)">F5:BAYAR&PRINT</a>';
 	$tombolprint = '<a class="buttonprint" onclick="kirim_data(0)">F6:BAYAR</a>';
 	$tombollihatpelanggan = '<a class="buttonpelanggan" onclick="pilih_pelanggan();">F9:PELANGGAN</a>';
-	$return = '<button onclick="munculkankasir();" style="font-size:12px;border: 1px solid orangered;">Klik untuk memunculkan kasir</button>';
-	$return .= '<div id="dialogkasir" style="font-size: 12px;" title="GLOBAL POS KASIR ['.$tanggal.']">';
+	$return = '<button onclick="munculkankasir();" style="font-size:12px;border: 1px solid orangered;">Klik untuk memunculkan '.trans('kasir', $dataPremis->bahasa).'</button>';
+	$return .= '<div id="dialogkasir" style="font-size: 12px;" title="GLOBAL POS '.strtoupper(trans('kasir', $dataPremis->bahasa)).' ['.$tanggal.'] :: '.strtoupper(trans('return', $dataPremis->bahasa)).' PRODUCT">';
 	$return .= '<div id="info-kasir-waktu">';
 	$return .= '<div id="tempattanggalkasir">';
 	$return .= '<div id="tempattanggal">';
-	$return .= '<label>TANGGAL</label><input readonly="readonly" type="text" id="tgljual" name="tgljual" value="'.$tanggal.'">';
+	$return .= '<label>'.strtoupper(trans('tanggal', $dataPremis->bahasa)).'</label><input readonly="readonly" type="text" id="tgljual" name="tgljual" value="'.$tanggal.'">';
 	$return .= '<input type="hidden" id="tgljualkirim" name="tgljualkirim" value="'.$tanggalkirim.'">';
 	$return .= '</div>';
 	$return .= '<div id="tempatnamakasir">';
 	global $user;
-	$return .= '<label>KASIR</label><input readonly="readonly" type="text" id="kasir" name="kasir" value="'.$user->name.'">';
+	$return .= '<label>'.strtoupper(trans('kasir', $dataPremis->bahasa)).'</label><input readonly="readonly" type="text" id="kasir" name="kasir" value="'.$user->name.'">';
 	$return .= '</div>';
 	$return .= '</div>';
 	$return .= '<div id="tempatjam" align="center">';
@@ -89,7 +90,7 @@ function return_penjualan(){
 	$return .= $tombolprint;
 	$return .= $tombollihatpelanggan;
 	$return .= '</div>';
-    $return .= '<div id="tempattotal"><div id="totalbelanja">Total Return : Rp. 0</div></div>';
+    $return .= '<div id="tempattotal"><div id="totalbelanja">Total : '.$currencySym.' 0</div></div>';
 	$return .= '</div>';
 	$return .= '<div title="Informasi" id="dialogwarning">';
 	$return .= '<p id="pesantext">Produk yang dicari tidak ada, Silahkan masukkan Barcode/Kode Produk/Nama Produk yang lain...!!!</p>';
@@ -216,7 +217,9 @@ function buat_nota_return($idreturn){
 	}
 	return $no_nota;
 }
+//b11gsvg
 function view_kasir(){
+    $gstSym = get_gst_symbols(false);
 	$kasirtabel ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_kasir">';
 	$kasirtabel .= '<thead>';
 	$kasirtabel .= '<tr>';
@@ -225,7 +228,7 @@ function view_kasir(){
 	$kasirtabel .= '<th>PRODUK</th>';
 	$kasirtabel .= '<th>HARGA</th>';
 	$kasirtabel .= '<th class="diskon2">%</th>';
-    $kasirtabel .= '<th class="diskon2">PPN</th>';
+    $kasirtabel .= '<th class="diskon2">'.$gstSym.'</th>';
 	$kasirtabel .= '<th class="diskon2">QTY</th>';
 	$kasirtabel .= '<th class="subtotal">SUBTOTAL</th>';
     $kasirtabel .= '<th class="tablebutton"></th>';

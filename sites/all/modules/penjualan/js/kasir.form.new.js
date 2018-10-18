@@ -498,7 +498,7 @@ function next_tab(InputObj, KeyObj){
                     Hutang = true;
                 }
             }
-			if (TotalBayar >= TotalPlusPpn) {
+            if (parseFloat(TotalBayar) >= parseFloat(TotalPlusPpn)) {
                 $("#status-message").removeClass('message-error').html('');
                 $('#simpan-transaksi').button('enable').focus();
             }else{
