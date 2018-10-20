@@ -63,6 +63,19 @@ function getDataPenjualan($nidpenjualan = null){
 		$result = db_query($strSQL,$nidpenjualan);
 		$dataPenjualan['info'] = db_fetch_object($result);
         $dataPenjualan['info']->tglorder = $dataPenjualan['info']->tglpenjualan;
+
+        $args = array($dataPenjualan['info']->idpemakai);
+        $UserData = views_get_view('user_data');
+        $UserData->set_display('default');
+        $UserData->set_arguments($args);
+        $UserData->pre_execute();
+        $UserData->execute();
+        if (!empty($UserData->result)) {
+            $UserProfile = $UserData->result[0];
+            $dataPenjualan['info']->kasir = $UserProfile->node_title;
+        }else{
+            $dataPenjualan['info']->kasir = $dataPenjualan['info']->idpemakai;
+        }
 		if (!empty($dataPenjualan['info']->idtitipanlaundry)){
 			$dataPenjualan['laundry'] = getDataLaundry($dataPenjualan['info']->idtitipanlaundry);
 		}
@@ -869,7 +882,7 @@ function printKasirOrder($dataOrder = null){
                 $tablePrint .= '<tr><td colspan="2" style="font-size: 11px;text-align: center;border-bottom: 1px solid #000;">'.$dataPremis->alamat.'&nbsp;&nbsp;</td></tr>';
                 //$tablePrint .= '<tr><td colspan="2" style="font-size: 11px;text-align: center;">SENTUL CITY - BOGOR&nbsp;&nbsp;</td></tr>';
             }
-            $tablePrint .= '<tr><td colspan="3" style="text-align: center;padding: 4px;"><div id="'.$orderInfo->nonota.'" class="barcode-place"></div></td></tr>';
+            $tablePrint .= '<tr><td colspan="3" style="text-align: center;padding: 4px;"><div align="center"><div id="'.$orderInfo->nonota.'" class="barcode-place"></div></div></td></tr>';
             $tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: center;">'.$orderInfo->nonota.'</td></tr>';
             if (!empty($orderInfo->namapelanggan)){
                 $tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: center;"><span style="float: left">Member</span><span style="float: right">'.$orderInfo->namapelanggan.'&nbsp;&nbsp;</span></td></tr>';
@@ -877,7 +890,26 @@ function printKasirOrder($dataOrder = null){
             if (!empty($orderInfo->meja)) {
                 $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: center;"><span style="float: left">Meja</span><span style="float: right">' . strtoupper($orderInfo->meja) . '</span></td></tr>';
             }
-            $tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: center;border-bottom: 1px solid #000;"><span style="float: left">'.ucfirst(trans('tanggal', $dataPremis->bahasa)).'</span><span style="float: right">'.substr($orderInfo->tglorder,0,16).'</span></td></tr>';
+            //Informasi Tanggal
+            $tablePrint .= '<tr>';
+            if (!empty($orderInfo->kasir)) {
+                $tablePrint .= '<td colspan="3" style="font-size: 14px;text-align: center;">';
+            }else{
+                $tablePrint .= '<td colspan="3" style="font-size: 14px;text-align: center;border-bottom: 1px solid #000;">';
+            }
+            $tablePrint .= '<span style="float: left">'.ucfirst(trans('tanggal', $dataPremis->bahasa)).'</span>';
+            $tablePrint .= '<span style="float: right">'.substr($orderInfo->tglorder,0,16).'</span>';
+            $tablePrint .= '</td>';
+            $tablePrint .= '</tr>';
+            //Informasi Kasir
+            if (!empty($orderInfo->kasir)) {
+                $tablePrint .= '<tr>';
+                $tablePrint .= '<td colspan="3" style="font-size: 14px;text-align: center;border-bottom: 1px solid #000;">';
+                $tablePrint .= '<span style="float: left">' . ucfirst(trans('kasir', $dataPremis->bahasa)) . '</span>';
+                $tablePrint .= '<span style="float: right">' . $orderInfo->kasir . '</span>';
+                $tablePrint .= '</td>';
+                $tablePrint .= '</tr>';
+            }
 			$totalOrder = 0;
             for ($i = 0;$i < count($orderDetail);$i++){
                 $dataDetail = $orderDetail[$i];
