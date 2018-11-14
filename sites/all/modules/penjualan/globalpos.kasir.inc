@@ -33,6 +33,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
     _addBlockUiPlugins(true);
     _add_chosen_jquery_plugins_old();
     _addJeditablePlugins();
+    _addPreventBackPage();
 	$idPelanggan = 0;
 	if (!empty($idtitipanlaundry)){
 		if (empty($alamatasal)){
@@ -376,14 +377,15 @@ function simpan_penjualan(){
 			$HARGAJUAL = $pecahnilai[2];
 			$DISKON = $pecahnilai[3];
             $batchCode = $pecahnilai[4];
+            $IdSupplier = db_result(db_query('SELECT idsupplier FROM product_supplier WHERE idproduct=%d LIMIT 1', $IDPRODUK));
 			$result = db_query("SELECT type_product, hargapokok,stok FROM product WHERE idproduct='%d'",$IDPRODUK);	
 			$data = db_fetch_object($result);
 			$HARGAPOKOK = $data->hargapokok;
 			$totalmodal = $totalmodal + ($HARGAPOKOK*$QTY);
 			$STOKSEBELUM = $data->stok;
-			db_query("INSERT INTO detailpenjualan(idpenjualan, idproduct, jumlah, hargapokok, hargajual, diskon, ppn) VALUES
-			('%d', '%d', '%f', '%f', '%f', '%f', '%f')",
-			$next_id, $IDPRODUK, $QTY, $HARGAPOKOK, $HARGAJUAL, $DISKON, $_POST["ppn"]);
+			db_query("INSERT INTO detailpenjualan(idpenjualan, idproduct, jumlah, hargapokok, hargajual, diskon, ppn, idsupplier) VALUES
+			('%d', '%d', '%f', '%f', '%f', '%f', '%f','%d')",
+			$next_id, $IDPRODUK, $QTY, $HARGAPOKOK, $HARGAJUAL, $DISKON, $_POST["ppn"],$IdSupplier);
 			if ($data->type_product == 0){
 				$STOKSEKARANG = $STOKSEBELUM - $QTY;
 				db_query("UPDATE product SET stok='%f' WHERE idproduct='%d'",$STOKSEKARANG,$IDPRODUK);

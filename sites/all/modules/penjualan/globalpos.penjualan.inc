@@ -229,10 +229,10 @@ function penjualan_produk($tgl1,$tgl2,$idSupplier){
 	$tabelpenjualan .= '<th>PRODUK</th>';
 	$tabelpenjualan .= '<th>SUPPLIER</th>';
 	$tabelpenjualan .= '<th class="qty">QTY</th>';
-	$tabelpenjualan .= '<th>H.JUAL MIN</th>';
+    $tabelpenjualan .= '<th>H.MODAL MIN</th>';
+    $tabelpenjualan .= '<th>H.MODAL MAX</th>';
+    $tabelpenjualan .= '<th>H.JUAL MIN</th>';
 	$tabelpenjualan .= '<th>H.JUAL MAX</th>';
-	$tabelpenjualan .= '<th>H.MODAL MIN</th>';
-	$tabelpenjualan .= '<th>H.MODAL MAX</th>';
 	$tabelpenjualan .= '<th>SUBTOTAL</th>';
 	$tabelpenjualan .= '<th>MODAL</th>';
 	$tabelpenjualan .= '<th>LABA</th>';

@@ -43,9 +43,9 @@ function delete_detail_pembelian($iddetail = null, $idPembelian = null){
         $qtyBeli = db_result(db_query('SELECT jumlah FROM detailpembelian WHERE iddetail=%d', $iddetail));
         $idproduct = db_result(db_query('SELECT idproduct FROM detailpembelian WHERE iddetail=%d', $iddetail));
         $stokproduct = db_result(db_query('SELECT stok FROM product WHERE idproduct=%d',$idproduct));
-        $stoksekarang = $stockproduct + $qtyBeli;
+        $stoksekarang = $stockproduct - $qtyBeli;
         if (!empty($idproduct)){
-            db_query("UPDATE product SET stok = stok + '%f', uploaded=0, changed=1 WHERE idproduct='%d'",$qtyBeli,$idproduct);
+            db_query("UPDATE product SET stok = stok - '%f', uploaded=0, changed=1 WHERE idproduct='%d'",$qtyBeli,$idproduct);
             $keterangan = 'Revisi Pembelian - Hapus Detail Pembelian';
             db_query("INSERT INTO transaksistock (idproduk, idpembelian, stocksebelum, keluar, stocksetelah, keterangan) VALUES
 				('%d', '%d', '%f', '%f', '%f', '%s')",$idproduct,$idPembelian,$stokproduct,$qtyBeli,$stoksekarang,$keterangan);

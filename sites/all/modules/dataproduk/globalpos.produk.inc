@@ -32,6 +32,7 @@ function data_produk(){
 	drupal_add_js('sites/all/libraries/uploadify/swfobject.js');
     drupal_add_js('misc/media/datatables/js/number.format.js');
     _addChosenJqueryPlugins();
+    _addJsRounding();
 	$filePath = base_path().file_directory_path();
     $IdKategori = 0;
     if (isset($_GET['idkategori']) && !empty($_GET['idkategori'])){
@@ -123,9 +124,13 @@ function data_produk(){
 	$viewtabelproduk .= '<label>SUBKATEGORI</label>'.$pilihansubkategori.$buttonadd2;
 	$viewtabelproduk .= '<label>SUPPLIER</label>'.$pilihansupplier.$buttonadd3;
 	$viewtabelproduk .= '<label>NAMA PRODUK</label><input type="text" class="validate[required]" id="namaproduk" name="namaproduk">';
+	$RadioLock = '<input id="rad-hargapokok" type="radio" name="lock-value" value="hargapokok">H.POKOK';
+    $RadioLock .= '<input id="rad-hargajual" type="radio" name="lock-value" value="hargajual">H.JUAL';
+    $RadioLock .= '<input id="rad-margin" type="radio" name="lock-value" value="margin" checked>MARGIN';
+    $viewtabelproduk .= '<label>LOCK</label><div style="float: left;">'.$RadioLock.'</div>';
 	$viewtabelproduk .= '<label>HARGA POKOK</label><input type="text" class="validate[required]" id="hargapokok" name="hargapokok" onkeyup="hitungmargin(\'hargapokok\')">';
 	$viewtabelproduk .= '<label>HARGA JUAL</label><input type="text" class="validate[required]" id="hargajual" name="hargajual" onkeyup="hitungmargin(\'hargajual\')">';
-	$viewtabelproduk .= '<label>MARGIN HARGA</label><input type="text" maxlength="2" id="margin" name="margin" onkeyup="hitungmargin(\'margin\')">';
+	$viewtabelproduk .= '<label>MARGIN HARGA</label><input type="text" maxlength="2" id="margin" name="margin" onkeyup="hitungmargin(\'margin\')" readonly="readonly">';
 	$pilihantype = '<select id="type_product" name="type_product">';
 	$pilihantype .= '<option value="0">Produk</option>';
 	$pilihantype .= '<option value="1">Jasa</option>';
@@ -401,6 +406,8 @@ function simpan_produk(){
 	/*idsupplier,idkategori,idsubkategori,barcode,alt_code,namaproduct,hargapokok,
 	hargajual,margin,minstok,maxstok,stok,satuan,berat,keterangan*/
 	global $user;
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
 	$altCode = remove_utf8_bom($_POST["alt_code"]);
 	if (isset($_POST["idproduk"])){
 		print $_POST["idproduk"];
@@ -433,8 +440,8 @@ function simpan_produk(){
 				type_product='%d', lead_time='%d', aturan_jam_kerja='%d',
 				berlaku_sebelum_zuhur='%d',uploaded=0, changed=1,barcode_type='%s'  WHERE idproduct='%d'",
 				$_POST["idkategori"],$_POST["idsubkategori"],
-				$_POST["barcode"],$kodealternatif,$_POST["namaproduk"],$_POST["hargapokok"],
-				$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],
+				$_POST["barcode"],$kodealternatif,$_POST["namaproduk"],round($_POST["hargapokok"],$DecDigit),
+				round($_POST["hargajual"],$DecDigit),$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],
 				$_POST["stok"],$_POST["satuan"],$_POST["keterangan"],$_POST["type_product"],
 				$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],$_POST["barcode_type"],
 				$_POST["idproduk"]);
@@ -442,12 +449,12 @@ function simpan_produk(){
 				if ($_POST["hargapokok"] <> $HARGAPOKOK){
 					global $user;
 					db_query("INSERT INTO historyhargabeli (hargasebelum, hargasesudah, uid) VALUES('%f','%f','%d')",
-					$HARGAPOKOK,$_POST["hargapokok"],$user->uid);
+					$HARGAPOKOK,round($_POST["hargapokok"],$DecDigit),$user->uid);
 				}
                 db_query('DELETE FROM product_supplier WHERE idproduct=%d', $_POST["idproduk"]);
                 for ($i = 0;$i < count($Supplier);$i++){
                     $IdSupplier = $Supplier[$i];
-                    $HargaPokok = $_POST["hargapokok"];
+                    $HargaPokok = round($_POST["hargapokok"],$DecDigit);
                     $StrSql = "INSERT INTO product_supplier (idproduct, idsupplier, harga, uid) ";
                     $StrSql .= "VALUES (%d, %d, '%f', %d)";
                     db_query($StrSql, $_POST["idproduk"], $IdSupplier,$HargaPokok, $user->uid);
@@ -459,7 +466,7 @@ function simpan_produk(){
 				idkategori='%d', type_product='%d',lead_time='%d', aturan_jam_kerja='%d',
 				berlaku_sebelum_zuhur='%d',uploaded=0, changed=1, barcode_type='%s'  WHERE idproduct='%d'",
 				$_POST["barcode"],
-				$_POST["namaproduk"],$_POST["hargapokok"],$_POST["hargajual"],
+				$_POST["namaproduk"],round($_POST["hargapokok"],$DecDigit),round($_POST["hargajual"],$DecDigit),
 				$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],$_POST["stok"],
 				$_POST["satuan"],$_POST["keterangan"],$_POST["idkategori"],$_POST["type_product"],
 				$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],$_POST["barcode_type"],
@@ -517,8 +524,8 @@ function simpan_produk(){
 			'%d','%d','%s','%s',
 			'%s','%f','%f','%f','%d','%d','%d','%s','%s','%d','%d','%d','%d','%s')",
 			$_POST["idkategori"],$_POST["idsubkategori"],
-			$_POST["barcode"],$altCode,$_POST["namaproduk"],$_POST["hargapokok"],
-			$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],
+			$_POST["barcode"],$altCode,$_POST["namaproduk"],round($_POST["hargapokok"],$DecDigit),
+			round($_POST["hargajual"],$DecDigit),$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],
 			$_POST["stok"],$_POST["satuan"],$_POST["keterangan"],$_POST["type_product"],
 			$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],$_POST["barcode_type"]);
 			$result = db_query("SELECT idproduct FROM product WHERE barcode='%s'",$_POST["barcode"]);
@@ -526,7 +533,7 @@ function simpan_produk(){
 			$IDPRODUK = $data->idproduct;
             for ($i = 0;$i < count($Supplier);$i++){
                 $IdSupplier = $Supplier[$i];
-                $HargaPokok = $_POST["hargapokok"];
+                $HargaPokok = round($_POST["hargapokok"],$DecDigit);
                 $StrSql = "INSERT INTO product_supplier (idproduct, idsupplier, harga, uid) ";
                 $StrSql .= "VALUES (%d, %d, '%f', %d)";
                 db_query($StrSql, $IDPRODUK, $IdSupplier,$HargaPokok, $user->uid);
@@ -620,6 +627,9 @@ function update_subkategori(){
 
 function edit_data_produk(){
 	if ($_GET["idproduk"]){
+        get_number_format($currencySym, $tSep, $dSep);
+        $dataPremis = get_data_premis(false);
+        $DecDigit = $dataPremis->decimal_digit;
 		$IDPRODUK = $_GET["idproduk"];
 		$resultproduk = db_query("SELECT idsupplier, idkategori, idsubkategori, barcode, 
 		alt_code, namaproduct, hargapokok, hargajual, margin, minstok, maxstok, stok, satuan,
@@ -630,19 +640,23 @@ function edit_data_produk(){
         $form_style = $path.'/css/custom-style.css';
         drupal_add_css($form_style, 'theme', 'all', FALSE);
         $variables['styles'] = drupal_get_css();
-		drupal_add_css('misc/media/datatables/themes/smoothness/jquery-ui-1.8.4.custom.css');
-		drupal_add_css('misc/media/css/validationEngine.jquery.css');
-		drupal_add_js('misc/media/jquery-1.4.4.min.js');
-		drupal_add_js('misc/media/jquery.validationEngine-en.js');
-		drupal_add_js('misc/media/jquery.validationEngine.js');
-		drupal_add_js('misc/media/jquery-ui-1.8.custom.min.js');
+        drupal_add_css('misc/media/datatables.1.10/jquery/jquery-ui.css');
+        drupal_add_css('misc/media/jqueryValidate/css/validationEngine.jquery.css');
+        drupal_add_css('misc/media/jqueryValidate/css/template.css');
+        drupal_add_js('misc/media/datatables.1.10/media/js/jquery.js');
+        drupal_add_js('misc/media/jqueryValidate/js/jquery.validationEngine-en.js');
+        drupal_add_js('misc/media/jqueryValidate/js/jquery.validationEngine.js');
+        drupal_add_js('misc/media/datatables.1.10/jquery/jquery-ui.js');
 		drupal_add_js('misc/media/jquery.autotab-1.1b.js');
+        _add_chosen_jquery_plugins_old();
+        _addJsRounding();
 		$filePath = base_path().file_directory_path();
 		$idSubKategori = $dataproduk->idsubkategori;
 		drupal_add_js(
 			array(
 				'filePath' => $filePath,
 				'idSubKategori' => $idSubKategori,
+                'dec_digit' => $DecDigit,
 			),
 			'setting');
 		$js_path = drupal_get_path('module','dataproduk').'/editproduct.js';
@@ -664,10 +678,16 @@ function edit_data_produk(){
 		$pilihansubkategori .= '</select>';
 		$buttonadd2 = '<img id="addsubkategori" title="Tambah Subkategori Baru" src="'.base_path().'misc/media/images/add-small.ico">';
 		//Pilihan Supplier
+        $StrSQL = 'SELECT idsupplier FROM product_supplier WHERE idproduct=%d';
+        $result = db_query($StrSQL, $IDPRODUK);
+        $SelectedSupplier = array();
+        while ($data = db_fetch_object($result)){
+            $SelectedSupplier[] = $data->idsupplier;
+        }
 		$result = db_query("SELECT idsupplier,kodesupplier,namasupplier FROM supplier ORDER BY kodesupplier,namasupplier");
-		$pilihansupplier = '<select id="idsupplier" name="idsupplier" >';
+		$pilihansupplier = '<select id="idsupplier" name="idsupplier" multiple="true" >';
 		while ($data = db_fetch_object($result)){
-			if ($data->idsupplier == $dataproduk->idsupplier){
+            if (in_array($data->idsupplier, $SelectedSupplier)){
 				$pilihansupplier .= '<option selected value="'.$data->idsupplier.'">'.$data->kodesupplier.'-'.$data->namasupplier.'</option>';
 			}else{
 				$pilihansupplier .= '<option value="'.$data->idsupplier.'">'.$data->kodesupplier.'-'.$data->namasupplier.'</option>';
@@ -717,9 +737,13 @@ function edit_data_produk(){
 		$editproduk .= '<label>SUBKATEGORI</label>'.$pilihansubkategori.$buttonadd2;
 		$editproduk .= '<label>SUPPLIER</label>'.$pilihansupplier.$buttonadd3;
 		$editproduk .= '<label>NAMA PRODUK</label><input type="text" class="validate[required]" id="namaproduk" name="namaproduk" value="'.$dataproduk->namaproduct.'">';
+        $RadioLock = '<input id="rad-hargapokok" type="radio" name="lock-value" value="hargapokok">H.POKOK';
+        $RadioLock .= '<input id="rad-hargajual" type="radio" name="lock-value" value="hargajual">H.JUAL';
+        $RadioLock .= '<input id="rad-margin" type="radio" name="lock-value" value="margin" checked>MARGIN';
+        $editproduk .= '<label>LOCK</label><div style="float: left;">'.$RadioLock.'</div>';
 		$editproduk .= '<label>HARGA POKOK</label><input type="text" class="validate[required]" id="hargapokok" name="hargapokok" onkeyup="hitungmargin(\'hargapokok\')" value="'.$dataproduk->hargapokok.'">';
 		$editproduk .= '<label>HARGA JUAL</label><input type="text" class="validate[required]" id="hargajual" name="hargajual" onkeyup="hitungmargin(\'hargajual\')" value="'.$dataproduk->hargajual.'">';
-		$editproduk .= '<label>MARGIN HARGA</label><input type="text" maxlength="2" id="margin" name="margin" onkeyup="hitungmargin(\'margin\')" value="'.$dataproduk->margin.'">';
+		$editproduk .= '<label>MARGIN HARGA</label><input type="text" maxlength="2" id="margin" name="margin" onkeyup="hitungmargin(\'margin\')" value="'.$dataproduk->margin.'" readonly="readonly">';
 		$editproduk .= '<label>MINIMUM STOK</label><input type="text" id="minstok" name="minstok" value="'.$dataproduk->minstok.'">';
 		$editproduk .= '<label>MAKSIMUM STOK</label><input type="text" id="maxstok" name="maxstok" value="'.$dataproduk->maxstok.'">';
 		$editproduk .= '<label>STOK SAAT INI</label><input type="text" id="stok" name="stok" value="'.$dataproduk->stok.'">';
@@ -807,6 +831,8 @@ function update_data_produk(){
 			db_query("INSERT INTO historyhargabeli (hargasebelum, hargasesudah, uid) VALUES('%f','%f','%d')",
 			$hargaPokok,$nilai,$user->uid);
 		}
+        $sql_update2 = "UPDATE product_supplier SET harga = '%f' WHERE idproduct='%d'";
+		db_query($sql_update2, $nilai, $productId);
 	}else if ($kolom == "7"){
 		$sql_update = "UPDATE product SET hargajual='%f' WHERE idproduct='%d'";
 		$nilaiRet = number_format($nilai,$DecDigit,$dSep,$tSep);

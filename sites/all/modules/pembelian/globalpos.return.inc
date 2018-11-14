@@ -18,6 +18,7 @@ function returnsupplier(){
     drupal_add_js('misc/media/datatables/js/dataTables.addtr.js');
     drupal_add_js('misc/media/datatables/js/number.format.js');
     drupal_add_js('misc/media/jquery.autotab-1.1b.js');
+    _addPreventBackPage();
     if (isset($_GET['tanggal'])){
         $tglsekarang = date("Y-m-d", strtotime($_GET['tanggal']));
         $tgltampil = date("d-m-Y", strtotime($_GET['tanggal']));

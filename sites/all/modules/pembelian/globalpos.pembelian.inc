@@ -22,6 +22,8 @@ function pembelian(){
 	drupal_add_js('misc/media/datatables/js/dataTables.addtr.js');
 	drupal_add_js('misc/media/datatables/js/number.format.js');
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
+    _add_chosen_jquery_plugins_old();
+    _addPreventBackPage();
 	if (isset($_GET['tanggal'])){
 		$tglsekarang = date("Y-m-d", strtotime($_GET['tanggal']));
 		$tgltampil = date("d-m-Y", strtotime($_GET['tanggal']));
@@ -125,6 +127,8 @@ function pembelian(){
 
 function simpan_pembelian(){
     //nonota, idpemakai, total, bayar, kembali
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
     if ($_POST["detail_produk"] AND $_POST["bayar"] >= 0 AND $_POST["totalbelanja"]){
         $result = db_query("SELECT idpembelian FROM pembelian ORDER BY idpembelian DESC LIMIT 1");
         $data = db_fetch_object($result);
@@ -134,7 +138,7 @@ function simpan_pembelian(){
             $next_id = 1;
         }
         $no_nota = buat_nota($next_id);
-        $kembali = $_POST["bayar"] - $_POST["totalbelanja"];
+        $kembali = round($_POST["bayar"] - $_POST["totalbelanja"],$DecDigit);
         date_default_timezone_set('Asia/Jakarta');
         $waktujual = $_POST["tglbeli"]." ".date("H:i:s");
         $JatuhTempo = null;
@@ -147,12 +151,12 @@ function simpan_pembelian(){
         if (!empty($JatuhTempo)) {
             db_query("INSERT INTO pembelian (nonota, idpemakai, total, bayar, kembali, 
             tglpembelian, carabayar, jatuh_tempo, idsupplier) VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%s', '%s','%d')",
-                $no_nota, $user->uid, $_POST["totalbelanja"], $_POST["bayar"], $kembali, $waktujual,
+                $no_nota, $user->uid, round($_POST["totalbelanja"],$DecDigit), $_POST["bayar"], $kembali, $waktujual,
                 $caraBayar, $JatuhTempo, $IdSupplier);
         }else{
             db_query("INSERT INTO pembelian (nonota, idpemakai, total, bayar, kembali, 
             tglpembelian, carabayar, idsupplier) VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%s', '%d')",
-                $no_nota, $user->uid, $_POST["totalbelanja"], $_POST["bayar"], $kembali, $waktujual,
+                $no_nota, $user->uid, round($_POST["totalbelanja"],$DecDigit), $_POST["bayar"], $kembali, $waktujual,
                 $caraBayar, $IdSupplier);
         }
         $next_id = db_last_insert_id('pembelian', 'idpembelian');
@@ -178,17 +182,17 @@ function simpan_pembelian(){
             $pecahnilai = explode("___",remove_utf8_bom($pecahparameter[1]));
             $IDPRODUK =	$pecahnilai[0];
             $QTY = $pecahnilai[1];
-            $HARGABELI = $pecahnilai[2];
+            $HARGABELI = round($pecahnilai[2],$DecDigit);
             $result = db_query("SELECT hargapokok,stok FROM product WHERE idproduct='%d'",$IDPRODUK);
             $data = db_fetch_object($result);
-            $HARGAPOKOK = $data->hargapokok;
+            $HARGAPOKOK = round($data->hargapokok,$DecDigit);
             $STOKSEBELUM = $data->stok;
             $ExpiredDate = $pecahnilai[3];
             $barcodeBatch = create_barcode_batch();
             //idpembelian, idproduct, jumlah, hargapokok, hargapokok
-            db_query("INSERT INTO detailpembelian(idpembelian, idproduct, jumlah, hargapokok, hargapokoksebelumnya,expired_date,barcode_batch) VALUES
-			    ('%d', '%d', '%f', '%f','%f','%s','%s')",
-                $next_id, $IDPRODUK, $QTY, $HARGABELI, $HARGAPOKOK, $ExpiredDate, $barcodeBatch);
+            db_query("INSERT INTO detailpembelian(idpembelian, idproduct, jumlah, hargapokok, hargapokoksebelumnya,expired_date,barcode_batch, idsupplier) VALUES
+			    ('%d', '%d', '%f', '%f','%f','%s','%s','%d')",
+                $next_id, $IDPRODUK, $QTY, $HARGABELI, $HARGAPOKOK, $ExpiredDate, $barcodeBatch,$_POST["idsupplier"]);
             if ($HARGAPOKOK <> $HARGABELI) {
                 db_query("INSERT INTO historyhargabeli (hargasebelum, hargasesudah, uid) VALUES('%f','%f','%d')",
                     $HARGAPOKOK, $HARGABELI, $user->uid);
@@ -366,7 +370,7 @@ function view_tabel_pembelian(){
         $tabeltampil = tabel_pembelian($tgl1,$tgl2, $idSupplier);
         $urutan = 1;
         $tampilData = 0;
-        $addedFilter = createSupplierSelection($idSupplier,'ALL', false).'<input type="hidden" id="idsupplier" name="idsupplier" value="0">';
+        $addedFilter = createSupplierSelection($idSupplier,'ALL', false).'<input type="hidden" id="idsupplier_select" name="idsupplier_select" value="0">';
         if(isset($_POST['idsupplier'])){
             $filterId = $_POST['idsupplier'];
         }
@@ -376,7 +380,7 @@ function view_tabel_pembelian(){
         $tabeltampil = pembelian_produk($tgl1,$tgl2,$idSupplier);
         $urutan = 3;
         $tampilData = 1;
-        $addedFilter = createSupplierSelection($idSupplier,'ALL',false).'<input type="hidden" id="idsupplier" name="idsupplier" value="0">';
+        $addedFilter = createSupplierSelection($idSupplier,'ALL',false).'<input type="hidden" id="idsupplier_select" name="idsupplier_select" value="0">';
         if (isset($_POST['idsupplier'])){
             $filterId = $_POST['idsupplier'];
         }
@@ -386,7 +390,7 @@ function view_tabel_pembelian(){
         $nota = 'selected="selected"';
         $urutan = 1;
         $tampilData = 0;
-        $addedFilter = createSupplierSelection($idSupplier,'ALL', false).'<input type="hidden" id="idsupplier" name="idsupplier" value="0">';
+        $addedFilter = createSupplierSelection($idSupplier,'ALL', false).'<input type="hidden" id="idsupplier_select" name="idsupplier_select" value="0">';
         if(isset($_POST['idsupplier'])){
             $filterId = $_POST['idsupplier'];
         }
@@ -468,6 +472,9 @@ function tabel_pembelian()
 {
     //nonota, tglpembelian, idpemakai, idlangganan, total,
     //totalmodal, carabayar, bayar, kembali
+    get_number_format($currencySym, $thousandSep, $decimalSep,false);
+    $gstSym = get_gst_symbols();
+    $dataPremis = get_data_premis(false);
     $tabelpembelian = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_pembelian">';
     $tabelpembelian .= '<thead>';
     $tabelpembelian .= '<tr>';
@@ -475,14 +482,15 @@ function tabel_pembelian()
     $tabelpembelian .= '<th class="tablebutton"></th>';
     $tabelpembelian .= '<th>NO. NOTA</th>';
     $tabelpembelian .= '<th class="tanggal">HARI</th>';
-    $tabelpembelian .= '<th class="tanggal">TGL</th>';
+    $tabelpembelian .= '<th class="tanggal">'.strtoupper(trans('tanggal', $dataPremis->bahasa)).'</th>';
     $tabelpembelian .= '<th class="tanggal">JAM</th>';
     $tabelpembelian .= '<th>TOTAL</th>';
     $tabelpembelian .= '<th>CARA BAYAR</th>';
     $tabelpembelian .= '<th>BAYAR</th>';
     $tabelpembelian .= '<th>KEMBALI</th>';
+    $tabelpembelian .= '<th>'.strtoupper(trans('tanggal', $dataPremis->bahasa)).' BAYAR</th>';
     $tabelpembelian .= '<th>SUPPLIER</th>';
-    $tabelpembelian .= '<th>KASIR</th>';
+    $tabelpembelian .= '<th>'.strtoupper(trans('kasir', $dataPremis->bahasa)).'</th>';
     $tabelpembelian .= '<th class="tablebutton"></th>';
     $tabelpembelian .= '</tr>';
     $tabelpembelian .= '</thead>';
@@ -495,7 +503,7 @@ function tabel_pembelian()
     $tabelpembelian .= '<th style="text-align: right">&nbsp;&nbsp;</th>';
     $tabelpembelian .= '<th style="text-align: right">&nbsp;&nbsp;</th>';
     $tabelpembelian .= '<th style="text-align: right">&nbsp;&nbsp;</th>';
-    $tabelpembelian .= '<th colspan="3">&nbsp;</th>';
+    $tabelpembelian .= '<th colspan="4">&nbsp;</th>';
     $tabelpembelian .= '</tr>';
     $tabelpembelian .= '</tfoot>';
     $tabelpembelian .= '</table>';

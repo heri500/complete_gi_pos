@@ -12,7 +12,12 @@ function update_pembelian(){
 			}else{
 				print $jampembelian;
 			}
-		}
+		}else if(isset($_POST['tanggalbayar'])){
+            $idpembelian = explode('-', $_POST['id']);
+            $tglbayarbaru = date('Y-m-d',strtotime($_POST['tanggalbayar']));
+            db_query("UPDATE pembelian SET jatuh_tempo='%s' WHERE idpembelian=%d", $tglbayarbaru, $idpembelian[1]);
+            print $tglbayarbaru;
+        }
 	}else{
 		$updateddata = new stdClass();
 		$updateddata->error = 'ID Penbelian Empty';
@@ -114,6 +119,7 @@ function insert_detail_pembelian(){
         if ($_POST['idpembelian'] > 0 && $_POST['idproduk'] > 0 && $_POST['hargapokok'] > 0 && $_POST['qty'] > 0 && isset($_POST['expired_date'])){
             $strSQL = 'SELECT iddetail FROM detailpembelian WHERE idproduct=%d AND idpembelian=%d LIMIT 1';
             $idDetailExist = db_result(db_query($strSQL, $_POST['idproduk'],$_POST['idpembelian']));
+            $idproduct = $_POST['idproduk'];
             if ($idDetailExist > 0){
                 $strSQL = 'UPDATE detailpembelian SET jumlah = jumlah + \'%f\', hargapokok=\'%f\', expired_date=\'%s\' ';
                 $strSQL .= 'WHERE iddetail=%d';

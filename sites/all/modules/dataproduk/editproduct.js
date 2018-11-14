@@ -2,6 +2,10 @@
 var pathutama = '';
 var pathfile = '';
 var barcodesama = false;
+var currSym = '';
+var tSep = '.';
+var dSep = ',';
+var dDigit = 0;
 
 function simpankategori(){
 	if ($("#kodekategori").val() != "" && $("#kategori").val() != ""){
@@ -159,22 +163,43 @@ function ubahkodebarang(){
 	});
 }
 function hitungmargin(asal){
-	if (asal == "hargapokok"){
-		if ($("#margin").val() > 0 && $("#hargapokok").val() > 0){
-			var hargajual = $("#hargapokok").val() * (100/(100-$("#margin").val()));
-			$("#hargajual").val(Math.round(hargajual));
-		}
-	}else if (asal == "hargajual"){
-		if ($("#hargapokok").val() > 0 && $("#hargajual").val() > 0){
-			var margin = (($("#hargajual").val() - $("#hargapokok").val())/$("#hargajual").val())*100;
-			$("#margin").val(Math.round(margin));
-		}
-	}else if (asal == "margin"){
-		if ($("#hargapokok").val() > 0 && $("#margin").val() > 0){
-			var hargajual = $("#hargapokok").val() * (100/(100-$("#margin").val()));
-			$("#hargajual").val(Math.round(hargajual));
-		}
-	}
+    if (asal == 'hargapokok'){
+        if ($('#rad-hargajual').is(':checked')) {
+            if ($('#margin').val() > 0 && $('#hargapokok').val() > 0){
+                var hargajual = $('#hargapokok').val() * (100/(100-$('#margin').val()));
+                $('#hargajual').val(Math.Math.round10(hargajual,(dDigit * -1)));
+            }
+        }else if ($('#rad-margin').is(':checked')) {
+            if ($('#hargajual').val() > 0 && $('#hargapokok').val() > 0){
+                var margin = 100 - (100*($('#hargapokok').val()/$('#hargajual').val()));
+                $('#margin').val(Math.round10(margin,(dDigit * -1)));
+            }
+        }
+    }else if (asal == 'hargajual'){
+        if ($('#rad-hargapokok').is(':checked')) {
+            if($('#hargajual').val() > 0 && $('#margin').val() > 0){
+                var hargapokok = $('#hargajual').val() * ((100 - $('#margin').val())/100);
+                $('#hargapokok').val(Math.round10(hargapokok,(dDigit * -1)));
+            }
+        }else if ($('#rad-margin').is(':checked')) {
+            if ($('#hargajual').val() > 0 && $('#hargapokok').val() > 0){
+                var margin = 100 - (100*($('#hargapokok').val()/$('#hargajual').val()));
+                $('#margin').val(Math.round10(margin,(dDigit * -1)));
+            }
+        }
+    }else if (asal == 'margin'){
+        if ($('#rad-hargajual').is(':checked')) {
+            if ($('#hargapokok').val() > 0 && $('#margin').val() > 0){
+                var hargajual = $('#hargapokok').val() * (100/(100-$('#margin').val()));
+                $('#hargajual').val(Math.round10(hargajual,(dDigit * -1)));
+            }
+        }else if ($('#rad-hargapokok').is(':checked')) {
+            if($('#hargajual').val() > 0 && $('#margin').val() > 0){
+                var hargapokok = $('#hargajual').val() * ((100 - $('#margin').val())/100);
+                $('#hargapokok').val(Math.round10(hargapokok,(dDigit * -1)));
+            }
+        }
+    }
 }
 function cek_barcode(field, rules, i, options){
 	if (field.val() != ""){
@@ -251,6 +276,10 @@ function batal(){
 	window.location = pathutama + "dataproduk/produk";
 }
 $(document).ready(function() {
+    currSym = Drupal.settings.currSym[0];
+    tSep = Drupal.settings.tSep[0];
+    dSep = Drupal.settings.dSep[0];
+    dDigit = Drupal.settings.dec_digit;
 	pathutama = Drupal.settings.basePath;
 	pathfile = Drupal.settings.filePath;
 	$("#dialogtambahkategori").dialog({
@@ -355,4 +384,29 @@ $(document).ready(function() {
 	$("#formproduk").validationEngine();
 	filtersubkategori(Drupal.settings.idSubKategori);
 	$("#barcode").select();
+    $('#idsupplier').chosen();
+    $('.chosen-container').css('float', 'left');
+    $('.chosen-container').css('margin-right', '4px');
+    $('.chosen-container').css('margin-top', '4px');
+    $('#rad-hargapokok').on('click', function () {
+        if ($('#rad-hargapokok').is(':checked')) {
+            $('#hargapokok').attr('readonly', 'readonly');
+            $('#hargajual').removeAttr('readonly');
+            $('#margin').removeAttr('readonly');
+        }
+    });
+    $('#rad-hargajual').on('click', function () {
+        if ($('#rad-hargajual').is(':checked')) {
+            $('#hargajual').attr('readonly', 'readonly');
+            $('#hargapokok').removeAttr('readonly');
+            $('#margin').removeAttr('readonly');
+        }
+    });
+    $('#rad-margin').on('click', function () {
+        if ($('#rad-margin').is(':checked')) {
+            $('#margin').attr('readonly', 'readonly');
+            $('#hargapokok').removeAttr('readonly');
+            $('#hargajual').removeAttr('readonly');
+        }
+    });
 })

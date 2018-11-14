@@ -454,41 +454,62 @@ function serverSidePenjualan2($request){
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-    if (is_null($pageLength) || $pageLength != -1){
+    if (is_null($pageLength) && $pageLength != -1){
         $pageLength = 100;
     }
-	$firstRecord = $pageStart;
-	$lastRecord = $pageStart + $pageLength;
-	$strSQL = "SELECT detail.idproduct,prod.barcode,prod.namaproduct,";
-	$strSQL .= "supp.namasupplier, SUM(detail.jumlah) AS totalqty,";
-	$strSQL .= "MIN(detail.hargapokok) AS minhargapokok,MAX(detail.hargapokok) AS maxhargapokok,";
-	$strSQL .= "MIN(detail.hargajual) AS minhargajual, MAX(detail.hargajual) AS maxhargajual, ";
-	$strSQL .= "SUM(detail.hargapokok*detail.jumlah) AS totalmodal, ";
-    $strSQL .= "SUM((detail.hargajual - (detail.hargajual*detail.diskon/100))*detail.jumlah) AS subtotal,";
-	$strSQL .= "SUM(((detail.hargajual - (detail.hargajual*detail.diskon/100)) - detail.hargapokok)*detail.jumlah) AS laba ";
-	$strSQLFilteredTotal = "SELECT COUNT(detail.idproduct) ";
-	$strSQL .= "FROM detailpenjualan AS detail ";
-	$strSQLFilteredTotal .= "FROM detailpenjualan AS detail ";
-	$strSQL .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan ";
-	$strSQL .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
-	$strSQL .= "LEFT JOIN supplier AS supp ON prod.idsupplier = supp.idsupplier ";
+    if ($pageLength != -1) {
+        $firstRecord = $pageStart;
+        $lastRecord = $pageStart + $pageLength;
+    }
+    $strSQL = "SELECT detail.idproduct,prod.barcode,prod.namaproduct,";
+    $strSQL .= "(SELECT GROUP_CONCAT(namasupplier SEPARATOR '<br/>') FROM product_supplier ";
+    $strSQL .= "AS ps LEFT JOIN supplier supp ON ps.idsupplier = supp.idsupplier ";
+    $strSQL .= "WHERE ps.idproduct = detail.idproduct AND ps.idsupplier = detail.idsupplier GROUP BY ps.idproduct) ";
+    $strSQL .= "AS namasupplier, ";
+    $strSQL .= "SUM(detail.jumlah) AS totalqty,";
+    $strSQL .= "MIN(detail.hargapokok) AS minhargapokok,MAX(detail.hargapokok) AS maxhargapokok,";
+    $strSQL .= "MIN(detail.hargajual) AS minhargajual, MAX(detail.hargajual) AS maxhargajual, ";
+    $strSQL .= "SUM(detail.hargapokok*detail.jumlah) AS totalmodal, ";
+    $strSQL .= "SUM(((detail.hargajual - (detail.hargajual*detail.diskon/100)) + ";
+    $strSQL .= "((detail.hargajual - (detail.hargajual*detail.diskon/100)) * detail.ppn/100))*detail.jumlah) AS subtotal,";
+    $strSQL .= "SUM((((detail.hargajual - (detail.hargajual*detail.diskon/100)) + ((detail.hargajual - (detail.hargajual*detail.diskon/100)) * detail.ppn/100)) - detail.hargapokok)*detail.jumlah) AS laba ";
+    $strSQL .= "FROM detailpenjualan AS detail ";
+    $strSQL .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan ";
+    $strSQL .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
+    //$strSQL .= "LEFT JOIN supplier AS supp ON prod.idsupplier = supp.idsupplier ";
 	if (!empty($idSupplier)){
-		$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND prod.idsupplier = %d ";
+		$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND ";
+        $strSQL .= "(SELECT MAX(idsupplier) FROM product_supplier ";
+        $strSQL .= "AS ps ";
+        $strSQL .= "WHERE ps.idproduct = detail.idproduct AND ps.idsupplier = detail.idsupplier ";
+        $strSQL .= "GROUP BY ps.idproduct)  = %d ";
 	}else{
 		$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
 	}
-	$strSQLFilteredTotal .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan ";
+    $strSQLFilteredTotal = "SELECT COUNT(detail.idproduct) ";
+    $strSQLFilteredTotal .= "FROM detailpenjualan AS detail ";
+    $strSQLFilteredTotal .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan ";
 	$strSQLFilteredTotal .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
-	$strSQLFilteredTotal .= "LEFT JOIN supplier AS supp ON prod.idsupplier = supp.idsupplier ";
+	//$strSQLFilteredTotal .= "LEFT JOIN supplier AS supp ON prod.idsupplier = supp.idsupplier ";
 	if (!empty($idSupplier)){
-		$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND prod.idsupplier = %d ";
+		$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND ";
+        $strSQLFilteredTotal .= "(SELECT MAX(idsupplier) FROM product_supplier ";
+        $strSQLFilteredTotal .= "AS ps ";
+        $strSQLFilteredTotal .= "WHERE ps.idproduct = detail.idproduct AND ps.idsupplier = detail.idsupplier ";
+        $strSQLFilteredTotal .= "GROUP BY ps.idproduct)  = %d ";
 	}else {
 		$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
 	}
 	$strCriteria = "";
 	if (!empty($searchQuery)){
 		$strCriteria .= "AND (prod.barcode LIKE '%%%s%%' OR prod.namaproduct LIKE '%%%s%%' ";
-		$strCriteria .= "OR supp.namasupplier LIKE '%%%s%%' ";
+
+        $strCriteria .= "OR (SELECT GROUP_CONCAT(namasupplier SEPARATOR ',') FROM product_supplier ";
+        $strCriteria .= "AS ps LEFT JOIN supplier supp ON ps.idsupplier = supp.idsupplier ";
+        $strCriteria .= "WHERE ps.idproduct = detail.idproduct AND ps.idsupplier = detail.idsupplier ";
+        $strCriteria .= "GROUP BY ps.idproduct) LIKE '%%%s%%' ";
+
+		//$strCriteria .= "OR supp.namasupplier LIKE '%%%s%%' ";
 		$strCriteria .= ")";
 	}
     if ($pageLength != -1) {
@@ -496,14 +517,13 @@ function serverSidePenjualan2($request){
     }else{
         $strSQL .= $strCriteria . " GROUP BY detail.idproduct ORDER BY $orderColumn";
     }
-	$strSQLFilteredTotal .= $strCriteria." GROUP BY detail.idproduct";
+	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
 		if (!empty($idSupplier)){
 			$result = db_query(
 				$strSQL,
 				$tglAwal,
 				$tglAkhir,
-				$idSupplier,
 				$searchQuery,
 				$searchQuery,
 				$searchQuery,
@@ -511,7 +531,7 @@ function serverSidePenjualan2($request){
 				$lastRecord
 			);
 			$recordsFiltered = db_result(
-				db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $idSupplier, $searchQuery, $searchQuery, $searchQuery)
+				db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery, $searchQuery, $searchQuery)
 			);
 		}else {
 			$result = db_query(
@@ -554,7 +574,7 @@ function serverSidePenjualan2($request){
 		$rowData[] = $data->idproduct;
 		$output[] = $rowData;
 	}
-	$recordsTotal = db_result(db_query("SELECT COUNT(idproduct) FROM detailpenjualan AS detail LEFT JOIN penjualan AS penj ON detail.idpenjualan=penj.idpenjualan WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' GROUP BY detail.idproduct",$tglAwal,$tglAkhir));
+	$recordsTotal = db_result(db_query("SELECT COUNT(idproduct) FROM detailpenjualan AS detail LEFT JOIN penjualan AS penj ON detail.idpenjualan=penj.idpenjualan WHERE penj.tglpenjualan BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
 	return array(
 			"draw"            => isset ( $request['draw'] ) ?
 				intval( $request['draw'] ) :
@@ -1348,11 +1368,13 @@ function serverSideDetailPenjualan($request){
     if (is_null($pageStart)){
         $pageStart = 0;
     }
-    if (is_null($pageLength) || $pageLength == -1){
+    if (is_null($pageLength) && $pageLength != -1){
         $pageLength = 25;
     }
-    $firstRecord = $pageStart;
-    $lastRecord = $pageStart + $pageLength;
+    if ($pageLength != -1) {
+        $firstRecord = $pageStart;
+        $lastRecord = $pageStart + $pageLength;
+    }
     $strSQL = 'SELECT detail.iddetail,product.barcode, product.namaproduct, detail.jumlah,detail.diskon, detail.ppn, ';
     $strSQL .= 'detail.hargapokok,detail.hargajual,';
     $strSQL .= '((detail.hargajual - (detail.hargajual*diskon/100))*detail.jumlah) AS subtotal,';
@@ -1838,7 +1860,7 @@ function serverSidePembelian($request){
     $arrayColumn = array(
         'pemb.idpembelian','pemb.nonota','pemb.tglpembelian','pemb.tglpembelian',
         'pemb.total','pemb.totalmodal','(pemb.total - pemb.totalmodal)','pemb.carabayar',
-        'pemb.bayar','pemb.kembali','user.name','supp.namasupplier'
+        'pemb.bayar','pemb.kembali','user.name','supp.namasupplier','pemb.jatuh_tempo'
     );
     $orderColumnArray = $_REQUEST['order'];
     $orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -1854,9 +1876,7 @@ function serverSidePembelian($request){
     $strSQL .= "SUBSTR(pemb.tglpembelian,12,5) AS waktu, pemb.idpemakai,pemb.total,";
     $strSQL .= "pemb.carabayar,pemb.bayar,pemb.kembali,";
     $strSQL .= "pemb.nokartu,pemb.keterangan,pemb.jatuh_tempo, user.name, supp.namasupplier, supp.idsupplier ";
-    $strSQLFilteredTotal = "SELECT COUNT(pemb.idpembelian) ";
     $strSQL .= "FROM pembelian AS pemb ";
-    $strSQLFilteredTotal .= "FROM pembelian AS pemb ";
     $strSQL .= "LEFT JOIN cms_users AS user ON user.uid = pemb.idpemakai ";
     $strSQL .= "LEFT JOIN supplier AS supp ON supp.idsupplier = pemb.idsupplier ";
     if (empty($idsupplier)){
@@ -1864,6 +1884,8 @@ function serverSidePembelian($request){
     }else{
         $strSQL .= "WHERE pemb.tglpembelian BETWEEN '%s' AND '%s' AND pemb.idsupplier=%d ";
     }
+    $strSQLFilteredTotal = "SELECT COUNT(pemb.idpembelian) ";
+    $strSQLFilteredTotal .= "FROM pembelian AS pemb ";
     $strSQLFilteredTotal .= "LEFT JOIN cms_users AS user ON user.uid = pemb.idpemakai ";
     $strSQLFilteredTotal .= "LEFT JOIN supplier AS supp ON supp.idsupplier = pemb.idsupplier ";
     if (empty($idsupplier)){
@@ -2024,6 +2046,7 @@ function serverSidePembelian($request){
         $rowData[] = $data->carabayar;
         $rowData[] = number_format($data->bayar,$DDigit,$dSep,$tSep);
         $rowData[] = number_format($data->kembali,$DDigit,$dSep,$tSep);
+        $rowData[] = $data->jatuh_tempo;
         $rowData[] = $data->namasupplier;
         $rowData[] = $data->name;
         $tombolprint = "<img title=\"Klik untuk mencetak barcode\" onclick=\"print_pembelian(".$data->idpembelian.");\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
@@ -2088,25 +2111,25 @@ function serverSidePembelian2($request){
     $firstRecord = $pageStart;
     $lastRecord = $pageStart + $pageLength;
     $strSQL = "SELECT detail.idproduct,prod.barcode,prod.namaproduct,";
-    $strSQL .= "supp.namasupplier, SUM(detail.jumlah) AS totalqty,";
+    $strSQL .= "GROUP_CONCAT(DISTINCT supp.namasupplier SEPARATOR '<br/>') AS namasupplier, SUM(detail.jumlah) AS totalqty,";
     $strSQL .= "MIN(detail.hargapokok) AS minhargapokok,MAX(detail.hargapokok) AS maxhargapokok,";
     $strSQL .= "SUM(detail.hargapokok*detail.jumlah) AS totalmodal ";
     $strSQL .= "FROM detailpembelian AS detail ";
-    $strSQLFilteredTotal = "SELECT COUNT(detail.idproduct) ";
-    $strSQLFilteredTotal .= "FROM detailpembelian AS detail ";
     $strSQL .= "LEFT JOIN pembelian AS pemb ON detail.idpembelian = pemb.idpembelian ";
     $strSQL .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
-    $strSQL .= "LEFT JOIN supplier AS supp ON prod.idsupplier = supp.idsupplier ";
+    $strSQL .= "LEFT JOIN supplier AS supp ON detail.idsupplier = supp.idsupplier ";
     if (!empty($idSupplier)){
-        $strSQL .= "WHERE pemb.tglpembelian BETWEEN '%s' AND '%s' AND prod.idsupplier = %d ";
+        $strSQL .= "WHERE pemb.tglpembelian BETWEEN '%s' AND '%s' AND detail.idsupplier = %d ";
     }else{
         $strSQL .= "WHERE pemb.tglpembelian BETWEEN '%s' AND '%s' ";
     }
+    $strSQLFilteredTotal = "SELECT COUNT(DISTINCT detail.idproduct) ";
+    $strSQLFilteredTotal .= "FROM detailpembelian AS detail ";
     $strSQLFilteredTotal .= "LEFT JOIN pembelian AS pemb ON detail.idpembelian = pemb.idpembelian ";
     $strSQLFilteredTotal .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
-    $strSQLFilteredTotal .= "LEFT JOIN supplier AS supp ON prod.idsupplier = supp.idsupplier ";
+    $strSQLFilteredTotal .= "LEFT JOIN supplier AS supp ON detail.idsupplier = supp.idsupplier ";
     if (!empty($idSupplier)){
-        $strSQLFilteredTotal .= "WHERE pemb.tglpembelian BETWEEN '%s' AND '%s' AND prod.idsupplier = %d ";
+        $strSQLFilteredTotal .= "WHERE pemb.tglpembelian BETWEEN '%s' AND '%s' AND detail.idsupplier = %d ";
     }else {
         $strSQLFilteredTotal .= "WHERE pemb.tglpembelian BETWEEN '%s' AND '%s' ";
     }
@@ -2116,45 +2139,80 @@ function serverSidePembelian2($request){
         $strCriteria .= "OR supp.namasupplier LIKE '%%%s%%' ";
         $strCriteria .= ")";
     }
-    $strSQL .= $strCriteria." GROUP BY detail.idproduct ORDER BY $orderColumn LIMIT %d, %d";
-    $strSQLFilteredTotal .= $strCriteria." GROUP BY detail.idproduct";
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " GROUP BY detail.idproduct ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " GROUP BY detail.idproduct ORDER BY $orderColumn";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
     if (!empty($searchQuery)){
         if (!empty($idSupplier)){
-            $result = db_query(
-                $strSQL,
-                $tglAwal,
-                $tglAkhir,
-                $idSupplier,
-                $searchQuery,
-                $searchQuery,
-                $searchQuery,
-                $firstRecord,
-                $lastRecord
-            );
+            if ($pageLength != -1) {
+                $result = db_query(
+                    $strSQL,
+                    $tglAwal,
+                    $tglAkhir,
+                    $idSupplier,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery,
+                    $firstRecord,
+                    $lastRecord
+                );
+            }else{
+                $result = db_query(
+                    $strSQL,
+                    $tglAwal,
+                    $tglAkhir,
+                    $idSupplier,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery
+                );
+            }
             $recordsFiltered = db_result(
                 db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $idSupplier, $searchQuery, $searchQuery, $searchQuery)
             );
         }else {
-            $result = db_query(
-                $strSQL,
-                $tglAwal,
-                $tglAkhir,
-                $searchQuery,
-                $searchQuery,
-                $searchQuery,
-                $firstRecord,
-                $lastRecord
-            );
+            if ($pageLength != -1) {
+                $result = db_query(
+                    $strSQL,
+                    $tglAwal,
+                    $tglAkhir,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery,
+                    $firstRecord,
+                    $lastRecord
+                );
+            }else{
+                $result = db_query(
+                    $strSQL,
+                    $tglAwal,
+                    $tglAkhir,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery
+                );
+            }
             $recordsFiltered = db_result(
                 db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery, $searchQuery, $searchQuery)
             );
         }
     }else{
         if (!empty($idSupplier)) {
-            $result = db_query($strSQL, $tglAwal, $tglAkhir, $idSupplier, $firstRecord, $lastRecord);
+            if ($pageLength != -1) {
+                $result = db_query($strSQL, $tglAwal, $tglAkhir, $idSupplier, $firstRecord, $lastRecord);
+            }else{
+                $result = db_query($strSQL, $tglAwal, $tglAkhir, $idSupplier);
+            }
             $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $idSupplier));
         }else{
-            $result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+            if ($pageLength != -1) {
+                $result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+            }else{
+                $result = db_query($strSQL, $tglAwal, $tglAkhir);
+            }
             $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
         }
     }
@@ -2171,14 +2229,15 @@ function serverSidePembelian2($request){
         $rowData[] = $data->idproduct;
         $output[] = $rowData;
     }
-    $recordsTotal = db_result(db_query("SELECT COUNT(idproduct) FROM detailpembelian AS detail LEFT JOIN pembelian AS penj ON detail.idpembelian=penj.idpembelian WHERE penj.tglpembelian BETWEEN '%s' AND '%s' GROUP BY detail.idproduct",$tglAwal,$tglAkhir));
+    $recordsTotal = db_result(db_query("SELECT COUNT(DISTINCT idproduct) FROM detailpembelian AS detail LEFT JOIN pembelian AS pemb ON detail.idpembelian=pemb.idpembelian WHERE pemb.tglpembelian BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
     return array(
         "draw"            => isset ( $request['draw'] ) ?
             intval( $request['draw'] ) :
             0,
         "recordsTotal"    => intval( $recordsTotal ),
         "recordsFiltered" => intval( $recordsFiltered ),
-        "data"            => $output
+        "data"            => $output,
+        "query"           => $strSQL,
     );
 }
 
@@ -2269,7 +2328,7 @@ function serverSideDetailPembelian($request){
         $rowData[] = $data->iddetail;
         $output[] = $rowData;
     }
-    $recordsTotal = db_result(db_query("SELECT COUNT(iddetail) FROM detailpembelian"));
+    $recordsTotal = db_result(db_query("SELECT COUNT(iddetail) FROM detailpembelian WHERE idpembelian=%d", $idPembelian));
     return array(
         "draw"            => isset ( $request['draw'] ) ?
             intval( $request['draw'] ) :

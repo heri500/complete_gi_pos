@@ -203,3 +203,19 @@ function create_barcode_batch()
     }
     return $newBarcode;
 }
+
+function fix_kembali_rounding(){
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
+    $StrSql = 'UPDATE pembelian SET kembali = ROUND(kembali,%d)';
+    db_query($StrSql,$DecDigit);
+    return 'Fix Test Pembelian';
+}
+
+function fix_detailpembelian_rounding(){
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
+    $StrSql = 'UPDATE detailpembelian SET hargapokok = ROUND(hargapokok,%d), hargapokoksebelumnya = ROUND(hargapokoksebelumnya,%d)';
+    db_query($StrSql,$DecDigit,$DecDigit);
+    return 'Fix Test Detail Pembelian';
+}

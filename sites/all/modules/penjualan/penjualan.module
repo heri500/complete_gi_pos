@@ -748,3 +748,32 @@ function hapus_penjualan(){
     }
     exit();
 }
+
+function fix_detail_penjualan($DateFrom = null, $DateThru = null){
+    if (empty($DateFrom)){
+        $DateFrom = db_result(db_query('SELECT tglpenjualan FROM penjualan ORDER BY tglpenjualan ASC LIMIT 1'));
+    }
+    if (empty($DateThru)){
+        $DateThru = db_result(db_query('SELECT tglpenjualan FROM penjualan ORDER BY tglpenjualan DESC LIMIT 1'));
+    }
+    dpm('Tanggal : '.$DateFrom.' '.$DateThru);
+    $StrSql = 'SELECT iddetail,(SELECT idsupplier FROM product_supplier AS ps WHERE ps.idproduct = detail.idproduct LIMIT 1) ';
+    $StrSql .= 'AS idsupplier_ref FROM detailpenjualan AS detail ';
+    $StrSql .= 'LEFT JOIN penjualan AS jual ON detail.idpenjualan = jual.idpenjualan ';
+    $StrSql .= 'WHERE idsupplier IS NULL AND ';
+    $StrSql .= "(jual.tglpenjualan BETWEEN '%s' AND '%s')";
+    $result = db_query($StrSql, $DateFrom, $DateThru);
+    $DetailUpdated = array();
+    $DetailData = array();
+    while ($data = db_fetch_object($result)){
+        $DetailData[] = $data;
+        $IdSupplier = $data->idsupplier_ref;
+        $IdDetail = $data->iddetail;
+        if (!empty($IdSupplier)){
+            db_query('UPDATE detailpenjualan SET idsupplier=%d WHERE iddetail=%d',$IdSupplier,$IdDetail);
+            $DetailUpdated[] = $IdDetail;
+        }
+    }
+    dpm($DetailData);
+    return $DetailUpdated;
+}

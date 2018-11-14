@@ -22,6 +22,7 @@ function reproduksi(){
 	drupal_add_js('misc/media/datatables/js/dataTables.addtr.js');
 	drupal_add_js('misc/media/datatables/js/number.format.js');
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
+    _addPreventBackPage();
 	$tglsekarang = date("Y-m-d");
 	$tgltampil = date("d-m-Y");
 	drupal_add_js(

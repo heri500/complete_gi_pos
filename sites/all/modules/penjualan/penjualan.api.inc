@@ -928,7 +928,7 @@ function printKasirOrder($dataOrder = null){
                 $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">'.$gstSym.'(' . $besarPpn . '%)</span><span style="float: right">' . number_format($totalPpn,$DecDigit,$decimalSep,$thousandSep) . '</span></td></tr>';
                 $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL+'.$gstSym.'</span><span style="float: right">' . number_format($totalPlusPpn,$DecDigit,$decimalSep,$thousandSep) . '</span></td></tr>';
             }
-            $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">BAYAR</span><span style="float: right">' . number_format($dataOrder['info']->bayar,$DecDigit,$decimalSep,$thousandSep) . '</span></td></tr>';
+            $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">BAYAR ('.$dataOrder['info']->carabayar.')</span><span style="float: right">' . number_format($dataOrder['info']->bayar,$DecDigit,$decimalSep,$thousandSep) . '</span></td></tr>';
             $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">'.strtoupper(trans('kembali', $dataPremis->bahasa)).'</span><span style="float: right">' . number_format($dataOrder['info']->kembali,$DecDigit,$decimalSep,$thousandSep) . '</span></td></tr>';
             $tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-top: 1px solid #000;">'.strtoupper(trans('terimakasih', $dataPremis->bahasa)).'</td></tr>';
             $Madah = variable_get('madah_slogan','INGAT MAKAN INGAT TUHAN');
@@ -1526,7 +1526,7 @@ function printProductBarcodeNew()
                         $BarcodeId = 'barcode-' . $index . '-' . $dataProduct['info']->barcode;
                         $BarInfo = new stdClass();
                         $BarInfo->id = $BarcodeId;
-                        $BarInfo->barcode = $dataProduct['info']->barcode;
+                        $BarInfo->barcode = trim($dataProduct['info']->barcode);
                         $BarInfo->barcode_type = $dataProduct['info']->barcode_type;
                         $BarcodeData[] = $BarInfo;
                         $tablePrint .= '<svg id="' . $BarcodeId . '" class="barcode-place"></svg>';
@@ -1544,11 +1544,18 @@ function printProductBarcodeNew()
                         }
                     }
                     $tablePrint .= '<tr class="standard-font">';
+                    if ($TotalInRow > 1){
+                        if (strlen($dataProduct['info']->namaproduct) <= 19){
+                            $NamaProduct = $dataProduct['info']->namaproduct. str_repeat('&nbsp;', 15);
+                        }else{
+                            $NamaProduct = $dataProduct['info']->namaproduct;
+                        }
+                    }
                     for ($k = 0; $k < $TotalInRow; $k++) {
                         if ($k == 0){
-                            $tablePrint .= '<td align="center" style="width: ' . $ColumnWidth . 'px;font-size: 10px;">&nbsp;' . $dataProduct['info']->namaproduct . '</td>';
+                            $tablePrint .= '<td align="center" style="width: ' . $ColumnWidth . 'px;font-size: 10px;">&nbsp;' . $NamaProduct . '</td>';
                         }else {
-                            $tablePrint .= '<td align="center" style="width: ' . $ColumnWidth . 'px;font-size: 10px;">' . $dataProduct['info']->namaproduct . '</td>';
+                            $tablePrint .= '<td align="center" style="width: ' . $ColumnWidth . 'px;font-size: 10px;">' . $NamaProduct . '</td>';
                         }
                         if ($TotalInRow > 1 && ($k < $TotalInRow - 1)) {
                             $tablePrint .= '<td style="width:11px;">&nbsp;</td>';
@@ -1640,7 +1647,7 @@ function printLabelHarga(){
                 $BarcodeId = 'barcode-' . $index . '-' . $dataProduct['info']->barcode;
                 $BarInfo = new stdClass();
                 $BarInfo->id = $BarcodeId;
-                $BarInfo->barcode = $dataProduct['info']->barcode;
+                $BarInfo->barcode = trim($dataProduct['info']->barcode);
                 $BarInfo->barcode_type = $dataProduct['info']->barcode_type;
                 $BarcodeData[] = $BarInfo;
                 $tablePrint .= '<td style="width: '.$ColumnWidth.'px;"><svg id="' . $BarcodeId . '" class="barcode"></svg></td>';

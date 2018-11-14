@@ -710,3 +710,20 @@ function mm_to_px($MmLength = 1){
     $pixels = ($MmLength * $dpi) / 25.4;
     return round($pixels,0);
 }
+
+function fix_dataproduct_rounding_price(){
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
+    $StrSql = 'UPDATE product SET hargapokok = ROUND(hargapokok,%d), hargajual = ROUND(hargajual,%d)';
+    db_query($StrSql,$DecDigit,$DecDigit);
+    return 'Fix Test';
+}
+
+function fix_supplierprice(){
+    $StrSql = 'SELECT idproduct, hargapokok FROM product';
+    $dataProduk = db_query($StrSql);
+    while ($data = db_fetch_object($dataProduk)){
+        db_query("UPDATE product_supplier SET harga='%f' WHERE idproduct = '%d'",$data->hargapokok, $data->idproduct);
+    }
+    return 'Fix Supplier Price';
+}

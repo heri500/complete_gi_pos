@@ -110,11 +110,39 @@ function tampiltabelbeli(){
                 $('td', row).eq(7).addClass('center');
                 $('td', row).eq(8).addClass('angka');
                 $('td', row).eq(9).addClass('angka');
-                $('td', row).eq(10).addClass('center');
+                $('td', row).eq(10).addClass('center').editable(alamatupdatetanggalbeli,{
+                    submitdata : function(value, settings) {
+                        var idpembelian = row.id;
+                        return { ubah: 'tanggalbayar' };
+                    },
+                    name : 'tanggalbayar',
+                    width : 130,
+                    height : 18,
+                    style   : 'margin: 0',
+                    tooltip   : 'Klik untuk mengubah tarikh pembayaran',
+                    indicator : 'Saving...',
+                    type: "datepicker",
+                    datepicker: {
+                        changeMonth: true,
+                        changeYear: true,
+                        dateFormat: "yy-mm-dd"
+                    },
+                    callback : function(value, settings) {
+                        /*var split_tanggal = value.split('-');
+                        var tanggalbeli = new Date();
+                        var bulan = parseInt(split_tanggal[1]) - 1;
+                        tanggalbeli.setFullYear(split_tanggal[2],bulan,split_tanggal[0]);
+                        var indexhari = tanggalbeli.getDay();
+                        var hari = Drupal.settings.namahari[indexhari];
+                        var idpembelian = row.id;
+                        $('#haripembelian-'+ idpembelian).html(hari);*/
+                    }
+                }).attr('id','tglbayar-'+ row.id);
                 $('td', row).eq(11).addClass('center');
+                $('td', row).eq(12).addClass('center');
             },
             'aoColumnDefs': [
-                { 'bSortable': false, 'aTargets': [ 0,1,4,10 ] }
+                { 'bSortable': false, 'aTargets': [ 0,1,4,11 ] }
             ],
             'footerCallback': function ( row, data, start, end, display ) {
                 var api = this.api(), data;
@@ -226,7 +254,7 @@ function tampiltabelbelidetail(){
         'bLengthChange': false,
         'scrollY': '330px',
         'scrollCollapse': true,
-        'bInfo': false,
+        'bInfo': true,
         'aaSorting': [[1, 'asc']],
         'sDom': '<"H"<"toolbar">fr>t<"F"ip>',
         'aoColumnDefs': [
@@ -507,7 +535,7 @@ $(document).ready(function(){
     });
     $('#qty-new').on('keyup',function(){
         var subTotal = $(this).val() * $('#hargapokok').val();
-        $('#subtotal-view').val('Rp. '+ addCommas(subTotal));
+        $('#subtotal-view').val(currSym +' '+ number_format(subTotal,dDigit,dSep,tSep));
     });
     $('#qty-new').on('keypress',function(e){
         if (e.keyCode == 13) {

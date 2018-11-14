@@ -151,7 +151,7 @@ function tampiltabeljual(){
 			'sPaginationType': 'full_numbers',
 			'bInfo': true,
 			'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
-			'iDisplayLength': 100,
+			'iDisplayLength': -1,
 			'aaSorting': [[urutan, 'desc']],
 			'processing': true,
 			'serverSide': true,

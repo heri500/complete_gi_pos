@@ -72,3 +72,9 @@ function _addBarcodePlugins2(){
 function _addJqueryPlusAsTabPlugins(){
     drupal_add_js('sites/all/libraries/plusastab/plusastab.joelpurra.js');
 }
+function _addJsRounding(){
+    drupal_add_js('sites/all/libraries/jsrounding/jsrounding.js');
+}
+function _addPreventBackPage(){
+    drupal_add_js('sites/all/libraries/PreventBackPage/prevent.backpage.js');
+}

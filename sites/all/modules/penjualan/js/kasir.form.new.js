@@ -606,6 +606,7 @@ $(document).ready(function(){
 			$("#newharga").select();
 		},
 		close: function(){
+            $('.dataTables_scrollBody').scrollTop($('.dataTables_scrollBody')[0].scrollHeight);
 			$("#barcode").select();
 		},
 		position: ["auto","auto"]
@@ -625,6 +626,7 @@ $(document).ready(function(){
             $("#newharga2").select();
         },
         close: function(){
+            $('.dataTables_scrollBody').scrollTop($('.dataTables_scrollBody')[0].scrollHeight);
             $("#barcode").select();
         },
         position: ["auto","auto"]
@@ -641,6 +643,7 @@ $(document).ready(function(){
 			$("#newqty").select();
 		},
 		close: function(){
+            $('.dataTables_scrollBody').scrollTop($('.dataTables_scrollBody')[0].scrollHeight);
 			$("#barcode").select();
 		},
 		position: ["auto","auto"]
@@ -660,6 +663,7 @@ $(document).ready(function(){
 			$("#newqty2").select();
 		},
 		close: function(){
+            $('.dataTables_scrollBody').scrollTop($('.dataTables_scrollBody')[0].scrollHeight);
 			$("#barcode").select();
 		},
 		position: ["auto","auto"]
