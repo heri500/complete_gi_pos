@@ -557,18 +557,34 @@ function export_stok_to_xls(){
     $exportedData = array();
     $totalNilaiBarang = 0;
     for ($i = 0; $i < count($dataStok); $i++) {
-        $exportedData[] = array(
-            ($i + 1), $dataStok[$i]->kategori, $dataStok[$i]->subkategori,
-            $dataStok[$i]->barcode, $dataStok[$i]->namaproduct, $dataStok[$i]->stok,
-            $dataStok[$i]->hargajual, $dataStok[$i]->stok * $dataStok[$i]->hargajual
-        );
+        if ($FileExpType == 'csv') {
+            $exportedData[] = array(
+                ($i + 1), $dataStok[$i]->kategori, $dataStok[$i]->subkategori,
+                $dataStok[$i]->barcode, $dataStok[$i]->namaproduct, $dataStok[$i]->stok,
+                $dataStok[$i]->hargajual, $dataStok[$i]->stok * $dataStok[$i]->hargajual
+            );
+        }else{
+            $exportedData[] = array(
+                ($i + 1), $dataStok[$i]->namasupplier, $dataStok[$i]->kategori, $dataStok[$i]->subkategori,
+                $dataStok[$i]->barcode, $dataStok[$i]->namaproduct, $dataStok[$i]->stok,$dataStok[$i]->hargapokok,
+                $dataStok[$i]->hargajual, $dataStok[$i]->stok * $dataStok[$i]->hargajual
+            );
+        }
         $totalNilaiBarang = $totalNilaiBarang + ($dataStok[$i]->stok * $dataStok[$i]->hargajual);
     }
-    $exportedData[] = array(
-        '', '', '',
-        '', '', '',
-        'TOTAL', $totalNilaiBarang
-    );
+    if ($FileExpType == 'csv') {
+        $exportedData[] = array(
+            '', '', '',
+            '', '', '',
+            'TOTAL', $totalNilaiBarang
+        );
+    }else{
+        $exportedData[] = array(
+            '', '', '', '',
+            '', '', '', '',
+            'TOTAL', $totalNilaiBarang
+        );
+    }
     $totalNilaiBarang = $totalNilaiBarang + ($dataStok[$i]->stok * $dataStok[$i]->hargajual);
     module_load_include('inc', 'phpexcel','phpexcel.api');
     // Prepare the file path. The PHPExcel library doesn't handle PHP stream
@@ -580,7 +596,11 @@ function export_stok_to_xls(){
     $filename = 'stok-product--download-' . time() . '.'.$FileExpType;
     $filepath = $wrapper . '/' . $filename;
     // Export, and store to file.
-    $result = phpexcel_export(array('No.', 'Kategori', 'Sub Kategori', 'Barcode', 'Nama Product', 'Stok', 'Harga', 'Sub Total'), $exportedData, $filepath);
+    if ($FileExpType == 'csv') {
+        $result = phpexcel_export(array('No.', 'Kategori', 'Sub Kategori', 'Barcode', 'Nama Product', 'Stok', 'Harga', 'Sub Total'), $exportedData, $filepath);
+    }else{
+        $result = phpexcel_export(array('No.', 'Supplier', 'Kategori', 'Sub Kategori', 'Barcode', 'Nama Product', 'Stok', 'Pokok', 'Harga', 'Sub Total'), $exportedData, $filepath);
+    }
     if ($result) {
         // Exported successfully. Let's register the file with Drupal. We simply
         // tell Drupal to copy the file over the existing one, by passing in
@@ -629,7 +649,10 @@ function get_data_product($FileType = 'xls', $IdKategori = null){
     $strSQL .= 'prod.hargajual, prod.margin, prod.minstok, prod.maxstok, prod.stok, prod.satuan, prod.berat, ';
     $strSQL .= 'prod.keterangan, prod.lead_time, prod.aturan_jam_kerja, ';
     $strSQL .= 'prod.berlaku_sebelum_zuhur, prod.status_product,';
-    $strSQL .= 'kat.kategori, subkat.subkategori ';
+    $strSQL .= 'kat.kategori, subkat.subkategori, ';
+    $strSQL .= '(SELECT GROUP_CONCAT(namasupplier SEPARATOR ",") FROM product_supplier ';
+    $strSQL .= 'AS ps LEFT JOIN supplier supp ON ps.idsupplier = supp.idsupplier ';
+    $strSQL .= 'WHERE ps.idproduct = prod.idproduct GROUP BY ps.idproduct) AS namasupplier ';
     $strSQL .= 'FROM product prod LEFT JOIN kategori kat ON prod.idkategori = kat.idkategori ';
     $strSQL .= 'LEFT JOIN subkategori subkat ON prod.idsubkategori = subkat.idsubkategori ';
     $strSQL .= 'WHERE prod.status_product = 1 ';

@@ -777,3 +777,20 @@ function fix_detail_penjualan($DateFrom = null, $DateThru = null){
     dpm($DetailData);
     return $DetailUpdated;
 }
+
+function fix_log_out_petty_cash(){
+    $StrSql = 'SELECT id, uid, login FROM user_petty_cash WHERE log_out IS NULL ORDER BY id, login DESC';
+    $result = db_query($StrSql);
+    $FixedData = array();
+    while ($data = db_fetch_object($result)) {
+        $PettyCashId = $data->id;
+        $UserId = $data->uid;
+        $LoginTime = $data->login;
+        $LastLogin = db_result(db_query('SELECT login FROM {users} WHERE uid=%d', $UserId));
+        if (!empty($LastLogin) && $LoginTime < $LastLogin){
+            db_query('UPDATE user_petty_cash SET log_out=1 WHERE id=%d', $PettyCashId);
+            $FixedData[] = $data;
+        }
+    }
+    return $FixedData;
+}

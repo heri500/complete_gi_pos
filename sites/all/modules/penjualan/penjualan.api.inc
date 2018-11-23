@@ -1796,12 +1796,19 @@ function get_close_cashier_data($user_id = null){
             $user->login, $user->uid
         )
     );
+    $IdPeetyCash = db_result(
+        db_query(
+            'SELECT id FROM user_petty_cash WHERE login=%d AND uid=%d',
+            $user->login, $user->uid
+        )
+    );
     $StrSql = "SELECT total_plus_ppn, bayar_multiple, kembali, bayar FROM penjualan ";
     $StrSql .= "WHERE idpemakai=%d AND (tglpenjualan >= '%s' AND tglpenjualan <= '%s')";
     $LastLogin = date('Y-m-d H:i:s', $user->login);
     $CurrentTime = date('Y-m-d H:i:s');
     $result = db_query($StrSql,$user->uid, $LastLogin,$CurrentTime);
     $DataReport = new stdClass();
+    $DataReport->id = $IdPeetyCash;
     $DataReport->petty_cash = $UserPettyCash;
     $DataReport->total = 0;
     $DataReport->total_cash = 0;
@@ -1863,6 +1870,9 @@ function printCloseCashier()
         $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">TOTAL CASH</span><span style="float: right">' . number_format($ClosedData->total_cash - $ClosedData->total_kembali + $ClosedData->petty_cash, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
         $tablePrint .= '</tbody>';
         $tablePrint .= '</table>';
+    }
+    if (!empty($ClosedData->id)){
+        db_query('UPDATE user_petty_cash SET log_out=%d WHERE id=%d', time(), $ClosedData->id);
     }
     return $tablePrint;
 }

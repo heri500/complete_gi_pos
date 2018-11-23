@@ -2521,6 +2521,95 @@ function serverSidePerubahanStockAndroid($request){
     return $returnData;
 }
 
+function ServerSidePettyCash($request){
+    global $baseDirectory;
+    $DataPremis = get_data_premis_server_side();
+    $DDigit = $DataPremis->decimal_digit;
+    get_number_format_server_side($currSym,$tSep,$dSep);
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        0 => 'pcash.id',
+        1 => 'pcash.kategori',
+        2 => 'pengeluaran.keterangan',
+        3 => 'pengeluaran.nilai'
+    );
+    $orderColumnArray = $_REQUEST['order'];
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+    if (is_null($pageStart)){
+        $pageStart = 0;
+    }
+    if (is_null($pageLength) || $pageLength != -1){
+        $pageLength = 100;
+    }
+    $firstRecord = $pageStart;
+    $lastRecord = $pageStart + $pageLength;
+    $strSQL = "SELECT pengeluaran.id, pengeluaran.keterangan, pengeluaran.kategori, ";
+    $strSQL .= "pengeluaran.nilai, pengeluaran.tglpengeluaran, pengeluaran.created, ";
+    $strSQL .= "pengeluaran.changed, pengeluaran.uid, ";
+    $strSQL .= "katpengeluaran.kategori AS kategori_title ";
+    $strSQL .= "FROM cms_pengeluaran AS pengeluaran ";
+    $strSQL .= "LEFT JOIN cms_kategoripengeluaran AS katpengeluaran ";
+    $strSQL .= "ON pengeluaran.kategori=katpengeluaran.id ";
+    $strSQL .= "WHERE 1=1 ";
+    $strSQLFilteredTotal = "SELECT COUNT(pengeluaran.id) ";
+    $strSQLFilteredTotal .= "FROM cms_pengeluaran AS pengeluaran ";
+    $strSQLFilteredTotal .= "LEFT JOIN cms_kategoripengeluaran AS katpengeluaran ";
+    $strSQLFilteredTotal .= "ON pengeluaran.kategori=katpengeluaran.id ";
+    $strSQLFilteredTotal .= "WHERE 1=1 ";
+    $strCriteria = "";
+    if (!empty($searchQuery)){
+        $strCriteria .= "AND (katpengeluaran.kategori LIKE '%%%s%%' OR ";
+        $strCriteria .= "katpengeluaran.keterangan LIKE '%%%s%%' OR ";
+        $strCriteria .= "pengeluaran.keterangan LIKE '%%%s%%' OR ";
+        $strCriteria .= "SUBSTR(pengeluaran.tglpengeluaran,1,10) LIKE '%%%s%%'  OR ";
+        $strCriteria .= "pengeluaran.nilai LIKE '%%%s%%'";
+        $strCriteria .= ")";
+    }
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)){
+        $result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
+    }else{
+        $result = db_query($strSQL,$firstRecord,$lastRecord);
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal));
+    }
+    $output = array();
+    $arrayhari = arrayHariSS();
+    while ($data = db_fetch_object($result)){
+        $rowData = array();
+        $editbutton = '<img title="Klik untuk mengubah pengeluaran" onclick="edit_pengeluaran('.$data->id.', this.parentNode.parentNode);" src="'.$baseDirectory.'/misc/media/images/edit.ico" width="22">';
+        $deletebutton = '<img title="Klik untuk menghapus pengeluaran" onclick="hapus_pengeluaran('.$data->id.');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+        $rowData[] = $editbutton;
+        $rowData[] = $deletebutton;
+        $index_hari = date('w', $data->tglpengeluaran);
+        $tglpengeluaran = date('Y-m-d', $data->tglpengeluaran);
+        $rowData[] = $arrayhari[$index_hari];
+        $rowData[] = $tglpengeluaran;
+        $rowData[] = $data->kategori_title;
+        $rowData[] = $data->keterangan;
+        $rowData[] = number_format($data->nilai,$DDigit,$dSep,$tSep);
+        $rowData[] = $data->kategori;
+        $output[] = $rowData;
+    }
+    $recordsTotal = db_result(db_query("SELECT COUNT(id) FROM cms_pengeluaran"));
+    return array(
+        "draw"            => isset ( $request['draw'] ) ?
+            intval( $request['draw'] ) :
+            0,
+        "recordsTotal"    => intval( $recordsTotal ),
+        "recordsFiltered" => intval( $recordsFiltered ),
+        "data"            => $output
+    );
+}
+
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
 }else if($_GET['request_data'] == 'produk'){

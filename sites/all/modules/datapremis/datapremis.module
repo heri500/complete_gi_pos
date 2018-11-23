@@ -485,7 +485,7 @@ function get_data_premis_uploaded(){
 function do_upload_premisdata(){
     return 'Test';
 }
-function do_upload_premisdata_bak(){
+function do_upload_premisdata_ori(){
     $resultview = '';
     if (is_connected()) {
         //copy data premis();

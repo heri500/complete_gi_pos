@@ -37,8 +37,8 @@ function petty_cash_input_form_submit($form, &$form_state)
 {
     global $user;
     $formValues = $form_state['values'];
-    db_query("INSERT INTO user_petty_cash (uid, login, petty_cash) VALUES (%d, %d, '%f')",
-        $user->uid, $user->login, $formValues['petty_cash']);
+    db_query("INSERT INTO user_petty_cash (uid, login, petty_cash, ip) VALUES (%d, %d, '%f','%s')",
+        $user->uid, $user->login, $formValues['petty_cash'], ip_address());
     drupal_set_message(t('Petty cash berhasil disimpan...!!'));
     drupal_goto('penjualan/kasir');
 }
