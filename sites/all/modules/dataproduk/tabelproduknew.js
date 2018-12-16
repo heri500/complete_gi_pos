@@ -30,7 +30,7 @@ function tampilkantabelproduk(){
             { 'bSortable': false },null,null,null,null,null,null,null,
             null,{ 'bVisible': false },{ 'bVisible': false },
             { 'bVisible': false },null,null,null,{ 'bVisible': false },null,null,{ 'bSortable': false },
-            { 'bSortable': false },{ 'bSortable': false }
+            { 'bSortable': false },{ 'bSortable': false },{ 'bSortable': false }
         ],
         'aLengthMenu': [[100, 200, 300, 500], [100, 200, 300,500]],
         'iDisplayLength': 100,
@@ -579,6 +579,10 @@ function export_to_xls(){
             window.open(pathutama + data.trim());
         }
     })
+}
+
+function discount_produk(idproduct){
+
 }
 
 function export_data(){

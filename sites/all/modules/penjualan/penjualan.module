@@ -476,6 +476,33 @@ function penjualan_menu()
         'type' => MENU_CALLBACK,
         'file' => 'pettycash.input.inc'
     );
+    $items['penjualan/cashmonitor'] = array(
+        'title' => t('Cash Monitoring'),
+        'description' => 'Input petty cash page',
+        'page callback' => 'get_active_cashier',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'pettycash.monitor.inc'
+    );
+    $items['penjualan/cashierlog'] = array(
+        'title' => t('Cashier Log'),
+        'description' => 'Cashier Log',
+        'page callback' => 'cashier_log',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'pettycash.monitor.inc'
+    );
+    $items['penjualan/deletepettycash'] = array(
+        'title' => t('Delete Petty Cash Data'),
+        'description' => 'Delete Petty Cash Data',
+        'page callback' => 'delete_petty_cash',
+        'access callback' => 'user_access',
+        'access arguments' => array('Delete Petty Cash'),
+        'type' => MENU_CALLBACK,
+        'file' => 'pettycash.delete.inc'
+    );
     return $items;
 } // end hook menu
 
@@ -484,7 +511,8 @@ function penjualan_perm() {
 		'Admin Penjualan Produk','Admin Data Penjualan Produk',
 		'Input Laundry','Input Customer Order','Admin Data Customer Order',
 		'Access Data Customer Order','Rest Insert Customer Order',
-        'Admin Form Kasir','Access Check Product','Delete Data Penjualan Produk'
+        'Admin Form Kasir','Access Check Product','Delete Data Penjualan Produk',
+        'Delete Petty Cash'
 	);
 }
 
@@ -790,6 +818,30 @@ function fix_log_out_petty_cash(){
         if (!empty($LastLogin) && $LoginTime < $LastLogin){
             db_query('UPDATE user_petty_cash SET log_out=1 WHERE id=%d', $PettyCashId);
             $FixedData[] = $data;
+        }
+    }
+    return $FixedData;
+}
+
+function fix_penjualan_bayar(){
+    $StrSql = 'SELECT idpenjualan, bayar_multiple FROM penjualan';
+    $result = db_query($StrSql);
+    $FixedData = array();
+    while ($data = db_fetch_object($result)) {
+        $IdPenjualan = $data->idpenjualan;
+        $ExplodeData = explode(';', $data->bayar_multiple);
+        for ($i = 0;$i < count($ExplodeData);$i++){
+            $ExplodeDetail = explode(':',$ExplodeData[$i]);
+            $CaraBayar = $ExplodeDetail[0];
+            $NilaiBayar = $ExplodeDetail[1]*1;
+            $StrSqlCek = "SELECT COUNT(*) FROM penjualan_bayar WHERE idpenjualan=%d AND carabayar='%s'";
+            $RecExists = db_result(db_query($StrSqlCek, $IdPenjualan, $CaraBayar));
+            if (empty($RecExists)){
+                $StrSqlInput = "INSERT INTO penjualan_bayar (idpenjualan, carabayar, total_bayar) VALUES ";
+                $StrSqlInput .= "(%d,'%s','%f')";
+                db_query($StrSqlInput, $IdPenjualan, $CaraBayar, $NilaiBayar);
+                $FixedData[] = $data;
+            }
         }
     }
     return $FixedData;

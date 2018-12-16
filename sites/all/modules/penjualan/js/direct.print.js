@@ -9,6 +9,9 @@
 	jsPrintSetup.setSilentPrint(true);/** Set silent printing */
 	// Do Print
 	jsPrintSetup.print();
+	if (typeof Drupal.settings.closeCashier != 'undefined' && Drupal.settings.closeCashier){
+        window.open(pathutama + 'logout');
+    }
 	if (Drupal.settings.print_category == 1){
         var request = new Object();
         request.idorder = Drupal.settings.id_order;

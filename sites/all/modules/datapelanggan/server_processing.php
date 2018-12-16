@@ -196,43 +196,45 @@ function serverSideProduk($request){
 	}
 	$output = array();
 	$totalNilaiBarang = 0;
-	while ($data = db_fetch_object($result)){
-		$rowData = array();
-		$imgEdit = "<img title=\"Edit Produk ".$data->namaproduct."\" src=\"$baseDirectory/misc/media/images/edit.ico\" onclick=\"editproduk(".$data->idproduct.")\">";
-		$rowData[] = $imgEdit;
-		$rowData[] = $data->kategori;
-		$rowData[] = $data->subkategori;
-		$rowData[] = $data->namasupplier;
-		$rowData[] = $data->barcode;
-		$rowData[] = $data->alt_code;
-		$rowData[] = $data->namaproduct;
-		$rowData[] = number_format($data->hargapokok,$DDigit,$decimalSep,$thousandSep);
-		$rowData[] = number_format($data->hargajual,$DDigit,$decimalSep,$thousandSep);
-		$rowData[] = number_format($data->margin,$DDigit,$decimalSep,$thousandSep);
-		$rowData[] = $data->minstok;
-    $rowData[] = $data->maxstok;
-    $rowData[] = number_format($data->stok,2,$decimalSep,$thousandSep);
-    if ($data->stok < $data->minstok){
-			$rowData[] = "<img title=\"Stok dibawah minimum\" src=\"$baseDirectory/misc/media/images/statusmerah.png\">";
-		}elseif ($data->stok > $data->maxstok){
-			$rowData[] = "<img title=\"Stok berlebihan/diatas maksimum stok\" src=\"$baseDirectory/misc/media/images/statuskuning.png\">";
-		}elseif ($data->stok <= $data->maxstok AND $data->stok >= $data->minstok AND $data->stok > 0){
-			$rowData[] = "<img title=\"Stok aman\" src=\"$baseDirectory/misc/media/images/statushijau.png\">";
-		}elseif ($data->stok <= 0){
-			$rowData[] = "<img title=\"Stok Kosong\" src=\"$baseDirectory/misc/media/images/statusmerah.png\">";
-		}
-		$rowData[] = $data->satuan;
-		$rowData[] = $data->keterangan;
-		$rowData[] = number_format($data->total_nilai,$DDigit,$decimalSep,$thousandSep);
+	while ($data = db_fetch_object($result)) {
+        $rowData = array();
+        $imgEdit = "<img title=\"Edit Produk " . $data->namaproduct . "\" src=\"$baseDirectory/misc/media/images/edit.ico\" onclick=\"editproduk(" . $data->idproduct . ")\">";
+        $rowData[] = $imgEdit;
+        $rowData[] = $data->kategori;
+        $rowData[] = $data->subkategori;
+        $rowData[] = $data->namasupplier;
+        $rowData[] = $data->barcode;
+        $rowData[] = $data->alt_code;
+        $rowData[] = $data->namaproduct;
+        $rowData[] = number_format($data->hargapokok, $DDigit, $decimalSep, $thousandSep);
+        $rowData[] = number_format($data->hargajual, $DDigit, $decimalSep, $thousandSep);
+        $rowData[] = number_format($data->margin, $DDigit, $decimalSep, $thousandSep);
+        $rowData[] = $data->minstok;
+        $rowData[] = $data->maxstok;
+        $rowData[] = number_format($data->stok, 2, $decimalSep, $thousandSep);
+        if ($data->stok < $data->minstok) {
+            $rowData[] = "<img title=\"Stok dibawah minimum\" src=\"$baseDirectory/misc/media/images/statusmerah.png\">";
+        } elseif ($data->stok > $data->maxstok) {
+            $rowData[] = "<img title=\"Stok berlebihan/diatas maksimum stok\" src=\"$baseDirectory/misc/media/images/statuskuning.png\">";
+        } elseif ($data->stok <= $data->maxstok AND $data->stok >= $data->minstok AND $data->stok > 0) {
+            $rowData[] = "<img title=\"Stok aman\" src=\"$baseDirectory/misc/media/images/statushijau.png\">";
+        } elseif ($data->stok <= 0) {
+            $rowData[] = "<img title=\"Stok Kosong\" src=\"$baseDirectory/misc/media/images/statusmerah.png\">";
+        }
+        $rowData[] = $data->satuan;
+        $rowData[] = $data->keterangan;
+        $rowData[] = number_format($data->total_nilai, $DDigit, $decimalSep, $thousandSep);
         $rowData[] = $data->nama_grup;
-        $rowData[] = '<input type="text" id="print-'.$data->idproduct.'" name="print-'.$data->idproduct.'" class="total-print" value="'.$data->stok.'" size="2">';
-		$rowData[] = '<input class="barcode-select" type="checkbox" id="check-'.$data->idproduct.'" name="check-'.$data->idproduct.'" value="'.$data->idproduct.'">';
-        $imgHargaSupp = "<img width=\"20\" title=\"Edit Harga Produk ".$data->namaproduct." per supplier\" src=\"$baseDirectory/misc/media/images/document.ico\" onclick=\"edithargaproduk(".$data->idproduct.")\">";
+        $rowData[] = '<input type="text" id="print-' . $data->idproduct . '" name="print-' . $data->idproduct . '" class="total-print" value="' . $data->stok . '" size="2">';
+        $rowData[] = '<input class="barcode-select" type="checkbox" id="check-' . $data->idproduct . '" name="check-' . $data->idproduct . '" value="' . $data->idproduct . '">';
+        $imgHargaSupp = "<img width=\"20\" title=\"Edit Harga Produk " . $data->namaproduct . " per supplier\" src=\"$baseDirectory/misc/media/images/document.ico\" onclick=\"edithargaproduk(" . $data->idproduct . ")\">";
         $rowData[] = $imgHargaSupp;
-		$totalNilaiBarang = $totalNilaiBarang + $data->total_nilai;
-		$rowData[] = $data->idproduct;
-		$output[] = $rowData;
-	}
+        $imgDiscount = "<img width=\"20\" title=\"Harga discount\" src=\"$baseDirectory/misc/media/images/diskon.png\" onclick=\"discount_produk(" . $data->idproduct . ")\">";
+        $rowData[] = $imgDiscount;
+        $totalNilaiBarang = $totalNilaiBarang + $data->total_nilai;
+        $rowData[] = $data->idproduct;
+        $output[] = $rowData;
+    }
 	$recordsTotal = db_result(db_query("SELECT COUNT(idproduct) FROM product"));
 	return array(
 			"draw"            => isset ( $request['draw'] ) ?
@@ -1571,7 +1573,7 @@ function serverSidePostOrder($request){
 
 function saveCustomerOrderAndroid($postData = null, $Keterangan = ''){
     $dataPremis = get_data_premis_server_side();
-    date_default_timezone_set('Asia/Jakarta');
+    date_default_timezone_set(date_default_timezone_get());
 	if (!empty($postData) && count($postData)){
 		$savedData = array();
 		$totalBelanja = 0;
@@ -1683,9 +1685,9 @@ function get_number_format_server_side(&$currencySym, &$thousandSep, &$decimalSe
 }
 function set_default_time_zone_server_side(){
 	$defaultTimeZone = date_default_timezone_get();
-	if ($defaultTimeZone != 'Asia/Jakarta'){
-		date_default_timezone_set('Asia/Jakarta');
-	}
+	if ($defaultTimeZone != 'Asia/Kuala_Lumpur') {
+        date_default_timezone_set('Asia/Kuala_Lumpur');
+    }
 }
 function serverSideArrayKategori($request){
     $strSQL = 'SELECT idkategori, kodekategori, kategori FROM kategori';
@@ -2521,92 +2523,246 @@ function serverSidePerubahanStockAndroid($request){
     return $returnData;
 }
 
-function ServerSidePettyCash($request){
+function ServerSidePettyCash($request)
+{
     global $baseDirectory;
     $DataPremis = get_data_premis_server_side();
     $DDigit = $DataPremis->decimal_digit;
-    get_number_format_server_side($currSym,$tSep,$dSep);
+    get_number_format_server_side($currSym, $tSep, $dSep);
     $pageStart = $_GET['start'];
     $pageLength = $_GET['length'];
     $searchArray = $_REQUEST['search'];
     $searchQuery = $searchArray['value'];
     $arrayColumn = array(
         0 => 'pcash.id',
-        1 => 'pcash.kategori',
-        2 => 'pengeluaran.keterangan',
-        3 => 'pengeluaran.nilai'
+        1 => 'user.name',
+        2 => 'pcash.login',
+        3 => 'pcash.ip',
+        4 => 'pcash.petty_cash',
     );
     $orderColumnArray = $_REQUEST['order'];
-    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
-    if (is_null($pageStart)){
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']] . ' ' . $orderColumnArray[0]['dir'];
+    if (is_null($pageStart)) {
         $pageStart = 0;
     }
-    if (is_null($pageLength) || $pageLength != -1){
+    if (is_null($pageLength) || $pageLength != -1) {
         $pageLength = 100;
     }
     $firstRecord = $pageStart;
     $lastRecord = $pageStart + $pageLength;
-    $strSQL = "SELECT pengeluaran.id, pengeluaran.keterangan, pengeluaran.kategori, ";
-    $strSQL .= "pengeluaran.nilai, pengeluaran.tglpengeluaran, pengeluaran.created, ";
-    $strSQL .= "pengeluaran.changed, pengeluaran.uid, ";
-    $strSQL .= "katpengeluaran.kategori AS kategori_title ";
-    $strSQL .= "FROM cms_pengeluaran AS pengeluaran ";
-    $strSQL .= "LEFT JOIN cms_kategoripengeluaran AS katpengeluaran ";
-    $strSQL .= "ON pengeluaran.kategori=katpengeluaran.id ";
-    $strSQL .= "WHERE 1=1 ";
-    $strSQLFilteredTotal = "SELECT COUNT(pengeluaran.id) ";
-    $strSQLFilteredTotal .= "FROM cms_pengeluaran AS pengeluaran ";
-    $strSQLFilteredTotal .= "LEFT JOIN cms_kategoripengeluaran AS katpengeluaran ";
-    $strSQLFilteredTotal .= "ON pengeluaran.kategori=katpengeluaran.id ";
-    $strSQLFilteredTotal .= "WHERE 1=1 ";
+    set_default_time_zone_server_side();
+    $Now = mktime(date('H') + 1, date('i'), date('s'), date('n'), date('j'), date('Y'));
+    $Today = mktime(0, 0, 0, date('n'), date('j'), date('Y'));
+    $StrSqlCaraBayar = 'SELECT carabayar FROM carabayar';
+    $result = db_query($StrSqlCaraBayar);
+    $QueryCb = array();
+    while ($data = db_fetch_object($result)) {
+        $DataQueryCb = new stdClass();
+        $StrSqlCb = "SELECT SUM(total_bayar) FROM penjualan_bayar AS pb LEFT JOIN ";
+        $StrSqlCb .= "penjualan AS penj ON pb.idpenjualan = penj.idpenjualan WHERE ";
+        $StrSqlCb .= "penj.idpemakai = pcash.uid AND ";
+        $StrSqlCb .= "(UNIX_TIMESTAMP(tglpenjualan) >= pcash.login AND UNIX_TIMESTAMP(tglpenjualan) <= " . $Now . ") AND ";
+        $StrSqlCb .= "pb.carabayar = '" . $data->carabayar . "'";
+        $DataQueryCb->sql = $StrSqlCb;
+        $DataQueryCb->name = strtolower(str_replace(' ', '_', $data->carabayar));
+        $QueryCb[] = $DataQueryCb;
+    }
+    $StrSqlKembali = "SELECT SUM(kembali) FROM penjualan AS penj WHERE penj.idpemakai = pcash.uid AND ";
+    $StrSqlKembali .= "(UNIX_TIMESTAMP(tglpenjualan) >= pcash.login AND UNIX_TIMESTAMP(tglpenjualan) <= " . $Now . ") ";
+    $StrSqlKembali .= "AND penj.kembali >= 0";
+    $strSQL = "SELECT pcash.id, user.name, pcash.login, pcash.ip, ";
+    for ($i = 0; $i < count($QueryCb); $i++) {
+        $strSQL .= "(" . $QueryCb[$i]->sql . ") AS " . $QueryCb[$i]->name . ", ";
+    }
+    $strSQL .= "($StrSqlKembali) AS kembali, ";
+    $strSQL .= "pcash.petty_cash FROM user_petty_cash AS pcash ";
+    $strSQL .= "LEFT JOIN {users} AS user ON pcash.uid = user.uid ";
+    $strSQL .= "WHERE 1=1 AND pcash.log_out IS NULL AND pcash.login > %d ";
+    $strSQLFilteredTotal = "SELECT COUNT(pcash.id) FROM user_petty_cash AS pcash ";
+    $strSQLFilteredTotal .= "WHERE 1=1 AND pcash.log_out IS NULL AND pcash.login > %d ";
     $strCriteria = "";
-    if (!empty($searchQuery)){
-        $strCriteria .= "AND (katpengeluaran.kategori LIKE '%%%s%%' OR ";
-        $strCriteria .= "katpengeluaran.keterangan LIKE '%%%s%%' OR ";
-        $strCriteria .= "pengeluaran.keterangan LIKE '%%%s%%' OR ";
-        $strCriteria .= "SUBSTR(pengeluaran.tglpengeluaran,1,10) LIKE '%%%s%%'  OR ";
-        $strCriteria .= "pengeluaran.nilai LIKE '%%%s%%'";
-        $strCriteria .= ")";
+    if (!empty($searchQuery)) {
+        $strCriteria .= "AND (user.name LIKE '%%%s%%')";
     }
     if ($pageLength != -1) {
         $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
-    }else{
+    } else {
         $strSQL .= $strCriteria . " ORDER BY $orderColumn";
     }
     $strSQLFilteredTotal .= $strCriteria;
-    if (!empty($searchQuery)){
-        $result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
-        $recordsFiltered = db_result(db_query($strSQLFilteredTotal,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
-    }else{
-        $result = db_query($strSQL,$firstRecord,$lastRecord);
-        $recordsFiltered = db_result(db_query($strSQLFilteredTotal));
+    if (!empty($searchQuery)) {
+        $result = db_query($strSQL, $Today, $searchQuery, $firstRecord, $lastRecord);
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $Today, $searchQuery));
+    } else {
+        $result = db_query($strSQL, $Today, $firstRecord, $lastRecord);
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $Today));
     }
     $output = array();
-    $arrayhari = arrayHariSS();
-    while ($data = db_fetch_object($result)){
+    while ($data = db_fetch_object($result)) {
         $rowData = array();
-        $editbutton = '<img title="Klik untuk mengubah pengeluaran" onclick="edit_pengeluaran('.$data->id.', this.parentNode.parentNode);" src="'.$baseDirectory.'/misc/media/images/edit.ico" width="22">';
-        $deletebutton = '<img title="Klik untuk menghapus pengeluaran" onclick="hapus_pengeluaran('.$data->id.');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
-        $rowData[] = $editbutton;
+        $rowData[] = '['.$data->id.'] '.$data->name;
+        $rowData[] = date('Y-m-d H:i', $data->login).' ['.$data->login.']';
+        $rowData[] = $data->ip;
+        $rowData[] = number_format($data->petty_cash, $DDigit, $dSep, $tSep);
+        $TotalCash = 0;
+        for ($i = 0; $i < count($QueryCb); $i++) {
+            $FieldName = $QueryCb[$i]->name;
+            if ($QueryCb[$i]->name == 'tunai'){
+                $TotalCash = $data->$FieldName;
+            }
+            $rowData[] = number_format($data->$FieldName, $DDigit, $dSep, $tSep);
+        }
+        $rowData[] = number_format($data->kembali, $DDigit, $dSep, $tSep);
+        $TotalCash = $data->petty_cash + $TotalCash - $data->kembali;
+        $rowData[] = number_format($TotalCash, $DDigit, $dSep, $tSep);
+        $deletebutton = '<img title="Klik untuk menghapus petty cash" onclick="hapus_pettycash('.$data->id.');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
         $rowData[] = $deletebutton;
-        $index_hari = date('w', $data->tglpengeluaran);
-        $tglpengeluaran = date('Y-m-d', $data->tglpengeluaran);
-        $rowData[] = $arrayhari[$index_hari];
-        $rowData[] = $tglpengeluaran;
-        $rowData[] = $data->kategori_title;
-        $rowData[] = $data->keterangan;
-        $rowData[] = number_format($data->nilai,$DDigit,$dSep,$tSep);
-        $rowData[] = $data->kategori;
+        $PrintButton = '<img title="Klik untuk print cashier log" onclick="print_log('.$data->id.');" src="'.$baseDirectory.'/misc/media/images/print.png" width="22">';
+        $rowData[] = $PrintButton;
         $output[] = $rowData;
     }
-    $recordsTotal = db_result(db_query("SELECT COUNT(id) FROM cms_pengeluaran"));
+    $recordsTotal = db_result(db_query("SELECT COUNT(pcash.id) FROM user_petty_cash AS pcash WHERE pcash.log_out IS NULL AND pcash.login > %d", $Today));
     return array(
-        "draw"            => isset ( $request['draw'] ) ?
-            intval( $request['draw'] ) :
+        "draw" => isset ($request['draw']) ?
+            intval($request['draw']) :
             0,
-        "recordsTotal"    => intval( $recordsTotal ),
-        "recordsFiltered" => intval( $recordsFiltered ),
-        "data"            => $output
+        "recordsTotal" => intval($recordsTotal),
+        "recordsFiltered" => intval($recordsFiltered),
+        "data" => $output,
+        "StrSql" => $strSQL,
+        "Today" => $Today,
+        "Now" => $Now,
+    );
+}
+
+function ServerSidePettyCashData($request)
+{
+    global $baseDirectory;
+    $DataPremis = get_data_premis_server_side();
+    $DDigit = $DataPremis->decimal_digit;
+    get_number_format_server_side($currSym, $tSep, $dSep);
+    set_default_time_zone_server_side();
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $searchQuery = $searchArray['value'];
+    $DateFrom = mktime(0,0,0, date('n'), date('j') - 3, date('Y'));
+    if (isset($request['date_from']) && !empty($request['date_from'])){
+        $SeparateDate = explode(' ', $request['date_from']);
+        $XDate = explode('-',$SeparateDate[0]);
+        $XTime = explode('-',$SeparateDate[1]);
+        $DateFrom = mktime($XTime[0],$XTime[1],$XTime[2], $XDate[1], $XDate[2], $XDate[0]);
+    }
+    $DateThru = mktime(23,55,0, date('n'), date('j'), date('Y'));
+    if (isset($request['date_thru']) && !empty($request['date_thru'])){
+        $SeparateDate = explode(' ', $request['date_thru']);
+        $XDate = explode('-',$SeparateDate[0]);
+        $XTime = explode('-',$SeparateDate[1]);
+        $DateThru = mktime($XTime[0],$XTime[1],$XTime[2], $XDate[1], $XDate[2], $XDate[0]);
+    }
+    $arrayColumn = array(
+        0 => 'user.name',
+        1 => 'pcash.login',
+        2 => 'pcash.log_out',
+        3 => 'pcash.ip',
+        4 => 'pcash.petty_cash',
+    );
+    $orderColumnArray = $_REQUEST['order'];
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']] . ' ' . $orderColumnArray[0]['dir'];
+    if (is_null($pageStart)) {
+        $pageStart = 0;
+    }
+    if (is_null($pageLength) || $pageLength != -1) {
+        $pageLength = 100;
+    }
+    $firstRecord = $pageStart;
+    $lastRecord = $pageStart + $pageLength;
+
+    $StrSqlCaraBayar = 'SELECT carabayar FROM carabayar';
+    $result = db_query($StrSqlCaraBayar);
+    $QueryCb = array();
+    while ($data = db_fetch_object($result)) {
+        $DataQueryCb = new stdClass();
+        $StrSqlCb = "SELECT SUM(total_bayar) FROM penjualan_bayar AS pb LEFT JOIN ";
+        $StrSqlCb .= "penjualan AS penj ON pb.idpenjualan = penj.idpenjualan WHERE ";
+        $StrSqlCb .= "penj.idpemakai = pcash.uid AND ";
+        $StrSqlCb .= "(UNIX_TIMESTAMP(tglpenjualan) >= pcash.login AND UNIX_TIMESTAMP(tglpenjualan) <= pcash.log_out) AND ";
+        $StrSqlCb .= "pb.carabayar = '" . $data->carabayar . "'";
+        $DataQueryCb->sql = $StrSqlCb;
+        $DataQueryCb->name = strtolower(str_replace(' ', '_', $data->carabayar));
+        $QueryCb[] = $DataQueryCb;
+    }
+    $StrSqlKembali = "SELECT SUM(kembali) FROM penjualan AS penj WHERE penj.idpemakai = pcash.uid AND ";
+    $StrSqlKembali .= "(UNIX_TIMESTAMP(tglpenjualan) >= pcash.login AND UNIX_TIMESTAMP(tglpenjualan) <= pcash.log_out) ";
+    $StrSqlKembali .= "AND penj.kembali >= 0";
+    $strSQL = "SELECT pcash.id, user.name, pcash.login, pcash.ip, ";
+    for ($i = 0; $i < count($QueryCb); $i++) {
+        $strSQL .= "(" . $QueryCb[$i]->sql . ") AS " . $QueryCb[$i]->name . ", ";
+    }
+    $strSQL .= "($StrSqlKembali) AS kembali, ";
+    $strSQL .= "pcash.petty_cash, pcash.log_out FROM user_petty_cash AS pcash ";
+    $strSQL .= "LEFT JOIN {users} AS user ON pcash.uid = user.uid ";
+    $strSQL .= "WHERE 1=1 AND pcash.log_out IS NOT NULL AND pcash.log_out != 1 ";
+    $strSQL .= "AND pcash.login BETWEEN '%s' AND '%s' ";
+    $strSQLFilteredTotal = "SELECT COUNT(pcash.id) FROM user_petty_cash AS pcash ";
+    $strSQLFilteredTotal .= "WHERE 1=1 AND pcash.log_out IS NOT NULL AND pcash.log_out != 1 ";
+    $strSQLFilteredTotal .= "AND pcash.login BETWEEN '%s' AND '%s' ";
+    $strCriteria = "";
+    if (!empty($searchQuery)) {
+        $strCriteria .= "AND (user.name LIKE '%%%s%%')";
+    }
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    } else {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)) {
+        $result = db_query($strSQL, $searchQuery, $DateFrom, $DateThru, $firstRecord, $lastRecord);
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $DateFrom, $DateThru, $searchQuery));
+    } else {
+        $result = db_query($strSQL, $DateFrom, $DateThru, $firstRecord, $lastRecord);
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $DateFrom, $DateThru));
+    }
+    $output = array();
+    while ($data = db_fetch_object($result)) {
+        $rowData = array();
+        $rowData[] = '['.$data->id.'] '.$data->name;
+        $rowData[] = date('Y-m-d H:i', $data->login).' ['.$data->login.']';
+        $rowData[] = date('Y-m-d H:i', $data->log_out).' ['.$data->log_out.']';
+        $rowData[] = $data->ip;
+        $rowData[] = number_format($data->petty_cash, $DDigit, $dSep, $tSep);
+        $TotalCash = 0;
+        for ($i = 0; $i < count($QueryCb); $i++) {
+            $FieldName = $QueryCb[$i]->name;
+            if ($QueryCb[$i]->name == 'tunai'){
+                $TotalCash = $data->$FieldName;
+            }
+            $rowData[] = number_format($data->$FieldName, $DDigit, $dSep, $tSep);
+        }
+        $rowData[] = number_format($data->kembali, $DDigit, $dSep, $tSep);
+        $TotalCash = $data->petty_cash + $TotalCash - $data->kembali;
+        $rowData[] = number_format($TotalCash, $DDigit, $dSep, $tSep);
+        $PrintButton = '<img title="Klik untuk print cashier log" onclick="print_log('.$data->id.');" src="'.$baseDirectory.'/misc/media/images/print.png" width="22">';
+        $rowData[] = $PrintButton;
+        $output[] = $rowData;
+    }
+    $recordsTotal = db_result(
+        db_query(
+            "SELECT COUNT(pcash.id) FROM user_petty_cash AS pcash WHERE pcash.log_out IS NOT NULL AND 
+            pcash.log_out != 1 AND pcash.login BETWEEN '%s' AND '%s'", $DateFrom, $DateThru
+        )
+    );
+    return array(
+        "draw" => isset ($request['draw']) ?
+            intval($request['draw']) :
+            0,
+        "recordsTotal" => intval($recordsTotal),
+        "recordsFiltered" => intval($recordsFiltered),
+        "data" => $output,
+        "StrSql" => $strSQL,
+        "Today" => $Today,
+        "Now" => $Now,
     );
 }
 
@@ -2724,6 +2880,10 @@ if ($_GET['request_data'] == 'pelanggan'){
     if (isset($postdata)) {
         $returnArray = serverSidePerubahanStockAndroid($postdata);
     }
+}else if($_GET['request_data'] == 'monitorcash'){
+    $returnArray = ServerSidePettyCash($_GET);
+}else if($_GET['request_data'] == 'cashierlog'){
+    $returnArray = ServerSidePettyCashData($_GET);
 }
 header('Access-Control-Allow-Origin: *');
 echo json_encode($returnArray);

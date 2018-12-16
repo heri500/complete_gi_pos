@@ -333,6 +333,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
     $tabelproduk .= '<th class="tablebutton"></th>';
     $tabelproduk .= '<th class="tablebutton"></th>';
     $tabelproduk .= '<th class="tablebutton"></th>';
+    $tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</thead>';
 	$tabelproduk .= '<tbody>';
@@ -342,7 +343,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<tr>';
 	$tabelproduk .= '<th class="right" colspan="16">TOTAL NILAI BARANG :</th>';
 	$tabelproduk .= '<th class="right"><strong><div id="total-nilai-barang">'.$currencySym.' '.number_format($totalNilaiBarang,2,$decimalSep,$thousandSep).'</div></strong></th>';
-	$tabelproduk .= '<th colspan="4"></th>';
+	$tabelproduk .= '<th colspan="5"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</tfoot>';
 	$tabelproduk .= '</table>';
@@ -528,15 +529,19 @@ function simpan_produk(){
 			round($_POST["hargajual"],$DecDigit),$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],
 			$_POST["stok"],$_POST["satuan"],$_POST["keterangan"],$_POST["type_product"],
 			$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],$_POST["barcode_type"]);
-			$result = db_query("SELECT idproduct FROM product WHERE barcode='%s'",$_POST["barcode"]);
-			$data = db_fetch_object($result);
-			$IDPRODUK = $data->idproduct;
+			//$result = db_query("SELECT idproduct FROM product WHERE barcode='%s'",$_POST["barcode"]);
+			//$data = db_fetch_object($result);
+			$IDPRODUK = db_last_insert_id('product','idproduct');
             for ($i = 0;$i < count($Supplier);$i++){
                 $IdSupplier = $Supplier[$i];
                 $HargaPokok = round($_POST["hargapokok"],$DecDigit);
-                $StrSql = "INSERT INTO product_supplier (idproduct, idsupplier, harga, uid) ";
-                $StrSql .= "VALUES (%d, %d, '%f', %d)";
-                db_query($StrSql, $IDPRODUK, $IdSupplier,$HargaPokok, $user->uid);
+                $StrSqlCek = 'SELECT COUNT(*) FROM product_supplier WHERE idproduct=%d AND idsupplier=%d';
+                $DataCount = db_result(db_query($StrSqlCek, $IDPRODUK, $IdSupplier));
+                if (empty($DataCount)) {
+                    $StrSql = "INSERT INTO product_supplier (idproduct, idsupplier, harga, uid) ";
+                    $StrSql .= "VALUES (%d, %d, '%f', %d)";
+                    db_query($StrSql, $IDPRODUK, $IdSupplier, $HargaPokok, $user->uid);
+                }
             }
 			if ($_POST["type_product"] == 0) {
 				$KETERANGAN = 'Inisialisasi Stock';

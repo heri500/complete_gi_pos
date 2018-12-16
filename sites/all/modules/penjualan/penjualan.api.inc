@@ -914,9 +914,13 @@ function printKasirOrder($dataOrder = null){
             for ($i = 0;$i < count($orderDetail);$i++){
                 $dataDetail = $orderDetail[$i];
                 $tablePrint .= '<tr>';
-                $tablePrint .= '<td colspan="2" style="font-size: 13px;">'.strtoupper($dataDetail['namaproduct']).'</td>';
+                $tablePrint .= '<td colspan="3" style="font-size: 13px;">'.strtoupper($dataDetail['namaproduct']).'</td>';
+                $tablePrint .= '</tr>';
+                $tablePrint .= '<tr>';
                 $HargaDiskon = $dataDetail['hargajual'] - ($dataDetail['hargajual'] * ($dataDetail['diskon']/100));
-                $tablePrint .= '<td style="font-size: 12px;text-align: right;width: 100px;">'.number_format($HargaDiskon,$DecDigit,$decimalSep,$thousandSep).' x '.$dataDetail['jumlah'].'</td>';
+                $tablePrint .= '<td colspan="2" style="font-size: 12px;text-align: left">'.number_format($HargaDiskon,$DecDigit,$decimalSep,$thousandSep).' x '.$dataDetail['jumlah'].'</td>';
+                $SubTotal = $HargaDiskon*$dataDetail['jumlah'];
+                $tablePrint .= '<td style="font-size: 12px;text-align: right;width: 100px;"><strong>'.number_format($SubTotal,$DecDigit,$decimalSep,$thousandSep).'</strong></td>';
                 $tablePrint .= '</tr>';
 				$totalOrder = $totalOrder + ($HargaDiskon*$dataDetail['jumlah']);
             }
@@ -1783,7 +1787,7 @@ function printBarcodeProduksi()
     return $tablePrint;
 }
 
-function get_close_cashier_data($user_id = null){
+function get_close_cashier_data($user_id = null, $date_from = null, $date_thru = null){
     if (empty($user_id)) {
         global $user;
     }else{
@@ -1804,11 +1808,22 @@ function get_close_cashier_data($user_id = null){
     );
     $StrSql = "SELECT total_plus_ppn, bayar_multiple, kembali, bayar FROM penjualan ";
     $StrSql .= "WHERE idpemakai=%d AND (tglpenjualan >= '%s' AND tglpenjualan <= '%s')";
-    $LastLogin = date('Y-m-d H:i:s', $user->login);
-    $CurrentTime = date('Y-m-d H:i:s');
+    if (empty($date_from)) {
+        $LastLogin = date('Y-m-d H:i:s', $user->login);
+    }else{
+        $LastLogin = date('Y-m-d H:i:s', $date_from);
+    }
+    if (empty($date_thru)) {
+        $CurrentTime = date('Y-m-d H:i:s');
+    }else{
+        $CurrentTime = date('Y-m-d H:i:s', $date_thru);
+    }
     $result = db_query($StrSql,$user->uid, $LastLogin,$CurrentTime);
     $DataReport = new stdClass();
     $DataReport->id = $IdPeetyCash;
+    $DataReport->username = $user->name;
+    $DataReport->login = $LastLogin;
+    $DataReport->logout = $CurrentTime;
     $DataReport->petty_cash = $UserPettyCash;
     $DataReport->total = 0;
     $DataReport->total_cash = 0;
@@ -1841,6 +1856,15 @@ function printCloseCashier()
 {
     global $user;
     date_default_timezone_set($user->timezone_name);
+    if (isset($_GET['id_petty_cash']) && !empty($_GET['id_petty_cash'])){
+
+    }else {
+        drupal_add_js(
+            array(
+                'closeCashier' => true,
+            ),
+            'setting');
+    }
     $js_path = drupal_get_path('module', 'penjualan') . '/js/direct.print.js';
     drupal_add_js($js_path);
     get_number_format($currencySym, $thousandSep, $decimalSep);
@@ -1848,7 +1872,18 @@ function printCloseCashier()
     $DecDigit = $dataPremis->decimal_digit;
     $printHeader = true;
     $pathLogo = createLogoImagePath();
-    $ClosedData = get_close_cashier_data();
+    $UserId = null;
+    $DateFrom = null;
+    $DateThru = null;
+    if (isset($_GET['id_petty_cash']) && !empty($_GET['id_petty_cash'])){
+        $UserId = db_result(db_query('SELECT uid FROM user_petty_cash WHERE id=%d', $_GET['id_petty_cash']));
+        $DateFrom = db_result(db_query('SELECT login FROM user_petty_cash WHERE id=%d', $_GET['id_petty_cash']));
+        $DateThru = db_result(db_query('SELECT log_out FROM user_petty_cash WHERE id=%d', $_GET['id_petty_cash']));
+        if (empty($DateThru)){
+            $DateThru = null;
+        }
+    }
+    $ClosedData = get_close_cashier_data($UserId, $DateFrom, $DateThru);
     if (!empty($ClosedData)) {
         $tablePrint = '<table style="width: 305px;border-collapse: collapse;" >';
         $tablePrint .= '<tbody>';
@@ -1857,9 +1892,9 @@ function printCloseCashier()
             $tablePrint .= '<tr><td colspan="2" style="font-size: 11px;text-align: center;border-bottom: 1px solid #000;">' . $dataPremis->alamat . '&nbsp;&nbsp;</td></tr>';
         }
         $tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: center;"><strong>LAPORAN TUTUP CASHIER</strong></td></tr>';
-        $tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: left;"><span style="float: left"><strong>USER ID</strong></span><span style="float: right"><strong>' . $user->name . '</strong></span></td></tr>';
-        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">LOGIN</span><span style="float: right">' . date('d-m-Y H:i', $user->login) . '</span></td></tr>';
-        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">CLOSE</span><span style="float: right">' . date('d-m-Y H:i') . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: left;"><span style="float: left"><strong>USER ID</strong></span><span style="float: right"><strong>' . $ClosedData->username . '</strong></span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">LOGIN</span><span style="float: right">' . $ClosedData->login . '</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;border-bottom: 1px solid #000;"><span style="float: left">CLOSE</span><span style="float: right">' . $ClosedData->logout . '</span></td></tr>';
         $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">TOTAL</span><span style="float: right">' . number_format($ClosedData->total, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
         $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">CASH</span><span style="float: right">' . number_format(($ClosedData->total_cash - $ClosedData->total_kembali), $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
         $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: left;"><span style="float: left">KAD KREDIT</span><span style="float: right">' . number_format($ClosedData->total_kad_kredit, $DecDigit, $decimalSep, $thousandSep) . '</span></td></tr>';
@@ -1871,8 +1906,12 @@ function printCloseCashier()
         $tablePrint .= '</tbody>';
         $tablePrint .= '</table>';
     }
-    if (!empty($ClosedData->id)){
-        db_query('UPDATE user_petty_cash SET log_out=%d WHERE id=%d', time(), $ClosedData->id);
+    if (isset($_GET['id_petty_cash']) && !empty($_GET['id_petty_cash'])){
+
+    }else {
+        if (!empty($ClosedData->id)) {
+            db_query('UPDATE user_petty_cash SET log_out=%d WHERE id=%d', time(), $ClosedData->id);
+        }
     }
     return $tablePrint;
 }

@@ -48,11 +48,17 @@ function tambahproduk(qtyAdd, batch_code){
 	var request = new Object();
 	if ($('#hiddenbarcode').val() != ''){
 		var katacari = $("#hiddenbarcode").val();
+		var katacari2 = $("#barcode").val();
 	}else{
 		var katacari = $("#barcode").val();
-	}
+        var katacari2 = 0;
+    }
 	var pecahkatacari = katacari.split("--->");
 	request.katacari = pecahkatacari[0];
+	if (katacari2 != 0) {
+        var pecahkatacari2 = katacari2.split("--->");
+        request.katacari2 = pecahkatacari2[0];
+    }
 	request.idpelanggan = $("#idpelanggan").val();
 	alamatcariproduk = pathutama +"penjualan/cariproduk";
 	$.ajax({
@@ -63,7 +69,8 @@ function tambahproduk(qtyAdd, batch_code){
 		success: function(data){
 			var pecahdata = new Array();
 			pecahdata = data.split(";");
-            if (pecahdata[0].trim() != "error"){
+            var BarcodeCheck = request.katacari.substr(0,2);
+            if (pecahdata[0].trim() != "error" && BarcodeCheck != '22'){
 				nilaisubtotal = (pecahdata[2] - ((pecahdata[2]*pecahdata[3])/100)) * qtyAdd;
 				subtotal = number_format(nilaisubtotal,dDigit,dSep,tSep);
 				nilaikirim = pecahdata[0].trim() +"___"+ qtyAdd +"___"+ pecahdata[2] +"___"+ pecahdata[3] +"___"+ pecahdata[6] ;
@@ -153,7 +160,7 @@ function tambahproduk(qtyAdd, batch_code){
                                 if ($("#" + namacekbox).val()) {
                                     var nilaicekbox = $("#" + namacekbox).val();
                                     var pecahnilai = nilaicekbox.split("___");
-                                    var qtybaru = parseFloat(pecahnilai[1]) + qtyAdd;
+                                    var qtybaru = parseFloat(pecahnilai[1]) + parseFloat(qtyAdd);
                                     qtybaru = parseFloat(qtybaru.toFixed(3));
                                     var subtotallama = pecahnilai[1] * (pecahnilai[2] - (pecahnilai[2] * pecahnilai[3] / 100));
                                     var subtotal = qtybaru * (pecahnilai[2] - (pecahnilai[2] * pecahnilai[3] / 100));
@@ -323,6 +330,8 @@ function akhiri_belanja(cetak){
             BayarMultiple.push(CaraBayar[i] +':'+ $('#nilai_bayar_kredit').val());
 		}else if (CaraBayar[i] == 'HUTANG'){
             BayarMultiple.push(CaraBayar[i] +':'+ $('#nilai_bayar_hutang').val());
+        }else if (CaraBayar[i] == 'DEPOSIT'){
+            BayarMultiple.push(CaraBayar[i] +':'+ $('#nilai_bayar_deposit').val());
         }
 	}
 	request.bayar_multiple = BayarMultiple.join(';');
@@ -470,6 +479,11 @@ function calculate_total_bayar(){
             TotalBayar = TotalBayar + parseFloat($('#nilai_bayar_debit').val());
         }
     }
+    if ($('#nilai_bayar_deposit').is(':visible')){
+    	if ($('#nilai_bayar_deposit').val() != '') {
+            TotalBayar = TotalBayar + parseFloat($('#nilai_bayar_deposit').val());
+        }
+    }
 	return TotalBayar;
 }
 
@@ -523,10 +537,13 @@ function next_tab(InputObj, KeyObj){
 function close_kasir(){
 	var konfirmasi = confirm('Yakin..???');
 	if (konfirmasi){
-		window.open(pathutama + 'print/6?close_cashier=1');
-		window.location = pathutama + 'logout';
+		window.location = pathutama + 'print/6?close_cashier=1';
 	}
 }
+
+function disableF5(e) { if ((e.which || e.keyCode) == 116) kirim_data(1); };
+
+$(document).on("keydown", disableF5);
 
 $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
@@ -681,11 +698,12 @@ $(document).ready(function(){
             $("#total_ppn").val(currSym +" "+ number_format(total_ppn_value,dDigit,dSep,tSep));
 			var total_plus_ppn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
             $("#total_plus_ppn").val(currSym +" "+ number_format(total_plus_ppn,dDigit,dSep,tSep));
-            $("#nilaibayar").val(number_format(total_plus_ppn,dDigit,dSep,tSep));
+            $("#nilaibayar").val(total_plus_ppn);
 			$("#kembali").val(currSym +" 0");
 			$("#nilaibayar").select();
             //$('#nomormeja').select();
 			$("#idpelanggan").removeAttr("disabled");
+            $("#carabayar").chosen();
             if ($("#idpelanggan").val() > 0) {
                 $("#baris-deposit").show();
                 alamat = pathutama + "datapelanggan/gettotalhutang/" + $("#idpelanggan").val();
@@ -712,7 +730,8 @@ $(document).ready(function(){
                             });
                         }
                         $('#depositpelanggan').val(currSym + " " + number_format(Math.abs(totalHutang),dDigit,dSep,tSep));
-                        $("#idpelanggan").attr("disabled", "disabled");
+                        /*$("#idpelanggan").attr("disabled", "disabled");*/
+                        $("#carabayar").trigger("chosen:updated");
                     }
                 });
             }else{
@@ -722,8 +741,8 @@ $(document).ready(function(){
                     }
                 });
                 $("#baris-deposit").hide();
+                $("#carabayar").trigger("chosen:updated");
             }
-            $("#carabayar").chosen();
 		},
 		close: function(){
 			$("#barcode").select();
@@ -950,6 +969,12 @@ $(document).ready(function(){
         }else{
             $("#baris_bayar_hutang").hide();
         }
+        if (SplitCaraBayar.indexOf('DEPOSIT') != -1) {
+            $("#baris_bayar_deposit").show();
+            $("#nilai_bayar_deposit").focus();
+        }else{
+            $("#baris_bayar_deposit").hide();
+		}
     });
 		/*if ($(this).val() == 'DEBIT' || $(this).val() == 'KAD KREDIT' || $(this).val() == 'GIRO'){
 			$("#field_no_kartu").show();
@@ -1035,6 +1060,9 @@ $(document).ready(function(){
         next_tab($(this), e);
     });
     $('#nilai_bayar_debit').on('keyup', function(e){
+        next_tab($(this), e);
+    });
+    $('#nilai_bayar_deposit').on('keyup', function(e){
         next_tab($(this), e);
     });
     /*$('#nomormeja').autocomplete({

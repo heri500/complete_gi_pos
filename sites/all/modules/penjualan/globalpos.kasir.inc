@@ -238,6 +238,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
     $NilaiBayarHutang = '<input type="text" id="nilai_bayar_hutang" name="nilai_bayar_hutang" tabindex="4">';
     $NilaiBayarDebit = '<input type="text" id="nilai_bayar_debit" name="nilai_bayar_debit" tabindex="5">';
     $NilaiBayarKredit = '<input type="text" id="nilai_bayar_kredit" name="nilai_bayar_kredit" tabindex="6">';
+    $NilaiBayarDeposit = '<input type="text" id="nilai_bayar_deposit" name="nilai_bayar_deposit" tabindex="7">';
 	$depositpelanggan = '<input type="text" id="depositpelanggan" name="depositpelanggan" readonly="readonly">';
 	$kembali = '<input readonly="readonly" type="text" id="kembali" name="kembali">';
 	$totalbelanja = '<input type="text" id="totalbelanjauser" name="totalbelanjauser">';
@@ -266,6 +267,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
     $penjualan .= '<div id="baris_bayar_hutang" class="barisbayar" style="display: none;"><label style="width: 250px;">HUTANG</label>'.$NilaiBayarHutang.'</div>';
     $penjualan .= '<div id="baris_bayar_debit" class="barisbayar" style="display: none;"><label style="width: 250px;">KAD DEBIT</label>'.$NilaiBayarDebit.'</div>';
     $penjualan .= '<div id="baris_bayar_kredit" class="barisbayar" style="display: none;"><label style="width: 250px;">KAD KREDIT</label>'.$NilaiBayarKredit.'</div>';
+    $penjualan .= '<div id="baris_bayar_deposit" class="barisbayar" style="display: none;"><label style="width: 250px;">USE DEPOSIT</label>'.$NilaiBayarDeposit.'</div>';
 	$penjualan .= '<div id="field_kembali" class="barisbayar"><label style="width: 250px;">'.strtoupper(trans('kembali', $dataPremis->bahasa)).'</label>'.$kembali.'</div>';
 	$penjualan .= '<div id="field_kembalian" class="barisbayar" style="display: none;"><label style="width: 250px;">Kembalian</label>'.$perlakuankembalian.'</div>';
     $penjualan .= '<div align="center"><button id="simpan-transaksi">'.strtoupper(trans('simpan', $dataPremis->bahasa)).'</button>&nbsp;&nbsp;<button id="selesai-transaksi">SELESAI</button></div>';
@@ -280,7 +282,11 @@ function simpan_penjualan(){
         isset($_POST["totalbelanja"]) AND isset($_POST['totalbelanjappn'])
     ){
 		global $user;
-        date_default_timezone_set($user->timezone_name);
+		if (!empty($user->timezone_name)) {
+            date_default_timezone_set($user->timezone_name);
+        }else{
+		    set_default_time_zone();
+        }
 		$waktujual = $_POST["tgljual"]." ".date("H:i:s");
 		$splitTanggal = explode('-', $_POST["tgljual"]);
 		$splitJam = explode(':',date("H:i:s"));
@@ -313,6 +319,38 @@ function simpan_penjualan(){
 		$_POST["idpelanggan"],$_POST["carabayar"], $idtitipanlaundry,$perkuankembalian,
         $_POST["ppn"],$_POST["totalbelanjappn"],$PpnValue,$_POST["bayar_multiple"]);
 		$next_id = db_last_insert_id('penjualan', 'idpenjualan');
+		$ExplodeBayar = explode(';',$_POST["bayar_multiple"]);
+		for ($i = 0;$i < count($ExplodeBayar);$i++){
+		    $ExplodeCaraBayar = explode(':',$ExplodeBayar[$i]);
+            $StrSqlCek = "SELECT COUNT(*) FROM penjualan_bayar WHERE idpenjualan=%d AND carabayar='%s'";
+		    $DataBayarExists = db_result(db_query($StrSqlCek, $next_id, $ExplodeCaraBayar[0]));
+		    if (empty($DataBayarExists)) {
+                $StrSqlInsertBayar = "INSERT INTO penjualan_bayar (idpenjualan, carabayar, total_bayar) VALUES (%d, '%s', '%f')";
+                db_query($StrSqlInsertBayar, $next_id, $ExplodeCaraBayar[0], $ExplodeCaraBayar[1]);
+                if (trim($ExplodeCaraBayar[0]) == 'DEPOSIT'){
+                    if (isset($_POST["idpelanggan"]) && !empty($_POST["idpelanggan"])){
+                        $idpelanggan = $_POST["idpelanggan"];
+                        $sisaDeposit = getTotalHutang($idpelanggan) + getTotalPenggunaanDeposit($idpelanggan) - getTotalPembayaran($idpelanggan);
+                        if ($sisaDeposit < 0) {
+                            if (abs($sisaDeposit) < $ExplodeCaraBayar[1]){
+                                $variables['penggunaan'] = abs($sisaDeposit);
+                                $sisaDeposit = 0;
+                            }else{
+                                $variables['penggunaan'] = $ExplodeCaraBayar[1];
+                                $sisaDeposit = abs($sisaDeposit) - $ExplodeCaraBayar[1];
+                            }
+                            $variables['idpelanggan'] = $idpelanggan;
+                            $variables['deposit'] = $sisaDeposit;
+                            $variables['tglbayar'] = $waktujual;
+                            $variables['keterangan'] = 'Penggunaan deposit untuk pembayaran nota : ' . $no_nota . ' Tanggal : ' . $waktujual;
+                            $variables['idpenjualan'] = $next_id;
+                            penggunaandeposit($variables);
+                            syncHutangPelanggan($_POST["idpelanggan"]);
+                        }
+                    }
+                }
+            }
+        }
 		print $next_id;
 		if ($kembali > 0 && $perkuankembalian == 2){
 			if (isset($_POST["idpelanggan"]) && !empty($_POST["idpelanggan"])){
@@ -340,7 +378,7 @@ function simpan_penjualan(){
 				$_POST["idpelanggan"],abs($kembali),$user->uid);	
 			}
 		}
-		if ($_POST["carabayar"] == "DEPOSIT"){
+		/*if ($_POST["carabayar"] == "DEPOSIT"){
 			if (isset($_POST["idpelanggan"]) && !empty($_POST["idpelanggan"])){
 				$sisaDeposit = getTotalPembayaran($_POST["idpelanggan"]) - (getTotalHutang($_POST["idpelanggan"]) + getTotalPenggunaanDeposit($_POST["idpelanggan"]));
 				$variables['idpelanggan'] = $_POST["idpelanggan"];
@@ -352,7 +390,7 @@ function simpan_penjualan(){
 				penggunaandeposit($variables);
 				syncHutangPelanggan($_POST["idpelanggan"]);
 			}
-		}
+		}*/
 		$detailTitipanLaundry = null;
 		if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){
 			$result = db_query("SELECT iddetail, idproduct, sisa, diambil FROM 
@@ -614,14 +652,24 @@ function cari_produk(){
             }
         }else {
             $KATACARI = '%' . $_POST["katacari"] . '%';
+            if (isset($_POST["katacari2"]) && !empty($_POST["katacari2"])) {
+                $KATACARI2 = '%' . $_POST["katacari2"] . '%';
+            }
             if (isset($_POST['freshproduct']) && !empty($_POST['freshproduct'])){
                 $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
 		        berlaku_sebelum_zuhur, barcode FROM product WHERE barcode = '%s'AND status_product = 1 LIMIT 1", $_POST["katacari"]);
             }else {
                 //$sql = "SELECT idproduct,idkategori,namaproduct,hargajual FROM product WHERE alt_code LIKE '$KATACARI' OR barcode LIKE '$KATACARI' OR namaproduct LIKE '$KATACARI'";
-                $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
-		        berlaku_sebelum_zuhur, barcode FROM product WHERE (alt_code LIKE '%s' OR barcode LIKE '%s' 
-		        OR UPPER(namaproduct) LIKE '%s') AND status_product = 1 LIMIT 50", $KATACARI, $KATACARI, $KATACARI);
+                if (!isset($KATACARI2)) {
+                    $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
+		            berlaku_sebelum_zuhur, barcode FROM product WHERE (alt_code LIKE '%s' OR barcode LIKE '%s' 
+		            OR UPPER(namaproduct) LIKE '%s') AND status_product = 1 LIMIT 50", $KATACARI, $KATACARI, $KATACARI);
+                }else{
+                    $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
+		                berlaku_sebelum_zuhur, barcode FROM product WHERE barcode = '%s' AND status_product = 1 LIMIT 50",
+                        $_POST["katacari"]
+                    );
+                }
             }
             $data = db_fetch_object($result);
             if ($data->idproduct) {

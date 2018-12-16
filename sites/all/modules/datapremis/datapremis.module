@@ -22,7 +22,7 @@ function datapremis_menu() {
         'description' => 'Upload data premis',
         'page callback' => 'do_upload_premisdata',
         'access callback' => 'user_access',
-        'access arguments' => array('Admin Data Premis'),
+        'access arguments' => array('Access Data Premis'),
         'type' => MENU_CALLBACK,
     );
     return $items;
@@ -634,7 +634,7 @@ function get_gst_symbols($AddJs = true)
 
 function set_default_time_zone(){
     $defaultTimeZone = date_default_timezone_get();
-    if ($defaultTimeZone != 'Asia/Jakarta'){
-        date_default_timezone_set('Asia/Jakarta');
+    if ($defaultTimeZone != 'Asia/Kuala_Lumpur'){
+        date_default_timezone_set('Asia/Kuala_Lumpur');
     }
 }

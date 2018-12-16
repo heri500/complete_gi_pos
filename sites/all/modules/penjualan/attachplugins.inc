@@ -78,3 +78,17 @@ function _addJsRounding(){
 function _addPreventBackPage(){
     drupal_add_js('sites/all/libraries/PreventBackPage/prevent.backpage.js');
 }
+function _add_jquery_datatables_plugins(){
+    drupal_add_css('misc/media/datatables.1.10/jquery/jquery-ui.css');
+    drupal_add_css('misc/media/datatables.1.10/media/css/dataTables.jqueryui.css');
+    drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.dataTables.css');
+    drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.jqueryui.css');
+    drupal_add_js('misc/media/datatables.1.10/media/js/jquery.js');
+    drupal_add_js('misc/media/datatables.1.10/jquery/jquery-ui.js');
+    drupal_add_js('misc/media/datatables.1.10/media/js/jquery.dataTables.js');
+    drupal_add_js('misc/media/datatables.1.10/media/js/dataTables.jqueryui.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/dataTables.buttons.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.html5.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.print.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.colVis.min.js');
+}

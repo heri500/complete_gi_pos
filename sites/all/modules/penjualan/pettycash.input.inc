@@ -1,14 +1,29 @@
 <?php
 
 function petty_cash_input(){
-    _addCustomCSS();
-    _addJqueryPlugins();
-    drupal_add_css('misc/media/themes/jquery-ui-1.8.11.custom.css');
-    drupal_add_js('misc/media/jquery-ui-1.8.11.custom.min.js');
-    $js_path = drupal_get_path('module','penjualan').'/js/inputpettycash.js';
-    drupal_add_js($js_path);
-    $formPettyCash = drupal_get_form('petty_cash_input_form');
-    return $formPettyCash;
+    global $user;
+    set_default_time_zone();
+    $Today = mktime(0,0,0, date('n'), date('j'), date('Y'));
+    $IpAddress = ip_address();
+    $PettyCashExists = db_result(
+        db_query(
+            "SELECT COUNT(*) FROM user_petty_cash WHERE uid = %d AND ip = '%s' AND login >= %d AND log_out IS NULL",
+                $user->uid, $IpAddress, $Today
+        )
+    );
+    if (empty($PettyCashExists)) {
+        _addCustomCSS();
+        _addJqueryPlugins();
+        drupal_add_css('misc/media/themes/jquery-ui-1.8.11.custom.css');
+        drupal_add_js('misc/media/jquery-ui-1.8.11.custom.min.js');
+        $js_path = drupal_get_path('module', 'penjualan') . '/js/inputpettycash.js';
+        drupal_add_js($js_path);
+        $formPettyCash = drupal_get_form('petty_cash_input_form');
+        return $formPettyCash;
+    }else{
+        drupal_goto('penjualan/kasir');
+    }
+    return false;
 }
 
 function petty_cash_input_form(&$form_state){
