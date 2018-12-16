@@ -1,0 +1,22 @@
+<?php
+
+function returnpenjualan_menu() {
+    $items['penjualan/return'] = array(
+        'title' => t('Form return penjualan'),
+        'description' => t('Form return dari penjualan'),
+        'page callback' => 'returnPenjualan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Return Penjualan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'return.penjualan.inc',
+    );
+    return $items;
+} // end hook menu
+
+function returnpenjualan_perm() {
+    return array(
+        'Input Return Penjualan','Access Data Return'
+    );
+}
+
+require_once 'api.returnpenjualan.inc';

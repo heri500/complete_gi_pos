@@ -1,0 +1,5 @@
+;$Id$
+name = datapelanggan
+description = Data Pelanggan by Ikhwan IT
+package = globalpos
+core = 6.x

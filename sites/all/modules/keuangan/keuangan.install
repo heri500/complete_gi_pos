@@ -1,0 +1,19 @@
+<?php
+
+function keuangan_install() {
+	$success = drupal_install_schema('keuangan');
+	if ($success) {
+    drupal_set_message(st('Module keuangan berhasil diinstall.'));
+  }
+  else {
+    drupal_set_message(st('Module keuangan gagal diinstall.'), 'error');
+  }
+}
+
+function keuangan_schema(){
+	require 'keuangan.schema.inc';
+	return $schema;
+}
+function keuangan_uninstall() {
+	drupal_uninstall_schema('keuangan');
+}

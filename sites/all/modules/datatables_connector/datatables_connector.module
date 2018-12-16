@@ -1,0 +1,35 @@
+<?php
+
+function datatables_connector_menu() {
+	$items['datatables/getdatasources'] = array(
+    'title' => t('Datatables Datasources'),
+    'description' => 'Get Data Source For Datatables',
+		'page callback' => 'getDataSource',
+		'access callback' => 'user_access',
+		'access arguments' => array('Access Global Pos'),
+		'type' => MENU_CALLBACK,
+	);
+	return $items;
+} // end hook menu
+
+require_once 'ssp.class.php';
+
+function datatables_connector_perm() {
+	return array('Access Global Pos');
+}
+
+function getDataSource($tableName = null){
+	if ($tableName == 'pelanggan'){
+		$primaryKey = 'id';
+		$columns = array(
+			array( 'db' => 'kode_pelanggan', 'dt' => 0 ),
+			array( 'db' => 'nama_pelanggan',  'dt' => 1 ),
+			array( 'db' => 'telp',   'dt' => 2 ),
+			array( 'db' => 'alamat',     'dt' => 3 )
+		);
+		$returnData = SSP::simple( $_GET, $tableName, $primaryKey, $columns );
+		
+	}
+	print json_encode($returnData);
+	exit();
+}

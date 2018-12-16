@@ -1,0 +1,1 @@
+ALTER TABLE `customer_order` ADD `idorderpanggil` INT NULL AFTER `pending_print`;

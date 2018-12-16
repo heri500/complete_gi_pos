@@ -1,0 +1,245 @@
+<?php
+
+function keuangan_menu() {
+	$items['keuangan/pengeluaran'] = array(
+    'title' => t('Tabel Pemasukan/Pengeluaran'),
+    'description' => t('Tabel pemasukan dan pengeluaran'),
+		'page callback' => 'tabel_pengeluaran_view',
+		'access callback' => 'user_access',
+		'access arguments' => array('Access Data Keuangan'),
+		'type' => MENU_CALLBACK,
+		'file' => 'keuangan.pengeluaran.inc',
+	);
+	$items['keuangan/getKategoriPengeluaran/1'] = array(
+    	'title' => t('Get Kategori Pengeluaran'),
+    	'description' => t('Get Kategori Pengeluaran'),
+		'page callback' => 'getKategoriPengeluaran',
+		'access callback' => 'user_access',
+		'access arguments' => array('Access Data Keuangan'),
+		'type' => MENU_CALLBACK,
+	);
+	$items['keuangan/updateKategoriPengeluaran/%'] = array(
+    'title' => t('Update Kategori Pengeluaran'),
+    'description' => t('Update Kategori Pengeluaran'),
+		'page callback' => 'updateKategoriPengeluaran',
+		'page arguments' => array(1),
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Keuangan'),
+		'type' => MENU_CALLBACK,
+	);
+	$items['keuangan/insertKategoriPengeluaran/%'] = array(
+    'title' => t('Insert Kategori Pengeluaran'),
+    'description' => t('Insert Kategori Pengeluaran'),
+		'page callback' => 'insertKategoriPengeluaran',
+		'page arguments' => array(1),
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Keuangan'),
+		'type' => MENU_CALLBACK,
+	);
+	$items['keuangan/updatePengeluaran/%'] = array(
+		'title' => t('Update Pengeluaran'),
+		'description' => t('Update Pengeluaran'),
+		'page callback' => 'updatePengeluaran',
+		'page arguments' => array(1),
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Keuangan'),
+		'type' => MENU_CALLBACK,
+	);
+	$items['keuangan/insertPengeluaran/%'] = array(
+		'title' => t('Insert Pengeluaran'),
+		'description' => t('Insert Pengeluaran'),
+		'page callback' => 'insertPengeluaran',
+		'page arguments' => array(1),
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Keuangan'),
+		'type' => MENU_CALLBACK,
+	);
+	$items['keuangan/deletepengeluaran/%'] = array(
+		'title' => t('Delete Pengeluaran'),
+		'description' => t('Delete Pengeluaran'),
+		'page callback' => 'deletePengeluaran',
+		'page arguments' => array(2),
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Keuangan'),
+		'type' => MENU_CALLBACK,
+	);
+	$items['keuangan/updatePemasukan/%'] = array(
+		'title' => t('Update Pemasukan'),
+		'description' => t('Update Pemasukan'),
+		'page callback' => 'updatePemasukan',
+		'page arguments' => array(1),
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Keuangan'),
+		'type' => MENU_CALLBACK,
+	);
+	$items['keuangan/insertPemasukan/%'] = array(
+		'title' => t('Insert Pemasukan'),
+		'description' => t('Insert Pemasukan'),
+		'page callback' => 'insertPemasukan',
+		'page arguments' => array(1),
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Keuangan'),
+		'type' => MENU_CALLBACK,
+	);
+	$items['keuangan/deletepemasukan/%'] = array(
+		'title' => t('Delete Pemasukan'),
+		'description' => t('Delete Pemasukan'),
+		'page callback' => 'deletePemasukan',
+		'page arguments' => array(2),
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Keuangan'),
+		'type' => MENU_CALLBACK,
+	);
+	$items['keuangan/viewkeuanganajax'] = array(
+		'title' => t('Report Keuangan'),
+		'description' => t('Report Keuangan'),
+		'page callback' => 'createReportAjax',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Keuangan'),
+		'type' => MENU_CALLBACK,
+		'file' => 'keuangan.pengeluaran.inc',
+	);
+	return $items;
+} // end hook menu
+
+function keuangan_perm() {
+	return array('Admin Data Keuangan','Access Data Keuangan');
+}
+
+require_once 'api.keuangan.inc';
+
+function keuangan_input_kategori_form(){
+	$form['idkategori'] = array(
+		'#type' => 'hidden',
+		'#value' => '',
+	);
+	$arrayJenisKategori = array(
+		0 => 'Pengeluaran',
+		1 => 'Pemasukan',
+	);
+	$form['jeniskategori'] = array(
+		'#type' => 'select',
+		'#title' => t('Jenis Kategori'),
+		'#options' => $arrayJenisKategori,
+		'#description' => t('Pilih jenis kategori.'),
+	);
+	$form['kategori'] = array(
+		'#title' => t('Kategori'),
+		'#type' => 'textfield',
+		'#description' => t('Isi kategori pemasukan/pengeluaran disini.'),
+	);
+	$form['keterangan'] = array(
+		'#title' => t('Keterangan'),
+		'#type' => 'textarea',
+		'#cols' => 40,
+		'#rows' => 3,
+		'#description' => t('Isi keterangan pemasukan/pengeluaran disini.'),
+	);
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Simpan')
+	);
+	$form['batal'] = array(
+		'#type' => 'button',
+		'#value' => t('Batal')
+	);
+	return $form;
+}
+function keuangan_input_form(){
+	$listKategori = getKategoriPengeluaran();
+	$arrayKategori = array();
+	if (count($listKategori)){
+		foreach ($listKategori as $idx => $kategoriData){
+			$arrayKategori[$kategoriData->id] = $kategoriData->kategori;
+		}
+	}
+	$form['idpengeluaran'] = array(
+		'#type' => 'hidden',
+		'#value' => '',
+	);
+	$form['tglkirim'] = array(
+		'#type' => 'hidden',
+		'#value' => '',
+	);
+	$form['idkategori'] = array(
+		'#type' => 'select',
+		'#title' => t('Kategori Pengeluaran'),
+		'#options' => $arrayKategori,
+		'#description' => t('Pilih kategori/jenis pengeluaran.'),
+	);
+	$form['tanggal'] = array(
+		'#title' => t('Tanggal Pengeluaran'),
+		'#type' => 'textfield',
+		'#description' => t('Isi tanggal pengeluaran disini.'),
+	);
+	$form['jumlah'] = array(
+		'#title' => t('Jumlah Pengeluaran'),
+		'#type' => 'textfield',
+		'#description' => t('Isi jumlah pengeluaran disini.'),
+	);
+	$form['keteranganpengeluaran'] = array(
+		'#title' => t('Keterangan'),
+		'#type' => 'textarea',
+		'#cols' => 40,
+		'#rows' => 3,
+		'#description' => t('Isi keterangan pengeluaran disini.'),
+	);
+	$form['submitpengeluaran'] = array(
+		'#type' => 'submit',
+		'#value' => t('Simpan')
+	);
+	$form['batalpengeluaran'] = array(
+		'#type' => 'button',
+		'#value' => t('Batal')
+	);
+	return $form;
+}
+function keuangan_input_pemasukan_form(){
+	$listKategori = getKategoriPemasukan();
+	$arrayKategori = array();
+	if (count($listKategori)){
+		foreach ($listKategori as $idx => $kategoriData){
+			$arrayKategori[$kategoriData->id] = $kategoriData->kategori;
+		}
+	}
+	$form['idpemasukan'] = array(
+		'#type' => 'hidden',
+		'#value' => '',
+	);
+	$form['tglkirim'] = array(
+		'#type' => 'hidden',
+		'#value' => '',
+	);
+	$form['idkategori'] = array(
+		'#type' => 'select',
+		'#title' => t('Kategori Pemasukan'),
+		'#options' => $arrayKategori,
+		'#description' => t('Pilih kategori/jenis pemasukan.'),
+	);
+	$form['tanggal'] = array(
+		'#title' => t('Tanggal Pemasukan'),
+		'#type' => 'textfield',
+		'#description' => t('Isi tanggal pemasukan disini.'),
+	);
+	$form['jumlah'] = array(
+		'#title' => t('Jumlah Pemasukan'),
+		'#type' => 'textfield',
+		'#description' => t('Isi jumlah pemasukan disini.'),
+	);
+	$form['keteranganpemasukan'] = array(
+		'#title' => t('Keterangan'),
+		'#type' => 'textarea',
+		'#cols' => 40,
+		'#rows' => 3,
+		'#description' => t('Isi keterangan pemasukan disini.'),
+	);
+	$form['submitpemasukan'] = array(
+		'#type' => 'submit',
+		'#value' => t('Simpan')
+	);
+	$form['batalpemasukan'] = array(
+		'#type' => 'button',
+		'#value' => t('Batal')
+	);
+	return $form;
+}

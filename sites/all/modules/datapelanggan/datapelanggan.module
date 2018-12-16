@@ -1,0 +1,182 @@
+<?php
+
+function datapelanggan_menu()
+{
+    $items['datapelanggan/pelanggan'] = array(
+        'title' => t('Data Pelanggan'),
+        'description' => 'Manajemen Data Pelanggan',
+        'page callback' => 'data_pelanggan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    $items['datapelanggan/detailhutang'] = array(
+        'title' => t('Detail Hutang Pelanggan'),
+        'description' => 'Detail Hutang Pelanggan',
+        'page callback' => 'detail_piutang',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    $items['datapelanggan/detailpembayaran'] = array(
+        'title' => t('Detail Pembayaran Pelanggan'),
+        'description' => 'Detail Pembayaran Pelanggan',
+        'page callback' => 'detail_pembayaran',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    $items['datapelanggan/pembayaran'] = array(
+        'title' => t('Form Pembayaran Piutang Pelanggan'),
+        'description' => 'Form Pembayaran Piutang Pelanggan',
+        'page callback' => 'bayar_hutang',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    $items['datapelanggan/tabeldiskon'] = array(
+        'title' => t('Tabel Diskon Pelanggan'),
+        'description' => 'Tabel Diskon Pelanggan',
+        'page callback' => 'tabel_diskon',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    $items['datapelanggan/simpandiskon'] = array(
+        'title' => t('Simpan Diskon Pelanggan'),
+        'description' => 'Simpan Diskon Pelanggan',
+        'page callback' => 'simpan_diskon',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    $items['datapelanggan/hapusdiskon'] = array(
+        'title' => t('Hapus Diskon Pelanggan'),
+        'description' => 'Hapus Diskon Pelanggan',
+        'page callback' => 'hapus_diskon',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    $items['datapelanggan/simpanpelanggan'] = array(
+        'title' => t('Simpan Data Pelanggan'),
+        'description' => 'Simpan Data Pelanggan',
+        'page callback' => 'simpan_pelanggan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    $items['datapelanggan/updatepelanggan'] = array(
+        'title' => t('Update Data Pelanggan'),
+        'description' => 'Update Data Pelanggan',
+        'page callback' => 'update_pelanggan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    $items['datapelanggan/gettotalhutang'] = array(
+        'title' => t('Get Total Hutang/Deposit Pelanggan'),
+        'description' => 'Get total hutang/deposit pelanggan',
+        'page callback' => 'rest_getTotalHutang',
+        'access callback' => 'user_access',
+        'access arguments' => array('Access Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['datapelanggan/synchutangpelanggan'] = array(
+        'title' => t('Sync Data Hutang Pelanggan'),
+        'description' => 'Sync data hutang pelanggan',
+        'page callback' => 'syncHutangPelangganAjax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    $items['datapelanggan/getpelangganinfo'] = array(
+        'title' => t('Get Data Pelanggan'),
+        'description' => 'Get data pelanggan',
+        'page callback' => 'get_pelanggan_info',
+        'access callback' => 'user_access',
+        'access arguments' => array('Access Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    $items['datapelanggan/updatediskon'] = array(
+        'title' => t('Update Diskon Pelanggan'),
+        'description' => 'Update diskon kategori/product pelanggan',
+        'page callback' => 'update_diskon_kategori_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    $items['datapelanggan/hapuspembayaran'] = array(
+        'title' => t('Hapus Pembayaran Pelanggan'),
+        'description' => 'Hapus pembayaran hutangan pelanggan',
+        'page callback' => 'delete_history_pembayaran',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pelanggan'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.pelanggan.inc'
+    );
+    return $items;
+} // end hook menu
+
+require_once 'datapelanggan.api.inc';
+
+function datapelanggan_perm() {
+	return array('Access Data Pelanggan','Admin Data Pelanggan','Admin Contact Person Pelanggan');
+}
+function pembayaranhutang($variables){
+	global $user;
+	if (!isset($variables['idtitipanlaundry'])){
+		$variables['idtitipanlaundry'] = 0;	
+	}
+	if (!isset($variables['idpenjualan'])){
+		$variables['idpenjualan'] = 0;	
+	}
+	if (!isset($variables['idcustomerorder'])){
+		$variables['idcustomerorder'] = 0;
+	}
+	db_query("INSERT INTO historypembayaran (idpelanggan, nilaisebelumbayar, pembayaran, uid, tglbayar, 
+	keterangan, idpenjualan, idtitipanlaundry,idcustomerorder) VALUES
+	('%d', '%f', '%f', '%d', '%s', '%s', '%d', '%d', '%d')",
+	$variables['idpelanggan'],$variables['hutang'],$variables['pembayaran'],$user->uid,$variables['tglbayar'],
+	$variables['keterangan'],$variables['idpenjualan'],$variables['idtitipanlaundry'],$variables['idcustomerorder']);
+	$sisahutang = $variables['hutang'] - $variables['pembayaran'];
+	$tglsekarang = date("Y-m-d H:i:s");
+	$piutangExist = cekPiutangExists($variables['idpelanggan']);
+	if ($piutangExist){
+		db_query("UPDATE piutang SET besarhutang='%f',pembayaranterakhir='%f',last_update='%s' WHERE idpelanggan='%d'",
+		$sisahutang,$variables['pembayaran'],$tglsekarang,$variables['idpelanggan']);
+		$variables['sisahutang'] = $sisahutang;
+	}else{
+		db_query(
+			"INSERT INTO piutang (idpelanggan, besarhutang, pembayaranterakhir,uid)
+			VALUES (%d, '%f','%f', %d)",$variables['idpelanggan'],$sisahutang,
+			$variables['pembayaran'], $user->uid
+		);
+	}
+
+	return $variables;
+}
+function rest_getTotalHutang($idpelanggan = null){
+	$result[] = getTotalHutang($idpelanggan) + getTotalPenggunaanDeposit($idpelanggan) - getTotalPembayaran($idpelanggan);
+	print json_encode($result);
+	exit();
+}
+function penggunaandeposit($variables){
+	global $user;
+	db_query("INSERT INTO historypenggunaandeposit (idpelanggan, nilaidepositsebelum, penggunaan, uid, tglbayar, keterangan,idpenjualan) VALUES 
+	('%d', '%f', '%f', '%d', '%s', '%s', '%d')",$variables['idpelanggan'],$variables['deposit'],
+	$variables['penggunaan'],$user->uid,$variables['tglbayar'],$variables['keterangan'],$variables['idpenjualan']);
+	return $variables;
+}

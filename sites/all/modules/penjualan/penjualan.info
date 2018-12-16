@@ -1,0 +1,5 @@
+;$Id$
+name = penjualan
+description = Penjualan by Ikhwan IT
+package = globalpos
+core = 6.x
