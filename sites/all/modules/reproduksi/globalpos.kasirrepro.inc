@@ -29,6 +29,7 @@ function reproduksi(){
 		array(
 			'tglsekarang' => $tglsekarang,
 			'tgltampil' => $tgltampil,
+            'dec_digit' => $DecDigit,
 		),
 		'setting');
 	$path = drupal_get_path('module', 'reproduksi');
@@ -57,9 +58,10 @@ function reproduksi(){
 	$reproduksi .= 'Jam';
 	$reproduksi .= '</div>';
 	$reproduksi .= '<div id="tempatkosong">';
-    $reproduksi .= '<div id="tempatsupplier"><label>KETERANGAN</label></div>';
-    $InputKeterangan = '<input type="text" id="keterangan" name="keterangan" style="width: 300px;">';
-    $reproduksi .= '<div id="tempatsupplier2">'.$InputKeterangan.'</div>';
+    $InputKeterangan = '<input type="text" id="keterangan" name="keterangan">';
+	$reproduksi .= '<div id="tempatsupplier"><label>KETERANGAN</label>'.$InputKeterangan.'</div>';
+	$CheckPelupusan = '<input type="checkbox" id="pelupusan" name="pelupusan" value="1" style="-moz-transform: scale(1.6);">';
+    $reproduksi .= '<div id="tempatsupplier"><label>PELUPUSAN</label>'.$CheckPelupusan.'</div>';
 	$reproduksi .= '</div>';
 	$reproduksi .= '</div>';
 	$reproduksi .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : <input type="text" id="barcode" name="barcode" class="barcodekasir"></div>';
@@ -106,9 +108,9 @@ function simpan_reproduksi(){
 		//date_default_timezone_set('Asia/Jakarta');
 		$waktujual = $_POST["tglreproduksi"]." ".date("H:i:s");
 		global $user;
-		db_query("INSERT INTO reproduksi (nonota, idpemakai, total, tglreproduksi, keterangan) 
-		VALUES ('%s', '%d', '%f', '%s', '%s')",
-		$no_nota, $user->uid, $_POST["totalbelanja"], $waktujual, $_POST["keterangan"]);
+		db_query("INSERT INTO reproduksi (nonota, idpemakai, total, tglreproduksi, keterangan, pelupusan) 
+		VALUES ('%s', '%d', '%f', '%s', '%s','%d')",
+		$no_nota, $user->uid, $_POST["totalbelanja"], $waktujual, $_POST["keterangan"], $_POST["pelupusan"]);
 		print $_POST["detail_produk"];
 		$pecahdetail = explode("&",$_POST["detail_produk"]);
 		$totalmodal = 0;
@@ -161,8 +163,8 @@ function buat_nota($idreproduksi){
 function cari_produk(){
 	if ($_POST["katacari"]){
 		$KATACARI = '%'.$_POST["katacari"].'%';
-		$sql = "SELECT idproduct,idkategori,namaproduct,hargajual FROM product WHERE alt_code LIKE '$KATACARI' OR barcode LIKE '$KATACARI' OR namaproduct LIKE '$KATACARI'";
-		$result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s'",$KATACARI,$KATACARI,$KATACARI);
+		//$sql = "SELECT idproduct,idkategori,namaproduct,hargajual FROM product WHERE status_product = 1 AND (alt_code LIKE '$KATACARI' OR barcode LIKE '$KATACARI' OR namaproduct LIKE '$KATACARI')";
+		$result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual FROM product WHERE status_product = 1 AND (alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s')",$KATACARI,$KATACARI,$KATACARI);
 		$data = db_fetch_object($result);
 		if ($data->idproduct){
 			$result2 = db_query("SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'",
@@ -186,7 +188,7 @@ function cari_produk(){
 function cari_barang(){
 	if ($_GET["term"]){
 		$KATACARI = '%'.$_GET["term"].'%';
-		$result = db_query("SELECT barcode, namaproduct FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s'",$KATACARI,$KATACARI,$KATACARI);
+		$result = db_query("SELECT barcode, namaproduct FROM product WHERE status_product = 1 AND (alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s')",$KATACARI,$KATACARI,$KATACARI);
 		$items = array();
 		while ($data = db_fetch_object($result)){
 			$items[] = array('value' => $data->namaproduct,'barcode' => $data->barcode,'alt_code' => $data->alt_code);

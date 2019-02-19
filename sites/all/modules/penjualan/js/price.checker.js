@@ -8,7 +8,7 @@ var dSep = '.';
 var currSym = '';
 function checkproduk() {
     var request = new Object();
-    request.katacari = $('#barcode-check').val();
+    request.barcode = $('#barcode-check').val();
     alamatcariproduk = Drupal.settings.basePath +"penjualan/cariproduk";
     $.ajax({
         type: "POST",

@@ -1,8 +1,10 @@
 <?php
 
 function view_tabel_customerorder(){
-    update_opened_customer_order_table(1);
 	get_number_format($currencySym, $thousandSep, $decimalSep);
+    $gstSym = get_gst_symbols();
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
  	drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -62,9 +64,12 @@ function view_tabel_customerorder(){
             'urutan'  => $urutan,
             'tglawal' => $tgl1,
             'tglakhir'=> $tgl2,
+            'dDigit' => $DecDigit,
+            'gstSym' => $gstSym,
         ),
         'setting'
     );
+    drupal_add_js('misc/media/datatables/js/number.format.js');
 	$js_path = drupal_get_path('module','penjualan').'/js/tabel.customerorder.js';
 	drupal_add_js($js_path);
 	$pilihantampil = '<select id="pilihantampil" name="pilihantampil">';
@@ -76,11 +81,6 @@ function view_tabel_customerorder(){
     $pilihperiode .= '<input readonly="readonly" type="text" id="tgl1" name="tgl1" value="'.date('d-m-Y',strtotime($tgl1)).'">';
 	$pilihperiode .= '<input readonly="readonly" type="text" id="tgl2" name="tgl2" value="'.date('d-m-Y', strtotime($tgl2)).'">';
     $pilihperiode .= $pilihantampil.'<button>LIHAT ORDER</button>';
-    $pilihperiode .= '<span style="float: right;margin-top: 6px;"><b>ANDROID MONITOR : ';
-    $pilihperiode .= '<img style="vertical-align:middle" id="status-android" src="'.base_path().'misc/media/images/on-icon.png">';
-    $pilihperiode .= '&nbsp;Total Table Open : <span id="total-open">0</span>';
-    $pilihperiode .= '&nbsp;&nbsp;RESET <img onclick="reset_android()" style="cursor: pointer;vertical-align:middle" src="'.base_path().'misc/media/images/reset-icon.png"></b>';
-    $pilihperiode .= '</span>';
     $pilihperiode .= '</div>';
     $pilihperiode .= '</form>';
     $viewcustomerorder = $pilihperiode.'<div id="viewcustomerorder">'.$tabeltampil.'</div>';
@@ -179,6 +179,7 @@ function detail_customerorder(){
 		$tabelcustomerorder .= '<th>SUBTOTAL</th>';
 		$tabelcustomerorder .= '<th class="qty">PERKIRAAN</th>';
 		$tabelcustomerorder .= '<th class="qty">TGL AMBIL</th>';
+        $tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
 		$tabelcustomerorder .= '</tr>';
 		$tabelcustomerorder .= '</thead>';
 		$tabelcustomerorder .= '<tbody>';
@@ -195,6 +196,7 @@ function detail_customerorder(){
 		$tabelcustomerorder .= '<th>&nbsp;</th>';
 		$tabelcustomerorder .= '<th>&nbsp;</th>';
 		$tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
 		$tabelcustomerorder .= '</tr>';
 		$tabelcustomerorder .= '</tfoot>';
 		$tabelcustomerorder .= '</table>';

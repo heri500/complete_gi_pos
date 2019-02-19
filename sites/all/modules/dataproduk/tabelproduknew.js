@@ -217,6 +217,32 @@ function tampilkantabelproduk(){
             });
             $('td', row).eq(14).addClass('center');
         },
+        'footerCallback': function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                if (typeof i === 'string') {
+                    i = i.split(tSep).join('');
+                    i = i.split(dSep).join('.');
+                }else if (typeof i === 'number'){
+                    i = i;
+                }else{
+                    i = 0;
+                }
+                return parseFloat(i);
+            };
+            // Total over all pages
+            total = api
+                .column( 16 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            // Update footer
+            $( api.column( 16 ).footer() ).html(
+                currSym +' '+ number_format(total,dDigit,dSep,tSep)
+            ).addClass('angka');
+        },
         'drawCallback': function( settings ) {
             $('.barcode-select').click(function(){
                 if ($(this).is(':checked')){

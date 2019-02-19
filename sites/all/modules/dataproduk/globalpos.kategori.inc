@@ -49,13 +49,18 @@ function tabel_kategori(){
 	$tabelkategori .= '</tr>';
 	$tabelkategori .= '</thead>';
 	$tabelkategori .= '<tbody>';
-	$result = db_query("SELECT idkategori,kodekategori,kategori,keterangan, selected_printer FROM kategori ORDER BY kodekategori,kategori");
+	$IpAddress = ip_address();
+	$StrSql = "SELECT selected_printer FROM kategori_printer AS katprn WHERE ";
+    $StrSql .= "katprn.idkategori = kat.idkategori AND ip_address = '$IpAddress'";
+    $StrSql2 = "SELECT idkategori,kodekategori,kategori,keterangan, ($StrSql) AS chosen_printer ";
+    $StrSql2 .= "FROM kategori AS kat ORDER BY kodekategori,kategori";
+	$result = db_query($StrSql2);
 	while ($data = db_fetch_object($result)){
 		$tabelkategori .= '<tr id="'.$data->idkategori.'">';
 		$tabelkategori .= '<td class="editable">'.$data->kodekategori.'</td>';
 		$tabelkategori .= '<td class="editable">'.$data->kategori.'</td>';
 		$tabelkategori .= '<td class="editable">'.$data->keterangan.'</td>';
-        $tabelkategori .= '<td class="editable-printer">'.$data->selected_printer.'</td>';
+        $tabelkategori .= '<td class="editable-printer">'.$data->chosen_printer.'</td>';
 		$tabelkategori .= '</tr>';
 	}
 	$tabelkategori .= '</tbody>';
@@ -92,6 +97,19 @@ function update_kategori(){
 		$sql_update = "UPDATE kategori SET keterangan='%s' WHERE idkategori='%d'";
 	}elseif ($KOLOM == "3"){
         $sql_update = "UPDATE kategori SET selected_printer='%s' WHERE idkategori='%d'";
+        $SelectedPrinter = $NILAI;
+        $IdKategori = $KATEGORI_ID;
+        $IpAddress = ip_address();
+        $StrSql = "SELECT COUNT(*) FROM kategori_printer WHERE ";
+        $StrSql .= "idkategori = %d AND ip_address = '%s'";
+        $PrinterExists = db_result(db_query($StrSql, $IdKategori, $IpAddress));
+        if ($PrinterExists){
+            $StrSql = "UPDATE kategori_printer SET selected_printer='%s' WHERE idkategori=%d AND ip_address = '%s'";
+            db_query($StrSql, $SelectedPrinter, $IdKategori, $IpAddress);
+        }else{
+            $StrSql = "INSERT INTO kategori_printer (idkategori, selected_printer, ip_address) VALUES (%d, '%s', '%s')";
+            db_query($StrSql, $IdKategori, $SelectedPrinter, $IpAddress);
+        }
     }
 	db_query($sql_update,$NILAI,$KATEGORI_ID);
 	echo $NILAI;

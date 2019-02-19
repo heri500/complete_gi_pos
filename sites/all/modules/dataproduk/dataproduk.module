@@ -425,7 +425,7 @@ function get_updated_product(){
 	return $dataProduct;
 }
 function generate_barcode_product(){
-    $strSQL = "SELECT idproduct FROM product WHERE barcode='' OR barcode IS NULL";
+    $strSQL = "SELECT idproduct FROM product WHERE barcode='' OR barcode IS NULL OR barcode = '1'";
     $result = db_query($strSQL);
     $dataProduct = array();
     while ($data = db_fetch_object($result)){
@@ -528,6 +528,8 @@ function get_konversi_satuan($satuan1 = null, $satuan2 = 'PCS'){
             $konversi = db_result(db_query($strSQL, $satuan2, $satuan1));
             if (!empty($konversi)){
                 $konversi = 1/$konversi;
+            }else{
+                $konversi = 1;
             }
         }
     }
@@ -749,4 +751,15 @@ function fix_supplierprice(){
         db_query("UPDATE product_supplier SET harga='%f' WHERE idproduct = '%d'",$data->hargapokok, $data->idproduct);
     }
     return 'Fix Supplier Price';
+}
+
+function fix_kategori_printer(){
+    $StrSql = 'SELECT idkategori, selected_printer FROM kategori WHERE selected_printer IS NOT NULL';
+    $dataKategori = db_query($StrSql);
+    $IpAddress = ip_address();
+    while ($data = db_fetch_object($dataKategori)){
+        db_query("INSERT INTO kategori_printer (idkategori, ip_address, selected_printer) VALUES ('%d','%s','%s')",
+            $data->idkategori, $IpAddress, $data->selected_printer);
+    }
+    return 'Fix Kategori Printer';
 }

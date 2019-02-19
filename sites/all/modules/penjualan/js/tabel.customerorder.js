@@ -9,18 +9,8 @@ var selectedPelanggan = 0;
 var currSym = '';
 var tSep = '.';
 var dSep = ',';
+var dDigit = 0;
 
-function addCommas(nStr){
-	nStr += "";
-	x = nStr.split(".");
-	x1 = x[0];
-	x2 = x.length > 1 ? dSep + x[1] : "";
-	var rgx = /(\d+)(\d{3})/;
-	while (rgx.test(x1)) {
-		x1 = x1.replace(rgx, "$1" + tSep + "$2");
-	}
-	return x1 + x2;
-}
 function tampiltabelcustomerorder(){
 	if (Drupal.settings.urutan == 1){
 		oTable = $('#tabel_customerorder').dataTable( {
@@ -82,17 +72,17 @@ function tampiltabelcustomerorder(){
 			'footerCallback': function ( row, data, start, end, display ) {
 				var api = this.api(), data;
 				// Remove the formatting to get integer data for summation
-				var intVal = function ( i ) {
-					if (typeof i === 'string') {
-						i = i.split(tSep).join('');
-						i = i.split(dSep).join('.');
-					}else if (typeof i === 'number'){
-						i = i;
-					}else{
-						i = 0;
-					}
-					return parseFloat(i);
-				};
+                var intVal = function ( i ) {
+                    if (typeof i === 'string') {
+                        i = i.split(tSep).join('');
+                        i = i.split(dSep).join('.');
+                    }else if (typeof i === 'number'){
+                        i = i;
+                    }else{
+                        i = 0;
+                    }
+                    return parseFloat(i);
+                };
 				// Total over all pages
 				total = api
 					.column( 10 )
@@ -103,7 +93,7 @@ function tampiltabelcustomerorder(){
 				// Update footer
                 total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 10 ).footer() ).html(
-					currSym +' '+ addCommas(total)
+					currSym +' '+ number_format(total,dDigit,dSep,tSep)
 				).addClass('angka');
 
                 total = api
@@ -115,7 +105,7 @@ function tampiltabelcustomerorder(){
                 // Update footer
                 total = parseFloat(Math.abs(total)).toFixed(2);
                 $( api.column( 11 ).footer() ).html(
-                    currSym +' '+ addCommas(total)
+                    currSym +' '+ number_format(total,dDigit,dSep,tSep)
                 ).addClass('angka');
 
                 total = api
@@ -127,7 +117,7 @@ function tampiltabelcustomerorder(){
                 // Update footer
                 total = parseFloat(Math.abs(total)).toFixed(2);
                 $( api.column( 12 ).footer() ).html(
-                    currSym +' '+ addCommas(total)
+                    currSym +' '+ number_format(total,dDigit,dSep,tSep)
                 ).addClass('angka');
 
 
@@ -140,7 +130,7 @@ function tampiltabelcustomerorder(){
 				// Update footer
 				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 14 ).footer() ).html(
-					currSym +' '+ addCommas(total)
+					currSym +' '+ number_format(total,dDigit,dSep,tSep)
 				).addClass('angka');
 				total = api
 					.column( 15 )
@@ -151,7 +141,7 @@ function tampiltabelcustomerorder(){
 				// Update footer
 				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 15 ).footer() ).html(
-					currSym +' '+ addCommas(total)
+					currSym +' '+ number_format(total,dDigit,dSep,tSep)
 				).addClass('angka');
 			},
 		});
@@ -171,83 +161,6 @@ function tampiltabelcustomerorder(){
 				'copy', 'excel', 'print'
 			],
 			'sDom': '<"button-div"B><"H"lfr>t<"F"ip>',
-			/*'createdRow': function ( row, data, index ) {
-				row.id = data[(data.length - 1)];
-				$('td', row).eq(1).addClass('center');
-				$('td', row).eq(2).addClass('center');
-				$('td', row).eq(3).addClass('center');
-				$('td', row).eq(4).addClass('center');
-				$('td', row).eq(5).addClass('center');
-				$('td', row).eq(6).addClass('center');
-				$('td', row).eq(7).addClass('center');
-				$('td', row).eq(8).addClass('center');
-				$('td', row).eq(9).addClass('angka');
-				$('td', row).eq(10).addClass('angka');
-				$('td', row).eq(11).addClass('center');
-				$('td', row).eq(12).addClass('angka');
-				$('td', row).eq(13).addClass('angka');
-				$('td', row).eq(14).addClass('center');
-				$('td', row).eq(15).addClass('center');
-				$('td', row).eq(16).addClass('center');
-				$('td', row).eq(17).addClass('center');
-			},
-			'drawCallback': function( settings ) {
-				var renderer = "bmp";
-				var btype = "ean13";
-				var settings = {
-					output:renderer,
-					barWidth: 1,
-					barHeight: 20
-				};
-				$(".barcode-place").each(function(){
-					barcode_value = $(this).attr('id');
-					$(this).barcode(barcode_value, btype, settings);
-				});
-			},
-			"aoColumnDefs": [
-				{ "bSortable": false, "aTargets": [ 0,1,2,3,4,6,8,12,13,16,18 ] }
-			],
-			'footerCallback': function ( row, data, start, end, display ) {
-				var api = this.api(), data;
-				// Remove the formatting to get integer data for summation
-				var intVal = function ( i ) {
-					return typeof i === 'string' ?
-					i.replace(/[\$.]/g, '')*1 :
-						typeof i === 'number' ?
-							i : 0;
-				};
-				// Total over all pages
-				total = api
-					.column( 10 )
-					.data()
-					.reduce( function (a, b) {
-						return intVal(a) + intVal(b);
-					}, 0 );
-				// Update footer
-				$( api.column( 10 ).footer() ).html(
-					currSym +' '+ addCommas(total)
-				).addClass('angka');
-				total = api
-					.column( 12 )
-					.data()
-					.reduce( function (a, b) {
-						return intVal(a) + intVal(b);
-					}, 0 );
-				// Update footer
-				$( api.column( 12 ).footer() ).html(
-					currSym +' '+ addCommas(total)
-				).addClass('angka');
-				total = api
-					.column( 13 )
-					.data()
-					.reduce( function (a, b) {
-						return intVal(a) + intVal(b);
-					}, 0 );
-				// Update footer
-				$( api.column( 13 ).footer() ).html(
-					currSym +' '+ addCommas(total)
-				).addClass('angka');
-			},*/
 		});
 	}
 }
@@ -313,7 +226,7 @@ function tampiltabelcustomerorderdetail(selectedId){
 			// Update footer
 			total = parseFloat(Math.abs(total)).toFixed(2);
 			$( api.column( 7 ).footer() ).html(
-				currSym +' '+ addCommas(total)
+				currSym +' '+ number_format(total,dDigit,dSep,tSep)
 			).addClass('angka');
 		},
 	});
@@ -380,25 +293,17 @@ function hapus_detail(id, namaproduct){
 	}
 }
 
-function reset_android(){
-	var Konfirmasi = confirm('Yakin ingin mereset monitoring Android Order??');
-	if (Konfirmasi){
-        alamat = pathutama + 'penjualan/resettablecoopen';
-        $.ajax({
-            type: 'POST',
-            url: alamat,
-            cache: false,
-            success: function (data) {
-				alert('Android Monitoring Berhasil Di Reset, Silahkan Tutup Browser Anda Dan Buka Kembali Aplikasi...!!!!');
-            }
-        });
-	}
-}
-
 function panggil_pelanggan(nopanggil){
     var konfirmasi = confirm('Yakin order dengan no order : '+ nopanggil +' selesai dan memanggil pelanggan...??!!');
     if (konfirmasi){
         window.open(pathutama + 'panggilpelanggan/'+ nopanggil);
+    }
+}
+
+function print_detail_order(id_order, id_detail_order, namaproduct){
+    var konfirmasi = confirm('Yakin ingin mencetak order '+ namaproduct +' ini di tempat produksi nya..??!');
+    if (konfirmasi){
+        window.open(pathutama + "print/6?id_order=" + id_order +'&id_detail_order='+ id_detail_order);
     }
 }
 
@@ -410,6 +315,7 @@ $(document).ready(function(){
 	currSym = Drupal.settings.currSym;
 	tSep = Drupal.settings.tSep;
 	dSep = Drupal.settings.dSep;
+    dDigit = Drupal.settings.dDigit;
 
 	urutan = Drupal.settings.urutan;
 	$('#dialogdetail').dialog({
@@ -517,17 +423,17 @@ $(document).ready(function(){
 				diskonview = '('+ ui.item.diskon +'%)';
 			}
 			$('#diskon').val(ui.item.diskon);
-			$('#harga-view').val(currSym +' '+ addCommas(hargajual) +' '+ diskonview);
+			$('#harga-view').val(currSym +' '+ number_format(hargajual,dDigit,dSep,tSep) +' '+ diskonview);
 			$('#hargajual').val(hargajual);
 			$('#hargapokok').val(ui.item.hargapokok);
-			$('#subtotal-view').val(currSym +' '+ addCommas(hargajual));
+			$('#subtotal-view').val(currSym +' '+ number_format(hargajual,dDigit,dSep,tSep));
 			$('#qty-new').val('1');
 			$('#qty-new').select();
 		}
 	});
 	$('#qty-new').on('keyup',function(){
 		var subTotal = $(this).val() * $('#hargajual').val();
-		$('#subtotal-view').val(currSym +' '+ addCommas(subTotal));
+		$('#subtotal-view').val(currSym +' '+ number_format(subTotal,dDigit,dSep,tSep));
 	});
 	$('#qty-new').on('keypress',function(e){
 		if (e.keyCode == 13) {
@@ -560,8 +466,8 @@ $(document).ready(function(){
 						$('#diskon').val(returnData[0].diskon);
 						$('#hargajual').val(hargajual);
 						$('#hargapokok').val(returnData[0].hargapokok);
-						$('#harga-view').val(currSym +' '+ addCommas(hargajual) +' '+ diskonview);
-						$('#subtotal-view').val(currSym +' '+ addCommas(hargajual));
+						$('#harga-view').val(currSym +' '+ number_format(hargajual,dDigit,dSep,tSep) +' '+ diskonview);
+						$('#subtotal-view').val(currSym +' '+ number_format(hargajual,dDigit,dSep,tSep));
 						$('#qty-new').val('1');
 						$('#qty-new').select();
 					}
@@ -600,52 +506,7 @@ $(document).ready(function(){
     $('#print-slip').on('click', function(){
         print_customerorder(selectedOrder,selectedNota);
     });
-    alamat = pathutama + 'penjualan/gettablecoopen';
-    $.ajax({
-        type: 'POST',
-        url: alamat,
-        cache: false,
-        success: function (data) {
-			var totalOpen = parseInt(data);
-			if (totalOpen == 1){
-                var timeOutId = 0;
-                var ajaxFn = function () {
-                    alamat = pathutama + 'penjualan/getnewandroidorderandroid';
-                    $.ajax({
-                        type: 'POST',
-                        url: alamat,
-                        cache: false,
-                        success: function (data) {
-                            var idOrder = parseInt(data.trim());
-                            if (idOrder > 0) {
-                                $('select[name=tabel_customerorder_length]').val(200);
-                                $('select[name=tabel_customerorder_length]').trigger('change');
-                                //window.open(pathutama + 'print/6?idghorder='+ idOrder);
-                                window.open(pathutama + "print/6?idghorderonly=" + idOrder +'&totalprint=1&print_category=1');
-                            }
-                            alamatcek = pathutama + 'penjualan/gettablecoopen';
-                            $.ajax({
-                                type: 'POST',
-                                url: alamatcek,
-                                cache: false,
-                                success: function (data) {
-                                    totalOpen = parseInt(data);
-                                    $('#total-open').html(totalOpen);
-                                    timeOutId = setTimeout(ajaxFn, 7000);
-                                }
-                            });
-                        }
-                    });
-                }
-                ajaxFn();
-                $('#status-android').attr('src',pathutama + 'misc/media/images/on-icon.png');
-                //$('#total-open').html(totalOpen);
-			}else{
-                $('#status-android').attr('src',pathutama + 'misc/media/images/off-icon.png');
-                $('#total-open').html(totalOpen);
-			}
-        }
-    });
+
 	alamat = pathutama + 'datapremis/uploaddata';
 	$.ajax({
 		type: 'POST',
@@ -655,26 +516,4 @@ $(document).ready(function(){
 
 		}
 	});
-	window.onunload = function(){
-        alamat = pathutama + 'penjualan/updatetableco?count=-1';
-        $.ajax({
-            type: 'GET',
-            url: alamat,
-            cache: false,
-            success: function (data) {
-
-            }
-        });
-	}
-    window.onbeforeunload = function(){
-        alamat = pathutama + 'penjualan/updatetableco?count=-1';
-        $.ajax({
-            type: 'GET',
-            url: alamat,
-            cache: false,
-            success: function (data) {
-
-            }
-        });
-    }
 })

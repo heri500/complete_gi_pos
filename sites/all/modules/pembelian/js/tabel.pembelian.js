@@ -140,9 +140,26 @@ function tampiltabelbeli(){
                 }).attr('id','tglbayar-'+ row.id);
                 $('td', row).eq(11).addClass('center');
                 $('td', row).eq(12).addClass('center');
+                $('td', row).eq(13).addClass('center').editable(alamatupdatetanggalbeli,{
+                    submitdata : function(value, settings) {
+                        var idpembelian = row.id;
+                        return { ubah: 'invoice_no' };
+                    },
+                    name   : 'invoice_no',
+                    width  : 120,
+                    height : 18,
+                    style  : 'margin: 0',
+                    submit : 'Ok',
+                    select : true,
+                    tooltip   : 'Klik untuk mengubah no invoice',
+                    indicator : 'Saving...',
+                }).attr('id','invoice-'+ row.id);
+                $('td', row).eq(14).addClass('center');
+                $('td', row).eq(15).addClass('angka');
+                $('td', row).eq(16).addClass('center');
             },
             'aoColumnDefs': [
-                { 'bSortable': false, 'aTargets': [ 0,1,4,11 ] }
+                { 'bSortable': false, 'aTargets': [ 0,1,4,11,13,14,15 ] }
             ],
             'footerCallback': function ( row, data, start, end, display ) {
                 var api = this.api(), data;

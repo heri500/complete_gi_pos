@@ -1,0 +1,1 @@
+CREATE TABLE `gipos_ghc`.`kategori_printer` ( `id` BIGINT NOT NULL AUTO_INCREMENT ,  `idkategori` INT NULL ,  `selected_printer` VARCHAR(255) NULL ,  `ip_address` VARCHAR(30) NULL ,    PRIMARY KEY  (`id`)) ENGINE = InnoDB;

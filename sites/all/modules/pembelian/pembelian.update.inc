@@ -17,6 +17,11 @@ function update_pembelian(){
             $tglbayarbaru = date('Y-m-d',strtotime($_POST['tanggalbayar']));
             db_query("UPDATE pembelian SET jatuh_tempo='%s' WHERE idpembelian=%d", $tglbayarbaru, $idpembelian[1]);
             print $tglbayarbaru;
+        }else if(isset($_POST['invoice_no'])){
+            $idpembelian = explode('-', $_POST['id']);
+            $InvoiceNo = $_POST['invoice_no'];
+            db_query("UPDATE pembelian SET no_invoice='%s' WHERE idpembelian=%d", $InvoiceNo, $idpembelian[1]);
+            print $InvoiceNo;
         }
 	}else{
 		$updateddata = new stdClass();

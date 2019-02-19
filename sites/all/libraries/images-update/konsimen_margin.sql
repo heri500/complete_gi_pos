@@ -1,0 +1,1 @@
+ALTER TABLE `supplier` ADD `konsimen_margin` DOUBLE NULL DEFAULT NULL AFTER `payment_term`;

@@ -506,10 +506,10 @@ function serverSidePenjualan2($request){
 	if (!empty($searchQuery)){
 		$strCriteria .= "AND (prod.barcode LIKE '%%%s%%' OR prod.namaproduct LIKE '%%%s%%' ";
 
-        $strCriteria .= "OR (SELECT GROUP_CONCAT(namasupplier SEPARATOR ',') FROM product_supplier ";
+        /*$strCriteria .= "OR (SELECT GROUP_CONCAT(namasupplier SEPARATOR ',') FROM product_supplier ";
         $strCriteria .= "AS ps LEFT JOIN supplier supp ON ps.idsupplier = supp.idsupplier ";
         $strCriteria .= "WHERE ps.idproduct = detail.idproduct AND ps.idsupplier = detail.idsupplier ";
-        $strCriteria .= "GROUP BY ps.idproduct) LIKE '%%%s%%' ";
+        $strCriteria .= "GROUP BY ps.idproduct) LIKE '%%%s%%' ";*/
 
 		//$strCriteria .= "OR supp.namasupplier LIKE '%%%s%%' ";
 		$strCriteria .= ")";
@@ -528,12 +528,12 @@ function serverSidePenjualan2($request){
 				$tglAkhir,
 				$searchQuery,
 				$searchQuery,
-				$searchQuery,
+				/*$searchQuery,*/
 				$firstRecord,
 				$lastRecord
 			);
 			$recordsFiltered = db_result(
-				db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery, $searchQuery, $searchQuery)
+				db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery, $searchQuery/*, $searchQuery*/)
 			);
 		}else {
 			$result = db_query(
@@ -542,13 +542,13 @@ function serverSidePenjualan2($request){
 				$tglAkhir,
 				$searchQuery,
 				$searchQuery,
-				$searchQuery,
+				/*$searchQuery,*/
 				$firstRecord,
 				$lastRecord
 			);
 			$recordsFiltered = db_result(
-				db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery, $searchQuery, $searchQuery)
-			);
+				db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery, $searchQuery)/*, $searchQuery*/
+                );
 		}
 	}else{
 		if (!empty($idSupplier)) {
@@ -1255,7 +1255,9 @@ function serverSideDetailCustomerOrder($request){
 		}else{
 			$rowData[] = '-';
 		}
-		$rowData[] = $data->id;
+        $PrintButton = '<img title="Klik untuk mencetak detail order ditempat produksi" onclick="print_detail_order('.$idCustomerOrder.','.$data->id.',\''.$data->namaproduct.'\');" src="'.$baseDirectory.'/misc/media/images/print.png" width="22">';
+        $rowData[] = $PrintButton;
+        $rowData[] = $data->id;
 		$output[] = $rowData;
 	}
 	$recordsTotal = db_result(db_query("SELECT COUNT(id) FROM detailcustomerorder"));
@@ -1877,7 +1879,8 @@ function serverSidePembelian($request){
     $strSQL = "SELECT pemb.idpembelian,pemb.nonota,SUBSTR(pemb.tglpembelian,1,10) AS tanggal,";
     $strSQL .= "SUBSTR(pemb.tglpembelian,12,5) AS waktu, pemb.idpemakai,pemb.total,";
     $strSQL .= "pemb.carabayar,pemb.bayar,pemb.kembali,";
-    $strSQL .= "pemb.nokartu,pemb.keterangan,pemb.jatuh_tempo, user.name, supp.namasupplier, supp.idsupplier ";
+    $strSQL .= "pemb.nokartu,pemb.keterangan,pemb.jatuh_tempo, user.name, supp.namasupplier, supp.idsupplier, ";
+    $strSQL .= "pemb.no_invoice, pemb.payment_status, pemb.payment_paid ";
     $strSQL .= "FROM pembelian AS pemb ";
     $strSQL .= "LEFT JOIN cms_users AS user ON user.uid = pemb.idpemakai ";
     $strSQL .= "LEFT JOIN supplier AS supp ON supp.idsupplier = pemb.idsupplier ";
@@ -2033,6 +2036,7 @@ function serverSidePembelian($request){
         }
     }
     $output = array();
+    $ArrayPaymentStatus = array_payment_status_serverside();
     while ($data = db_fetch_object($result)){
         $rowData = array();
         $imgDetail = "<img title=\"Klik untuk melihat detail pembelian\" onclick=\"view_detail(".$data->idpembelian.",'".$data->nonota."',".$data->idsupplier.");\" src=\"$baseDirectory/misc/media/images/forward_enabled.ico\" width=\"22\">";
@@ -2051,6 +2055,9 @@ function serverSidePembelian($request){
         $rowData[] = $data->jatuh_tempo;
         $rowData[] = $data->namasupplier;
         $rowData[] = $data->name;
+        $rowData[] = $data->no_invoice;
+        $rowData[] = $ArrayPaymentStatus[$data->payment_status];
+        $rowData[] = $data->payment_paid;
         $tombolprint = "<img title=\"Klik untuk mencetak barcode\" onclick=\"print_pembelian(".$data->idpembelian.");\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
         $rowData[] = $tombolprint;
         $rowData[] = $data->idpembelian;
@@ -2504,20 +2511,22 @@ function serverSidePerubahanHargaAndroid($request){
 function serverSidePerubahanStockAndroid($request){
     $returnData = json_decode($request);
     for ($i = 0;$i < count($returnData);$i++){
-        $StokSebelum = db_result(db_query('SELECT stok FROM product WHERE idproduct=%d', $returnData[$i]->idproduct));
-        $sql_update = "UPDATE product SET stok='%f',uploaded=0, changed=1 WHERE idproduct='%d'";
-        db_query($sql_update, $returnData[$i]->updatedstok,$returnData[$i]->idproduct);
-        $SelisihStok = ($returnData[$i]->updatedstok*1) - $StokSebelum;
-        if ($SelisihStok < 0){
-            $keluar = abs($SelisihStok);
-            $keterangan = 'Stock Take -> Stok Berkurang';
-            db_query("INSERT INTO transaksistock (idproduk, stocksebelum, keluar, stocksetelah, keterangan) VALUES 
-			('%d', '%f', '%f', '%f', '%s')",$returnData[$i]->idproduct,$StokSebelum,$keluar,$returnData[$i]->updatedstok,$keterangan);
-        }else{
-            $masuk = $SelisihStok;
-            $keterangan = 'Stock Take -> Stok Bertambah';
-            db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
-			('%d', '%f', '%f', '%f', '%s')",$returnData[$i]->idproduct,$StokSebelum,$masuk,$returnData[$i]->updatedstok,$keterangan);
+        if ($returnData[$i]->updatedstok != '') {
+            $StokSebelum = db_result(db_query('SELECT stok FROM product WHERE idproduct=%d', $returnData[$i]->idproduct));
+            $sql_update = "UPDATE product SET stok='%f',uploaded=0, changed=1 WHERE idproduct='%d'";
+            db_query($sql_update, $returnData[$i]->updatedstok, $returnData[$i]->idproduct);
+            $SelisihStok = ($returnData[$i]->updatedstok * 1) - $StokSebelum;
+            if ($SelisihStok < 0) {
+                $keluar = abs($SelisihStok);
+                $keterangan = 'Stock Take -> Stok Berkurang';
+                db_query("INSERT INTO transaksistock (idproduk, stocksebelum, keluar, stocksetelah, keterangan) VALUES 
+			('%d', '%f', '%f', '%f', '%s')", $returnData[$i]->idproduct, $StokSebelum, $keluar, $returnData[$i]->updatedstok, $keterangan);
+            } else {
+                $masuk = $SelisihStok;
+                $keterangan = 'Stock Take -> Stok Bertambah';
+                db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
+			('%d', '%f', '%f', '%f', '%s')", $returnData[$i]->idproduct, $StokSebelum, $masuk, $returnData[$i]->updatedstok, $keterangan);
+            }
         }
     }
     return $returnData;
@@ -2763,6 +2772,14 @@ function ServerSidePettyCashData($request)
         "StrSql" => $strSQL,
         "Today" => $Today,
         "Now" => $Now,
+    );
+}
+
+function array_payment_status_serverside(){
+    return array(
+        'BELUM BAYAR',
+        'BAYAR SEBAGIAN',
+        'LUNAS'
     );
 }
 

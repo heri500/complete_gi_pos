@@ -83,12 +83,13 @@ function tabel_reproduksi($tgl1,$tgl2){
 	$tabelreproduksi .= '<th title="Total nilai laba hasil packing">L. HASIL</th>';
 	$tabelreproduksi .= '<th>'.strtoupper(trans('kasir', $dataPremis->bahasa)).'</th>';
     $tabelreproduksi .= '<th>KETERANGAN</th>';
+    $tabelreproduksi .= '<th>PELUPUSAN</th>';
 	$tabelreproduksi .= '</tr>';
 	$tabelreproduksi .= '</thead>';
 	$tabelreproduksi .= '<tbody>';
 	$result = db_query("SELECT idreproduksi, name, nonota, SUBSTR(tglreproduksi,1,10) AS
 	tanggal,SUBSTR(tglreproduksi,11,9) AS waktu, idpemakai, total, totalmodal,
-	(total-totalmodal) AS laba, keterangan FROM
+	(total-totalmodal) AS laba, keterangan, pelupusan FROM
 	reproduksi a LEFT JOIN cms_users b
 	ON a.idpemakai = b.uid
 	WHERE  SUBSTR(tglreproduksi,1,10) BETWEEN '%s' AND '%s' ORDER BY idreproduksi",
@@ -111,7 +112,11 @@ function tabel_reproduksi($tgl1,$tgl2){
 		$tombolhasil = '<img title="Klik untuk mengisi hasil packing ulang" onclick="add_hasil_pack(\''.$data->idreproduksi.'\',\''.$data->nonota.'\');" src="'.base_path().'misc/media/images/add-small.ico">';
 		//}
 		$tabelreproduksi .= '<td class="center">'.$tomboldetail.'</td>';
-		$tabelreproduksi .= '<td class="center">'.$tombolhasil.'</td>';
+        if ($data->pelupusan != 1) {
+            $tabelreproduksi .= '<td class="center">' . $tombolhasil . '</td>';
+        }else{
+            $tabelreproduksi .= '<td class="center">&nbsp;</td>';
+        }
 		$tabelreproduksi .= '<td class="center">'.$data->nonota.'</td>';
 		$tabelreproduksi .= '<td class="center">'.$data->tanggal.'</td>';
 		$tabelreproduksi .= '<td class="center">'.$data->waktu.'</td>';
@@ -126,6 +131,11 @@ function tabel_reproduksi($tgl1,$tgl2){
 		$tabelreproduksi .= '<td class="angka">'.number_format($labarepro,$DecDigit,$decimalSep,$thousandSep).'</td>';
 		$tabelreproduksi .= '<td class="center">'.$data->name.'</td>';
         $tabelreproduksi .= '<td class="center">'.$data->keterangan.'</td>';
+        if ($data->pelupusan == 1){
+            $tabelreproduksi .= '<td class="center">PELUPUSAN</td>';
+        }else{
+            $tabelreproduksi .= '<td class="center">-</td>';
+        }
 		$tabelreproduksi .= '</tr>';
 		$totaljual = $totaljual + $data->total;
 		$totalmodal = $totalmodal + $data->totalmodal;
@@ -141,8 +151,9 @@ function tabel_reproduksi($tgl1,$tgl2){
 	$tabelreproduksi .= '<th style="text-align: right">'.$currencySym.' '.number_format($totaljualhasil,$DecDigit,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
 	$tabelreproduksi .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalmodalhasil,$DecDigit,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
 	$tabelreproduksi .= '<th style="text-align: right">'.$currencySym.' '.number_format($totallabahasil,$DecDigit,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
-	$tabelreproduksi .= '<th></th>';
-    $tabelreproduksi .= '<th></th>';
+	$tabelreproduksi .= '<th>&nbsp;</th>';
+    $tabelreproduksi .= '<th>&nbsp;</th>';
+    $tabelreproduksi .= '<th>&nbsp;</th>';
 	$tabelreproduksi .= '</tr>';
 	$tabelreproduksi .= '</tfoot>';
 	$tabelreproduksi .= '</table>';

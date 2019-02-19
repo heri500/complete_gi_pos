@@ -213,6 +213,8 @@ function akhiri_belanja(cetak){
 	}
 }
 function do_selesai(cetak){
+    $('#dialogbayar').focus();
+    $('#dialogbayar').block();
 	var request = new Object();
 	request.idsupplier = $('#idsupplier').val();
 	request.detail_produk = $('#nilaikirim').val();
@@ -223,6 +225,7 @@ function do_selesai(cetak){
 	if (request.carabayar == 'HUTANG' && $('#jatuhtempokirim').val() != '') {
         request.jatuh_tempo = $('#jatuhtempokirim').val();
     }
+    request.invoice_no = $('#invoice_no').val();
 	alamat = pathutama + 'pembelian/simpanpembelian';
 	$.ajax({
 		type: 'POST',
@@ -230,6 +233,7 @@ function do_selesai(cetak){
 		data: request,
 		cache: false,
 		success: function(data){
+            $('#dialogbayar').unblock();
 			if (cetak == 1){
                 window.open(pathutama + "print/6?idpembelian="+ data.trim());
             }
@@ -386,11 +390,47 @@ $(document).ready(function(){
 		resizable: false,
 		autoOpen: false,
 		open: function(event, ui) {
-			$('#totalbelanjauser').val(currSym +' '+ number_format(totalbelanja,dDigit,dSep,tSep));
-			$('#nilaibayar').val(totalbelanja);
-			kembali = $('#nilaibayar').val()-totalbelanja;
-			$('#kembali').val(currSym +' '+ number_format(kembali,dDigit,dSep,tSep));
-			$('#nilaibayar').select();
+			var request = new Object();
+            request.id_supplier = $('#idsupplier').val();
+            alamat = pathutama + 'datasupplier/getsupplier';
+            $.ajax({
+                type: 'POST',
+                url: alamat,
+                data: request,
+                cache: false,
+                success: function(data){
+                    var RetData = eval(data);
+                    var DataSupplier = RetData[0];
+                    $('#totalbelanjauser').val(currSym +' '+ number_format(totalbelanja,dDigit,dSep,tSep));
+                    if (DataSupplier.payment_type != 0){
+                        $('#nilaibayar').val(0);
+                        $('#carabayar').val('HUTANG');
+                        $('#carabayar').change();
+                        var JatuhTempo = new Date();
+                        var PaymentTerm = 30;
+                        if (DataSupplier.payment_term > 0){
+                            PaymentTerm = DataSupplier.payment_term;
+						}
+                        JatuhTempo.setDate(JatuhTempo.getDate() + parseInt(PaymentTerm));
+                        var Tgl = JatuhTempo.getDate();
+                        if (Tgl < 10){
+                            Tgl = '0'+ Tgl.toString();
+						}
+                        var Bulan = JatuhTempo.getMonth() + 1;
+                        if (Bulan < 10){
+                            Bulan = '0' + Bulan.toString();
+						}
+                        var Tahun = JatuhTempo.getFullYear();
+                        $('#jatuhtempo').val(Tgl + '-' + Bulan +'-'+ Tahun);
+                        $('#jatuhtempokirim').val(Tahun + '-' + Bulan +'-'+ Tgl);
+					}else {
+                        $('#nilaibayar').val(totalbelanja);
+                    }
+                    kembali = $('#nilaibayar').val()-totalbelanja;
+                    $('#kembali').val(currSym +' '+ number_format(kembali,dDigit,dSep,tSep));
+                    $('#invoice_no').select();
+                }
+            });
 		},
 		close: function(){
 			$('#barcode').select();
@@ -479,8 +519,6 @@ $(document).ready(function(){
             var pecahnilai = nilaidata.split("___");
             var nilaiubah = parseFloat($("#newharga2").val());
             var SubTotalLama = parseFloat(pecahnilai[1])*parseFloat(pecahnilai[2]);
-            console.log(SubTotalLama);
-            console.log(totalbelanja);
             totalbelanja = totalbelanja - SubTotalLama;
 
             oTable.fnUpdate(number_format(nilaiubah,dDigit,dSep,tSep), baris_int, 3 );
@@ -567,4 +605,9 @@ $(document).ready(function(){
     $('#idsupplier').chosen().change(function(){
         $('#barcode').focus();
     });
+    $('#invoice_no').keyup(function(e){
+    	if (e.keyCode == 13){
+            $('#nilaibayar').select();
+		}
+	});
 })

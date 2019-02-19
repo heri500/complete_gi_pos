@@ -25,11 +25,19 @@ function datapremis_menu() {
         'access arguments' => array('Access Data Premis'),
         'type' => MENU_CALLBACK,
     );
+    $items['datapremis/uploaddatacron'] = array(
+        'title' => t('Upload Data Premis'),
+        'description' => 'Upload data premis',
+        'page callback' => 'do_upload_premisdata_cron',
+        'access callback' => 'user_access',
+        'access arguments' => array('Access Cron Data Premis'),
+        'type' => MENU_CALLBACK,
+    );
     return $items;
 } // end hook menu
 
 function datapremis_perm() {
-    return array('Access Data Premis','Admin Data Premis');
+    return array('Access Data Premis','Admin Data Premis', 'Access Cron Data Premis');
 }
 
 require_once 'datapremis.api.inc';
@@ -101,6 +109,7 @@ function datapremis_input_form(&$form_state){
     $Madah = variable_get('madah_slogan','INGAT MAKAN INGAT TUHAN');
     $JumlahLorong = variable_get('jumlah_lorong',10);
     $JumlahTingkat = variable_get('jumlah_tingkat',10);
+    $RoundDigit = variable_get('decimal_digit_cashier',0);
     if (!count($dataPremis)){
         $idPremis = createEAN13PemisCode();
         $zonePremis = 0;
@@ -255,6 +264,13 @@ function datapremis_input_form(&$form_state){
         '#default_value' => $DecimalDigit,
         '#description' => t('Isi dengan digit desimal(jumlah angka dibelakang koma), default 0'),
     );
+    $form['decimal_digit_cashier'] = array(
+        '#type' => 'select',
+        '#title' => t('Round decimal digit in cashier'),
+        '#options' => array(0 => 'Tidak', 1=> 'Ya'),
+        '#description' => t('Pilih Ya untuk round decimal, Tidak untuk sebaliknya.'),
+        '#default_value' => $RoundDigit,
+    );
     $form['bahasa'] = array(
         '#type' => 'select',
         '#title' => t('Bahasa di Resi'),
@@ -304,6 +320,7 @@ function datapremis_input_form_submit($form, &$form_state) {
     variable_set('madah_slogan', $formValues['madah']);
     variable_set('jumlah_lorong', $formValues['jumlah_lorong']);
     variable_set('jumlah_tingkat', $formValues['jumlah_tingkat']);
+    variable_set('decimal_digit_cashier', $formValues['decimal_digit_cashier']);
     if (cek_data_premis_exists()){
         $formValues['uid'] = $user->uid;
         $formValues['changed'] = time();
@@ -482,10 +499,10 @@ function get_data_premis_uploaded(){
     }
     return $arrayData;
 }
-function do_upload_premisdata(){
+function do_upload_premisdata_test(){
     return 'Test';
 }
-function do_upload_premisdata_ori(){
+function do_upload_premisdata(){
     $resultview = '';
     if (is_connected()) {
         //copy data premis();
@@ -600,7 +617,7 @@ function is_connected(){
 
 }
 function get_number_format(&$currencySym, &$thousandSep, &$decimalSep, $addJs = true){
-    $dataPremis = get_data_premis();
+    $dataPremis = get_data_premis(false);
     if (!empty($dataPremis)){
         $currencySym = $dataPremis->currency_symbol;
         $thousandSep = trim($dataPremis->thousand_separator);

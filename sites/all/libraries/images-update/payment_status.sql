@@ -1,0 +1,10 @@
+ALTER TABLE `pembelian` ADD `payment_status` TINYINT NOT NULL DEFAULT '0' AFTER `status_supplier`;
+ALTER TABLE `pembelian` ADD `no_invoice` VARCHAR(255) NULL AFTER `nonota`;
+ALTER TABLE `pembelian` ADD `payment_paid` DOUBLE NULL AFTER `payment_status`;
+ALTER TABLE `pembelian` ADD `uid_changed` INT NULL ;
+ALTER TABLE `pembelian` CHANGE `payment_paid` `payment_paid` DOUBLE NULL DEFAULT '0';
+ALTER TABLE `pembayaranhutang` ADD `discount_persen` INT NOT NULL DEFAULT '0' AFTER `keterangan`, ADD `discount_value` DOUBLE NOT NULL DEFAULT '0' AFTER `discount_persen`;
+CREATE TABLE `pembayaranhutang_nota` ( `idpembayaran` BIGINT NULL , `idpembelian` BIGINT NULL , `status_pembayaran` TINYINT NOT NULL DEFAULT '0' ) ENGINE = InnoDB;
+ALTER TABLE `pembayaranhutang_nota` ADD PRIMARY KEY( `idpembayaran`, `idpembelian`, `status_pembayaran`);
+ALTER TABLE `pembayaranhutang_nota` ADD `total_bayar` DOUBLE NOT NULL DEFAULT '0' AFTER `status_pembayaran`;
+ALTER TABLE `product` ADD `harga_datang` DOUBLE NULL AFTER `changed`, ADD `harga_pokok_purata` DOUBLE NULL AFTER `harga_datang`;

@@ -1,0 +1,2 @@
+ALTER TABLE `diskonkategori` CHANGE `idkategori` `idkategori` INT(11) NULL, CHANGE `besardiskon` `besardiskon` DOUBLE NOT NULL DEFAULT '0';
+ALTER TABLE `diskonkategori` ADD `harga_diskon` DOUBLE NOT NULL DEFAULT '0' AFTER `besardiskon`;

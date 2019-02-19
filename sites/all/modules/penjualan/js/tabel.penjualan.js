@@ -47,7 +47,23 @@ function tampiltabeljual(){
 				$('td', row).eq(7).addClass('angka');
 				$('td', row).eq(8).addClass('angka');
 				$('td', row).eq(9).addClass('center');
-				$('td', row).eq(10).addClass('angka');
+				$('td', row).eq(10).addClass('angka').editable(alamatupdate,{
+                    submitdata : function(value, settings) {
+                        var idpenjualan = row.id;
+                        return { ubah: 'bayar' };
+                    },
+                    name   : 'bayar',
+                    width  : 100,
+                    height : 18,
+                    style  : 'margin: 0',
+                    submit : 'Ok',
+                    select : true,
+                    tooltip   : 'Klik untuk mengubah bayar',
+                    indicator : 'Saving...',
+                    callback : function(value, settings) {
+                        oTable.fnDraw();
+                    }
+                }).attr('id','bayar-'+ row.id);
 				$('td', row).eq(11).addClass('angka');
 				$('td', row).eq(12).addClass('center');
 				$('td', row).eq(13).addClass('center');
@@ -55,7 +71,7 @@ function tampiltabeljual(){
                 $('td', row).eq(15).addClass('center');
 			},
             'aoColumnDefs': [
-                { 'bSortable': false, 'aTargets': [ 0,3,12,16 ] }
+                { 'bSortable': false, 'aTargets': [ 0,3,12,14,15,16 ] }
             ],
 			'footerCallback': function ( row, data, start, end, display ) {
 				var api = this.api(), data;
@@ -522,6 +538,7 @@ function delete_penjualan(idpenjualan, nonota){
 $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
 	alamatupdatepenjualan = pathutama + 'penjualan/updatedetailpenjualan';
+	alamatupdate = pathutama + 'penjualan/updatepenjualan';
 	urutan = Drupal.settings.urutan;
 
 	currSym = Drupal.settings.currSym;

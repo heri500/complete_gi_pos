@@ -341,9 +341,9 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$totalNilaiBarang = calculateTotalNilaiBarang($statusstok, $statusProduct);
 	$tabelproduk .= '<tfoot>';
 	$tabelproduk .= '<tr>';
-	$tabelproduk .= '<th class="right" colspan="16">TOTAL NILAI BARANG :</th>';
-	$tabelproduk .= '<th class="right"><strong><div id="total-nilai-barang">'.$currencySym.' '.number_format($totalNilaiBarang,2,$decimalSep,$thousandSep).'</div></strong></th>';
-	$tabelproduk .= '<th colspan="5"></th>';
+	$tabelproduk .= '<th class="right" colspan="16">TOTAL NILAI BARANG(VIEW) :</th>';
+	$tabelproduk .= '<th class="right">&nbsp;</th>';
+	$tabelproduk .= '<th colspan="5"><strong>TOTAL SELURUH BARANG : <div id="total-nilai-barang">'.$currencySym.' '.number_format($totalNilaiBarang,2,$decimalSep,$thousandSep).'</div></strong></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</tfoot>';
 	$tabelproduk .= '</table>';

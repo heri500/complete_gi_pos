@@ -22,6 +22,7 @@ function pembelian(){
 	drupal_add_js('misc/media/datatables/js/dataTables.addtr.js');
 	drupal_add_js('misc/media/datatables/js/number.format.js');
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
+    _addBlockUiPlugins(false);
     _add_chosen_jquery_plugins_old();
     _addPreventBackPage();
 	if (isset($_GET['tanggal'])){
@@ -113,10 +114,12 @@ function pembelian(){
 	$carabayar .= '</select>';
 	$nilaibayar = '<input type="text" id="nilaibayar" name="nilaibayar">';
 	$kembali = '<input readonly="readonly" type="text" id="kembali" name="kembali">';
+    $InvoiceInput = '<input type="text" id="invoice_no" name="invoice_no">';
 	$totalbelanja = '<input type="text" id="totalbelanjauser" name="totalbelanjauser">';
 	$JatuhTempo = '<input type="text" id="jatuhtempo" name="jatuhtempo" readonly="readonly">';
     $JatuhTempo .= '<input type="text" id="jatuhtempokirim" name="jatuhtempokirim" style="display: none;">';
-	$pembelian .= '<div class="barisbayar"><label>Total</label>'.$totalbelanja.'</div>';
+    $pembelian .= '<div class="barisbayar"><label>Invoice</label>'.$InvoiceInput.'</div>';
+    $pembelian .= '<div class="barisbayar"><label>Total</label>'.$totalbelanja.'</div>';
 	$pembelian .= '<div class="barisbayar"><label>Cara Bayar</label>'.$carabayar.'</div>';
 	$pembelian .= '<div class="barisbayar"><label>Pembayaran</label>'.$nilaibayar.'</div>';
     $pembelian .= '<div id="barisjatuhtempo" class="barisbayar" style="display: none;"><label>'.ucfirst(trans('jatuh tempo', $dataPremis->bahasa)).'</label>'.$JatuhTempo.'</div>';
@@ -150,14 +153,14 @@ function simpan_pembelian(){
         global $user;
         if (!empty($JatuhTempo)) {
             db_query("INSERT INTO pembelian (nonota, idpemakai, total, bayar, kembali, 
-            tglpembelian, carabayar, jatuh_tempo, idsupplier) VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%s', '%s','%d')",
+            tglpembelian, carabayar, jatuh_tempo, idsupplier, no_invoice) VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%s', '%s','%d','%s')",
                 $no_nota, $user->uid, round($_POST["totalbelanja"],$DecDigit), $_POST["bayar"], $kembali, $waktujual,
-                $caraBayar, $JatuhTempo, $IdSupplier);
+                $caraBayar, $JatuhTempo, $IdSupplier,$_POST["invoice_no"]);
         }else{
             db_query("INSERT INTO pembelian (nonota, idpemakai, total, bayar, kembali, 
-            tglpembelian, carabayar, idsupplier) VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%s', '%d')",
+            tglpembelian, carabayar, idsupplier,no_invoice) VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%s', '%d','%s')",
                 $no_nota, $user->uid, round($_POST["totalbelanja"],$DecDigit), $_POST["bayar"], $kembali, $waktujual,
-                $caraBayar, $IdSupplier);
+                $caraBayar, $IdSupplier,$_POST["invoice_no"]);
         }
         $next_id = db_last_insert_id('pembelian', 'idpembelian');
         print $_POST["detail_produk"];
@@ -187,6 +190,16 @@ function simpan_pembelian(){
             $data = db_fetch_object($result);
             $HARGAPOKOK = round($data->hargapokok,$DecDigit);
             $STOKSEBELUM = $data->stok;
+            if ($STOKSEBELUM <= 0){
+                $HargaRata2 = $HARGABELI;
+            }else{
+                $HargaRata2 = (($HARGAPOKOK*$STOKSEBELUM) + ($HARGABELI*$QTY))/($STOKSEBELUM + $QTY);
+            }
+
+            db_query("
+                UPDATE product SET harga_datang='%f', harga_pokok_purata='%f' WHERE idproduct=%d",
+                $HARGABELI, $HargaRata2, $IDPRODUK
+            );
             $ExpiredDate = $pecahnilai[3];
             $barcodeBatch = create_barcode_batch();
             //idpembelian, idproduct, jumlah, hargapokok, hargapokok
@@ -368,7 +381,7 @@ function view_tabel_pembelian(){
         $nota = 'selected="selected"';
         $idSupplier = isset($_POST['idsupplier']) ? $_POST['idsupplier'] : 0;
         $tabeltampil = tabel_pembelian($tgl1,$tgl2, $idSupplier);
-        $urutan = 1;
+        $urutan = 2;
         $tampilData = 0;
         $addedFilter = createSupplierSelection($idSupplier,'ALL', false).'<input type="hidden" id="idsupplier_select" name="idsupplier_select" value="0">';
         if(isset($_POST['idsupplier'])){
@@ -388,7 +401,7 @@ function view_tabel_pembelian(){
         $idSupplier = isset($_POST['idsupplier']) ? $_POST['idsupplier'] : 0;
         $tabeltampil = tabel_pembelian($tgl1,$tgl2,$idSupplier);
         $nota = 'selected="selected"';
-        $urutan = 1;
+        $urutan = 2;
         $tampilData = 0;
         $addedFilter = createSupplierSelection($idSupplier,'ALL', false).'<input type="hidden" id="idsupplier_select" name="idsupplier_select" value="0">';
         if(isset($_POST['idsupplier'])){
@@ -491,6 +504,9 @@ function tabel_pembelian()
     $tabelpembelian .= '<th>'.strtoupper(trans('tanggal', $dataPremis->bahasa)).' BAYAR</th>';
     $tabelpembelian .= '<th>SUPPLIER</th>';
     $tabelpembelian .= '<th>'.strtoupper(trans('kasir', $dataPremis->bahasa)).'</th>';
+    $tabelpembelian .= '<th>'.strtoupper(trans('faktur', $dataPremis->bahasa)).'</th>';
+    $tabelpembelian .= '<th>STATUS</th>';
+    $tabelpembelian .= '<th>PAID</th>';
     $tabelpembelian .= '<th class="tablebutton"></th>';
     $tabelpembelian .= '</tr>';
     $tabelpembelian .= '</thead>';
@@ -503,7 +519,7 @@ function tabel_pembelian()
     $tabelpembelian .= '<th style="text-align: right">&nbsp;&nbsp;</th>';
     $tabelpembelian .= '<th style="text-align: right">&nbsp;&nbsp;</th>';
     $tabelpembelian .= '<th style="text-align: right">&nbsp;&nbsp;</th>';
-    $tabelpembelian .= '<th colspan="4">&nbsp;</th>';
+    $tabelpembelian .= '<th colspan="7">&nbsp;</th>';
     $tabelpembelian .= '</tr>';
     $tabelpembelian .= '</tfoot>';
     $tabelpembelian .= '</table>';

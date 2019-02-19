@@ -111,4 +111,14 @@ $TerjemahKata = array(
         'Malaysia' => 'period',
         'English' => 'periode',
     ),
+    'konsinyasi' => array(
+        'Indonesia' => 'konsinyasi',
+        'Malaysia' => 'konsimen',
+        'English' => 'consiment',
+    ),
+    'voucher' => array(
+        'Indonesia' => 'voucher',
+        'Malaysia' => 'baucher',
+        'English' => 'voucher',
+    ),
 );

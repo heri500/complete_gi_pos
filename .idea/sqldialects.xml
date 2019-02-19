@@ -4,5 +4,13 @@
     <file url="file://$PROJECT_DIR$/sites/all/libraries/images-update/barcode_type_field.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/sites/all/libraries/images-update/cara_bayar_penjualan_mod.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/sites/all/libraries/images-update/id_pembayaran_supplier.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/sites/all/libraries/images-update/kategori_printer.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/sites/all/libraries/images-update/konsimen_margin.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/sites/all/libraries/images-update/payment_status.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/sites/all/libraries/images-update/penjualan_bayar.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/sites/all/libraries/images-update/petty_cash_logout.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/sites/all/libraries/images-update/po_exp_arrive.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/sites/all/libraries/images-update/product_discount.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/sites/all/libraries/images-update/update_detail_jual_beli_add_idsupplier.sql" dialect="MySQL" />
   </component>
 </project>

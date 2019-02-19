@@ -503,6 +503,15 @@ function penjualan_menu()
         'type' => MENU_CALLBACK,
         'file' => 'pettycash.delete.inc'
     );
+    $items['penjualan/androidmonitor'] = array(
+        'title' => t('Android Monitoring'),
+        'description' => 'Android monitoring page',
+        'page callback' => 'android_monitor_page',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'android.monitor.inc'
+    );
     return $items;
 } // end hook menu
 
@@ -820,6 +829,12 @@ function fix_log_out_petty_cash(){
             $FixedData[] = $data;
         }
     }
+    return $FixedData;
+}
+
+function fix_penjualan_bayarmultiple(){
+    $StrSql = "UPDATE penjualan SET bayar_multiple = CONCAT (carabayar, ':', bayar) WHERE bayar_multiple IS NULL";
+    $FixedData = db_query($StrSql);
     return $FixedData;
 }
 

@@ -156,8 +156,15 @@ function delete_detail_penjualan($iddetail = null, $idPenjualan = null){
 		$totalOrder = db_result(db_query($strSQL,$idPenjualan));
 		$strSQL = 'SELECT SUM(hargapokok*jumlah) AS total_modal FROM detailpenjualan WHERE idpenjualan=%d';
 		$totalModal = db_result(db_query($strSQL,$idPenjualan));
-		$strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\', uploaded=0, changed=1 WHERE idpenjualan=%d';
-		db_query($strSQL,$totalOrder,$totalModal,$idPenjualan);
+        $strSQL = 'SELECT ppn FROM customer_order WHERE id=%d';
+        $PpnValue = db_result(db_query($strSQL));
+        $TotalPlusPpn = $totalOrder + ($totalOrder * $PpnValue/100);
+        $TotalAfterVoucher = $TotalPlusPpn;
+        $TotalRound = round5($TotalPlusPpn);
+        $strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\', total_plus_ppn=\'%f\', ';
+        $strSQL .= 'total_after_voucher = \'%f\', total_round = \'%f\', ';
+        $strSQL .= 'uploaded=0, changed=1  WHERE idpenjualan=%d';
+        db_query($strSQL, $totalOrder, $totalModal, $TotalPlusPpn, $TotalAfterVoucher, $TotalRound, $idPenjualan);
 		/* End Update Penjualan */
 		/* Update Hutang Penjualan Jika Ada */
 		$caraJual = db_result(db_query('SELECT carabayar FROM penjualan WHERE idpenjualan=%d',$idPenjualan));
@@ -173,6 +180,8 @@ function delete_detail_penjualan($iddetail = null, $idPenjualan = null){
 		}
 		/* End Update Hutang Penjualan Jika Ada */
 		$deleteStatus[] = array('message' => 'Penghapusan detail penjualan berhasil...!!!');
+        $kembali = $bayar - $TotalRound;
+        db_query('UPDATE penjualan SET kembali=\'%f\', uploaded=0, changed=1 WHERE idpenjualan=%d',$kembali,$idPenjualan);
 	}
 	return $deleteStatus;
 }

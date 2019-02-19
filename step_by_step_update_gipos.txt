@@ -1,0 +1,12 @@
+generate_product_supplier();
+cara_bayar_penjualan_mod.sql
+fix_penjualan_bayarmultiple();
+fix_penjualan_bayar();
+fix_detail_penjualan();
+payment_status.sql
+payment_by_voucher.sql
+diskon_pelanggan_update.sql
+update_detail_jual_beli_add_idsupplier.sql
+konsimen_margin.sql
+user_petty_cash_table.sql
+petty_cash_logout.sql

@@ -7,7 +7,7 @@
  */
 function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	get_number_format($currencySym, $thousandSep, $decimalSep);
-    $gstSym = get_gst_symbols();
+    $gstSym = get_gst_symbols(false);
 	$dataPremis = get_data_premis();
     $DecDigit = $dataPremis->decimal_digit;
 	$path = drupal_get_path('theme', 'cti_flex');
@@ -92,6 +92,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	}
 	$tglsekarang = date("Y-m-d");
 	$tgltampil = date("d-m-Y");
+    $DecDigitCashier = variable_get('decimal_digit_cashier',0);
 	drupal_add_js(
 		array(
 			'tglsekarang' => $tglsekarang,
@@ -99,6 +100,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 			'logo' => $logoPath,
 			'upload_data' => $uploadData,
             'dec_digit' => $DecDigit,
+            'dec_digit_cashier' => $DecDigitCashier,
 		), 
 	'setting');
 	$js_path = drupal_get_path('module','penjualan').'/js/kasir.form.new.js';
@@ -197,18 +199,26 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$penjualan .= '<label>Qty Baru : </label><input type="text" id="newqty2" name="newqty2">';
 	$penjualan .= '</div>';
 	$penjualan .= '<div title="PEMBAYARAN" id="dialogbayar">';
-	$carabayar = '<select id="carabayar" name="carabayar" multiple="multiple" style="font-size: 1.4em !important;font-weight: bold;margin-top: 10px;">';
+	$carabayar = '<select id="carabayar" name="carabayar" style="font-weight: bold;">';
+    $carabayar2 = '<select id="carabayar2" name="carabayar2" style="font-weight: bold;" disabled="disabled">';
 	$result = db_query("SELECT carabayar FROM carabayar");
 	$i = 0;
 	while($data = db_fetch_object($result)){
 		if ($i == 0){
-			$carabayar .= '<option selected="selected" value="'.$data->carabayar.'">'.$data->carabayar.'</option>';	
+			$carabayar .= '<option selected="selected" value="'.$data->carabayar.'">'.$data->carabayar.'</option>';
+            $carabayar2 .= '<option disabled="disabled" value="'.$data->carabayar.'">'.$data->carabayar.'</option>';
 		}else{
-			$carabayar .= '<option value="'.$data->carabayar.'">'.$data->carabayar.'</option>';	
+			$carabayar .= '<option value="'.$data->carabayar.'">'.$data->carabayar.'</option>';
+            if ($i == 1){
+                $carabayar2 .= '<option selected="selected" value="'.$data->carabayar.'">'.$data->carabayar.'</option>';
+            }else{
+                $carabayar2 .= '<option value="'.$data->carabayar.'">'.$data->carabayar.'</option>';
+            }
 		}
 		$i++;
 	}
 	$carabayar .= '</select>';
+    $carabayar2 .= '</select>';
 	$perlakuankembalian = '<select id="kembalian" name="kembalian">';
 	$arrayPerlakuan = PERLAKUAN_KEMBALIAN();
 	for ($i = 0;$i < count($arrayPerlakuan);$i++){
@@ -257,9 +267,24 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$totalppn .= '<input type="text" id="total_ppn" name="total_ppn" value="0" disabled="disabled">';
 	$ceklistPpn = '<input type="checkbox" id="use-ppn" name="use-ppn" value="1" checked="checked" class="checkbox-ppn">';
 	$penjualan .= '<div class="barisbayar"><label style="width: 250px;" >'.$gstSym.' ('.$dataPremis->ppn_value.'%)&nbsp;'.$ceklistPpn.'</label>'.$totalppn.'</div>';
-	$totalplusppn = '<input type="text" id="total_plus_ppn" name="total_plus_ppn" value="0" disabled="disabled">';
-	$penjualan .= '<div class="barisbayar"><label style="width: 250px;">TOTAL + '.$gstSym.'</label>'.$totalplusppn.'</div>';
-	$penjualan .= '<div class="barisbayar"><label style="width: 250px;">CARA BAYAR</label>'.$carabayar.'</div>';
+
+	//Payment By Voucher
+    $VoucherPayment = '<input type="text" id="voucher_value" name="voucher_value" value="0" disabled="disabled">';
+    $VoucherNumber = '<textarea id="voucher_number" name="voucher_number" disabled="disabled" class="textarea-bayar"></textarea>';
+    $CekListVoucher = '<input type="checkbox" id="use-voucher" name="use-voucher" value="1" class="checkbox-ppn">';
+    $penjualan .= '<div class="barisbayar"><label style="width: 250px;" >'.strtoupper(trans('voucher', $dataPremis->bahasa)).' '.$CekListVoucher.'</label>'.$VoucherPayment.'</div>';
+    $penjualan .= '<div class="barisbayar"><label style="width: 250px;" >&nbsp;</label>'.$VoucherNumber.'</div>';
+	//End Payment By Voucher
+
+    $totalplusppn = '<input type="text" id="total_plus_ppn" name="total_plus_ppn" value="0" disabled="disabled">';
+    $penjualan .= '<div class="barisbayar"><label style="width: 250px;">TOTAL + '.$gstSym.'</label>'.$totalplusppn.'</div>';
+    $Penggenapan = '<input type="text" id="penggenapan" name="penggenapan" value="0" disabled="disabled" style="margin-bottom: 8px;">';
+    $penjualan .= '<div class="barisbayar"><label style="width: 250px;">PENGGENAPAN</label>'.$Penggenapan.'</div>';
+    $penjualan .= '<div class="barisbayar"><label style="width: 250px;">CARA BAYAR</label>'.$carabayar.'</div>';
+
+    $CekListCaraBayar = '<input type="checkbox" id="use-carabayar2" name="use-carabayar2" value="1" class="checkbox-ppn">';
+    $penjualan .= '<div class="barisbayar"><label style="width: 250px;">CARA BAYAR 2'.$CekListCaraBayar.'</label>'.$carabayar2.'</div>';
+
 	$penjualan .= '<div id="field_no_kartu_debit" class="barisbayar" style="display: none;"><label style="width: 250px;">NO. KAD DEBIT</label>'.$nokartudebit.'</div>';
     $penjualan .= '<div id="field_no_kartu_kredit" class="barisbayar" style="display: none;"><label style="width: 250px;">NO. KAD KREDIT</label>'.$nokartukredit.'</div>';
 	$penjualan .= '<div id="baris-deposit" class="barisbayar"><label id="label-deposit" style="width: 250px;">Deposit</label>'.$depositpelanggan.'</div>';
@@ -299,7 +324,7 @@ function simpan_penjualan(){
 			$next_id = 1;
 		}
 		$no_nota = buat_nota($next_id);
-		$kembali = $_POST["bayar"] - $_POST["totalbelanjappn"];
+		$kembali = $_POST["bayar"] - $_POST["totalbelanjaround"];
 		$perkuankembalian = isset($_POST["perlakuankembalian"]) ? $_POST["perlakuankembalian"] : 0;
 		$idtitipanlaundry = 0;
 		if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){
@@ -313,11 +338,14 @@ function simpan_penjualan(){
             $PpnValue = $_POST["totalbelanjappn"] - ($_POST["totalbelanja"] / ((100 + $_POST["ppn"])/100));
         }
 		db_query("INSERT INTO penjualan (nonota, idpemakai, total, bayar, kembali, tglpenjualan, idpelanggan, 
-        carabayar, idtitipanlaundry, perlakuankembalian, ppn, total_plus_ppn, ppn_value,bayar_multiple) 
-		VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%d', '%s', '%d', '%d', '%f', '%f', '%f', '%s')",
+        carabayar, idtitipanlaundry, perlakuankembalian, ppn, total_plus_ppn, ppn_value,bayar_multiple,total_round,
+        voucher_value,voucher_number,total_after_voucher) 
+		VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%d', '%s', '%d', '%d', '%f', '%f', '%f', '%s', '%f',
+		'%f','%s','%f')",
 		$no_nota, $user->uid, $_POST["totalbelanja"], $_POST["bayar"], $kembali, $waktujual,
 		$_POST["idpelanggan"],$_POST["carabayar"], $idtitipanlaundry,$perkuankembalian,
-        $_POST["ppn"],$_POST["totalbelanjappn"],$PpnValue,$_POST["bayar_multiple"]);
+        $_POST["ppn"],$_POST["totalbelanjappn"],$PpnValue,$_POST["bayar_multiple"],$_POST["totalbelanjaround"],
+        $_POST["voucher_value"], $_POST["voucher_number"], $_POST["total_after_voucher"]);
 		$next_id = db_last_insert_id('penjualan', 'idpenjualan');
 		$ExplodeBayar = explode(';',$_POST["bayar_multiple"]);
 		for ($i = 0;$i < count($ExplodeBayar);$i++){
@@ -363,7 +391,7 @@ function simpan_penjualan(){
 				$variables['keterangan'] = 'Deposit Uang Dari Kembalian Nota Penjualan : '.$no_nota.' Tanggal : '.$waktujual;
 				pembayaranhutang($variables);	
 			}
-		}else if ($kembali < 0){
+		}else if ($kembali < 0 && isset($_POST["idpelanggan"]) && !empty($_POST["idpelanggan"])){
 			db_query("INSERT INTO detailpiutang (idpelanggan, idpenjualan, besarhutang) VALUES ('%d','%d','%f')",
 			$_POST["idpelanggan"],$next_id,abs($kembali));
 			$resultpiutang = db_query("SELECT idpelanggan, besarhutang  FROM piutang WHERE idpelanggan='%d'",
@@ -608,6 +636,12 @@ function buat_nota($idpenjualan){
 	return $no_nota;
 }
 function hitung_omset($tgl = null){
+    global $user;
+    if (!empty($user->timezone_name)) {
+        date_default_timezone_set($user->timezone_name);
+    }else{
+        set_default_time_zone();
+    }
 	if ($_POST["tglpost"]){
 		$tglomset = $_POST["tglpost"];
 	}else{
@@ -617,7 +651,7 @@ function hitung_omset($tgl = null){
 			$tglomset = $tgl;
 		}
 	}
-	$result = db_query("SELECT SUM(total_plus_ppn) AS totalbelanja FROM penjualan WHERE SUBSTR(tglpenjualan,1,10)='%s'",$tglomset);
+	$result = db_query("SELECT SUM(total_round) AS totalbelanja FROM penjualan WHERE SUBSTR(tglpenjualan,1,10)='%s'",$tglomset);
 	$data = db_fetch_object($result);
 	if ($_POST["tglpost"]){
 		print $data->totalbelanja;
@@ -628,9 +662,9 @@ function hitung_omset($tgl = null){
 }
 
 function cari_produk(){
-    if (isset($_POST["katacari"])){
+    if (isset($_POST["barcode"])){
         $strSQL = "SELECT idproduct FROM detailpembelian WHERE barcode_batch='%s'";
-        $idBarang = db_result(db_query($strSQL,$_POST["katacari"]));
+        $idBarang = db_result(db_query($strSQL,$_POST["barcode"]));
         if (!empty($idBarang)){
             //$result = db_query("SELECT barcode, alt_code, namaproduct, stok, hargajual FROM product WHERE idproduct=%d", $idBarang);
             $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
@@ -651,25 +685,18 @@ function cari_produk(){
                 print "error";
             }
         }else {
-            $KATACARI = '%' . $_POST["katacari"] . '%';
-            if (isset($_POST["katacari2"]) && !empty($_POST["katacari2"])) {
-                $KATACARI2 = '%' . $_POST["katacari2"] . '%';
+            $Barcode = $_POST["barcode"];
+            if (isset($_POST["katacari"]) && !empty($_POST["katacari"])) {
+                $SearchTerm = '%' . $_POST["katacari"] . '%';
             }
             if (isset($_POST['freshproduct']) && !empty($_POST['freshproduct'])){
                 $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
-		        berlaku_sebelum_zuhur, barcode FROM product WHERE barcode = '%s'AND status_product = 1 LIMIT 1", $_POST["katacari"]);
+		        berlaku_sebelum_zuhur, barcode FROM product WHERE barcode = '%s' AND status_product = 1 LIMIT 1", $Barcode);
             }else {
                 //$sql = "SELECT idproduct,idkategori,namaproduct,hargajual FROM product WHERE alt_code LIKE '$KATACARI' OR barcode LIKE '$KATACARI' OR namaproduct LIKE '$KATACARI'";
-                if (!isset($KATACARI2)) {
-                    $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
-		            berlaku_sebelum_zuhur, barcode FROM product WHERE (alt_code LIKE '%s' OR barcode LIKE '%s' 
-		            OR UPPER(namaproduct) LIKE '%s') AND status_product = 1 LIMIT 50", $KATACARI, $KATACARI, $KATACARI);
-                }else{
-                    $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
-		                berlaku_sebelum_zuhur, barcode FROM product WHERE barcode = '%s' AND status_product = 1 LIMIT 50",
-                        $_POST["katacari"]
-                    );
-                }
+                $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
+		        berlaku_sebelum_zuhur, barcode FROM product WHERE barcode = '%s' AND status_product = 1 LIMIT 50",
+                $Barcode);
             }
             $data = db_fetch_object($result);
             if ($data->idproduct) {
@@ -732,13 +759,13 @@ function cari_barang(){
             $result = db_query("SELECT barcode, alt_code, namaproduct, stok, hargajual FROM product WHERE idproduct=%d", $idBarang);
             while ($data = db_fetch_object($result)) {
                 $items[] = array(
-                    'value' => $data->namaproduct . '--->['.$currencySym.' ' . number_format($data->hargajual,$DecDigit,$decimalSep,$thousandSep) . '][' . $data->stok . ']', 'barcode' => $data->barcode, 'alt_code' => $data->alt_code, 'barcode_batch' => $_GET["term"]);
+                    'value' => $data->barcode .'--->'. $data->namaproduct . '--->['.$currencySym.' ' . number_format($data->hargajual,$DecDigit,$decimalSep,$thousandSep) . '][' . $data->stok . ']', 'barcode' => $data->barcode, 'alt_code' => $data->alt_code, 'barcode_batch' => $_GET["term"]);
             }
         }else {
             $KATACARI = '%' . $_GET["term"] . '%';
-            $result = db_query("SELECT idproduct, barcode, alt_code, namaproduct, stok, hargajual FROM product WHERE (alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s') AND status_product=1 LIMIT 50", $KATACARI, $KATACARI, $KATACARI);
+            $result = db_query("SELECT idproduct, barcode, alt_code, namaproduct, stok, hargajual FROM product WHERE (barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s') AND status_product=1 LIMIT 50", $KATACARI, $KATACARI, $KATACARI);
             while ($data = db_fetch_object($result)) {
-                $items[] = array('value' => $data->namaproduct . '--->['.$currencySym.' ' . number_format($data->hargajual,$DecDigit,$decimalSep,$thousandSep) . '][' . $data->stok . ']', 'barcode' => $data->barcode, 'alt_code' => $data->alt_code, 'barcode_batch' => '0');
+                $items[] = array('value' => $data->barcode .'--->'.$data->namaproduct . '--->['.$currencySym.' ' . number_format($data->hargajual,$DecDigit,$decimalSep,$thousandSep) . '][' . $data->stok . ']', 'barcode' => $data->barcode, 'alt_code' => $data->alt_code, 'barcode_batch' => '0');
             }
         }
         print json_encode($items);
@@ -821,12 +848,14 @@ function get_pelanggan_diskon(){
 	$besarDiskon = array();
 	if (isset($_POST['idpelanggan']) && isset($_REQUEST['idproduk'])){
 		$idProduct = $_REQUEST['idproduk'];
+		$IdPelanggan = $_POST['idpelanggan'];
 		if (count($idProduct)){
 			for ($i = 0;$i < count($idProduct);$i++) {
-				$idKategori = db_result(db_query('SELECT idkategori FROM product WHERE idproduct = %d', $idProduct[$i]));
-				if ($idKategori) {
-					$besarDiskon[$idProduct[$i]] = db_result(db_query("SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'", $_POST["idpelanggan"], $idKategori));
-				}
+				if ($IdPelanggan != 0) {
+                    $besarDiskon[$idProduct[$i]] = get_diskon_product($IdPelanggan, $idProduct[$i]);
+                }else{
+                    $besarDiskon[$idProduct[$i]] = 0;
+                }
 			}
 		}
 	}

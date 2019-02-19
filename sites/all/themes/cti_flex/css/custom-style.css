@@ -407,6 +407,23 @@ input[type="text"].barcodekasir{
 	float: left;
     margin-bottom: 20px;
 }
+
+#main #formplace.supplier input[type="text"],
+#main #formplace.supplier input[type="password"],
+#main #formplace.supplier select,
+#main #formplace.pelanggan input[type="text"],
+#main #formplace.pelanggan input[type="password"],
+#main #formplace.pelanggan select{
+	margin-bottom: 4px;
+	float: left;
+}
+
+#main #formplace.supplier select{
+	width: 145px;
+	margin-right: 10px;
+	height: 25px;
+}
+
 #main #formplace.subkategori{
 	width: 925px;
 	margin-bottom: 10px;
@@ -989,4 +1006,16 @@ blink {
 }
 @keyframes blinker {
     50% { opacity: 0; }
+}
+.textarea-bayar{
+	margin-top: 8px !important;
+	width: 300px !important;
+}
+#ui-dialog-title-dialogbayar{
+	font-size: 1.4em !important;
+}
+.button-save{
+	float: left;
+	width: 100%;
+	margin-top: 4px !important;
 }

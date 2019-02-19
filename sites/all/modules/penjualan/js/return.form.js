@@ -106,7 +106,7 @@ function tambahproduk(qtyAdd, batch_code){
 	var request = new Object();
 	var katacari = $("#barcode").val();
 	var pecahkatacari = katacari.split("--->");
-	request.katacari = pecahkatacari[0];
+	request.barcode = pecahkatacari[0];
 	request.idpelanggan = $("#idpelanggan").val();
 	alamatcariproduk = pathutama +"penjualan/cariproduk";
 	$.ajax({
@@ -160,7 +160,7 @@ function tambahproduk(qtyAdd, batch_code){
                     row += "<td id=\"diskon-" + pecahdata[0].trim() + "\" class=\"angka diskon-produk\">" + pecahdata[3] + "</td>";
                     row += "<td class=\"angka\">" + checkboxppn + "</td>";
                     row += "<td class=\"angka\">" + qtyAdd + "</td>";
-                    row += "<td class=\"angka\"><span id=\"subtotal-"+ pecahdata[0].trim() +"\">" + subtotal + "</span> " + checkboxnilai + "</td>";
+                    row += "<td class=\"angka\"><span id=\"subtotal-"+ pecahdata[0].trim() +"\">" + number_format(subtotal,dDigit,dSep,tSep) + "</span> " + checkboxnilai + "</td>";
                     row += "<td>" + iconharga + "</td></tr>";
                     $("#tabel_kasir").dataTable().fnAddTr($(row)[0]);
                     giCount++;
@@ -677,7 +677,7 @@ $(document).ready(function(){
             var nilaikirim = idproduknya +"___"+ pecahnilai[1] +"___"+ nilaiubah +"___"+ pecahnilai[3];
             nilaikirim += "___"+ pecahnilai[4] +"___"+ pecahnilai[5] ;
             var checkboxnilai = "<input class=\"nilai_kirim\" checked=\"checked\" style=\"display: none;\" id=\""+ namacekbox +"\" name=\""+ namacekbox +"\" type=\"checkbox\" value=\""+ nilaikirim +"\" />";
-            oTable.fnUpdate('<span id="subtotal-'+ idproduknya +'">'+subtotalbaru +'</span> '+ checkboxnilai, baris_int, 7 );
+            oTable.fnUpdate('<span id="subtotal-'+ idproduknya +'">'+ subtotalbaru +'</span> '+ checkboxnilai, baris_int, 7 );
             totalbelanja = totalbelanja + nilaisubtotal;
             posisiakhir = totalproduk-1;
             if (baris_int == posisiakhir){
@@ -701,7 +701,7 @@ $(document).ready(function(){
 			oTable.fnUpdate(nilaiubah, baris_int, 6 );
 			nilaisubtotal = ($("#lastharga").val()-($("#lastharga").val()*$("#lastdiskon").val()/100))*nilaiubah;
             nilaisubtotal = nilaisubtotal + (nilaisubtotal * PpnValue/100);
-			subtotalbaru = number_format(nilaisubtotal,0,",",".");
+			subtotalbaru = number_format(nilaisubtotal,dDigit,dSep,tSep);
 			var namacekbox = "cekbox_"+ $("#last_id").val();
             var splitNilaiCekBox = $('#'+ namacekbox).val().split('___');
 			var nilaikirim = $("#last_id").val() +"___"+ nilaiubah +"___"+ $("#lastharga").val();
@@ -731,7 +731,7 @@ $(document).ready(function(){
 			oTable.fnUpdate(nilaiubah, baris_int, 6 );
 			nilaisubtotal = (pecahnilai[2]-(pecahnilai[2]*pecahnilai[3]/100))*nilaiubah;
             nilaisubtotal = nilaisubtotal + (nilaisubtotal * PpnValue/100);
-			subtotalbaru = number_format(nilaisubtotal,0,",",".");
+			subtotalbaru = number_format(nilaisubtotal,dDigit,dSep,tSep);
 			var namacekbox = "cekbox_"+ idproduknya;
             var splitNilaiCekBox = $('#'+ namacekbox).val().split('___');
 			var nilaikirim = idproduknya +"___"+ nilaiubah +"___"+ pecahnilai[2] +"___"+ pecahnilai[3];

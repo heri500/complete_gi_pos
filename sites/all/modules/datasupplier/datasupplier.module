@@ -100,11 +100,19 @@ function datasupplier_menu()
         'access arguments' => array('Admin Data Supplier'),
         'type' => MENU_CALLBACK,
     );
+    $items['datasupplier/getsupplier'] = array(
+        'title' => t('Get Data Supplier'),
+        'description' => 'Get Data Supplier',
+        'page callback' => 'get_data_supplier_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Access Data Supplier'),
+        'type' => MENU_CALLBACK,
+    );
     return $items;
 } // end hook menu
 
 function datasupplier_perm() {
-	return array('Admin Data Supplier','Admin Contact Person Supplier');
+	return array('Access Data Supplier', 'Admin Data Supplier','Admin Contact Person Supplier');
 }
 function do_pembayaran_hutang($variables = null){
 	if (!empty($variables) && count($variables)){
@@ -209,4 +217,40 @@ function sync_hutang_supplier_rest(){
     }
     print json_encode($ReturnData);
     exit();
+}
+
+function array_payment_type(){
+    $dataPremis = get_data_premis(false);
+    return array(
+      'CASH', 'KREDIT', strtoupper(trans('konsinyasi', $dataPremis->bahasa))
+    );
+}
+
+function get_data_supplier($id_supplier = null){
+    $DataSupplier = null;
+    if (!empty($id_supplier)){
+        $StrSql = 'SELECT idsupplier, kodesupplier, namasupplier, telp, alamat, email, ';
+        $StrSql .= 'status_supplier, payment_type, payment_term FROM supplier WHERE idsupplier=%d';
+        $result = db_query($StrSql, $id_supplier);
+        $DataSupplier = new stdClass();
+        while ($data = db_fetch_object($result)){
+            $DataSupplier = $data;
+        }
+    }
+    return $DataSupplier;
+}
+
+function get_data_supplier_ajax(){
+    $IdSupplier = $_POST['id_supplier'];
+    $RetData = array();
+    $RetData[] = get_data_supplier($IdSupplier);
+    print json_encode($RetData);
+    exit();
+}
+function array_payment_status(){
+    return array(
+        'BELUM BAYAR',
+        'BAYAR SEBAGIAN',
+        'LUNAS'
+    );
 }

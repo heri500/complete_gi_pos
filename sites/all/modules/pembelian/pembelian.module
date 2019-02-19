@@ -146,8 +146,18 @@ function pembelian_menu()
         'type' => MENU_CALLBACK,
         'file' => 'pembelian.delete.inc'
     );
+    $items['pembelian/getsupplierrelatednota'] = array(
+        'title' => t('Supplier Related Invoice'),
+        'description' => 'Supplier Related Invoice',
+        'page callback' => 'get_supplier_related_nota_rest',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Pembelian Produk'),
+        'type' => MENU_CALLBACK,
+    );
     return $items;
 } // end hook menu
+
+require_once 'pembelian.api.inc';
 
 function pembelian_perm() {
 	return array('Admin Pembelian Produk','Admin Data Pembelian Produk');

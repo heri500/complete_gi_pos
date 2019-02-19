@@ -49,16 +49,20 @@ function view_tabel_returnpelanggan(){
     $pilihantampil .= '<option '.$nota.'>NOTA</option>';
     $pilihantampil .= '<option '.$produk.'>PRODUK</option>';
     $pilihantampil .= '</select>';
-    $pilihperiode = '<form action="'.base_path().'penjualan/viewreturn" method="post"><div id="pilihanperiode"><label>PILIH PERIODE RETURN SUPPLIER </label><input readonly="readonly" type="text" id="tgl1" name="tgl1" value="'.date('d-m-Y', strtotime($tgl1)).'">';
-    $pilihperiode .= '<input readonly="readonly" type="text" id="tgl2" name="tgl2" value="'.date('d-m-Y', strtotime($tgl2)).'">'.$pilihantampil.'<button>LIHAT RETURN SUPPLIER</button></div></form>';
+    $pilihperiode = '<form action="'.base_path().'penjualan/viewreturn" method="post"><div id="pilihanperiode"><label>PILIH PERIODE RETURN PELANGGAN </label><input readonly="readonly" type="text" id="tgl1" name="tgl1" value="'.date('d-m-Y', strtotime($tgl1)).'">';
+    $pilihperiode .= '<input readonly="readonly" type="text" id="tgl2" name="tgl2" value="'.date('d-m-Y', strtotime($tgl2)).'">'.$pilihantampil.'<button>LIHAT RETURN PELANGGAN</button></div></form>';
     $viewreturnpelanggan = $pilihperiode.'<div id="viewreturnpelanggan">'.$tabeltampil.'</div>';
-    $viewreturnpelanggan .= '<div id="dialogdetail" title="DETAIL RETURN SUPPLIER"></div>';
+    $viewreturnpelanggan .= '<div id="dialogdetail" title="DETAIL RETURN PELANGGAN"></div>';
     return $viewreturnpelanggan;
 }
 
 function tabel_returnpelanggan($tgl1,$tgl2){
     //nonota, tglreturn, idpemakai, idlangganan, total,
     //totalmodal, carabayar, bayar, kembali
+    get_number_format($currencySym, $thousandSep, $decimalSep, false);
+    $gstSym = get_gst_symbols(false);
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
     $tgl1 = date('Y-m-d', strtotime($tgl1));
     $tgl2 = date('Y-m-d', strtotime($tgl2));
     $tabelreturnpelanggan ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_returnpelanggan">';
@@ -112,8 +116,8 @@ function tabel_returnpelanggan($tgl1,$tgl2){
         $tabelreturnpelanggan .= '<td id="tglreturn-'.$idreturn.'" class="center edit-tanggal">'.date('d-m-Y', strtotime($data->tanggal)).'</td>';
         $tabelreturnpelanggan .= '<td id="jamreturnpelanggan-'.$idreturn.'" class="center edit-jam">'.$data->waktu.'</td>';
         if (cekUserRoles()){
-            $tabelreturnpelanggan .= '<td class="angka">'.number_format($data->total,0,",",".").'</td>';
-            $tabelreturnpelanggan .= '<td class="angka">'.number_format($data->kembali,0,",",".").'</td>';
+            $tabelreturnpelanggan .= '<td class="angka">'.number_format($data->total,$DecDigit,$decimalSep,$thousandSep).'</td>';
+            $tabelreturnpelanggan .= '<td class="angka">'.number_format($data->kembali,$DecDigit,$decimalSep,$thousandSep).'</td>';
             $tabelreturnpelanggan .= '<td class="center">'.$data->name.'</td>';
         }
         $tabelreturnpelanggan .= '<td class="center">'.$data->carareturn.'</td>';
@@ -128,9 +132,9 @@ function tabel_returnpelanggan($tgl1,$tgl2){
         $tabelreturnpelanggan .= '<tfoot>';
         $tabelreturnpelanggan .= '<tr>';
         $tabelreturnpelanggan .= '<th style="text-align:right" colspan="6">Total:&nbsp;&nbsp;</th>';
-        $tabelreturnpelanggan .= '<th style="text-align: right">Rp. '.number_format($totalmodal,0,",",".").'&nbsp;&nbsp;</th>';
-        $tabelreturnpelanggan .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
-        $tabelreturnpelanggan .= '<th style="text-align: right">Rp. '.number_format($totalkembali,0,",",".").'&nbsp;&nbsp;</th>';
+        $tabelreturnpelanggan .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalmodal,$DecDigit,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+        $tabelreturnpelanggan .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalbayar,$DecDigit,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+        $tabelreturnpelanggan .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalkembali,$DecDigit,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
         $tabelreturnpelanggan .= '<th>&nbsp;</th>';
         $tabelreturnpelanggan .= '<th>&nbsp;</th>';
         $tabelreturnpelanggan .= '</tr>';
@@ -142,6 +146,10 @@ function tabel_returnpelanggan($tgl1,$tgl2){
 
 function detail_returnpelanggan(){
     if ($_POST["idreturn"]){
+        get_number_format($currencySym, $thousandSep, $decimalSep, false);
+        $gstSym = get_gst_symbols(false);
+        $dataPremis = get_data_premis(false);
+        $DecDigit = $dataPremis->decimal_digit;
         $tabelreturnpelanggan ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_returnpelanggan">';
         $tabelreturnpelanggan .= '<thead>';
         $tabelreturnpelanggan .= '<tr>';
@@ -163,8 +171,8 @@ function detail_returnpelanggan(){
             $tabelreturnpelanggan .= '<td>'.$data->namaproduct.'</td>';
             $tabelreturnpelanggan .= '<td class="angka">'.$data->jumlah.'</td>';
             if (cekUserRoles()){
-                $tabelreturnpelanggan .= '<td class="angka">'.$data->hargajual.'</td>';
-                $tabelreturnpelanggan .= '<td class="angka">'.$data->subtotal.'</td>';
+                $tabelreturnpelanggan .= '<td class="angka">'.number_format($data->hargajual,$DecDigit,$decimalSep,$thousandSep).'</td>';
+                $tabelreturnpelanggan .= '<td class="angka">'.number_format($data->subtotal,$DecDigit,$decimalSep,$thousandSep).'</td>';
             }
             $tabelreturnpelanggan .= '</tr>';
         }
@@ -175,6 +183,10 @@ function detail_returnpelanggan(){
     exit();
 }
 function returnpelanggan_produk($tgl1,$tgl2){
+    get_number_format($currencySym, $thousandSep, $decimalSep, false);
+    $gstSym = get_gst_symbols(false);
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
     $tgl1 = date('Y-m-d', strtotime($tgl1)).' 00:00';
     $tgl2 = date('Y-m-d', strtotime($tgl2)).' 23:59';
     $tabelreturnpelanggan ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_returnpelanggan">';
@@ -205,8 +217,8 @@ function returnpelanggan_produk($tgl1,$tgl2){
         $tabelreturnpelanggan .= '<td>'.$data->namasupplier.'</td>';
         $tabelreturnpelanggan .= '<td class="angka">'.$data->totalqty.'</td>';
         if (cekUserRoles()){
-            $tabelreturnpelanggan .= '<td class="angka">'.$data->hargapokok.'</td>';
-            $tabelreturnpelanggan .= '<td class="angka">'.$data->subtotal.'</td>';
+            $tabelreturnpelanggan .= '<td class="angka">'.number_format($data->hargapokok,$DecDigit,$decimalSep,$thousandSep).'</td>';
+            $tabelreturnpelanggan .= '<td class="angka">'.number_format($data->subtotal,$DecDigit,$decimalSep,$thousandSep).'</td>';
         }
         $tabelreturnpelanggan .= '</tr>';
         $totalmodal = $totalmodal + $data->subtotal;
@@ -216,7 +228,7 @@ function returnpelanggan_produk($tgl1,$tgl2){
         $tabelreturnpelanggan .= '<tfoot>';
         $tabelreturnpelanggan .= '<tr>';
         $tabelreturnpelanggan .= '<th style="text-align:right" colspan="5">Total:&nbsp;&nbsp;</th>';
-        $tabelreturnpelanggan .= '<th style="text-align: right">Rp. '.number_format($totalmodal,0,",",".").'&nbsp;&nbsp;</th>';
+        $tabelreturnpelanggan .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalmodal,$DecDigit,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
         $tabelreturnpelanggan .= '</tr>';
         $tabelreturnpelanggan .= '</tfoot>';
     }

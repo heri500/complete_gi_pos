@@ -4,7 +4,8 @@ function customerorder(){
     get_number_format($currencySym, $thousandSep, $decimalSep);
     createLogoImagePath();
     $gstSym = get_gst_symbols();
-    $dataPremis = get_data_premis();
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
     $path = drupal_get_path('theme', 'cti_flex');
     $form_style = $path.'/css/custom-style.css';
     drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -12,7 +13,8 @@ function customerorder(){
     drupal_add_css('misc/media/datatables/css/demo_table_jui.css');
     drupal_add_css('misc/media/themes/jquery-ui-1.8.11.custom.css');
     drupal_add_css('misc/media/css/validationEngine.jquery.css');
-    drupal_add_js('misc/media/jquery-1.4.4.min.js');
+    //drupal_add_js('misc/media/jquery-1.4.4.min.js');
+    _addJqueryPlugins();
     drupal_add_js('misc/media/jqClock.min.js');
     drupal_add_js('misc/media/jquery.validationEngine-en.js');
     drupal_add_js('misc/media/jquery.validationEngine.js');
@@ -24,10 +26,13 @@ function customerorder(){
     _add_chosen_jquery_plugins_old();
     $tglsekarang = date("Y-m-d");
     $tgltampil = date("d-m-Y");
+    $DecDigitCashier = variable_get('round_decimal_digit_cashier',0);
     drupal_add_js(
         array(
             'tglsekarang' => $tglsekarang,
             'tgltampil' => $tgltampil,
+            'dec_digit' => $DecDigit,
+            'dec_digit_cashier' => $DecDigitCashier,
         ),
         'setting');
     $js_path = drupal_get_path('module','penjualan').'/js/customerorder.form.js';
@@ -443,14 +448,17 @@ function cari_nota_order_android(){
 }
 function get_customer_order_printer(){
     if (isset($_POST['idorder']) && !empty($_POST['idorder'])){
-        $StrSql = 'SELECT selected_printer FROM detailcustomerorder AS dco ';
+        $IpAddress = ip_address();
+        $StrSqlPrn = "SELECT selected_printer FROM kategori_printer AS katprn WHERE ";
+        $StrSqlPrn .= "katprn.idkategori = kat.idkategori AND katprn.ip_address = '$IpAddress'";
+        $StrSql = 'SELECT ('.$StrSqlPrn.') AS chosen_printer  FROM detailcustomerorder AS dco ';
         $StrSql .= 'LEFT JOIN product AS prod ON dco.idproduct = prod.idproduct ';
         $StrSql .= 'LEFT JOIN kategori AS kat ON prod.idkategori = kat.idkategori ';
-        $StrSql .= 'WHERE idcustomerorder=%d GROUP BY kat.selected_printer';
+        $StrSql .= 'WHERE idcustomerorder=%d GROUP BY chosen_printer';
         $SelectedPrinter = array();
         $Result = db_query($StrSql, $_POST['idorder']);
         while ($DataPrinter = db_fetch_object($Result)){
-            $SelectedPrinter[] = $DataPrinter->selected_printer;
+            $SelectedPrinter[] = $DataPrinter->chosen_printer;
         }
         print json_encode($SelectedPrinter);
     }
