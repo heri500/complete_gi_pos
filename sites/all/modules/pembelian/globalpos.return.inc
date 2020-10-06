@@ -2,6 +2,10 @@
 
 function returnsupplier(){
     createLogoImagePath();
+    get_number_format($currencySym, $thousandSep, $decimalSep);
+    $dataPremis = get_data_premis();
+    $DecDigit = $dataPremis->decimal_digit;
+    $DecDigitCashier = variable_get('decimal_digit_cashier',0);
     $path = drupal_get_path('theme', 'cti_flex');
     $form_style = $path.'/css/custom-style.css';
     drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -30,6 +34,8 @@ function returnsupplier(){
         array(
             'tglsekarang' => $tglsekarang,
             'tgltampil' => $tgltampil,
+            'dec_digit' => $DecDigit,
+            'dec_digit_cashier' => $DecDigitCashier,
         ),
         'setting');
     $js_path = drupal_get_path('module','pembelian').'/js/returnsupplier.js';

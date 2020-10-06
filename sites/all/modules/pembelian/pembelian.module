@@ -160,7 +160,7 @@ function pembelian_menu()
 require_once 'pembelian.api.inc';
 
 function pembelian_perm() {
-	return array('Admin Pembelian Produk','Admin Data Pembelian Produk');
+	return array('Admin Pembelian Produk','Admin Data Pembelian Produk', 'Admin Return Produk');
 }
 
 

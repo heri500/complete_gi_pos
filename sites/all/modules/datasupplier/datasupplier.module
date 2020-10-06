@@ -247,7 +247,7 @@ function get_data_supplier_ajax(){
     print json_encode($RetData);
     exit();
 }
-function array_payment_status(){
+function array_payment_status_supplier(){
     return array(
         'BELUM BAYAR',
         'BAYAR SEBAGIAN',

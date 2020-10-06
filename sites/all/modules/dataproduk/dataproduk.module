@@ -38,8 +38,8 @@ function dataproduk_menu() {
 		'file' => 'globalpos.subkategori.inc'
 	);
 	$items['dataproduk/produk'] = array(
-    'title' => t('Data Produk'),
-    'description' => 'Manajemen Data Produk',
+        'title' => t('Data Produk'),
+        'description' => 'Manajemen Data Produk',
 		'page callback' => 'data_produk',
 		'access callback' => 'user_access',
 		'access arguments' => array('Admin Data Produk'),
@@ -223,6 +223,14 @@ function dataproduk_menu() {
         'access arguments' => array('Admin Data Produk'),
         'type' => MENU_CALLBACK,
     );
+    $items['dataproduk/exportcsvrongta'] = array(
+        'title' => t('Export to csv rongta scale'),
+        'description' => 'Export data product to csv',
+        'page callback' => 'export_stok_to_csv_rongta',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Produk'),
+        'type' => MENU_CALLBACK,
+    );
     $items['dataproduk/getconversion'] = array(
         'title' => t('Get unit conversion'),
         'description' => 'Get unit conversion',
@@ -239,12 +247,87 @@ function dataproduk_menu() {
         'access arguments' => array('Admin Data Produk'),
         'type' => MENU_CALLBACK,
     );
+    $items['dataproduk/getproductinfo'] = array(
+        'title' => t('Get Product Info'),
+        'description' => 'Get Product Info',
+        'page callback' => 'get_product_info_rest',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Produk'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['dataproduk/simpandiskonproduct'] = array(
+        'title' => t('Save Product Discount'),
+        'description' => 'Save Product Discount',
+        'page callback' => 'save_product_discount',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Discount Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.produk.inc'
+    );
+    $items['dataproduk/tablediskonproduct'] = array(
+        'title' => t('Table Product Discount'),
+        'description' => 'Table Product Discount',
+        'page callback' => 'table_product_discount',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Discount Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.produk.inc'
+    );
+    $items['dataproduk/hapusdiskon'] = array(
+        'title' => t('Hapus Product Discount'),
+        'description' => 'Hapus Product Discount',
+        'page callback' => 'hapus_product_discount',
+        'access callback' => 'user_access',
+        'access arguments' => array('Delete Discount Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.produk.inc'
+    );
+    $items['dataproduk/applydiscount'] = array(
+        'title' => t('Apply & Unapply Product Discount'),
+        'description' => 'Apply & Unapply Product Discount',
+        'page callback' => 'product_discount_apply',
+        'access callback' => 'user_access',
+        'access arguments' => array('Apply Discount Produk'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['dataproduk/activediscount'] = array(
+        'title' => t('Applied Discount Table'),
+        'description' => 'Applied Discount Table',
+        'page callback' => 'active_product_discount_table',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Discount Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.produk.inc'
+    );
+    $items['dataproduk/mejaoption'] = array(
+        'title' => t('Array pilihan meja'),
+        'description' => 'Array pilihan meja',
+        'page callback' => 'option_meja_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Meja'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['dataproduk/stockcard'] = array(
+        'title' => t('Product Stock Card Table'),
+        'description' => 'Product Stock Card Table',
+        'page callback' => 'product_stock_card',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.produk.inc'
+    );
 	return $items;
 } // end hook menu
 
 function dataproduk_perm() {
-	return array('Admin Kategori Produk','Admin Subkategori Produk','Admin Data Produk','Admin Meja');
+	return array(
+	    'Admin Kategori Produk', 'Admin Subkategori Produk', 'Admin Data Produk', 'Admin Meja',
+        'Admin Discount Produk', 'Delete Discount Produk', 'Apply Discount Produk'
+    );
 }
+
+require_once 'product.api.inc';
+
 /*
 	$array_to_js : array('key' => 'value')
 */
@@ -275,110 +358,110 @@ function getLeadTime($idProduct = null){
 	return $leadTime;
 }
 function calculateTakeTimeNormal($leadTime = null, $dateIn = null){
-	if (empty($dateIn)){
-		$dateIn = date('Y-m-d H:i');	
-	}
-	$takeTime = null;
-	if (!empty($leadTime)){
-		$splitDateTime = explode(' ',$dateIn);
-		$splitDate = explode('-',$splitDateTime[0]);
-		$splitTime = explode(':',$splitDateTime[1]);
-		$takeDay = date('w', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-		$takeHour = date('H', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-		$jamKerjaLaundry = JAM_KERJA_LAUNDRY();
-		if ($takeDay == 0){
-			if ((int)$takeHour > (int)$jamKerjaLaundry['minggu']['jam_keluar']){
-				$takeTimeOld = date('Y-m-d', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-				$splitTakeTime = explode('-', $takeTimeOld);
-				$takeTime = array();	
-				$takeTime[] = date('d-M-y H:i', mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]));
-				$takeTime[] = mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]);
-			}else{
-				$takeTime = array();	
-				$takeTime[] = date('d-M-y H:i', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-				$takeTime[] = mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]);
-			}
-		}else{
-			if ($takeHour > $jamKerjaLaundry['normal']['jam_keluar']){
-				$takeTimeOld = date('Y-m-d', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-				$splitTakeTime = explode('-', $takeTimeOld);
-				$takeTime = array();
-				$takeTime[] = date('d-M-y H:i', mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]));
-				$takeTime[] = mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]);
-			}else{
-				$takeTime = array();
-				$takeTime[] = date('d-M-y H:i', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-				$takeTime[] = mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]);
-			}
-		}
-	}
-	return $takeTime;
+    if (empty($dateIn)){
+        $dateIn = date('Y-m-d H:i');
+    }
+    $takeTime = null;
+    if (!empty($leadTime)){
+        $splitDateTime = explode(' ',$dateIn);
+        $splitDate = explode('-',$splitDateTime[0]);
+        $splitTime = explode(':',$splitDateTime[1]);
+        $takeDay = date('w', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+        $takeHour = date('H', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+        $jamKerjaLaundry = JAM_KERJA_LAUNDRY();
+        if ($takeDay == 0){
+            if ((int)$takeHour > (int)$jamKerjaLaundry['minggu']['jam_keluar']){
+                $takeTimeOld = date('Y-m-d', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+                $splitTakeTime = explode('-', $takeTimeOld);
+                $takeTime = array();
+                $takeTime[] = date('d-M-y', mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]));
+                $takeTime[] = mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]);
+            }else{
+                $takeTime = array();
+                $takeTime[] = date('d-M-y', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+                $takeTime[] = mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]);
+            }
+        }else{
+            if ($takeHour > $jamKerjaLaundry['normal']['jam_keluar']){
+                $takeTimeOld = date('Y-m-d', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+                $splitTakeTime = explode('-', $takeTimeOld);
+                $takeTime = array();
+                $takeTime[] = date('d-M-y', mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]));
+                $takeTime[] = mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]);
+            }else{
+                $takeTime = array();
+                $takeTime[] = date('d-M-y', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+                $takeTime[] = mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]);
+            }
+        }
+    }
+    return $takeTime;
 }
 function calculateTakeTime($leadTime = null, $dateIn = null, $ikutJamKerja = false, $sebelumZuhur = false){
-	if (empty($dateIn)){
-		$dateIn = date('Y-m-d H:i');	
-	}
-	$takeTime = null;
-	if (!empty($leadTime)){
-		$splitDateTime = explode(' ',$dateIn);
-		$splitDate = explode('-',$splitDateTime[0]);
-		$splitTime = explode(':',$splitDateTime[1]);
-		$inDay = date('w', mktime($splitTime[0], $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-		$takeHour = date('H', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-		if ($ikutJamKerja && $sebelumZuhur){
-			if ($splitTime[0] > 12){
-				$newDateIn = date('Y-m-d H:i',mktime(7,0,0, $splitDate[1], (int)$splitDate[2] + 1, $splitDate[0]));
-				$takeTime = calculateTakeTime($leadTime, $newDateIn, $ikutJamKerja, false);
-			}else{
-				$takeTime = calculateTakeTime($leadTime, $dateIn, $ikutJamKerja, false);
-			}
-		}else if($ikutJamKerja && !$sebelumZuhur){
-			$jamKerjaLaundry = JAM_KERJA_LAUNDRY();
-			if ($inDay == 0){
-				$jamSelesai = $jamKerjaLaundry['minggu']['jam_keluar'];
-			}else{
-				$jamSelesai = $jamKerjaLaundry['normal']['jam_keluar'];
-			}
-			$jamMulai = $splitTime[0];
-			$jamKerja = $jamSelesai - $jamMulai;
-			$sisaJamKerja = $leadTime - $jamKerja;
-			if ($sisaJamKerja > 0){
-				 while ($sisaJamKerja > 0){
-				 	$nextDate = date('Y-m-d',mktime(0, 0, 0, $splitDate[1],$splitDate[2] + 1,$splitDate[0]));
-				 	$nextDay = date('w',mktime(0, 0, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-				 	if ($nextDay == 0){
-				 		$totalJamKerja = $jamKerjaLaundry['minggu']['total_jam'];
-						$jamMasuk = $jamKerjaLaundry['minggu']['jam_masuk'];
-				 	}else{
-				 		$totalJamKerja = $jamKerjaLaundry['normal']['total_jam'];
-				 		$jamMasuk = $jamKerjaLaundry['normal']['jam_masuk'];
-				 	}
-				 	$sisaSebelum = $sisaJamKerja;
-				 	$sisaJamKerja = $sisaJamKerja - $totalJamKerja;
-			        }
-			        $explodeTakeDate = explode('-',$nextDate);
-			        $takeTime[] = date('d-M-y H:i', mktime($jamMasuk, 0, 0, $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]));
-			        $takeTime[] = mktime($jamMasuk, 0, 0, $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]);	
-			}else{
-                $nextDate = date('Y-m-d',mktime($splitTime[0], $splitTime[1] + $leadTime, $splitTime[2], $splitDate[1],$splitDate[2],$splitDate[0]));
-				$explodeTakeDate = explode('-',$nextDate);
-                $nexTime =  date('H:i:s',mktime($splitTime[0], $splitTime[1]  + $leadTime, $splitTime[2], $splitDate[1],$splitDate[2],$splitDate[0]));
-				$explodeTakeTime = explode(':',$nexTime);
-				$takeTime[] = date('d-M-y H:i', mktime($explodeTakeTime[0], $explodeTakeTime[1], $explodeTakeTime[2], $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]));
-			    $takeTime[] = mktime($explodeTakeTime[0], $explodeTakeTime[1], $explodeTakeTime[2], $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]);
-			}
-		}else if(!$ikutJamKerja && $sebelumZuhur){
-			if ($splitTime[0] > 12){
-				$newDateIn = date('Y-m-d H:i',mktime(7,0,0, $splitDate[1], (int)$splitDate[2] + 1, $splitDate[0]));
-				$takeTime = calculateTakeTimeNormal($leadTime, $newDateIn);
-			}else{
-				$takeTime = calculateTakeTimeNormal($leadTime, $dateIn);
-			}
-		}else{
-			$takeTime = calculateTakeTimeNormal($leadTime, $dateIn);
-		}
-	}
-	return $takeTime;
+    if (empty($dateIn)){
+        $dateIn = date('Y-m-d H:i');
+    }
+    $takeTime = null;
+    if (!empty($leadTime)){
+        $splitDateTime = explode(' ',$dateIn);
+        $splitDate = explode('-',$splitDateTime[0]);
+        $splitTime = explode(':',$splitDateTime[1]);
+        $inDay = date('w', mktime($splitTime[0], $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+        $takeHour = date('H', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+        if ($ikutJamKerja && $sebelumZuhur){
+            if ($splitTime[0] > 12){
+                $newDateIn = date('Y-m-d H:i',mktime(7,0,0, $splitDate[1], (int)$splitDate[2] + 1, $splitDate[0]));
+                $takeTime = calculateTakeTime($leadTime, $newDateIn, $ikutJamKerja, false);
+            }else{
+                $takeTime = calculateTakeTime($leadTime, $dateIn, $ikutJamKerja, false);
+            }
+        }else if($ikutJamKerja && !$sebelumZuhur){
+            $jamKerjaLaundry = JAM_KERJA_LAUNDRY();
+            if ($inDay == 0){
+                $jamSelesai = $jamKerjaLaundry['minggu']['jam_keluar'];
+            }else{
+                $jamSelesai = $jamKerjaLaundry['normal']['jam_keluar'];
+            }
+            $jamMulai = $splitTime[0];
+            $jamKerja = $jamSelesai - $jamMulai;
+            $sisaJamKerja = $leadTime - $jamKerja;
+            if ($sisaJamKerja > 0){
+                while ($sisaJamKerja > 0){
+                    $nextDate = date('Y-m-d',mktime(0, 0, 0, $splitDate[1],$splitDate[2] + 1,$splitDate[0]));
+                    $nextDay = date('w',mktime(0, 0, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+                    if ($nextDay == 0){
+                        $totalJamKerja = $jamKerjaLaundry['minggu']['total_jam'];
+                        $jamMasuk = $jamKerjaLaundry['minggu']['jam_masuk'];
+                    }else{
+                        $totalJamKerja = $jamKerjaLaundry['normal']['total_jam'];
+                        $jamMasuk = $jamKerjaLaundry['normal']['jam_masuk'];
+                    }
+                    $sisaSebelum = $sisaJamKerja;
+                    $sisaJamKerja = $sisaJamKerja - $totalJamKerja;
+                }
+                $explodeTakeDate = explode('-',$nextDate);
+                $takeTime[] = date('d-M-y', mktime($jamMasuk, 0, 0, $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]));
+                $takeTime[] = mktime($jamMasuk, 0, 0, $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]);
+            }else{
+                $nextDate = date('Y-m-d',mktime($splitTime[0] + $leadTime, $splitTime[1], $splitTime[2], $splitDate[1],$splitDate[2],$splitDate[0]));
+                $explodeTakeDate = explode('-',$nextDate);
+                $nexTime =  date('H:i:s',mktime($splitTime[0] + $leadTime, $splitTime[1], $splitTime[2], $splitDate[1],$splitDate[2],$splitDate[0]));
+                $explodeTakeTime = explode(':',$nexTime);
+                $takeTime[] = date('d-M-y', mktime($explodeTakeTime[0], $explodeTakeTime[1], $explodeTakeTime[2], $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]));
+                $takeTime[] = mktime($explodeTakeTime[0], $explodeTakeTime[1], $explodeTakeTime[2], $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]);
+            }
+        }else if(!$ikutJamKerja && $sebelumZuhur){
+            if ($splitTime[0] > 12){
+                $newDateIn = date('Y-m-d H:i',mktime(7,0,0, $splitDate[1], (int)$splitDate[2] + 1, $splitDate[0]));
+                $takeTime = calculateTakeTimeNormal($leadTime, $newDateIn);
+            }else{
+                $takeTime = calculateTakeTimeNormal($leadTime, $dateIn);
+            }
+        }else{
+            $takeTime = calculateTakeTimeNormal($leadTime, $dateIn);
+        }
+    }
+    return $takeTime;
 }
 function calculateTotalNilaiBarang($statusstok = null, $statusProduct = 1){
 	$strSQL = "SELECT SUM(stok*hargajual) AS total_stok FROM product WHERE 1=1 AND status_product= %d ";
@@ -416,7 +499,7 @@ function get_updated_product(){
 	$strSQL .= 'alt_code, namaproduct, type_product, hargapokok, hargajual, margin, minstok, ';
 	$strSQL .= 'maxstok, stok, satuan, berat, keterangan, lead_time, aturan_jam_kerja, ';
 	$strSQL .= 'berlaku_sebelum_zuhur, status_product, uploaded, changed ';
-	$strSQL .= 'FROM product WHERE uploaded=0';
+	$strSQL .= 'FROM product WHERE uploaded = 0 AND process_upload = 0';
 	$result = db_query($strSQL);
 	$dataProduct = array();
 	while ($data = db_fetch_array($result)){
@@ -689,6 +772,42 @@ function get_data_product($FileType = 'xls', $IdKategori = null){
     return $arrayData;
 }
 
+function get_data_product_rongta($IdKategori = null){
+    $strSQL = 'SELECT prod.barcode, prod.namaproduct, ';
+    $strSQL .= 'prod.hargajual, prod.satuan, prod.berat ';
+    $strSQL .= 'FROM product AS prod ';
+    $strSQL .= 'WHERE prod.status_product = 1 ';
+    if (!empty($IdKategori)){
+        $strSQL .= 'AND prod.idkategori = %d ';
+    }
+    $strSQL .= 'ORDER BY prod.idkategori, prod.idsubkategori,prod.namaproduct';
+    if (!empty($IdKategori)) {
+        $dataProduk = db_query($strSQL, $IdKategori);
+    }else{
+        $dataProduk = db_query($strSQL);
+    }
+    $arrayData = array();
+    $i = 1;
+    //No. Name, Barcode, Barcode, Price, Satuan, Amount(0), Department(22),
+    //PT Weight(0), Shelf Time (15), Pack Type (Normal), Tare (0),
+    //Error(0), Message (0), Message (0), Label (0), Discount (0),
+    //Nutrition(0)
+    while ($data = db_fetch_object($dataProduk)) {
+        $PluCode = $data->barcode;
+        $PluName = $data->namaproduct;
+        $NewHarga = round($data->hargajual, 2) * 100;
+        $DataHarga = str_pad($NewHarga, 5, '0', STR_PAD_LEFT);
+        $Satuan = ($data->satuan == 'KG') ? 9 : 4;
+        $arrayData[] = implode("\t", array(
+            $i, $PluName, $PluCode, $PluCode,2,
+            $DataHarga, $Satuan, 22, 0, 15,
+            "Normal", 0, 0, 0, 0, 0, 0, 0
+        ));
+        $i++;
+    }
+    return $arrayData;
+}
+
 function get_diskon_product($IdPelanggan = null, $IdProduct = null){
     $DiskonProduct = 0;
     if (!empty($IdPelanggan) && !empty($IdProduct)){
@@ -720,6 +839,27 @@ function export_stok_to_csv() {
     $fp = fopen ($filepath, "w");
     //$fp = fopen('php://output', 'w');
     $data = get_data_product('csv',$IdKategori);
+    foreach ( $data as $line ) {
+        //$val = explode(',', $line);
+        //fputcsv($fp, $line);
+        fputs($fp, $line."\r\n");
+    }
+    fclose($fp);
+    print $filepath;
+    exit();
+}
+
+function export_stok_to_csv_rongta() {
+    $filename = 'csv-rongta-scale-download-' . time() . '.csv';
+    $wrapper = file_directory_path();
+    $filepath = $wrapper . '/' . $filename;
+    $IdKategori = null;
+    if (isset($_POST['idkategori'])){
+        $IdKategori = $_POST['idkategori'];
+    }
+    $fp = fopen ($filepath, "w");
+    //$fp = fopen('php://output', 'w');
+    $data = get_data_product_rongta($IdKategori);
     foreach ( $data as $line ) {
         //$val = explode(',', $line);
         //fputcsv($fp, $line);
@@ -762,4 +902,18 @@ function fix_kategori_printer(){
             $data->idkategori, $IpAddress, $data->selected_printer);
     }
     return 'Fix Kategori Printer';
+}
+
+function get_product_info_rest(){
+    if (isset($_POST['idproduct']) && !empty($_POST['idproduct'])){
+        $IdProduct = $_POST['idproduct'];
+        $StrSql = 'SELECT idproduct, barcode, alt_code, namaproduct, hargajual FROM product WHERE idproduct=%d';
+        $result = db_query($StrSql, $IdProduct);
+        $DataProduct = array();
+        while ($data = db_fetch_object($result)){
+            $DataProduct[] = $data;
+        }
+        print json_encode($DataProduct);
+        exit();
+    }
 }

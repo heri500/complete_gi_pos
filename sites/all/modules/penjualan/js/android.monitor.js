@@ -63,7 +63,7 @@ $(document).ready(function() {
             }
         }
     });
-    window.onunload = function(){
+    /*window.onunload = function(){
         alamat = pathutama + 'penjualan/updatetableco?count=-1';
         $.ajax({
             type: 'GET',
@@ -84,5 +84,5 @@ $(document).ready(function() {
 
             }
         });
-    }
+    }*/
 });

@@ -499,14 +499,30 @@ function get_data_premis_uploaded(){
     }
     return $arrayData;
 }
-function do_upload_premisdata_test(){
+function do_upload_premisdata(){
     return 'Test';
 }
-function do_upload_premisdata(){
+function do_upload_premisdata_ori(){
     $resultview = '';
     if (is_connected()) {
         //copy data premis();
-        $url = 'http://report.ikhwanit.com/importdatapremis';
+        if (function_exists('get_array_data_upload_server')){
+            $url = array();
+            $UploadServer = get_array_data_upload_server();
+            if (count($UploadServer)){
+                for ($i = 0;$i < count($UploadServer);$i++){
+                    $ServerAddress = $UploadServer[$i]->url_server;
+                    if (!empty($UploadServer[$i]->port) && $UploadServer[$i]->port != '80'){
+                        $ServerAddress .= $ServerAddress.':'.$UploadServer[$i]->port;
+                    }
+                    $url[] = $ServerAddress;
+                }
+            }else{
+                $url = 'http://report.ikhwanit.com/importdatapremis';
+            }
+        }else{
+            $url = 'http://report.ikhwanit.com/importdatapremis';
+        }
         /* Process Upload Product Data */
         $totalRecord = db_result(db_query("SELECT COUNT(*) AS total_record FROM product WHERE uploaded = 0"));
         $totalUploadProcess = floor($totalRecord / 40) + 1;
@@ -516,42 +532,84 @@ function do_upload_premisdata(){
         $dataPremis = get_data_premis_uploaded();
         $dataProduct = get_updated_product();
         $uploadproses = 1;
-        for ($i = 0; $i < $totalUploadProcess; $i++) {
-            $startJ = ($i * 40);
-            $endRecord = ($i * 40) + 40;
-            if ($endRecord > $totalRecord) {
-                $endRecord = $totalRecord;
-            }
-            $postproduct = array();
-            for ($j = $startJ; $j < $endRecord; $j++) {
-                if (isset($dataProduct[$j])) {
-                    $postproduct[] = $dataProduct[$j];
+        if (is_array($url)) {
+            for ($IdxServer = 0; $IdxServer < count($url); $IdxServer++) {
+                for ($i = 0; $i < $totalUploadProcess; $i++) {
+                    $startJ = ($i * 40);
+                    $endRecord = ($i * 40) + 40;
+                    if ($endRecord > $totalRecord) {
+                        $endRecord = $totalRecord;
+                    }
+                    $postproduct = array();
+                    for ($j = $startJ; $j < $endRecord; $j++) {
+                        if (isset($dataProduct[$j])) {
+                            $postproduct[] = $dataProduct[$j];
+                        }
+                    }
+                    $postdata = array('premisuser' => 'ikhwanmart', 'premispssword' => '@abuya313', 'datapremis' => $dataPremis);
+                    $postdata['product'] = $postproduct;
+                    $fields_string2 = http_build_query($postdata, '', '&');
+                    $ch = curl_init();
+                    //set the url, number of POST vars, POST data
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+                    curl_setopt($ch, CURLOPT_URL, $url[$IdxServer]);
+                    curl_setopt($ch, CURLOPT_POST, 1);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string2);
+                    curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
+                    $result = curl_exec($ch);
+                    $arrayProdUploaded = json_decode($result);
+                    $resultview .= '<p>' . $uploadproses . '. Record : ' . $startJ . ' to ' . $endRecord . ' Product successfully uploaded[' . count($arrayProdUploaded) . '] : <ul>';
+                    for ($k = 0; $k < count($arrayProdUploaded); $k++) {
+                        $prod_id = $arrayProdUploaded[$k]->idproduct_old;
+                        $proses = $arrayProdUploaded[$k]->proses;
+                        db_query("UPDATE product SET uploaded = 1, process_upload = 0 WHERE idproduct='%d'", $prod_id);
+                        $productName = $arrayProdUploaded[$k]->namaproduct;
+                        $productBarcode = $arrayProdUploaded[$k]->barcode;
+                        $resultview .= '<li>ID : ' . $prod_id . ', Barcode : ' . $productBarcode . ', Product Name : ' . $productName . ', Proses : ' . $proses . '</li>';
+                    }
+                    $resultview .= '</ul></p>';
+                    curl_close($ch);
+                    $uploadproses++;
                 }
             }
-            $postdata = array('premisuser' => 'ikhwanmart', 'premispssword' => '@abuya313', 'datapremis' => $dataPremis);
-            $postdata['product'] = $postproduct;
-            $fields_string2 = http_build_query($postdata, '', '&');
-            $ch = curl_init();
-            //set the url, number of POST vars, POST data
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string2);
-            curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
-            $result = curl_exec($ch);
-            $arrayProdUploaded = json_decode($result);
-            $resultview .= '<p>' . $uploadproses . '. Record : ' . $startJ . ' to ' . $endRecord . ' Product successfully uploaded[' . count($arrayProdUploaded) . '] : <ul>';
-            for ($k = 0; $k < count($arrayProdUploaded); $k++) {
-                $prod_id = $arrayProdUploaded[$k]->idproduct_old;
-                $proses = $arrayProdUploaded[$k]->proses;
-                db_query("UPDATE product SET uploaded = 1 WHERE idproduct='%d'", $prod_id);
-                $productName = $arrayProdUploaded[$k]->namaproduct;
-                $productBarcode = $arrayProdUploaded[$k]->barcode;
-                $resultview .= '<li>ID : ' . $prod_id . ', Barcode : ' . $productBarcode . ', Product Name : ' . $productName . ', Proses : ' . $proses . '</li>';
+        }else{
+            for ($i = 0; $i < $totalUploadProcess; $i++) {
+                $startJ = ($i * 40);
+                $endRecord = ($i * 40) + 40;
+                if ($endRecord > $totalRecord) {
+                    $endRecord = $totalRecord;
+                }
+                $postproduct = array();
+                for ($j = $startJ; $j < $endRecord; $j++) {
+                    if (isset($dataProduct[$j])) {
+                        $postproduct[] = $dataProduct[$j];
+                    }
+                }
+                $postdata = array('premisuser' => 'ikhwanmart', 'premispssword' => '@abuya313', 'datapremis' => $dataPremis);
+                $postdata['product'] = $postproduct;
+                $fields_string2 = http_build_query($postdata, '', '&');
+                $ch = curl_init();
+                //set the url, number of POST vars, POST data
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string2);
+                curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
+                $result = curl_exec($ch);
+                $arrayProdUploaded = json_decode($result);
+                $resultview .= '<p>' . $uploadproses . '. Record : ' . $startJ . ' to ' . $endRecord . ' Product successfully uploaded[' . count($arrayProdUploaded) . '] : <ul>';
+                for ($k = 0; $k < count($arrayProdUploaded); $k++) {
+                    $prod_id = $arrayProdUploaded[$k]->idproduct_old;
+                    $proses = $arrayProdUploaded[$k]->proses;
+                    db_query("UPDATE product SET uploaded = 1, process_upload = 0 WHERE idproduct='%d'", $prod_id);
+                    $productName = $arrayProdUploaded[$k]->namaproduct;
+                    $productBarcode = $arrayProdUploaded[$k]->barcode;
+                    $resultview .= '<li>ID : ' . $prod_id . ', Barcode : ' . $productBarcode . ', Product Name : ' . $productName . ', Proses : ' . $proses . '</li>';
+                }
+                $resultview .= '</ul></p>';
+                curl_close($ch);
+                $uploadproses++;
             }
-            $resultview .= '</ul></p>';
-            curl_close($ch);
-            $uploadproses++;
         }
         /* End Process Upload Product Data */
         /* Process Upload Penjualan Data */
@@ -563,42 +621,84 @@ function do_upload_premisdata(){
         $dataPremis = get_data_premis_uploaded();
         $dataPenjualan = get_updated_penjualan();
         $uploadproses = 1;
-        for ($i = 0; $i < $totalUploadProcess; $i++) {
-            $startJ = ($i * 50);
-            $endRecord = ($i * 50) + 50;
-            if ($endRecord > $totalRecord) {
-                $endRecord = $totalRecord;
-            }
-            $postpenjualan = array();
-            for ($j = $startJ; $j < $endRecord; $j++) {
-                if (isset($dataPenjualan[$j])) {
-                    $postpenjualan[] = $dataPenjualan[$j];
+        if (is_array($url)) {
+            for ($IdxServer = 0; $IdxServer < count($url); $IdxServer++) {
+                for ($i = 0; $i < $totalUploadProcess; $i++) {
+                    $startJ = ($i * 50);
+                    $endRecord = ($i * 50) + 50;
+                    if ($endRecord > $totalRecord) {
+                        $endRecord = $totalRecord;
+                    }
+                    $postpenjualan = array();
+                    for ($j = $startJ; $j < $endRecord; $j++) {
+                        if (isset($dataPenjualan[$j])) {
+                            $postpenjualan[] = $dataPenjualan[$j];
+                        }
+                    }
+                    $postdata = array('premisuser' => 'ikhwanmart', 'premispssword' => '@abuya313', 'datapremis' => $dataPremis);
+                    $postdata['penjualan'] = $postpenjualan;
+                    $fields_string2 = http_build_query($postdata, '', '&');
+                    $ch = curl_init();
+                    //set the url, number of POST vars, POST data
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+                    curl_setopt($ch, CURLOPT_URL, $url[$IdxServer]);
+                    curl_setopt($ch, CURLOPT_POST, 1);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string2);
+                    curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
+                    $result = curl_exec($ch);
+                    $arrayPenjualanUploaded = json_decode($result);
+                    $resultview .= '<p>' . $uploadproses . '. Penjualan successfully uploaded[' . count($arrayPenjualanUploaded) . '] : <ul>';
+                    for ($k = 0; $k < count($arrayPenjualanUploaded); $k++) {
+                        $penj_id = $arrayPenjualanUploaded[$k]->idpenjualan;
+                        $proses = $arrayPenjualanUploaded[$k]->proses;
+                        db_query("UPDATE penjualan SET uploaded = 1, process_upload = 0 WHERE idpenjualan='%d'", $penj_id);
+                        $noNota = $arrayPenjualanUploaded[$k]->nonota;
+                        $tglPenjualan = $arrayPenjualanUploaded[$k]->tglpenjualan;
+                        $resultview .= '<li>ID : ' . $penj_id . ', No. Nota : ' . $noNota . ', Tgl Penjualan : ' . $tglPenjualan . ', Proses : ' . $proses . '</li>';
+                    }
+                    $resultview .= '</ul></p>';
+                    curl_close($ch);
+                    $uploadproses++;
                 }
             }
-            $postdata = array('premisuser' => 'ikhwanmart', 'premispssword' => '@abuya313', 'datapremis' => $dataPremis);
-            $postdata['penjualan'] = $postpenjualan;
-            $fields_string2 = http_build_query($postdata, '', '&');
-            $ch = curl_init();
-            //set the url, number of POST vars, POST data
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string2);
-            curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
-            $result = curl_exec($ch);
-            $arrayPenjualanUploaded = json_decode($result);
-            $resultview .= '<p>' . $uploadproses . '. Penjualan successfully uploaded[' . count($arrayPenjualanUploaded) . '] : <ul>';
-            for ($k = 0; $k < count($arrayPenjualanUploaded); $k++) {
-                $penj_id = $arrayPenjualanUploaded[$k]->idpenjualan;
-                $proses = $arrayPenjualanUploaded[$k]->proses;
-                db_query("UPDATE penjualan SET uploaded = 1 WHERE idpenjualan='%d'", $penj_id);
-                $noNota = $arrayPenjualanUploaded[$k]->nonota;
-                $tglPenjualan = $arrayPenjualanUploaded[$k]->tglpenjualan;
-                $resultview .= '<li>ID : ' . $penj_id . ', No. Nota : ' . $noNota . ', Tgl Penjualan : ' . $tglPenjualan . ', Proses : ' . $proses . '</li>';
+        }else{
+            for ($i = 0; $i < $totalUploadProcess; $i++) {
+                $startJ = ($i * 50);
+                $endRecord = ($i * 50) + 50;
+                if ($endRecord > $totalRecord) {
+                    $endRecord = $totalRecord;
+                }
+                $postpenjualan = array();
+                for ($j = $startJ; $j < $endRecord; $j++) {
+                    if (isset($dataPenjualan[$j])) {
+                        $postpenjualan[] = $dataPenjualan[$j];
+                    }
+                }
+                $postdata = array('premisuser' => 'ikhwanmart', 'premispssword' => '@abuya313', 'datapremis' => $dataPremis);
+                $postdata['penjualan'] = $postpenjualan;
+                $fields_string2 = http_build_query($postdata, '', '&');
+                $ch = curl_init();
+                //set the url, number of POST vars, POST data
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string2);
+                curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
+                $result = curl_exec($ch);
+                $arrayPenjualanUploaded = json_decode($result);
+                $resultview .= '<p>' . $uploadproses . '. Penjualan successfully uploaded[' . count($arrayPenjualanUploaded) . '] : <ul>';
+                for ($k = 0; $k < count($arrayPenjualanUploaded); $k++) {
+                    $penj_id = $arrayPenjualanUploaded[$k]->idpenjualan;
+                    $proses = $arrayPenjualanUploaded[$k]->proses;
+                    db_query("UPDATE penjualan SET uploaded = 1, process_upload = 0 WHERE idpenjualan='%d'", $penj_id);
+                    $noNota = $arrayPenjualanUploaded[$k]->nonota;
+                    $tglPenjualan = $arrayPenjualanUploaded[$k]->tglpenjualan;
+                    $resultview .= '<li>ID : ' . $penj_id . ', No. Nota : ' . $noNota . ', Tgl Penjualan : ' . $tglPenjualan . ', Proses : ' . $proses . '</li>';
+                }
+                $resultview .= '</ul></p>';
+                curl_close($ch);
+                $uploadproses++;
             }
-            $resultview .= '</ul></p>';
-            curl_close($ch);
-            $uploadproses++;
         }
         /* End Process Upload Penjualan Data */
     }
@@ -654,4 +754,10 @@ function set_default_time_zone(){
     if ($defaultTimeZone != 'Asia/Kuala_Lumpur'){
         date_default_timezone_set('Asia/Kuala_Lumpur');
     }
+}
+
+function set_default_time_zone_by_user(){
+    global $user;
+    date_default_timezone_set($user->timezone_name);
+    return $user->timezone_name;
 }

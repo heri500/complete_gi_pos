@@ -76,3 +76,21 @@ tbody{
 .pull-right{
   float: right;
 }
+.vertical-text-big{
+  font-size: 24px;
+  font-weight: bold;
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+}
+.vertical-text-bigger{
+  font-size: 28px;
+  font-weight: bold;
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+}
+.vertical-text-small{
+  font-size: 20px;
+  font-weight: bold;
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg);
+}

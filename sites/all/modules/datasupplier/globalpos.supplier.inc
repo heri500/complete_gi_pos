@@ -6,32 +6,37 @@ function data_supplier(){
  	drupal_add_css($form_style, 'theme', 'all', FALSE);
  	$variables['styles'] = drupal_get_css();
     $dataPremis = get_data_premis();
+    $gstSym = get_gst_symbols(false);
     $DecDigit = $dataPremis->decimal_digit;
-	drupal_add_css('misc/media/datatables/css/demo_table_jui.css');
-	drupal_add_css('misc/media/datatables/css/TableTools.css');
-	drupal_add_css('misc/media/datatables/themes/smoothness/jquery-ui-1.8.4.custom.css');
-	drupal_add_css('misc/media/datatables/css/ColVis.css');
-	drupal_add_css('misc/media/css/validationEngine.jquery.css');
-	//drupal_add_js('misc/media/jquery-1.4.4.min.js');
-    _addJqueryPlugins();
-	drupal_add_js('misc/media/jquery.validationEngine-en.js');
-	drupal_add_js('misc/media/jquery.validationEngine.js');
-	drupal_add_js('misc/media/jquery-ui-1.8.custom.min.js');
-	drupal_add_js('misc/media/datatables/js/jquery.dataTables.min.js');
-	drupal_add_js('misc/media/datatables/ZeroClipboard/ZeroClipboard.js');
-	drupal_add_js('misc/media/datatables/js/TableTools.min.js');
-	drupal_add_js('misc/media/jquery.jeditable.js');
-	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
+    drupal_add_css('misc/media/datatables.1.10/jquery/jquery-ui.css');
+    drupal_add_css('misc/media/datatables.1.10/media/css/dataTables.jqueryui.css');
+    drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.dataTables.css');
+    drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.jqueryui.css');
+    drupal_add_js('misc/media/datatables.1.10/media/js/jquery.js');
+    drupal_add_js('misc/media/jqueryValidate/js/jquery.validationEngine-en.js');
+    drupal_add_js('misc/media/jqueryValidate/js/jquery.validationEngine.js');
+    drupal_add_js('misc/media/datatables.1.10/jquery/jquery-ui.js');
+    drupal_add_js('misc/media/datatables.1.10/media/js/jquery.dataTables.js');
+    drupal_add_js('misc/media/datatables.1.10/media/js/dataTables.jqueryui.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/dataTables.buttons.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.flash.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.html5.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.print.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.colVis.min.js');
     drupal_add_js('misc/media/datatables/js/number.format.js');
     _addChosenJqueryPlugins();
     _addJeditablePlugins();
+    _addTimePickerPlugins();
+    _addAutotabPlugins();
     $PaymentType = array_payment_type();
     drupal_add_js(
         array(
             'filepath' => file_directory_path(),
             'status_options' => array('External','Internal'),
             'payment_type' => $PaymentType,
-            'dec_digit' => $DecDigit
+            'dec_digit' => $DecDigit,
+            'gstSym' => $gstSym,
+            'dDigit' => $DecDigit,
         ),
         'setting');
 	$modulePath = drupal_get_path('module','datasupplier');

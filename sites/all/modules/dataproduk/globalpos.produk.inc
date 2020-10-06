@@ -46,6 +46,21 @@ function data_produk(){
 		),
 		'setting'
 	);
+    if (function_exists('data_produk_size')){
+        drupal_add_js(
+            array(
+                'product_size'  => 1,
+            ),
+            'setting'
+        );
+    }else{
+        drupal_add_js(
+            array(
+                'product_size'  => 0,
+            ),
+            'setting'
+        );
+    }
 	$js_path = drupal_get_path('module','dataproduk').'/tabelproduknew.js';
 	drupal_add_js($js_path);
 	drupal_set_title('<span style="float: left;margin-right: 6px;">Data Produk</span><button id="tambahprodukbaru" class="tombolutama">Tambah Produk</button><button id="refreshprodukbaru" class="tombolutama">Refresh Tabel Produk</button>');
@@ -165,6 +180,7 @@ function data_produk(){
     $FileTypeOpt = '<select id="file_type" name="file_type" class="file-selection">';
     $FileTypeOpt .= '<option value="xls">EXCEL</option>';
     $FileTypeOpt .= '<option value="csv">CSV</option>';
+    $FileTypeOpt .= '<option value="csv-rongta">CSV RONGTA</option>';
     $FileTypeOpt .= '</select>';
     $pilihanstatus .= $FileTypeOpt.'<button id="export-data" onclick="export_data();" class="button-prod-table">Export</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="nonaktifkan" class="button-prod-table">Non Aktifkan</button>&nbsp;&nbsp;';
@@ -176,6 +192,12 @@ function data_produk(){
     //$pilihanstatus .= '<button id="print-barcode-50x15">Barcode 50x15</button>';
     $BarcodeTypeOpt = barcode_selection('price-label','price-label');
     $pilihanstatus .= $BarcodeTypeOpt.'<button id="print-price-label" class="button-prod-table">Print Price Label</button>&nbsp;&nbsp;';
+    $pilihanstatus .= '<input class="date_field" type="text" id="date_from_view" name="date_from_view" value="'.date('Y-m-').'01">';
+    $DateThru = date('Y-m-').get_last_day(date('n'), date('Y'));
+    $pilihanstatus .= '<input class="date_field" type="text" id="date_thru_view" name="date_thru_view" value="'.$DateThru.'">';
+    $pilihanstatus .= '<div class="button-div"><div class="dt-buttons">';
+    $pilihanstatus .= '<a class="dt-button buttons-collection" id="print-stock-card">Stock Card</a>';
+    $pilihanstatus .= '</div></div>';
 	$pilihanstatus .= '</span>';
 	$pilihanstatus .= '</div>';
 	$statusProduct = 1;
@@ -241,6 +263,7 @@ function data_produk(){
 	$viewtabelproduk .= '</form>';
 	$viewtabelproduk .= '<div><button id="tambahsatuan" onclick="simpansatuan();">Tambah Satuan</button></div>';
 	$viewtabelproduk .= '</div>';
+	/* Dialog harga supplier */
     $viewtabelproduk .= '<div id="dialoghargasupplier" title="HARGA PRODUK/SUPPLIER">';
     $viewtabelproduk .= '<div id="table-harga-wrapper"></div>';
     $viewtabelproduk .= '<div>';
@@ -248,11 +271,47 @@ function data_produk(){
     $viewtabelproduk .= '<button id="closehargasupplier" onclick="closehargasupplier();">Close</button>';
     $viewtabelproduk .= '</div>';
     $viewtabelproduk .= '</div>';
+    /* end dialog harga supplier */
+    /* Dialog product discount */
+    $viewtabelproduk .= '<div id="dialog-produk-diskon" title="'.strtoupper(trans('diskon', $dataPremis->bahasa)).' PRODUK">';
+    $viewtabelproduk .= '<h5 id="product-title">NAMA PRODUCT</h5>';
+    $viewtabelproduk .= '<div id="form_diskon" class="produk">';
+    $viewtabelproduk .= '<form class="form_style">';
+    $viewtabelproduk .= '<label>Tarikh Mula</label>';
+    $viewtabelproduk .= '<input readonly="readonly" id="tgl1" name="tgl1" type="text" value="'.date('Y-m-d').'">';
+    $viewtabelproduk .= '<label>Tarikh Akhir</label>';
+    $viewtabelproduk .= '<input readonly="readonly" id="tgl2" name="tgl2" type="text" value="'.date('Y-m-d').'">';
+    $viewtabelproduk .= '<label>Harga Asal</label>';
+    $viewtabelproduk .= '<input id="harga_asal" name="harga_asal" type="text" readonly="readonly">';
+    $viewtabelproduk .= '<label>Harga '.ucfirst(trans('diskon', $dataPremis->bahasa)).'</label>';
+    $viewtabelproduk .= '<input id="harga_diskon" name="harga_diskon" type="text">';
+    $viewtabelproduk .= '<div class="button-form">';
+    $viewtabelproduk .= '<button id="simpan-diskon">Simpan '.ucfirst(trans('diskon', $dataPremis->bahasa)).' Produk</button>&nbsp;';
+    $viewtabelproduk .= '<button id="close-diskon" onclick="closediskon();">Close</button>';
+    $viewtabelproduk .= '</div>';
+    $viewtabelproduk .= '<input id="idproduct_diskon" name="idproduct_diskon" type="hidden" readonly="readonly">';
+    $viewtabelproduk .= '<input id="normal_price" name="normal_price" type="hidden" readonly="readonly">';
+    $viewtabelproduk .= '</form>';
+    $viewtabelproduk .= '</div>';
+    $viewtabelproduk .= '<div id="table-diskon-wrapper"></div>';
+    $viewtabelproduk .= '</div>';
+    /* end dialog product discount */
+    /* form print barcode price or label */
     $viewtabelproduk .= '<form id="form-print" method="post" action="'.base_path().'print/6" target="_blank" style="display:none;">';
     $viewtabelproduk .= '<textarea id="selected-product-print" name="selected-product-print"></textarea>';
     $viewtabelproduk .= '<input type="hidden" id="sticker-type" name="sticker-type" value="1">';
     $viewtabelproduk .= '<input type="hidden" id="sticker-size" name="sticker-size" value="52.5x37">';
     $viewtabelproduk .= '</form>';
+    /* end form print barcode price or label */
+    /* form view stock card */
+    $viewtabelproduk .= '<form id="stock-card-form" method="post" action="'.base_path().'dataproduk/stockcard" target="_blank" style="display:none;">';
+    $viewtabelproduk .= '<select id="idproduct-stockcard" name="idproduct-stockcard[]" multiple></select>';
+    $viewtabelproduk .= '<input type="hidden" id="date_from" name="date_from" value="'.date('Y-m-').'01">';
+    $DateThru = date('Y-m-').get_last_day(date('n'), date('Y'));
+    $viewtabelproduk .= '<input type="hidden" id="date_thru" name="date_thru" value="'.$DateThru.'">';
+    $viewtabelproduk .= '<input type="submit" value="Print">';
+    $viewtabelproduk .= '</form>';
+    /* end form view stock card */
 	return $viewtabelproduk;
 }
 
@@ -268,6 +327,7 @@ function barcode_selection($ObjId = 'barcode-select', $ObjName = 'barcode-select
     $BarcodeTypeOpt .= '<option value="65x23x2">Barcode 65x23 (2 Column)</option>';
     $BarcodeTypeOpt .= '<option value="50x25">Barcode 50x25</option>';
     $BarcodeTypeOpt .= '<option value="50x15">Barcode 50x15</option>';
+    $BarcodeTypeOpt .= '<option value="50x30">Barcode 50x30</option>';
     $BarcodeTypeOpt .= '</select>';
     return $BarcodeTypeOpt;
 }
@@ -330,10 +390,13 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<th>KETERANGAN</th>';
 	$tabelproduk .= '<th>TOTAL('.trim($currencySym).')</th>';
 	$tabelproduk .= '<th>GRUP</th>';
-    $tabelproduk .= '<th class="tablebutton"></th>';
-    $tabelproduk .= '<th class="tablebutton"></th>';
-    $tabelproduk .= '<th class="tablebutton"></th>';
-    $tabelproduk .= '<th class="tablebutton"></th>';
+    $tabelproduk .= '<th class="tablebutton">&nbsp;</th>';
+    $tabelproduk .= '<th class="tablebutton">&nbsp;</th>';
+    $tabelproduk .= '<th class="tablebutton">&nbsp;</th>';
+    $tabelproduk .= '<th class="tablebutton">&nbsp;</th>';
+    if (function_exists('data_produk_size')){
+        $tabelproduk .= '<th>&nbsp;</th>';
+    }
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</thead>';
 	$tabelproduk .= '<tbody>';
@@ -343,7 +406,11 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<tr>';
 	$tabelproduk .= '<th class="right" colspan="16">TOTAL NILAI BARANG(VIEW) :</th>';
 	$tabelproduk .= '<th class="right">&nbsp;</th>';
-	$tabelproduk .= '<th colspan="5"><strong>TOTAL SELURUH BARANG : <div id="total-nilai-barang">'.$currencySym.' '.number_format($totalNilaiBarang,2,$decimalSep,$thousandSep).'</div></strong></th>';
+    if (function_exists('data_produk_size')){
+        $tabelproduk .= '<th colspan="6"><strong>TOTAL SELURUH BARANG : <div id="total-nilai-barang">' . $currencySym . ' ' . number_format($totalNilaiBarang, 2, $decimalSep, $thousandSep) . '</div></strong></th>';
+    }else {
+        $tabelproduk .= '<th colspan="5"><strong>TOTAL SELURUH BARANG : <div id="total-nilai-barang">' . $currencySym . ' ' . number_format($totalNilaiBarang, 2, $decimalSep, $thousandSep) . '</div></strong></th>';
+    }
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</tfoot>';
 	$tabelproduk .= '</table>';
@@ -413,10 +480,11 @@ function simpan_produk(){
 	if (isset($_POST["idproduk"])){
 		print $_POST["idproduk"];
 		if (isset($_POST["barcode"]) AND isset($_POST["namaproduk"])){
-			$result = db_query("SELECT idkategori,idsubkategori,stok,hargapokok,alt_code FROM product WHERE idproduct='%d'",$_POST["idproduk"]);
+			$result = db_query("SELECT idkategori,idsubkategori,stok,hargapokok,alt_code, hargajual FROM product WHERE idproduct='%d'",$_POST["idproduk"]);
 			$data = db_fetch_object($result);
 			$STOKSEBELUM = $data->stok;
 			$HARGAPOKOK = $data->hargapokok;
+			$HARGAJUAL = $data->hargajual;
             $Supplier = $_REQUEST["idsupplier"];
 			if (!($data->idkategori == $_POST["idkategori"] AND $data->idsubkategori == $_POST["idsubkategori"])){
 				$resultkategori = db_query("SELECT kodekategori FROM kategori WHERE idkategori='%d'",$_POST["idkategori"]);
@@ -449,9 +517,14 @@ function simpan_produk(){
 				//print $sql;
 				if ($_POST["hargapokok"] <> $HARGAPOKOK){
 					global $user;
-					db_query("INSERT INTO historyhargabeli (hargasebelum, hargasesudah, uid) VALUES('%f','%f','%d')",
-					$HARGAPOKOK,round($_POST["hargapokok"],$DecDigit),$user->uid);
+					db_query("INSERT INTO historyhargabeli (idproduct, hargasebelum, hargasesudah, uid) VALUES('%d', '%f','%f','%d')",
+                        $_POST["idproduk"], $HARGAPOKOK,round($_POST["hargapokok"],$DecDigit),$user->uid);
 				}
+                if ($_POST["hargajual"] <> $HARGAJUAL){
+                    global $user;
+                    db_query("INSERT INTO historyhargajual (idproduct, hargasebelum, hargasesudah, uid) VALUES('%d', '%f','%f','%d')",
+                        $_POST["idproduk"], $HARGAJUAL,round($_POST["hargajual"],$DecDigit),$user->uid);
+                }
                 db_query('DELETE FROM product_supplier WHERE idproduct=%d', $_POST["idproduk"]);
                 for ($i = 0;$i < count($Supplier);$i++){
                     $IdSupplier = $Supplier[$i];
@@ -474,9 +547,14 @@ function simpan_produk(){
 				$_POST["idproduk"]);
 				if ($_POST["hargapokok"] <> $HARGAPOKOK){
 					global $user;
-					db_query("INSERT INTO historyhargabeli (hargasebelum, hargasesudah, uid) VALUES('%f','%f','%d')",
-					$HARGAPOKOK,$_POST["hargapokok"],$user->uid);
+					db_query("INSERT INTO historyhargabeli (idproduct, hargasebelum, hargasesudah, uid) VALUES('%d', '%f', '%f', '%d')",
+                        $_POST["idproduk"], $HARGAPOKOK,$_POST["hargapokok"],$user->uid);
 				}
+                if ($_POST["hargajual"] <> $HARGAJUAL){
+                    global $user;
+                    db_query("INSERT INTO historyhargajual (idproduct, hargasebelum, hargasesudah, uid) VALUES('%d', '%f','%f','%d')",
+                        $_POST["idproduk"], $HARGAJUAL,round($_POST["hargajual"],$DecDigit),$user->uid);
+                }
                 db_query('DELETE FROM product_supplier WHERE idproduct=%d', $_POST["idproduk"]);
                 for ($i = 0;$i < count($Supplier);$i++){
                     $IdSupplier = $Supplier[$i];
@@ -833,8 +911,8 @@ function update_data_produk(){
 		$nilaiRet = number_format($nilai,$DecDigit,$dSep,$tSep);
 		if ($nilai <> $hargaPokok){
 			global $user;
-			db_query("INSERT INTO historyhargabeli (hargasebelum, hargasesudah, uid) VALUES('%f','%f','%d')",
-			$hargaPokok,$nilai,$user->uid);
+			db_query("INSERT INTO historyhargabeli (idproduct, hargasebelum, hargasesudah, uid) VALUES ('%d', '%f', '%f', '%d')",
+			$productId, $hargaPokok,$nilai,$user->uid);
 		}
         $sql_update2 = "UPDATE product_supplier SET harga = '%f' WHERE idproduct='%d'";
 		db_query($sql_update2, $nilai, $productId);
@@ -843,8 +921,8 @@ function update_data_produk(){
 		$nilaiRet = number_format($nilai,$DecDigit,$dSep,$tSep);
 		if ($nilai <> $hargaJual){
 			global $user;
-			db_query("INSERT INTO historyhargajual (hargasebelum, hargasesudah, uid) VALUES('%f','%f','%d')",
-			$hargaJual,$nilai,$user->uid);
+			db_query("INSERT INTO historyhargajual (idproduct, hargasebelum, hargasesudah, uid) VALUES ('%d','%f','%f','%d')",
+                $productId, $hargaJual, $nilai, $user->uid);
 		}
 	}else if ($kolom == "8"){
 		$sql_update = "UPDATE product SET stok='%f',uploaded=0, changed=1  WHERE idproduct='%d'";
@@ -941,4 +1019,238 @@ function ubah_supplier_price(){
         }
     }
     exit();
+}
+function save_product_discount(){
+    if (isset($_POST['idproduct']) && !empty($_POST['idproduct'])
+        && isset($_POST['price']) && !empty($_POST['price'])
+        && isset($_POST['date_from']) && !empty($_POST['date_from'])
+        && isset($_POST['date_thru']) && !empty($_POST['date_thru'])
+    ){
+        $StrSql = "INSERT INTO product_discount (idproduct, date_from, date_thru, price, normal_price) VALUES ";
+        $StrSql .= "(%d, '%s', '%s', '%f', '%f')";
+        db_query($StrSql,$_POST['idproduct'], $_POST['date_from'], $_POST['date_thru'], $_POST['price'], $_POST['normal_price']);
+    }
+    exit();
+}
+
+function table_product_discount()
+{
+    if (isset($_POST['idproduct']) && !empty($_POST['idproduct'])) {
+        $header = array(
+            array('data' => 'From'),
+            array('data' => 'Thru'),
+            array('data' => 'Discount Price'),
+            array('data' => 'Normal Price'),
+            array('data' => '&nbsp;', 'class' => 'tablebutton'),
+        );
+        $StrSql = "SELECT idproduct,id, idproduct, date_from, date_thru, price, normal_price FROM product_discount ";
+        $StrSql .= "WHERE idproduct = %d ORDER BY date_from DESC";
+        $Result = db_query($StrSql, $_POST['idproduct']);
+        $ImgPath = base_path().drupal_get_path('module','dataproduk');
+        while ($DataDiscount = db_fetch_object($Result)) {
+            $HapusData = '<img id="hapus-'.$DataDiscount->id.'" onclick="hapus_diskon('.$DataDiscount->id.')" src="'.$ImgPath.'/images/delete.ico" width="20">';
+            $rows[] = array(
+                array('data' => $DataDiscount->date_from),
+                array('data' => $DataDiscount->date_thru),
+                array('data' => $DataDiscount->price),
+                array('data' => $DataDiscount->normal_price),
+                $HapusData
+            );
+        }
+        $TableId = 'tabel-'.$_POST['idproduct'];
+        $output = theme_table($header, $rows, array('id' => $TableId, 'class' => 'table-product-discount'));
+        print $output;
+    }
+    exit();
+}
+
+function hapus_product_discount(){
+    if (isset($_POST['id']) && !empty($_POST['id'])){
+        $Active = db_result(db_query('SELECT active FROM product_discount WHERE id = %d', $_POST['id']));
+        if ($Active == 1){
+            $NormalPrice = db_result(db_query('SELECT normal_price FROM product_discount WHERE id = %d', $_POST['id']));
+            $IdProduct = db_result(db_query('SELECT idproduct FROM product_discount WHERE id = %d', $_POST['id']));
+            db_query("UPDATE product SET hargajual = '%f' WHERE idproduct = %d ", $NormalPrice, $IdProduct);
+        }
+        db_query('DELETE FROM product_discount WHERE id = %d', $_POST['id']);
+    }
+    exit();
+}
+
+function active_product_discount_table(){
+    get_number_format($currencySym, $tSep, $dSep);
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
+    $path = drupal_get_path('theme', 'cti_flex');
+    $form_style = $path.'/css/custom-style.css';
+    drupal_add_css($form_style, 'theme', 'all', FALSE);
+    //$variables['styles'] = drupal_get_css();
+    drupal_add_css('misc/media/datatables.1.10/jquery/jquery-ui.css');
+    drupal_add_css('misc/media/datatables.1.10/media/css/dataTables.jqueryui.css');
+    drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.dataTables.css');
+    drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.jqueryui.css');
+    drupal_add_css('misc/media/jqueryValidate/css/validationEngine.jquery.css');
+    drupal_add_css('misc/media/jqueryValidate/css/template.css');
+    drupal_add_js('misc/media/datatables.1.10/media/js/jquery.js');
+    drupal_add_js('misc/media/datatables.1.10/jquery/jquery-ui.js');
+    drupal_add_js('misc/media/datatables.1.10/media/js/jquery.dataTables.js');
+    drupal_add_js('misc/media/datatables.1.10/media/js/dataTables.jqueryui.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/dataTables.buttons.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.flash.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.html5.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.print.js');
+    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.colVis.min.js');
+    drupal_add_js('misc/media/datatables/js/number.format.js');
+    _addJsRounding();
+    drupal_add_js(
+        array(
+            'dec_digit' => $DecDigit,
+        ),
+        'setting'
+    );
+    $js_path = drupal_get_path('module','dataproduk').'/tabelprodukdiscount.js';
+    drupal_add_js($js_path);
+    $header = array(
+        array('data' => 'Barcode'),
+        array('data' => 'Nama Product'),
+        array('data' => 'Harga Pokok'),
+        array('data' => 'From'),
+        array('data' => 'Thru'),
+        array('data' => 'Discount Price'),
+        array('data' => 'Normal Price'),
+        array('data' => 'Stok'),
+        array('data' => '&nbsp;', 'class' => 'tablebutton'),
+    );
+    $TableId = 'active-product-discount-table';
+    $rows[] = array(1,1,1,1,1,1,1,1,1);
+    $ActiveProductDiscountTable = theme_table($header, $rows, array('id' => $TableId, 'class' => 'table-product-discount'));
+    return $ActiveProductDiscountTable;
+}
+
+function product_stock_card(){
+    $path = drupal_get_path('theme', 'cti_flex');
+    $form_style = $path.'/css/custom-style.css';
+    drupal_add_css($form_style, 'theme', 'all', FALSE);
+    set_default_time_zone_by_user();
+    $DataPremis = get_data_premis();
+    $ListProduct = $_POST['idproduct-stockcard'];
+    $DateFrom = date('Y-m-01').' 00:00';
+    if (isset($_POST['date_from']) && !empty($_POST['date_from'])){
+        $DateFrom = $_POST['date_from'].' 00:00';
+    }
+    $DateThru = date('Y-m-').get_last_day(date('n'), date('Y')).' 23:59';
+    if (isset($_POST['date_thru']) && !empty($_POST['date_thru'])){
+        $DateThru = $_POST['date_thru'].' 23:59';
+    }
+    $ViewStockCard = '';
+    if (is_array($ListProduct) && count($ListProduct)){
+        $StrSql = "SELECT barcode, idproduct, barcode, alt_code, namaproduct, keterangan FROM product WHERE idproduct IN (".db_placeholders($ListProduct, 'int').")";
+        $result = db_query($StrSql, $ListProduct);
+        $ArrDataProduct = array();
+        while ($DataProduct = db_fetch_object($result)){
+            $IdProduct = $DataProduct->idproduct;
+            $StrSql = "SELECT idproduk, idpenjualan, tgltransaksi, stocksebelum, masuk, ";
+            $StrSql .= "keluar, stocksetelah, keterangan, idpembelian, idreproduksi, idreturn, ";
+            $StrSql .= "idreturnpelanggan, idcustomerorder FROM transaksistock ";
+            $StrSql .= "WHERE idproduk = %d AND tgltransaksi BETWEEN '%s' AND '%s' ";
+            $StrSql .= "ORDER BY tgltransaksi";
+            $result2 = db_query($StrSql, $IdProduct, $DateFrom, $DateThru);
+            $DetailTransaksi = array();
+            $RowTransaksi = array();
+            while ($DataTransaksi = db_fetch_object($result2)){
+                $QtyIn = 0;
+                if (!empty($DataTransaksi->masuk)){
+                    $QtyIn = $DataTransaksi->masuk;
+                }
+                $QtyOut = 0;
+                if (!empty($DataTransaksi->keluar)){
+                    $QtyOut = $DataTransaksi->keluar;
+                }
+                $RowTransaksi[] = array(
+                    array('data' => $DataTransaksi->tgltransaksi, 'class' => 'center'),
+                    array('data' => $DataTransaksi->stocksebelum, 'class' => 'angka'),
+                    array('data' => $QtyIn, 'class' => 'angka'),
+                    array('data' => $QtyOut, 'class' => 'angka'),
+                    array('data' => $DataTransaksi->stocksetelah, 'class' => 'angka'),
+                    $DataTransaksi->keterangan
+                );
+                $DetailTransaksi[] = $DataTransaksi;
+            }
+            $DataProduct->detail_transaksi = $DetailTransaksi;
+            $DataProduct->row_transaksi = $RowTransaksi;
+            $ArrDataProduct[] = $DataProduct;
+        }
+        if (count($ArrDataProduct)){
+            $header = header_stock_card_table();
+            $ViewStockCard .= '<div class="header">'.strtoupper($DataPremis->nama).' STOCK REPORT</div>';
+            $ViewStockCard .= '<div>PERIODE : '.$DateFrom.' s.d. '.$DateThru.'</div>';
+            $ViewStockCard .= '<div>&nbsp;</div>';
+            $ViewStockCard .= '<div>&nbsp;</div>';
+            for ($i = 0;$i < count($ArrDataProduct);$i++){
+                $TableStock = theme_table(
+                    $header,
+                    $ArrDataProduct[$i]->row_transaksi,
+                    array(
+                        'id' => 'table-stock-card-'.$ArrDataProduct[$i]->idproduk,
+                        'class' => 'table-product-discount',
+                    )
+                );
+                $ViewStockCard .= '<div>'.$ArrDataProduct[$i]->namaproduct.'</div>';
+                $ViewStockCard .= '<div>&nbsp;</div>';
+                $ViewStockCard .= '<div>'.$TableStock.'</div>';
+            }
+        }
+    }
+    return $ViewStockCard;
+}
+
+function header_stock_card_table(){
+    $header = array(
+        array('data' => 'Date', 'class' => 'date-col'),
+        array('data' => 'Beginning Balance'),
+        array('data' => 'Stock In', 'class' => 'stock-col'),
+        array('data' => 'Stock Out', 'class' => 'stock-col'),
+        array('data' => 'Ending Balance'),
+        array('data' => 'Keterangan', 'class' => 'desc-col'),
+    );
+    return $header;
+}
+
+function get_last_day($mon, $year) {
+    $daysinmonth = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+    $days = $daysinmonth[$mon-1];
+    if ($mon == 2 && ($year % 4) == 0 && (($year % 100) != 0 ||
+            ($year % 400) == 0)) $days++;
+    //if ($mon == 2 && ($year % 4) == 0 && ($year % 1000) != 0) $days++;
+    $lastday = $days;
+    return $lastday;
+}
+function get_days_array($sStartDate, $sEndDate){
+    // Firstly, format the provided dates.
+    // This function works best with YYYY-MM-DD
+    // but other date formats will work thanks
+    // to strtotime().
+    $sStartDate = date("Y-m-d", strtotime($sStartDate));
+    $sEndDate = date("Y-m-d", strtotime($sEndDate));
+
+    // Start the variable off with the start date
+    $aDays[] = $sStartDate;
+
+    // Set a 'temp' variable, sCurrentDate, with
+    // the start date - before beginning the loop
+    $sCurrentDate = $sStartDate;
+
+    // While the current date is less than the end date
+    while($sCurrentDate < $sEndDate){
+        // Add a day to the current date
+        $sCurrentDate = date("Y-m-d", strtotime("+1 day", strtotime($sCurrentDate)));
+
+        // Add this new day to the aDays array
+        $aDays[] = $sCurrentDate;
+    }
+
+    // Once the loop has finished, return the
+    // array of days.
+
+    return $aDays;
 }

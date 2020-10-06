@@ -6,7 +6,7 @@ function get_supplier_related_nota($IdSupplier = null, $nota_status = array(0,1)
         $dataPremis = get_data_premis(false);
         $DecDigit = $dataPremis->decimal_digit;
         if (is_array($nota_status)) {
-            $StrSql = 'SELECT idpembelian, nonota, no_invoice, total, payment_paid FROM pembelian WHERE ';
+            $StrSql = 'SELECT idpembelian, nonota, no_invoice, total, payment_paid,tglpembelian FROM pembelian WHERE ';
             $StrSql .= 'payment_status IN (' . db_placeholders($nota_status, 'int') . ') ';
             $StrSql .= 'AND idsupplier = %d ORDER BY idpembelian';
             $result = db_query($StrSql, array_merge($nota_status, array($IdSupplier)));
@@ -16,7 +16,7 @@ function get_supplier_related_nota($IdSupplier = null, $nota_status = array(0,1)
                 $RelatedInvoice[] = $data;
             }
         }else{
-            $result = db_query('SELECT idpembelian, nonota, no_invoice, total, payment_paid FROM pembelian WHERE 
+            $result = db_query('SELECT idpembelian, nonota, no_invoice, total, payment_paid,tglpembelian FROM pembelian WHERE 
             payment_status = %d AND idsupplier = %d ORDER BY idpembelian', $nota_status, $IdSupplier);
             $RelatedInvoice = array();
             while ($data = db_fetch_object($result)) {

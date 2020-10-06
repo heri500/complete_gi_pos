@@ -1,6 +1,10 @@
 <?php
 
 function view_tabel_laundry(){
+    get_number_format($currencySym, $thousandSep, $decimalSep);
+    $gstSym = get_gst_symbols(false);
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
 	$path = drupal_get_path('theme', 'cti_flex');
 	$form_style = $path.'/css/custom-style.css';
 	drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -52,10 +56,13 @@ function view_tabel_laundry(){
 		array(
 			'urutan'  => $urutan,
 			'tglawal' => $tgl1,
-			'tglakhir'=> $tgl2
+			'tglakhir'=> $tgl2,
+            'gstSym' => $gstSym,
+            'dDigit' => $DecDigit,
 		),
 		'setting'
 	);
+    drupal_add_js('misc/media/datatables/js/number.format.js');
 	$js_path = drupal_get_path('module','penjualan').'/js/tabel.laundry.js';
 	drupal_add_js($js_path);
 	$pilihantampil = '<select id="pilihantampil" name="pilihantampil">';
@@ -135,11 +142,12 @@ function detail_laundry(){
 		$tabellaundry .= '<th class="qty">TGL AMBIL</th>';
 		$tabellaundry .= '<th>H.JUAL</th>';
 		$tabellaundry .= '<th>SUBTOTAL</th>';
+        $tabellaundry .= '<th>NO. RAK</th>';
 		$tabellaundry .= '</tr>';
 		$tabellaundry .= '</thead>';
 		$tabellaundry .= '<tbody>';
 		$result = db_query("SELECT b.iddetail,c.barcode, c.namaproduct, b.jumlah, b.hargajual, (b.hargajual*b.jumlah) AS subtotal,
-		sisa, diambil,perkiraan_ambil FROM 
+		sisa, diambil,perkiraan_ambil,b.detail_nomer_rak FROM 
 		detaillaundry b LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN supplier a ON c.idsupplier=a.idsupplier WHERE b.idtitipanlaundry='%d'",$_POST["idtitipanlaundry"]);
 		while($data = db_fetch_object($result)){
 			$iddetail = $data->iddetail;
@@ -157,6 +165,7 @@ function detail_laundry(){
 			$tabellaundry .= '<td id="tglambil-'.$iddetail.'" class="center edit-tanggal">'.$tglambil.'</td>';
 			$tabellaundry .= '<td id="detailharga-'.$iddetail.'" class="angka edit-hargajual">'.number_format($data->hargajual,0,",",".").'</td>';
 			$tabellaundry .= '<td class="angka">'.number_format($data->subtotal,0,",",".").'</td>';
+            $tabellaundry .= '<td id="rak-'.$iddetail.'" class="center edit-rak">'.$data->detail_nomer_rak.'</td>';
 			$tabellaundry .= '</tr>';
 		}
 		$tabellaundry .= '</tbody>';

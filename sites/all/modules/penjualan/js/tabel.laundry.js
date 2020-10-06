@@ -1,19 +1,13 @@
 var oTable;
 var pathutama = '';
-var urutan = '';
+var urutan = 0;
 var alamatupdatedetaillaundry = '';
 var alamatupdaterak = '';
-function addCommas(nStr){
-	nStr += "";
-	x = nStr.split(",");
-	x1 = x[0];
-	x2 = x.length > 1 ? "," + x[1] : "";
-	var rgx = /(\d+)(\d{3})/;
-	while (rgx.test(x1)) {
-		x1 = x1.replace(rgx, "$1" + "." + "$2");
-	}
-	return x1 + x2;
-}
+var currSym = '';
+var tSep = '.';
+var dSep = ',';
+var dDigit = 0;
+
 function tampiltabellaundry(){
 	oTable = $('#tabel_laundry').dataTable( {
 		'bJQueryUI': true,
@@ -22,8 +16,8 @@ function tampiltabellaundry(){
 		'bInfo': true,
 		'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
 		'iDisplayLength': 100,
-		'ordering': false,
 		/*'aaSorting': [[6, 'desc']],*/
+		'aaSorting': [[urutan, 'desc']],
 		'processing': true,
 		'serverSide': true,
 		'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=laundry&tglawal='+ Drupal.settings.tglawal +'&tglakhir='+ Drupal.settings.tglakhir,
@@ -63,6 +57,52 @@ function tampiltabellaundry(){
 				'tooltip': 'Edit'
 			});
 		},
+		'footerCallback': function ( row, data, start, end, display ) {
+			var api = this.api(), data;
+			// Remove the formatting to get integer data for summation
+			var intVal = function ( i ) {
+				if (typeof i === 'string') {
+					i = i.split(tSep).join('');
+					i = i.split(dSep).join('.');
+				}else if (typeof i === 'number'){
+					i = i;
+				}else{
+					i = 0;
+				}
+				return parseFloat(i);
+			};
+			// Total over all pages
+			total = api
+				.column( 8 )
+				.data()
+				.reduce( function (a, b) {
+					return intVal(a) + intVal(b);
+				}, 0 );
+			// Update footer
+			$( api.column( 8 ).footer() ).html(
+				currSym +' '+ number_format(total,dDigit,dSep,tSep)
+			).addClass('angka');
+			total = api
+				.column( 10 )
+				.data()
+				.reduce( function (a, b) {
+					return intVal(a) + intVal(b);
+				}, 0 );
+			// Update footer
+			$( api.column( 10 ).footer() ).html(
+				currSym +' '+ number_format(total,dDigit,dSep,tSep)
+			).addClass('angka');
+			total = api
+				.column( 11 )
+				.data()
+				.reduce( function (a, b) {
+					return intVal(a) + intVal(b);
+				}, 0 );
+			// Update footer
+			$( api.column( 11 ).footer() ).html(
+				currSym +' '+ number_format(total,dDigit,dSep,tSep)
+			).addClass('angka');
+		},
 		/*"aoColumnDefs": [
 		 { "bSortable": false, "aTargets": [ 0,1,2,3,5,7,11 ] }
 		 ]*/
@@ -93,6 +133,14 @@ function view_detail(idlaundry,nonota){
 			tampiltabellaundrydetail();
 			$('div.toolbar').html('No. Nota : '+ nonota);
 			$('#dialogdetail').dialog('open');
+            $('.edit-rak').editable(alamatupdatedetaillaundry,{
+                name : 'nomer-rak',
+                width : 60,
+                height : 18,
+                style   : 'margin: 0',
+                tooltip   : 'Klik untuk mengubah nomer rak',
+                indicator : 'Saving...'
+            });
 			/*$('.edit-jumlah').editable(alamatupdatedetaillaundry,{
 			 name : 'jumlahproduk',
 			 width : 60,
@@ -129,8 +177,13 @@ function pickup_laundry(idtitipan, nonota){
 }
 $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
-	alamatupdatetanggaljual = pathutama + 'penjualan/updatelaundry';
+    alamatupdatedetaillaundry = pathutama + 'penjualan/updatelaundry';
 	alamatupdaterak = pathutama + 'penjualan/updateraklaundry';
+	currSym = Drupal.settings.currSym;
+	tSep = Drupal.settings.tSep;
+	dSep = Drupal.settings.dSep;
+	dDigit = Drupal.settings.dDigit;
+
 	//alamatupdatedetaillaundry = pathutama + 'laundry/updatedetaillaundry';
 	urutan = Drupal.settings.urutan;
 	$('#dialogdetail').dialog({
@@ -143,7 +196,7 @@ $(document).ready(function(){
 	$('button').button();
 	//TableToolsInit.sSwfPath = pathutama +'misc/media/datatables/swf/ZeroClipboard.swf';
 	if (urutan == 1){
-		$('.edit-tanggal').editable(alamatupdatetanggaljual,{
+		$('.edit-tanggal').editable(alamatupdatedetaillaundry,{
 			submitdata : function(value, settings) {
 				var idlaundry = $(this).attr('id');
 				var splitidlaundry = idlaundry.split('-');
@@ -176,7 +229,7 @@ $(document).ready(function(){
 				$('#harilaundry-'+ idlaundry).html(hari);
 			}
 		});
-		$('.edit-jam').editable(alamatupdatetanggaljual,{
+		$('.edit-jam').editable(alamatupdatedetaillaundry,{
 			name : 'jampenjualan',
 			width : 120,
 			height : 18,

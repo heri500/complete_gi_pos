@@ -169,6 +169,7 @@ function pembayaranhutang($variables){
 	return $variables;
 }
 function rest_getTotalHutang($idpelanggan = null){
+    $TotalHutang = db_result(db_query("SELECT besarhutang FROM piutang WHERE idpelanggan=%d", $idpelanggan));
 	$result[] = getTotalHutang($idpelanggan) + getTotalPenggunaanDeposit($idpelanggan) - getTotalPembayaran($idpelanggan);
 	print json_encode($result);
 	exit();

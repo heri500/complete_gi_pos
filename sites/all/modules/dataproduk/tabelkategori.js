@@ -1,8 +1,8 @@
 var oTable;
 var pathutama = "";
 var pathfile = "";
-function tampilkantabelkategori(){
-    oTable = $("#tabel_kategori").dataTable( {
+function tampilkantabelkategori() {
+    oTable = $("#tabel_kategori").dataTable({
         "bJQueryUI": true,
         "bAutoWidth": false,
         "sPaginationType": "full_numbers",
@@ -11,7 +11,7 @@ function tampilkantabelkategori(){
         "iDisplayLength": 100,
         "aaSorting": [[0, "asc"]],
         "sDom": '<"space"T><"clear"><"H"lfr>t<"F"ip>'
-});
+    });
 }
 $(document).ready(function() {
     pathutama = Drupal.settings.basePath;

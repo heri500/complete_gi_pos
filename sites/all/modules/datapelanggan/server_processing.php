@@ -44,38 +44,64 @@ function serverSidePelanggan($request){
 	$searchArray = $_REQUEST['search'];
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
-		'','','','plg.kodepelanggan','plg.namapelanggan','plg.telp', 'plg.alamat',
+		'','','','plg.idpelanggan','plg.namapelanggan','plg.telp', 'plg.alamat',
 		'plg.email','ptg.besarhutang','ptg.pembayaranterakhir','bayarterakhir'
 	);
+	$ModuleGrupExists = server_side_cek_field_exists('pelanggan','id_grup');
+	$ArrayGrup = array();
+    $ArrayGrup[0] = 'UMUM';
+	if ($ModuleGrupExists){
+	    $StrSql = "SELECT id, nama_grup FROM {grup_pelanggan}";
+	    $Result = db_query($StrSql);
+	    while ($Data = db_fetch_object($Result)){
+            $ArrayGrup[$Data->id] = $Data->nama_grup;
+        }
+        $arrayColumn[] = 'id_grup';
+    }
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-	if (is_null($pageLength)){
-		$pageLength = 25;
+	if (is_null($pageLength) && $pageLength != -1){
+		$pageLength = 100;
 	}
 	$firstRecord = $pageStart;
-	$lastRecord = $pageStart + $pageLength;
+	$lastRecord = $pageLength;
 	$strSQL = "SELECT plg.idpelanggan,plg.kodepelanggan,plg.namapelanggan,plg.telp,plg.alamat,plg.email,";
-	$strSQLFilteredTotal = "SELECT COUNT(plg.idpelanggan) ";
 	$strSQL .= "ptg.besarhutang, ptg.pembayaranterakhir, SUBSTR(ptg.last_update,1,10) AS bayarterakhir ";
+    if ($ModuleGrupExists){
+        $strSQL .= ", id_grup ";
+    }
 	$strSQL .= "FROM pelanggan AS plg ";
-	$strSQLFilteredTotal .= "FROM pelanggan AS plg ";
-	$strSQL .= "LEFT JOIN piutang AS ptg ON ptg.idpelanggan = plg.idpelanggan WHERE 1=1 ";
-	$strSQLFilteredTotal .= "LEFT JOIN piutang AS ptg ON ptg.idpelanggan = plg.idpelanggan WHERE 1=1 ";
-	$strCriteria = "";
+    $strSQL .= "LEFT JOIN piutang AS ptg ON ptg.idpelanggan = plg.idpelanggan WHERE 1=1 ";
+    $strCriteria = "";
 	if (!empty($searchQuery)){
 		$strCriteria .= "AND (plg.kodepelanggan LIKE '%%%s%%' OR plg.namapelanggan LIKE '%%%s%%' ";
 		$strCriteria .= "OR plg.alamat LIKE '%%%s%%' OR plg.email LIKE '%%%s%%')";
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
-	$strSQLFilteredTotal .= $strCriteria;
+	if ($pageLength != -1) {
+    	$strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+	}else{
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn ";
+	}
+    $strSQLFilteredTotal = "SELECT COUNT(plg.idpelanggan) ";
+    $strSQLFilteredTotal .= "FROM pelanggan AS plg ";
+    $strSQLFilteredTotal .= "LEFT JOIN piutang AS ptg ON ptg.idpelanggan = plg.idpelanggan WHERE 1=1 ";
+    $strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
-		$result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
+		if ($pageLength != -1){
+            $result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
+		}else{
+            $result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery);
+		}
 		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
 	}else{
-		$result = db_query($strSQL,$firstRecord,$lastRecord);
+        if ($pageLength != -1) {
+            $result = db_query($strSQL, $firstRecord, $lastRecord);
+        }else{
+            $result = db_query($strSQL);
+		}
 		$recordsFiltered = db_result(db_query($strSQLFilteredTotal));
 	}
 	$output = array();
@@ -95,6 +121,13 @@ function serverSidePelanggan($request){
 		$rowData[] = number_format($data->besarhutang,$DDigit,$decimalSep,$thousandSep);
 		$rowData[] = number_format($data->pembayaranterakhir,$DDigit,$decimalSep,$thousandSep);
 		$rowData[] = $data->bayarterakhir;
+        if ($ModuleGrupExists){
+            if (is_null($data->id_grup)){
+                $data->id_grup = 0;
+            }
+            $rowData[] = $ArrayGrup[$data->id_grup];
+        }
+        $rowData[] = '<input class="pelanggan-select" type="checkbox" id="check-' . $data->idpelanggan . '" name="check-' . $data->idpelanggan . '" value="' . $data->idpelanggan . '">';
         $rowData[] = $data->idpelanggan;
 		$output[] = $rowData;
 	}
@@ -105,7 +138,8 @@ function serverSidePelanggan($request){
 				0,
 			"recordsTotal"    => intval( $recordsTotal ),
 			"recordsFiltered" => intval( $recordsFiltered ),
-			"data"            => $output
+			"data"            => $output,
+			"StrSQL"		  => $strSQL,
 		);
 }
 function serverSideProduk($request){
@@ -117,6 +151,7 @@ function serverSideProduk($request){
 	$pageLength = $_GET['length'];
 	$searchArray = $_REQUEST['search'];
 	$searchQuery = $searchArray['value'];
+	$ProductSize = $_REQUEST['product_size'];
 	$arrayColumn = array(
 		'prod.idproduct', 'kat.kategori','subkat.subkategori','supp.namasupplier', 'prod.barcode',
 		'prod.alt_code','prod.namaproduct','prod.hargapokok','prod.hargajual','prod.margin'
@@ -196,6 +231,9 @@ function serverSideProduk($request){
 	}
 	$output = array();
 	$totalNilaiBarang = 0;
+	if ($ProductSize){
+	    $ArrayProductSize = data_produk_size_server();
+    }
 	while ($data = db_fetch_object($result)) {
         $rowData = array();
         $imgEdit = "<img title=\"Edit Produk " . $data->namaproduct . "\" src=\"$baseDirectory/misc/media/images/edit.ico\" onclick=\"editproduk(" . $data->idproduct . ")\">";
@@ -232,6 +270,9 @@ function serverSideProduk($request){
         $imgDiscount = "<img width=\"20\" title=\"Harga discount\" src=\"$baseDirectory/misc/media/images/diskon.png\" onclick=\"discount_produk(" . $data->idproduct . ")\">";
         $rowData[] = $imgDiscount;
         $totalNilaiBarang = $totalNilaiBarang + $data->total_nilai;
+        if ($ProductSize){
+            $rowData[] = create_size_selection_server($ArrayProductSize, $data->idproduct);
+        }
         $rowData[] = $data->idproduct;
         $output[] = $rowData;
     }
@@ -247,195 +288,509 @@ function serverSideProduk($request){
 		);
 }
 
-function serverSidePenjualan($request){
+function serverSidePenjualan($request)
+{
+    $GstSepExists = server_side_cek_field_exists('penjualan','gst_flag');
     $DataPremis = get_data_premis_server_side();
     $DDigit = $DataPremis->decimal_digit;
-	get_number_format_server_side($currSym,$tSep,$dSep);
-	global $baseDirectory;
-	$pageStart = $_GET['start'];
-	$pageLength = $_GET['length'];
-	$searchArray = $_REQUEST['search'];
-	$tglAwal = $_REQUEST['tglawal'].' 00:00';
-	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
-	$idpelanggan = $_REQUEST['idpelanggan'];
-	$searchQuery = $searchArray['value'];
-	$arrayColumn = array(
-		'penj.idpenjualan','penj.nonota','penj.tglpenjualan','penj.tglpenjualan',
-		'penj.total','penj.ppn_value','penj.total_plus_ppn','penj.totalmodal','(penj.total - penj.totalmodal)','penj.carabayar',
-		'penj.bayar','penj.kembali','user.name','plg.namapelanggan'
-	);
-	$orderColumnArray = $_REQUEST['order'];
-	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
-	if (is_null($pageStart)){
-		$pageStart = 0;
-	}
-	if (is_null($pageLength) || $pageLength != -1){
-		$pageLength = 100;
-	}
-	$firstRecord = $pageStart;
-	$lastRecord = $pageStart + $pageLength;
-	$strSQL = "SELECT penj.idpenjualan,penj.nonota,SUBSTR(penj.tglpenjualan,1,10) AS tanggal,";
-	$strSQL .= "SUBSTR(penj.tglpenjualan,11,9) AS waktu, penj.idpemakai,penj.total,penj.totalmodal,";
-	$strSQL .= "(penj.total-penj.totalmodal) AS laba, penj.carabayar,penj.bayar,penj.kembali,";
-	$strSQL .= "(penj.total * (penj.ppn/100)) AS ppn_value, penj.total_plus_ppn, ";
-	$strSQL .= "penj.nokartu,penj.keterangan,penj.insert_date, user.name, ";
+    get_number_format_server_side($currSym, $tSep, $dSep);
+    global $baseDirectory;
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $tglAwal = $_REQUEST['tglawal'] . ' 00:00';
+    $tglAkhir = $_REQUEST['tglakhir'] . ' 23:59';
+    $idpelanggan = $_REQUEST['idpelanggan'];
+    $searchQuery = $searchArray['value'];
+    if (server_side_cek_field_exists('penjualan')) {
+        $arrayColumn = array(
+            'penj.idpenjualan', 'penj.nonota', 'penj.tglpenjualan', 'penj.tglpenjualan',
+            'penj.total', 'penj.ppn_value', 'penj.total_plus_ppn', 'penj.totalmodal', '(penj.total - penj.totalmodal)', 'penj.carabayar',
+            'penj.bayar', 'penj.kembali', 'user.name', 'plg.namapelanggan', 'penj.nokartu', 'penj.payment_status'
+        );
+    } else {
+        $arrayColumn = array(
+            'penj.idpenjualan', 'penj.nonota', 'penj.tglpenjualan', 'penj.tglpenjualan',
+            'penj.total', 'penj.ppn_value', 'penj.total_plus_ppn', 'penj.totalmodal', '(penj.total - penj.totalmodal)', 'penj.carabayar',
+            'penj.bayar', 'penj.kembali', 'user.name', 'plg.namapelanggan', 'penj.nokartu'
+        );
+    }
+    $orderColumnArray = $_REQUEST['order'];
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']] . ' ' . $orderColumnArray[0]['dir'];
+    if (is_null($pageStart)) {
+        $pageStart = 0;
+    }
+    if (is_null($pageLength) || $pageLength != -1) {
+        $pageLength = 100;
+    }
+    $firstRecord = $pageStart;
+    $lastRecord = $pageStart + $pageLength;
+    $strSQL = "SELECT penj.idpenjualan,penj.nonota,SUBSTR(penj.tglpenjualan,1,10) AS tanggal,penj.nokartu, ";
+    $strSQL .= "SUBSTR(penj.tglpenjualan,11,9) AS waktu, penj.idpemakai,penj.total,penj.totalmodal,";
+    $strSQL .= "(penj.total-penj.totalmodal) AS laba, penj.carabayar,penj.bayar,penj.kembali,";
+    $strSQL .= "(penj.total * (penj.ppn/100)) AS ppn_value, penj.total_plus_ppn, ";
+    $strSQL .= "penj.nokartu,penj.keterangan,penj.insert_date, user.name, ";
     $strSQL .= "penj.idpelanggan, plg.namapelanggan ";
-	$strSQL .= "FROM penjualan AS penj ";
-	$strSQL .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
-	$strSQL .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
-	if (empty($idpelanggan)){
-		$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
-	}else{
-		$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND penj.idpelanggan=%d ";
-	}
+    if (server_side_cek_field_exists('penjualan')) {
+        $strSQL .= ", penj.payment_status, penj.payment_paid ";
+    }
+    $strSQL .= "FROM penjualan AS penj ";
+    $strSQL .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
+    $strSQL .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
+    if (empty($idpelanggan)) {
+        $strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+    } else {
+        $strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND penj.idpelanggan=%d ";
+    }
     $strSQLFilteredTotal = "SELECT COUNT(penj.idpenjualan) ";
     $strSQLFilteredTotal .= "FROM penjualan AS penj ";
-	$strSQLFilteredTotal .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
-	$strSQLFilteredTotal .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
-	if (empty($idpelanggan)){
-		$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
-	}else{
-		$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND penj.idpelanggan=%d ";
-	}
-	$strCriteria = "";
-	if (!empty($searchQuery)){
-		$strCriteria .= "AND (penj.nonota LIKE '%%%s%%' OR SUBSTR(penj.tglpenjualan,1,10) LIKE '%%%s%%' ";
-		$strCriteria .= "OR SUBSTR(penj.tglpenjualan,11,9) LIKE '%%%s%%' OR user.name LIKE '%%%s%%' ";
-		$strCriteria .= "OR plg.namapelanggan LIKE '%%%s%%' OR penj.carabayar LIKE '%%%s%%' ";
-		$strCriteria .= ")";
-	}
-	if ($pageLength != -1) {
-		$strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
-	}else{
-		$strSQL .= $strCriteria . " ORDER BY $orderColumn";
-	}
-	$strSQLFilteredTotal .= $strCriteria;
-	if (!empty($searchQuery)){
-		if (empty($idpelanggan)) {
-			$result = db_query(
-				$strSQL,
-				$tglAwal,
-				$tglAkhir,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$firstRecord,
-				$lastRecord
-			);
-			$recordsFiltered = db_result(
-				db_query(
-					$strSQLFilteredTotal,
-					$tglAwal,
-					$tglAkhir,
-					$searchQuery,
-					$searchQuery,
-					$searchQuery,
-					$searchQuery,
-					$searchQuery,
-					$searchQuery
-				)
-			);
-		}else{
-			$result = db_query(
-				$strSQL,
-				$tglAwal,
-				$tglAkhir,
-				$idpelanggan,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$firstRecord,
-				$lastRecord
-			);
-			$recordsFiltered = db_result(
-				db_query(
-					$strSQLFilteredTotal,
-					$tglAwal,
-					$tglAkhir,
-					$idpelanggan,
-					$searchQuery,
-					$searchQuery,
-					$searchQuery,
-					$searchQuery,
-					$searchQuery,
-					$searchQuery
-				)
-			);
-		}
-	}else{
-		if (empty($idpelanggan)) {
-			$result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
-			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
-		}else{
-			$result = db_query($strSQL, $tglAwal, $tglAkhir, $idpelanggan, $firstRecord, $lastRecord);
-			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $idpelanggan, $tglAwal, $tglAkhir));
-		}
-	}
-	$output = array();
-	while ($data = db_fetch_object($result)){
-		$rowData = array();
-		$imgDetail = "<img title=\"Klik untuk melihat detail penjualan\" onclick=\"view_detail(".$data->idpenjualan.",'".$data->nonota."',".$data->idpelanggan.");\" src=\"$baseDirectory/misc/media/images/forward_enabled.ico\">";
-		$rowData[] = $imgDetail;
-		$rowData[] = $data->nonota;
-		$rowData[] = $data->tanggal;
-		$rowData[] = $data->waktu;
-		$rowData[] = number_format($data->total,$DDigit,$dSep,$tSep);
-		$rowData[] = number_format($data->ppn_value,$DDigit,$dSep,$tSep);
-		$rowData[] = number_format($data->total_plus_ppn,$DDigit,$dSep,$tSep);
-		$rowData[] = number_format($data->totalmodal,$DDigit,$dSep,$tSep);
-		$rowData[] = number_format($data->laba,$DDigit,$dSep,$tSep);
-		$rowData[] = $data->carabayar;
-		$rowData[] = number_format($data->bayar,$DDigit,$dSep,$tSep);
-		$rowData[] = number_format($data->kembali,$DDigit,$dSep,$tSep);
-		$rowData[] = $data->name;
-		$rowData[] = $data->namapelanggan;
-		$tombolprint = "<img title=\"Klik untuk mencetak nota penjualan\" onclick=\"print_penjualan(".$data->idpenjualan.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
-		$rowData[] = $tombolprint;
-        $tombolprint2 = "<img title=\"Klik untuk mencetak faktur penjualan\" onclick=\"print_faktur(".$data->idpenjualan.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/printer2.png\" width=\"22\">";
+    $strSQLFilteredTotal .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
+    $strSQLFilteredTotal .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
+    if (empty($idpelanggan)) {
+        $strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+    } else {
+        $strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND penj.idpelanggan=%d ";
+    }
+    $strCriteria = "";
+    if (!empty($searchQuery)) {
+        $strCriteria .= "AND (penj.nonota LIKE '%%%s%%' OR SUBSTR(penj.tglpenjualan,1,10) LIKE '%%%s%%' ";
+        $strCriteria .= "OR SUBSTR(penj.tglpenjualan,11,9) LIKE '%%%s%%' OR user.name LIKE '%%%s%%' ";
+        $strCriteria .= "OR plg.namapelanggan LIKE '%%%s%%' OR penj.carabayar LIKE '%%%s%%' ";
+        $strCriteria .= "OR penj.nokartu LIKE '%%%s%%' ";
+        $strCriteria .= ")";
+    }
+    if ($GstSepExists){
+        if ($_GET['gst_access'] == 0){
+            $strSQL .= " AND gst_flag = 1 ";
+            $strSQLFilteredTotal .= " AND gst_flag = 1 ";
+        }
+    }
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    } else {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)) {
+        if (empty($idpelanggan)) {
+            $result = db_query(
+                $strSQL,
+                $tglAwal,
+                $tglAkhir,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $firstRecord,
+                $lastRecord
+            );
+            $recordsFiltered = db_result(
+                db_query(
+                    $strSQLFilteredTotal,
+                    $tglAwal,
+                    $tglAkhir,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery
+                )
+            );
+        } else {
+            $result = db_query(
+                $strSQL,
+                $tglAwal,
+                $tglAkhir,
+                $idpelanggan,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $firstRecord,
+                $lastRecord
+            );
+            $recordsFiltered = db_result(
+                db_query(
+                    $strSQLFilteredTotal,
+                    $tglAwal,
+                    $tglAkhir,
+                    $idpelanggan,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery,
+                    $searchQuery
+                )
+            );
+        }
+    } else {
+        if (empty($idpelanggan)) {
+            $result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+            $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
+        } else {
+            $result = db_query($strSQL, $tglAwal, $tglAkhir, $idpelanggan, $firstRecord, $lastRecord);
+            $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $idpelanggan, $tglAwal, $tglAkhir));
+        }
+    }
+    $output = array();
+    $ArryStatusBayar = array('BELUM BAYAR', 'BAYAR SEBAGIAN', 'LUNAS');
+    $ModulePiutangExist = server_side_cek_field_exists('penjualan');
+    while ($data = db_fetch_object($result)) {
+        $rowData = array();
+        $imgDetail = "<img title=\"Klik untuk melihat detail penjualan\" onclick=\"view_detail(" . $data->idpenjualan . ",'" . $data->nonota . "'," . $data->idpelanggan . ");\" src=\"$baseDirectory/misc/media/images/forward_enabled.ico\">";
+        $rowData[] = $imgDetail;
+        $rowData[] = $data->nonota;
+        $rowData[] = $data->tanggal;
+        $rowData[] = $data->waktu;
+        $rowData[] = number_format($data->total, $DDigit, $dSep, $tSep);
+        $rowData[] = number_format($data->ppn_value, $DDigit, $dSep, $tSep);
+        $rowData[] = number_format($data->total_plus_ppn, $DDigit, $dSep, $tSep);
+        $rowData[] = number_format($data->totalmodal, $DDigit, $dSep, $tSep);
+        $rowData[] = number_format($data->laba, $DDigit, $dSep, $tSep);
+        $rowData[] = $data->carabayar;
+        $TotalBayar = $data->bayar;
+        if ($ModulePiutangExist) {
+            if ($data->carabayar == 'HUTANG') {
+                if (!empty($data->bayar)) {
+                    $TotalBayar = $TotalBayar + $data->payment_paid;
+                } else {
+                    $TotalBayar = $data->payment_paid;
+                }
+            }
+        }
+        $rowData[] = number_format($TotalBayar, $DDigit, $dSep, $tSep);
+        $Kembali = $TotalBayar - $data->total;
+        $rowData[] = number_format($Kembali, $DDigit, $dSep, $tSep);
+        $rowData[] = $data->name;
+        $rowData[] = $data->namapelanggan;
+        $rowData[] = $data->nokartu;
+        $tombolprint = "<img title=\"Klik untuk mencetak nota penjualan\" onclick=\"print_penjualan(" . $data->idpenjualan . ",'" . $data->nonota . "');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
+        $rowData[] = $tombolprint;
+        $tombolprint2 = "<img title=\"Klik untuk mencetak faktur penjualan\" onclick=\"print_faktur(" . $data->idpenjualan . ",'" . $data->nonota . "');\" src=\"$baseDirectory/misc/media/images/printer2.png\" width=\"22\">";
         $rowData[] = $tombolprint2;
-        $TombolDelete = "<img title=\"Klik untuk menghapus penjualan\" onclick=\"delete_penjualan(".$data->idpenjualan.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/delete.ico\" width=\"22\">";
+        $TombolDelete = "<img title=\"Klik untuk menghapus penjualan\" onclick=\"delete_penjualan(" . $data->idpenjualan . ",'" . $data->nonota . "');\" src=\"$baseDirectory/misc/media/images/delete.ico\" width=\"22\">";
         $rowData[] = $TombolDelete;
-		$rowData[] = $data->idpenjualan;
-		$output[] = $rowData;
-	}
-	if (empty($idpelanggan)) {
-		$recordsTotal = db_result(
-			db_query(
-				"SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s'",
-				$tglAwal,
-				$tglAkhir
-			)
-		);
-	}else{
-		$recordsTotal = db_result(
-			db_query(
-				"SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s' AND idpelanggan=%d",
-				$tglAwal,
-				$tglAkhir,
-				$idpelanggan
-			)
-		);
-	}
-	return array(
-			"draw"            => isset ( $request['draw'] ) ?
-				intval( $request['draw'] ) :
-				0,
-			"recordsTotal"    => intval( $recordsTotal ),
-			"recordsFiltered" => intval( $recordsFiltered ),
-			"data"            => $output,
-			"sql"			  => $strSQL,
-			"tglawal"		  => $tglAwal,
-			"tglakhir"		  => $tglAkhir,
-		);
+        if ($ModulePiutangExist) {
+            $rowData[] = $ArryStatusBayar[$data->payment_status];
+        }
+        $rowData[] = '<input class="penjualan-select" type="checkbox" id="check-' . $data->idpenjualan . '" name="check-' . $data->idpenjualan . '" value="' . $data->idpenjualan . '">';
+        $rowData[] = $data->idpelanggan;
+        $rowData[] = $data->idpenjualan;
+        $output[] = $rowData;
+    }
+    if (empty($idpelanggan)) {
+        if ($GstSepExists){
+            if ($_GET['gst_access'] == 0){
+                $recordsTotal = db_result(
+                    db_query(
+                        "SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s' AND gst_flag = 1",
+                        $tglAwal,
+                        $tglAkhir
+                    )
+                );
+            }else if ($_GET['gst_access'] == 1){
+                $recordsTotal = db_result(
+                    db_query(
+                        "SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s' ",
+                        $tglAwal,
+                        $tglAkhir
+                    )
+                );
+            }
+        }else{
+            $recordsTotal = db_result(
+                db_query(
+                    "SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s'",
+                    $tglAwal,
+                    $tglAkhir
+                )
+            );
+        }
+    } else {
+        if ($GstSepExists){
+            if ($_GET['gst_access'] == 0){
+                $recordsTotal = db_result(
+                    db_query(
+                        "SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s' AND idpelanggan=%d AND gst_flag = 1",
+                        $tglAwal,
+                        $tglAkhir,
+                        $idpelanggan
+                    )
+                );
+            }else if ($_GET['gst_access'] == 1){
+                $recordsTotal = db_result(
+                    db_query(
+                        "SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s' AND idpelanggan=%d",
+                        $tglAwal,
+                        $tglAkhir,
+                        $idpelanggan
+                    )
+                );
+            }
+        }else{
+            $recordsTotal = db_result(
+                db_query(
+                    "SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s' AND idpelanggan=%d",
+                    $tglAwal,
+                    $tglAkhir,
+                    $idpelanggan
+                )
+            );
+        }
+
+    }
+    return array(
+        "draw" => isset ($request['draw']) ?
+            intval($request['draw']) :
+            0,
+        "recordsTotal" => intval($recordsTotal),
+        "recordsFiltered" => intval($recordsFiltered),
+        "data" => $output,
+        "sql" => $strSQL,
+        "tglawal" => $tglAwal,
+        "tglakhir" => $tglAkhir,
+        "gst_exist" => $GstSepExists,
+        "gst_access" => $_GET['gst_access'],
+    );
 }
 
 function serverSidePenjualan2($request){
+    $GstSepExists = server_side_cek_field_exists('penjualan','gst_flag');
+    $DataPremis = get_data_premis_server_side();
+    $DDigit = $DataPremis->decimal_digit;
+    get_number_format_server_side($currSym,$tSep,$dSep);
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $tglAwal = $_REQUEST['tglawal'].' 00:00';
+    $tglAkhir = $_REQUEST['tglakhir'].' 23:59';
+    $DateRange = array_date_range_serverside($_REQUEST['tglawal'],$_REQUEST['tglakhir']);
+    $TotalDay = count($DateRange);
+    $IdPelanggan = $_REQUEST['idpelanggan'];
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        'prod.barcode','prod.namaproduct',
+        'totalqty','minhargapokok','maxhargapokok','minhargajual','maxhargajual',
+        'subtotal','totalmodal','laba'
+    );
+    $orderColumnArray = $_REQUEST['order'];
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+    if (is_null($pageStart)){
+        $pageStart = 0;
+    }
+    if (is_null($pageLength) && $pageLength != -1){
+        $pageLength = 100;
+    }
+    if ($pageLength != -1) {
+        $firstRecord = $pageStart;
+        $lastRecord = $pageStart + $pageLength;
+    }
+    $strSQL = "SELECT detail.idproduct,prod.barcode,prod.namaproduct,prod.stok,";
+    //$strSQL .= "GROUP_CONCAT(DISTINCT plg.namapelanggan ORDER BY plg.namapelanggan SEPARATOR ', ') AS namapelanggan, ";
+    //$strSQL .= "GROUP_CONCAT(DISTINCT penj.nonota ORDER BY penj.nonota SEPARATOR ', ') AS nonota, ";
+    $strSQL .= "SUM(detail.jumlah) AS totalqty,";
+    $strSQL .= "MIN(detail.hargapokok) AS minhargapokok,MAX(detail.hargapokok) AS maxhargapokok,";
+    $strSQL .= "MIN(detail.hargajual) AS minhargajual, MAX(detail.hargajual) AS maxhargajual, ";
+    $strSQL .= "SUM(detail.hargapokok*detail.jumlah) AS totalmodal, ";
+    $strSQL .= "SUM(((detail.hargajual - (detail.hargajual*detail.diskon/100)) + ";
+    $strSQL .= "((detail.hargajual - (detail.hargajual*detail.diskon/100)) * detail.ppn/100))*detail.jumlah) AS subtotal,";
+    $strSQL .= "SUM((((detail.hargajual - (detail.hargajual*detail.diskon/100)) + ((detail.hargajual - (detail.hargajual*detail.diskon/100)) * detail.ppn/100)) - detail.hargapokok)*detail.jumlah) AS laba ";
+    $strSQL .= "FROM detailpenjualan AS detail ";
+    $strSQL .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan ";
+    $strSQL .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
+    $strSQL .= "LEFT JOIN pelanggan AS plg ON penj.idpelanggan = plg.idpelanggan ";
+    if (!empty($IdPelanggan)){
+        $strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND ";
+        $strSQL .= "penj.idpelanggan = %d ";
+    }else{
+        $strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+    }
+    $strSQLFilteredTotal = "SELECT COUNT(detail.idproduct) ";
+    $strSQLFilteredTotal .= "FROM detailpenjualan AS detail ";
+    $strSQLFilteredTotal .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan ";
+    $strSQLFilteredTotal .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
+    $strSQLFilteredTotal .= "LEFT JOIN pelanggan AS plg ON penj.idpelanggan = plg.idpelanggan ";
+    if (!empty($idSupplier)){
+        $strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND ";
+        $strSQLFilteredTotal .= "penj.idpelanggan = %d ";
+    }else {
+        $strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+    }
+    if ($GstSepExists){
+        if ($_GET['gst_access'] == 0){
+            $strSQL .= " AND gst_flag = 1 ";
+            $strSQLFilteredTotal .= " AND gst_flag = 1 ";
+        }
+    }
+    $strCriteria = "";
+    if (!empty($searchQuery)){
+        $strCriteria .= "AND (prod.barcode LIKE '%%%s%%' OR prod.namaproduct LIKE '%%%s%%' ";
+        $strCriteria .= "OR plg.namapelanggan LIKE '%%%s%%' ";
+        /*$strCriteria .= "OR (SELECT GROUP_CONCAT(namasupplier SEPARATOR ',') FROM product_supplier ";
+        $strCriteria .= "AS ps LEFT JOIN supplier supp ON ps.idsupplier = supp.idsupplier ";
+        $strCriteria .= "WHERE ps.idproduct = detail.idproduct AND ps.idsupplier = detail.idsupplier ";
+        $strCriteria .= "GROUP BY ps.idproduct) LIKE '%%%s%%' ";*/
+        //$strCriteria .= "OR supp.namasupplier LIKE '%%%s%%' ";
+        $strCriteria .= ")";
+    }
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " GROUP BY detail.idproduct ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " GROUP BY detail.idproduct ORDER BY $orderColumn";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)){
+        if (!empty($IdPelanggan)){
+            if ($pageLength != -1) {
+                $result = db_query(
+                    $strSQL,
+                    $tglAwal,
+                    $tglAkhir,
+                    $IdPelanggan,
+                    $searchQuery,
+                    $searchQuery,
+                    /*$searchQuery,*/
+                    $firstRecord,
+                    $lastRecord
+                );
+            }else{
+                $result = db_query(
+                    $strSQL,
+                    $tglAwal,
+                    $tglAkhir,
+                    $IdPelanggan,
+                    $searchQuery,
+                    $searchQuery
+                /*$searchQuery,*/
+                /*$firstRecord,
+                $lastRecord*/
+                );
+            }
+            $recordsFiltered = db_result(
+                db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $IdPelanggan, $searchQuery, $searchQuery/*, $searchQuery*/)
+            );
+        } else {
+            if ($pageLength != -1) {
+                $result = db_query(
+                    $strSQL,
+                    $tglAwal,
+                    $tglAkhir,
+                    $searchQuery,
+                    $searchQuery,
+                    /*$searchQuery,*/
+                    $firstRecord,
+                    $lastRecord
+                );
+            }else{
+                $result = db_query(
+                    $strSQL,
+                    $tglAwal,
+                    $tglAkhir,
+                    $searchQuery,
+                    $searchQuery
+                /*$searchQuery,*/
+                /*$firstRecord,
+                $lastRecord*/
+                );
+            }
+            $recordsFiltered = db_result(
+                db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery, $searchQuery)/*, $searchQuery*/
+            );
+        }
+    }else{
+        if (!empty($IdPelanggan)) {
+            if ($pageLength != -1) {
+                $result = db_query($strSQL, $tglAwal, $tglAkhir, $IdPelanggan, $firstRecord, $lastRecord);
+            }else{
+                $result = db_query($strSQL, $tglAwal, $tglAkhir, $IdPelanggan);
+            }
+            $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $IdPelanggan));
+        }else{
+            if ($pageLength != -1) {
+                $result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+            }else{
+                $result = db_query($strSQL, $tglAwal, $tglAkhir);
+            }
+            $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
+        }
+    }
+    $output = array();
+    if ($TotalDay == 0){
+        $TotalDay = 1;
+    }
+    while ($data = db_fetch_object($result)){
+        $rowData = array();
+        $rowData[] = $data->barcode;
+        $rowData[] = $data->namaproduct;
+        //$rowData[] = $data->nonota;
+        //$rowData[] = $data->namapelanggan;
+        $rowData[] = number_format($data->totalqty,2,$dSep,$tSep);
+        $rowData[] = number_format($data->minhargapokok,$DDigit,$dSep,$tSep);
+        $rowData[] = number_format($data->maxhargapokok,$DDigit,$dSep,$tSep);
+        $rowData[] = number_format($data->minhargajual,$DDigit,$dSep,$tSep);
+        $rowData[] = number_format($data->maxhargajual,$DDigit,$dSep,$tSep);
+        $rowData[] = number_format($data->subtotal,$DDigit,$dSep,$tSep);
+        $rowData[] = number_format($data->totalmodal,$DDigit,$dSep,$tSep);
+        $rowData[] = number_format($data->laba,$DDigit,$dSep,$tSep);
+        $rowData[] = number_format($data->stok,$DDigit,$dSep,$tSep);
+        $Rata2 = $data->totalqty/$TotalDay;
+        $rowData[] = number_format($Rata2,$DDigit,$dSep,$tSep);
+        $rowData[] = $data->idproduct;
+        $output[] = $rowData;
+    }
+    $StrSqlTotal = "SELECT COUNT(idproduct) FROM detailpenjualan AS detail ";
+    $StrSqlTotal .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan=penj.idpenjualan WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+    if (!empty($IdPelanggan)){
+        if ($GstSepExists){
+            if ($_GET['gst_access'] == 0){
+                $StrSqlTotal .= "AND penj.idpelanggan = %d AND gst_flag = 1 ";
+            }else if ($_GET['gst_access'] == 1){
+                $StrSqlTotal .= "AND penj.idpelanggan = %d ";
+            }
+        }else{
+            $StrSqlTotal .= "AND penj.idpelanggan = %d ";
+        }
+        $recordsTotal = db_result(
+            db_query(
+                $StrSqlTotal,
+                $tglAwal,$tglAkhir, $IdPelanggan
+            )
+        );
+    }else{
+        if ($GstSepExists){
+            if ($_GET['gst_access'] == 0){
+                $StrSqlTotal .= " AND gst_flag = 1 ";
+            }
+        }
+        $recordsTotal = db_result(
+            db_query(
+                $StrSqlTotal,
+                $tglAwal,$tglAkhir
+            )
+        );
+    }
+
+    return array(
+        "draw"            => isset ( $request['draw'] ) ?
+            intval( $request['draw'] ) :
+            0,
+        "recordsTotal"    => intval( $recordsTotal ),
+        "recordsFiltered" => intval( $recordsFiltered ),
+        "data"            => $output
+    );
+}
+
+function serverSidePenjualan2_080719($request){
     $DataPremis = get_data_premis_server_side();
     $DDigit = $DataPremis->decimal_digit;
 	get_number_format_server_side($currSym,$tSep,$dSep);
@@ -522,40 +877,70 @@ function serverSidePenjualan2($request){
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
 		if (!empty($idSupplier)){
-			$result = db_query(
-				$strSQL,
-				$tglAwal,
-				$tglAkhir,
-				$searchQuery,
-				$searchQuery,
-				/*$searchQuery,*/
-				$firstRecord,
-				$lastRecord
-			);
+            if ($pageLength != -1) {
+                $result = db_query(
+                    $strSQL,
+                    $tglAwal,
+                    $tglAkhir,
+                    $searchQuery,
+                    $searchQuery,
+                    /*$searchQuery,*/
+                    $firstRecord,
+                    $lastRecord
+                );
+            }else{
+                $result = db_query(
+                    $strSQL,
+                    $tglAwal,
+                    $tglAkhir,
+                    $searchQuery,
+                    $searchQuery
+                    /*$searchQuery,*/
+                );
+            }
 			$recordsFiltered = db_result(
 				db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery, $searchQuery/*, $searchQuery*/)
 			);
 		}else {
-			$result = db_query(
-				$strSQL,
-				$tglAwal,
-				$tglAkhir,
-				$searchQuery,
-				$searchQuery,
-				/*$searchQuery,*/
-				$firstRecord,
-				$lastRecord
-			);
+            if ($pageLength != -1) {
+                $result = db_query(
+                    $strSQL,
+                    $tglAwal,
+                    $tglAkhir,
+                    $searchQuery,
+                    $searchQuery,
+                    /*$searchQuery,*/
+                    $firstRecord,
+                    $lastRecord
+                );
+            }else{
+                $result = db_query(
+                    $strSQL,
+                    $tglAwal,
+                    $tglAkhir,
+                    $searchQuery,
+                    $searchQuery
+                    /*$searchQuery,*/
+                );
+            }
 			$recordsFiltered = db_result(
 				db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery, $searchQuery)/*, $searchQuery*/
                 );
 		}
 	}else{
 		if (!empty($idSupplier)) {
-			$result = db_query($strSQL, $tglAwal, $tglAkhir, $idSupplier, $firstRecord, $lastRecord);
+            if ($pageLength != -1) {
+                $result = db_query($strSQL, $tglAwal, $tglAkhir, $idSupplier, $firstRecord, $lastRecord);
+            }else{
+                $result = db_query($strSQL, $tglAwal, $tglAkhir, $idSupplier);
+            }
 			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $idSupplier));
 		}else{
-			$result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+            if ($pageLength != -1) {
+                $result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+            }else{
+                $result = db_query($strSQL, $tglAwal, $tglAkhir);
+            }
 			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
 		}
 	}
@@ -588,6 +973,7 @@ function serverSidePenjualan2($request){
 }
 
 function serverSidePenjualan3($request){
+    $GstSepExists = server_side_cek_field_exists('penjualan','gst_flag');
     $DataPremis = get_data_premis_server_side();
     $DDigit = $DataPremis->decimal_digit;
 	get_number_format_server_side($currSym,$tSep,$dSep);
@@ -612,9 +998,15 @@ function serverSidePenjualan3($request){
 	$firstRecord = $pageStart;
 	$lastRecord = $pageStart + $pageLength;
 	$strSQL = "SELECT kateg.idkategori,kateg.kodekategori,kateg.kategori,";
-	$strSQL .= "SUM((detail.hargajual - (detail.hargajual*detail.diskon/100))*detail.jumlah) AS totaljual,";
+	$strSQL .= "SUM(";
+    $strSQL .= "(detail.hargajual - (detail.hargajual*detail.diskon/100) + (detail.hargajual*detail.ppn/100))";
+    $strSQL .= "*detail.jumlah) ";
+	$strSQL .= "AS totaljual,";
 	$strSQL .= "SUM(detail.hargapokok*detail.jumlah) AS totalmodal, ";
-	$strSQL .= "SUM(((detail.hargajual - (detail.hargajual * detail.diskon/100)) - detail.hargapokok) * detail.jumlah) AS totallaba ";
+	$strSQL .= "SUM(";
+    $strSQL .= "((detail.hargajual - (detail.hargajual * detail.diskon/100) + ";
+    $strSQL .= "(detail.hargajual * detail.ppn/100)) - detail.hargapokok) * detail.jumlah) ";
+    $strSQL .= "AS totallaba ";
 	$strSQL .= "FROM detailpenjualan AS detail ";
 	$strSQL .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan ";
 	$strSQL .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
@@ -626,6 +1018,12 @@ function serverSidePenjualan3($request){
 	$strSQLFilteredTotal .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
 	$strSQLFilteredTotal .= "LEFT JOIN kategori AS kateg ON prod.idkategori = kateg.idkategori ";
 	$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	if ($GstSepExists){
+        if ($_GET['gst_access'] == 0){
+            $strSQL .= "AND gst_flag = 1 ";
+            $strSQLFilteredTotal .= "AND gst_flag = 1 ";
+        }
+    }
 	$strCriteria = "";
 	if (!empty($searchQuery)){
 		$strCriteria .= "AND (kateg.kodekategori LIKE '%%%s%%' OR ";
@@ -665,12 +1063,19 @@ function serverSidePenjualan3($request){
 		$rowData[] = $data->idkategori;
 		$output[] = $rowData;
 	}
+	$StrSqlTotal = "SELECT COUNT(kateg.idkategori) FROM detailpenjualan AS detail ";
+    $StrSqlTotal .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan=penj.idpenjualan ";
+    $StrSqlTotal .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
+    $StrSqlTotal .= "LEFT JOIN kategori AS kateg ON prod.idkategori = kateg.idkategori ";
+    $StrSqlTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+    if ($GstSepExists){
+        if ($_GET['gst_access'] == 0){
+            $StrSqlTotal .= "AND gst_flag = 1 ";
+        }
+    }
+	$StrSqlTotal .= "GROUP BY kateg.idkategori";
 	$recordsTotal = db_result(
-		db_query("SELECT COUNT(kateg.idkategori) FROM detailpenjualan AS detail
-				LEFT JOIN penjualan AS penj ON detail.idpenjualan=penj.idpenjualan
-				LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct
-				LEFT JOIN kategori AS kateg ON prod.idkategori = kateg.idkategori
-				WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' GROUP BY kateg.idkategori",
+		db_query($StrSqlTotal,
 				$tglAwal,$tglAkhir
 		)
 	);
@@ -682,6 +1087,415 @@ function serverSidePenjualan3($request){
 		"recordsFiltered" => intval( $recordsFiltered ),
 		"data"            => $output
 	);
+}
+
+function serverSidePenjualan4($request)
+{
+    $GstSepExists = server_side_cek_field_exists('penjualan', 'gst_flag');
+    $DataPremis = get_data_premis_server_side();
+    $DDigit = $DataPremis->decimal_digit;
+    get_number_format_server_side($currSym, $tSep, $dSep);
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $tglAwal = $_REQUEST['tglawal'] . ' 00:00';
+    $tglAkhir = $_REQUEST['tglakhir'] . ' 23:59';
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        'plg.namapelanggan', 'plg.id_grup', 'total_belanja', 'plg.idpelanggan'
+    );
+    $orderColumnArray = $_REQUEST['order'];
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']] . ' ' . $orderColumnArray[0]['dir'];
+    if (is_null($pageStart)) {
+        $pageStart = 0;
+    }
+    if (is_null($pageLength) && $pageLength != -1) {
+        $pageLength = 100;
+    }
+    if ($pageLength != -1) {
+        $firstRecord = $pageStart;
+        $lastRecord = $pageStart + $pageLength;
+    } else {
+        $firstRecord = null;
+        $lastRecord = null;
+    }
+    $ModuleGrupExist = server_side_cek_field_exists('pelanggan','id_grup');
+    $ArrayGrup = array();
+    $ArrayGrup[0] = 'UMUM';
+    $strSQL = "SELECT plg.idpelanggan, plg.namapelanggan, ";
+    if ($ModuleGrupExist){
+        $ResultGrup = db_query("SELECT id, nama_grup FROM {grup_pelanggan}");
+        while ($DataGrup = db_fetch_object($ResultGrup)){
+            $ArrayGrup[$DataGrup->id] = $DataGrup->nama_grup;
+        }
+        $strSQL .= "plg.id_grup, ";
+    }
+    $strSQL .= "SUM(total_plus_ppn) AS total_belanja ";
+    $strSQL .= "FROM penjualan AS penj ";
+    $strSQL .= "LEFT JOIN pelanggan AS plg ON penj.idpelanggan = plg.idpelanggan ";
+    $strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+    $strSQLFilteredTotal = "SELECT COUNT(plg.idpelanggan) ";
+    $strSQLFilteredTotal .= "FROM penjualan AS penj ";
+    $strSQLFilteredTotal .= "LEFT JOIN pelanggan AS plg ON penj.idpelanggan = plg.idpelanggan ";
+    $strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+    if ($GstSepExists) {
+        if ($_GET['gst_access'] == 0) {
+            $strSQL .= " AND gst_flag = 1 ";
+            $strSQLFilteredTotal .= " AND gst_flag = 1 ";
+        }
+    }
+    $strCriteria = "";
+    if (!empty($searchQuery)) {
+        $strCriteria .= "AND (plg.namapelanggan LIKE '%%%s%%') ";
+    }
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " GROUP BY plg.idpelanggan ORDER BY $orderColumn LIMIT %d, %d";
+    } else {
+        $strSQL .= $strCriteria . " GROUP BY plg.idpelanggan ORDER BY $orderColumn";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)) {
+        if ($pageLength != -1) {
+            $result = db_query(
+                $strSQL,
+                $tglAwal,
+                $tglAkhir,
+                $searchQuery,
+                $firstRecord,
+                $lastRecord
+            );
+        } else {
+            $result = db_query(
+                $strSQL,
+                $tglAwal,
+                $tglAkhir,
+                $searchQuery
+            );
+        }
+        $recordsFiltered = db_result(
+            db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery)
+        );
+    } else {
+        if ($pageLength != -1) {
+            $result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+        } else {
+            $result = db_query($strSQL, $tglAwal, $tglAkhir);
+        }
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
+    }
+    $output = array();
+    while ($data = db_fetch_object($result)) {
+        $rowData = array();
+        if (empty($data->idpelanggan)){
+            $data->namapelanggan = 'UMUM';
+        }
+        $rowData[] = $data->namapelanggan;
+        if ($ModuleGrupExist){
+            if (empty($data->id_grup)){
+                $data->id_grup = 0;
+            }
+            $rowData[] = $ArrayGrup[$data->id_grup];
+        }
+        $rowData[] = number_format($data->total_belanja, $DDigit, $dSep, $tSep);
+        $rowData[] = $data->idpelanggan;
+        $output[] = $rowData;
+    }
+    $StrSqlTotal = "SELECT COUNT(penj.idpelanggan) FROM penjualan AS penj ";
+    $StrSqlTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' GROUP BY idpelanggan";
+    if ($GstSepExists) {
+        if ($_GET['gst_access'] == 0) {
+            $StrSqlTotal .= " AND gst_flag = 1 ";
+        }
+    }
+    $recordsTotal = db_result(
+        db_query(
+            $StrSqlTotal,
+            $tglAwal, $tglAkhir
+        )
+    );
+
+    return array(
+        "draw" => isset ($request['draw']) ?
+            intval($request['draw']) :
+            0,
+        "recordsTotal" => intval($recordsTotal),
+        "recordsFiltered" => intval($recordsFiltered),
+        "data" => $output,
+        "sql" => $strSQL,
+        "sql_total" => $StrSqlTotal,
+    );
+}
+
+function serverSidePenjualan5($request)
+{
+    $GstSepExists = server_side_cek_field_exists('penjualan', 'gst_flag');
+    $DataPremis = get_data_premis_server_side();
+    $DDigit = $DataPremis->decimal_digit;
+    get_number_format_server_side($currSym, $tSep, $dSep);
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $tglAwal = $_REQUEST['tglawal'] . ' 00:00';
+    $tglAkhir = $_REQUEST['tglakhir'] . ' 23:59';
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        'plg.namapelanggan', 'plg.id_grup', 'total_belanja', 'plg.idpelanggan'
+    );
+    $orderColumnArray = $_REQUEST['order'];
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']] . ' ' . $orderColumnArray[0]['dir'];
+    $orderColumn .= ', plg.namapelanggan ';
+    if (is_null($pageStart)) {
+        $pageStart = 0;
+    }
+    if (is_null($pageLength) && $pageLength != -1) {
+        $pageLength = 100;
+    }
+    if ($pageLength != -1) {
+        $firstRecord = $pageStart;
+        $lastRecord = $pageStart + $pageLength;
+    } else {
+        $firstRecord = null;
+        $lastRecord = null;
+    }
+    $ModuleGrupExist = server_side_cek_field_exists('pelanggan','id_grup');
+    $ArrayGrup = array();
+    $ArrayGrup[0] = 'UMUM';
+    $StrSum = "SELECT SUM(total_plus_ppn) FROM penjualan WHERE ";
+    $StrSum .= "tglpenjualan BETWEEN '%s' AND '%s' AND idpelanggan = plg.idpelanggan";
+    if ($GstSepExists) {
+        if ($_GET['gst_access'] == 0) {
+            $StrSum .= " AND gst_flag = 1 ";
+        }
+    }
+    $strSQL = "SELECT plg.idpelanggan, plg.namapelanggan, ";
+    if ($ModuleGrupExist){
+        $ResultGrup = db_query("SELECT id, nama_grup FROM {grup_pelanggan}");
+        while ($DataGrup = db_fetch_object($ResultGrup)){
+            $ArrayGrup[$DataGrup->id] = $DataGrup->nama_grup;
+        }
+        $strSQL .= "plg.id_grup, ";
+    }
+    $strSQL .= "($StrSum) AS total_belanja ";
+    $strSQL .= "FROM pelanggan AS plg ";
+    $strSQLFilteredTotal = "SELECT COUNT(plg.idpelanggan) ";
+    $strSQLFilteredTotal .= "FROM pelanggan AS plg ";
+    $strCriteria = "";
+    if (!empty($searchQuery)) {
+        $strCriteria .= "AND (plg.namapelanggan LIKE '%%%s%%') ";
+    }
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    } else {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)) {
+        if ($pageLength != -1) {
+            $result = db_query(
+                $strSQL,
+                $tglAwal,
+                $tglAkhir,
+                $searchQuery,
+                $firstRecord,
+                $lastRecord
+            );
+        } else {
+            $result = db_query(
+                $strSQL,
+                $tglAwal,
+                $tglAkhir,
+                $searchQuery
+            );
+        }
+        $recordsFiltered = db_result(
+            db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery)
+        );
+    } else {
+        if ($pageLength != -1) {
+            $result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+        } else {
+            $result = db_query($strSQL, $tglAwal, $tglAkhir);
+        }
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
+    }
+    $output = array();
+    while ($data = db_fetch_object($result)) {
+        $rowData = array();
+        if (empty($data->idpelanggan)){
+            $data->namapelanggan = 'UMUM';
+        }
+        $rowData[] = $data->namapelanggan;
+        if ($ModuleGrupExist){
+            if (empty($data->id_grup)){
+                $data->id_grup = 0;
+            }
+            $rowData[] = $ArrayGrup[$data->id_grup];
+        }
+        $rowData[] = number_format($data->total_belanja, $DDigit, $dSep, $tSep);
+        $rowData[] = $data->idpelanggan;
+        $output[] = $rowData;
+    }
+    $StrSqlTotal = "SELECT COUNT(idpelanggan) FROM pelanggan ";
+    $recordsTotal = db_result(
+        db_query(
+            $StrSqlTotal
+        )
+    );
+
+    return array(
+        "draw" => isset ($request['draw']) ?
+            intval($request['draw']) :
+            0,
+        "recordsTotal" => intval($recordsTotal),
+        "recordsFiltered" => intval($recordsFiltered),
+        "data" => $output,
+        "sql" => $strSQL,
+        "sql_total" => $StrSqlTotal,
+    );
+}
+
+function serverSidePenjualan6($request)
+{
+    $GstSepExists = server_side_cek_field_exists('penjualan', 'gst_flag');
+    $DataPremis = get_data_premis_server_side();
+    $DDigit = $DataPremis->decimal_digit;
+    get_number_format_server_side($currSym, $tSep, $dSep);
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $tglAwal = $_REQUEST['tglawal'] . ' 00:00';
+    $tglAkhir = $_REQUEST['tglakhir'] . ' 23:59';
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        'plg.namapelanggan', 'plg.id_grup', 'total_belanja', 'plg.idpelanggan'
+    );
+    $orderColumnArray = $_REQUEST['order'];
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']] . ' ' . $orderColumnArray[0]['dir'];
+    $orderColumn .= ', plg.namapelanggan ';
+    if (is_null($pageStart)) {
+        $pageStart = 0;
+    }
+    if (is_null($pageLength) && $pageLength != -1) {
+        $pageLength = 100;
+    }
+    if ($pageLength != -1) {
+        $firstRecord = $pageStart;
+        $lastRecord = $pageStart + $pageLength;
+    } else {
+        $firstRecord = null;
+        $lastRecord = null;
+    }
+    $ModuleGrupExist = server_side_cek_field_exists('pelanggan','id_grup');
+    $ArrayGrup = array();
+    $ArrayGrup[0] = 'UMUM';
+    $StrSum = "SELECT idpelanggan, SUM(total_plus_ppn) AS total_belanja FROM penjualan WHERE ";
+    $StrSum .= "tglpenjualan BETWEEN '%s' AND '%s' GROUP BY idpelanggan";
+    if ($GstSepExists) {
+        if ($_GET['gst_access'] == 0) {
+            $StrSum .= " AND gst_flag = 1 ";
+        }
+    }
+    $ResultSum = db_query($StrSum, $tglAwal, $tglAkhir);
+    $DataSum = array();
+    while ($Data = db_fetch_object($ResultSum)){
+        $DataSum[$Data->idpelanggan] = $Data->total_belanja;
+    }
+    $strSQL = "SELECT plg.idpelanggan, plg.namapelanggan ";
+    if ($ModuleGrupExist){
+        $ResultGrup = db_query("SELECT id, nama_grup FROM {grup_pelanggan}");
+        while ($DataGrup = db_fetch_object($ResultGrup)){
+            $ArrayGrup[$DataGrup->id] = $DataGrup->nama_grup;
+        }
+        $strSQL .= ",plg.id_grup ";
+    }
+    $strSQL .= "FROM pelanggan AS plg ";
+    $strSQLFilteredTotal = "SELECT COUNT(plg.idpelanggan) ";
+    $strSQLFilteredTotal .= "FROM pelanggan AS plg ";
+    $strCriteria = "";
+    if (!empty($searchQuery)) {
+        $strCriteria .= "AND (plg.namapelanggan LIKE '%%%s%%') ";
+    }
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    } else {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)) {
+        if ($pageLength != -1) {
+            $result = db_query(
+                $strSQL,
+                $tglAwal,
+                $tglAkhir,
+                $searchQuery,
+                $firstRecord,
+                $lastRecord
+            );
+        } else {
+            $result = db_query(
+                $strSQL,
+                $tglAwal,
+                $tglAkhir,
+                $searchQuery
+            );
+        }
+        $recordsFiltered = db_result(
+            db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery)
+        );
+    } else {
+        if ($pageLength != -1) {
+            $result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+        } else {
+            $result = db_query($strSQL, $tglAwal, $tglAkhir);
+        }
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
+    }
+    $output = array();
+    $rowData = array();
+    $rowData[] = 'UMUM';
+    $rowData[] = $ArrayGrup[0];
+    $rowData[] = number_format($DataSum[0], $DDigit, $dSep, $tSep);
+    $rowData[] = 0;
+    $output[] = $rowData;
+    while ($data = db_fetch_object($result)) {
+        if (!empty($data->namapelanggan)) {
+            $rowData = array();
+            if (empty($data->idpelanggan)) {
+                $data->namapelanggan = 'UMUM';
+            }
+            $rowData[] = strtoupper($data->namapelanggan);
+            if ($ModuleGrupExist) {
+                if (empty($data->id_grup)) {
+                    $data->id_grup = 0;
+                }
+                $rowData[] = $ArrayGrup[$data->id_grup];
+            }
+            if (isset($DataSum[$data->idpelanggan])) {
+                $rowData[] = number_format($DataSum[$data->idpelanggan], $DDigit, $dSep, $tSep);
+            } else {
+                $rowData[] = 0;
+            }
+            $rowData[] = $data->idpelanggan;
+            $output[] = $rowData;
+        }
+    }
+    $StrSqlTotal = "SELECT COUNT(idpelanggan) FROM pelanggan ";
+    $recordsTotal = db_result(
+        db_query(
+            $StrSqlTotal
+        )
+    );
+
+    return array(
+        "draw" => isset ($request['draw']) ?
+            intval($request['draw']) :
+            0,
+        "recordsTotal" => intval($recordsTotal),
+        "recordsFiltered" => intval($recordsFiltered),
+        "data" => $output,
+        "sql" => $strSQL,
+        "sql_total" => $StrSqlTotal,
+    );
 }
 
 function serverSideLaundry($request){
@@ -701,14 +1515,16 @@ function serverSideLaundry($request){
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
-	if (is_null($pageStart)){
-		$pageStart = 0;
-	}
-	if (is_null($pageLength)){
-		$pageLength = 100;
-	}
-	$firstRecord = $pageStart;
-	$lastRecord = $pageStart + $pageLength;
+	if ($pageLength !=  -1) {
+        if (is_null($pageStart)) {
+            $pageStart = 0;
+        }
+        if (is_null($pageLength)) {
+            $pageLength = 100;
+        }
+        $firstRecord = $pageStart;
+        $lastRecord = $pageStart + $pageLength;
+    }
 	$strSQL = "SELECT laundry.idtitipanlaundry,laundry.nonota,SUBSTR(laundry.tglpenjualan,1,10) AS tanggal,";
 	$strSQL .= "SUBSTR(laundry.tglpenjualan,11,9) AS waktu, laundry.idpemakai,";
 	$strSQL .= "(SELECT SUM(hargajual*jumlah) FROM detaillaundry WHERE ";
@@ -716,7 +1532,7 @@ function serverSideLaundry($request){
 	$strSQL .= "(SELECT MAX(perkiraan_ambil) FROM detaillaundry WHERE ";
 	$strSQL .= "idtitipanlaundry = laundry.idtitipanlaundry) AS perkiraan_ambil,";
 	$strSQL .= "laundry.carabayar, laundry.bayar, laundry.status_laundry, ";
-	$strSQL .= "plg.namapelanggan, laundry.keterangan, user.name ";
+	$strSQL .= "plg.namapelanggan, laundry.keterangan, user.name,laundry.nomer_rak ";
 	$strSQL .= "FROM titipanlaundry AS laundry ";
 	$strSQL .= "LEFT JOIN cms_users AS user ON user.uid = laundry.idpemakai ";
 	$strSQL .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = laundry.idpelanggan ";
@@ -733,13 +1549,25 @@ function serverSideLaundry($request){
 		$strCriteria .= "OR plg.namapelanggan LIKE '%%%s%%' OR laundry.carabayar LIKE '%%%s%%' ";
 		$strCriteria .= ")";
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+    if ($pageLength !=  -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
-		$result = db_query($strSQL,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
+        if ($pageLength !=  -1) {
+            $result = db_query($strSQL, $tglAwal, $tglAkhir, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
+        }else{
+            $result = db_query($strSQL, $tglAwal, $tglAkhir, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery);
+        }
 		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
 	}else{
-		$result = db_query($strSQL,$tglAwal,$tglAkhir,$firstRecord,$lastRecord);
+        if ($pageLength !=  -1) {
+            $result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+        }else{
+            $result = db_query($strSQL, $tglAwal, $tglAkhir);
+        }
 		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir));
 	}
     $arrayhari = arrayHariSS();
@@ -779,7 +1607,8 @@ function serverSideLaundry($request){
             $rowData[] = 'SUDAH DIAMBIL';
         }
         $rowData[] = date('d-m-Y H:i', $data->perkiraan_ambil);
-        $rowData[] = $data->keterangan;
+        $rowData[] = nl2br($data->keterangan);
+        $rowData[] = $data->nomer_rak;
         $rowData[] = $data->idtitipanlaundry;
 		$output[] = $rowData;
 	}
@@ -794,6 +1623,132 @@ function serverSideLaundry($request){
             "order"           => $orderColumn
 		);
 }
+
+function serverSideLaundryProduct($request){
+    global $baseDirectory;
+    $DataPremis = get_data_premis_server_side();
+    $DDigit = $DataPremis->decimal_digit;
+    get_number_format_server_side($currSym,$tSep,$dSep);
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $tglAwal = $_REQUEST['tglawal'].' 00:00';
+    $tglAkhir = $_REQUEST['tglakhir'].' 23:59';
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        'laundry.nonota','tanggal','totallaundry','laundry.carabayar','laundry.bayar',
+        'plg.namapelanggan','laundry.status_laundry','perkiraan_ambil','laundry.keterangan'
+    );
+    $orderColumnArray = $_REQUEST['order'];
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+    if ($pageLength !=  -1) {
+        if (is_null($pageStart)) {
+            $pageStart = 0;
+        }
+        if (is_null($pageLength)) {
+            $pageLength = 100;
+        }
+        $firstRecord = $pageStart;
+        $lastRecord = $pageStart + $pageLength;
+    }
+    $strSQL = "SELECT laundry.idtitipanlaundry,laundry.nonota,SUBSTR(laundry.tglpenjualan,1,10) AS tanggal,";
+    $strSQL .= "SUBSTR(laundry.tglpenjualan,11,9) AS waktu, laundry.idpemakai,";
+    $strSQL .= "(SELECT SUM(hargajual*jumlah) FROM detaillaundry WHERE ";
+    $strSQL .= "idtitipanlaundry = laundry.idtitipanlaundry) AS totallaundry,";
+    $strSQL .= "(SELECT MAX(perkiraan_ambil) FROM detaillaundry WHERE ";
+    $strSQL .= "idtitipanlaundry = laundry.idtitipanlaundry) AS perkiraan_ambil,";
+    $strSQL .= "laundry.carabayar, laundry.bayar, laundry.status_laundry, ";
+    $strSQL .= "plg.namapelanggan, laundry.keterangan, user.name ";
+    $strSQL .= "FROM titipanlaundry AS laundry ";
+    $strSQL .= "LEFT JOIN cms_users AS user ON user.uid = laundry.idpemakai ";
+    $strSQL .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = laundry.idpelanggan ";
+    $strSQL .= "WHERE laundry.tglpenjualan BETWEEN '%s' AND '%s' ";
+    $strSQLFilteredTotal = "SELECT COUNT(laundry.idtitipanlaundry) ";
+    $strSQLFilteredTotal .= "FROM titipanlaundry AS laundry ";
+    $strSQLFilteredTotal .= "LEFT JOIN cms_users AS user ON user.uid = laundry.idpemakai ";
+    $strSQLFilteredTotal .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = laundry.idpelanggan ";
+    $strSQLFilteredTotal .= "WHERE laundry.tglpenjualan BETWEEN '%s' AND '%s' ";
+    $strCriteria = "";
+    if (!empty($searchQuery)){
+        $strCriteria .= "AND (laundry.nonota LIKE '%%%s%%' OR SUBSTR(laundry.tglpenjualan,1,10) LIKE '%%%s%%' ";
+        $strCriteria .= "OR SUBSTR(laundry.tglpenjualan,11,9) LIKE '%%%s%%' OR user.name LIKE '%%%s%%' ";
+        $strCriteria .= "OR plg.namapelanggan LIKE '%%%s%%' OR laundry.carabayar LIKE '%%%s%%' ";
+        $strCriteria .= ")";
+    }
+    if ($pageLength !=  -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)){
+        if ($pageLength !=  -1) {
+            $result = db_query($strSQL, $tglAwal, $tglAkhir, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
+        }else{
+            $result = db_query($strSQL, $tglAwal, $tglAkhir, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $searchQuery);
+        }
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
+    }else{
+        if ($pageLength !=  -1) {
+            $result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+        }else{
+            $result = db_query($strSQL, $tglAwal, $tglAkhir);
+        }
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir));
+    }
+    $arrayhari = arrayHariSS();
+    $output = array();
+    while ($data = db_fetch_object($result)){
+        $rowData = array();
+        $tomboldetail = "<img title=\"Klik untuk melihat detail laundry\" onclick=\"view_detail(".$data->idtitipanlaundry.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/forward_enabled.ico\" width=\"22\">";
+        $tombolambil = "<img title=\"Klik untuk mengisi form pengambilan laundry\" onclick=\"pickup_laundry(".$data->idtitipanlaundry.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/update.ico\" width=\"22\">";
+        $tombolhapus = "<img title=\"Klik untuk menghapus laundry\" onclick=\"delete_laundry(".$data->idtitipanlaundry.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/del.ico\" width=\"22\">";
+        $tombolprint = "<img title=\"Klik untuk mencetak titipan laundry\" onclick=\"print_laundry(".$data->idtitipanlaundry.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
+        $tombolselesai = "<img title=\"Laundry sudah diambil\" src=\"$baseDirectory/misc/media/images/checks.png\" width=\"22\">";
+        $rowData[] = $tomboldetail;
+        if ($data->status_laundry == 0 || $data->status_laundry == 1){
+            $rowData[] = $tombolambil;
+        }else{
+            $rowData[] = $tombolselesai;
+        }
+        $rowData[] = $tombolprint;
+        $rowData[] = $tombolhapus;
+        $rowData[] = $data->nonota;
+        $indexhari = date('w', strtotime($data->tanggal));
+        $rowData[] = $arrayhari[$indexhari];
+        $rowData[] = date('d-m-Y', strtotime($data->tanggal));
+        $rowData[] = $data->waktu;
+        $rowData[] = number_format($data->totallaundry,$DDigit,$dSep,$tSep);
+        $rowData[] = $data->carabayar;
+        $rowData[] = number_format($data->bayar,$DDigit,$dSep,$tSep);
+        $sisaPembayaran = $data->totallaundry - $data->bayar;
+        $rowData[] = number_format($sisaPembayaran,$DDigit,$dSep,$tSep);
+        $rowData[] = $data->name;
+        $rowData[] = $data->namapelanggan;
+        if ($data->status_laundry == 0){
+            $rowData[] = 'BELUM DIAMBIL';
+        }else if ($data->status_laundry == 1){
+            $rowData[] = 'DIAMBIL SEBAGIAN';
+        }else if ($data->status_laundry == 2){
+            $rowData[] = 'SUDAH DIAMBIL';
+        }
+        $rowData[] = date('d-m-Y H:i', $data->perkiraan_ambil);
+        $rowData[] = $data->keterangan;
+        $rowData[] = $data->idtitipanlaundry;
+        $output[] = $rowData;
+    }
+    $recordsTotal = db_result(db_query("SELECT COUNT(idtitipanlaundry) FROM titipanlaundry WHERE tglpenjualan BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
+    return array(
+        "draw"            => isset ( $request['draw'] ) ?
+            intval( $request['draw'] ) :
+            0,
+        "recordsTotal"    => intval( $recordsTotal ),
+        "recordsFiltered" => intval( $recordsFiltered ),
+        "data"            => $output,
+        "order"           => $orderColumn
+    );
+}
+
 function serverSideCustomerOrder($request){
 	global $baseDirectory;
     $DataPremis = get_data_premis_server_side();
@@ -806,6 +1761,7 @@ function serverSideCustomerOrder($request){
 	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
+		4 => 'customerorder.id',
 		5 => 'customerorder.nonota',
 		7 => 'tanggal',
 		9 => 'total',
@@ -870,51 +1826,53 @@ function serverSideCustomerOrder($request){
 	}
 	$arrayhari = arrayHariSS();
 	$output = array();
-	while ($data = db_fetch_object($result)){
+	while ($data = db_fetch_object($result)) {
 		$rowData = array();
-		$tomboldetail = "<img title=\"Klik untuk melihat detail customer order\" onclick=\"view_detail(".$data->id.",'".$data->nonota."',".$data->idpelanggan.");\" src=\"$baseDirectory/misc/media/images/forward_enabled.ico\" width=\"22\">";
-		$tombolambil = "<img title=\"Klik untuk mengisi form pengambilan customer order\" onclick=\"pickup_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/update.ico\" width=\"22\">";
-		$tombolhapus = "<img title=\"Klik untuk menghapus customer order\" onclick=\"delete_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/del.ico\" width=\"22\">";
-		$tombolprint = "<img title=\"Klik untuk mencetak customer order\" onclick=\"print_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
-		//$tombolselesai = "<img title=\"Customer order sudah diambil\" src=\"$baseDirectory/misc/media/images/checks.png\" width=\"22\">";
-		$tombolprintproduksi = "<img title=\"Klik untuk mencetak keperluan produksi\" onclick=\"print_production(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print-production.png\" width=\"22\">";
+		$tomboldetail = "<img title=\"Klik untuk melihat detail customer order\" onclick=\"view_detail(" . $data->id . ",'" . $data->nonota . "'," . $data->idpelanggan . ");\" src=\"$baseDirectory/misc/media/images/forward_enabled.ico\" width=\"22\">";
+		$tombolambil = "<img title=\"Klik untuk mengisi form pengambilan customer order\" onclick=\"pickup_customerorder(" . $data->id . ",'" . $data->nonota . "');\" src=\"$baseDirectory/misc/media/images/update.ico\" width=\"22\">";
+		$tombolhapus = "<img title=\"Klik untuk menghapus customer order\" onclick=\"delete_customerorder(" . $data->id . ",'" . $data->nonota . "');\" src=\"$baseDirectory/misc/media/images/del.ico\" width=\"22\">";
+		$tombolprint = "<img title=\"Klik untuk mencetak customer order\" onclick=\"print_customerorder(" . $data->id . ",'" . $data->nonota . "');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
+		$tombolselesai = "<img title=\"Customer order sudah diambil\" src=\"$baseDirectory/misc/media/images/checks.png\" width=\"22\">";
+		$tombolprintproduksi = "<img title=\"Klik untuk mencetak keperluan produksi\" onclick=\"print_production(" . $data->id . ",'" . $data->nonota . "');\" src=\"$baseDirectory/misc/media/images/print-production.png\" width=\"22\">";
 		$rowData[] = $tomboldetail;
-		if ($data->status_order == 0 || $data->status_order == 1){
+		if ($data->status_order == 0 || $data->status_order == 1) {
 			$rowData[] = $tombolambil;
-		}else{
+		} else {
 			$rowData[] = $tombolselesai;
 		}
 		$rowData[] = $tombolprint;
 		$rowData[] = $tombolhapus;
+		$rowData[] = $data->id;
 		$rowData[] = $data->meja;
-		$rowData[] = '<div id="'.$data->nonota.'" class="barcode-place"></div>';
+		$rowData[] = '<div id="' . $data->nonota . '" class="barcode-place"></div>';
 		$rowData[] = $data->nonota;
 		$indexhari = date('w', strtotime($data->tanggal));
 		$rowData[] = $arrayhari[$indexhari];
 		$rowData[] = date('d-m-Y', strtotime($data->tanggal));
 		$rowData[] = $data->waktu;
-		$rowData[] = number_format($data->total,$DDigit,$dSep,$tSep);
-        $rowData[] = number_format($data->ppn_value,$DDigit,$dSep,$tSep);
-        $rowData[] = number_format($data->total_plus_ppn,$DDigit,$dSep,$tSep);
+		$rowData[] = number_format($data->total, $DDigit, $dSep, $tSep);
+		$rowData[] = number_format($data->ppn_value, $DDigit, $dSep, $tSep);
+		$rowData[] = number_format($data->total_plus_ppn, $DDigit, $dSep, $tSep);
 		$rowData[] = $data->carabayar;
-		$rowData[] = number_format($data->bayar,$DDigit,$dSep,$tSep);
+		$rowData[] = number_format($data->bayar, $DDigit, $dSep, $tSep);
 		$sisaPembayaran = ($data->total + $data->ppn_value) - $data->bayar;
-		$rowData[] = number_format($sisaPembayaran,$DDigit,$dSep,$tSep);
+		$rowData[] = number_format($sisaPembayaran, $DDigit, $dSep, $tSep);
 		$rowData[] = $data->name;
 		$rowData[] = $data->namapelanggan;
-		if ($data->status_order == 0){
+		if ($data->status_order == 0) {
 			$rowData[] = 'BELUM DIAMBIL';
-		}else if ($data->status_order == 1){
+		} else if ($data->status_order == 1) {
 			$rowData[] = 'DIAMBIL SEBAGIAN';
-		}else if ($data->status_order == 2){
+		} else if ($data->status_order == 2) {
 			$rowData[] = 'SUDAH DIAMBIL';
 		}
 		$rowData[] = date('d-m-Y H:i', $data->perkiraan_ambil);
 		$rowData[] = $data->keterangan;
 		//$rowData[] = $tombolprintproduksi;
-        $NomerPanggil = '1'.str_pad($data->idorderpanggil,3,'0', STR_PAD_LEFT);
-        $tombolselesai = "<img title=\"Klik untuk memanggil pelanggan\" onclick=\"panggil_pelanggan('".$NomerPanggil."');\" src=\"$baseDirectory/misc/media/images/complete-small.png\" width=\"22\">";
-        $rowData[] = $tombolselesai;
+		$NomerPanggil = '1' . str_pad($data->idorderpanggil, 3, '0', STR_PAD_LEFT);
+		$tombolPanggil = "<img title=\"Klik untuk memanggil pelanggan\" onclick=\"panggil_pelanggan('" . $NomerPanggil . "');\" src=\"$baseDirectory/misc/media/images/complete-small.png\" width=\"22\">";
+		$rowData[] = $tombolPanggil;
+        $rowData[] = '<input class="custord-select" type="checkbox" id="check-' . $data->id . '" name="check-' . $data->id . '" value="' . $data->id . '">';
 		$rowData[] = $data->id;
 		$output[] = $rowData;
 	}
@@ -1194,6 +2152,8 @@ function serverSideDetailCustomerOrder($request){
         7 => '(detord.jumlah*detord.hargajual)',
 		8 => 'detord.perkiraan_ambil',
 		9 => 'detord.diambil',
+        10 => 'detord.qty_pcs',
+        11 => 'detord.keterangan',
 	);
 	$orderColumnArray = isset($_REQUEST['order']) && !empty($_REQUEST['order']) ? $_REQUEST['order'] : array( 0 => array('column' => 1, 'dir' => 'ASC'));
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -1207,7 +2167,7 @@ function serverSideDetailCustomerOrder($request){
 	$lastRecord = $pageStart + $pageLength;
 	$strSQL = 'SELECT detord.id,product.barcode, product.namaproduct, detord.jumlah,';
 	$strSQL .= 'detord.hargajual,(detord.hargajual*detord.jumlah) AS subtotal,detord.sisa,';
-	$strSQL .= 'detord.diambil,detord.perkiraan_ambil,detord.outstanding FROM ';
+	$strSQL .= 'detord.diambil,detord.perkiraan_ambil,detord.outstanding,detord.qty_pcs, detord.keterangan FROM ';
 	$strSQL .= 'detailcustomerorder detord LEFT JOIN product product ';
 	$strSQL .= 'ON detord.idproduct=product.idproduct ';
 	$strSQL .= 'LEFT JOIN supplier supp ON product.idsupplier=supp.idsupplier ';
@@ -1238,26 +2198,30 @@ function serverSideDetailCustomerOrder($request){
 		$result = db_query($strSQL,$idCustomerOrder,$firstRecord,$lastRecord);
 		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$idCustomerOrder));
 	}
-	while($data = db_fetch_object($result)){
+	while($data = db_fetch_object($result)) {
 		$rowData = array();
-		$deletebutton = '<img title="Klik untuk menghapus detail order" onclick="hapus_detail('.$data->id.',\''.$data->namaproduct.'\');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+		$deletebutton = '<img title="Klik untuk menghapus detail order" onclick="hapus_detail(' . $data->id . ',\'' . $data->namaproduct . '\');" src="' . $baseDirectory . '/misc/media/images/del.ico" width="22">';
 		$rowData[] = $deletebutton;
 		$rowData[] = $data->barcode;
 		$rowData[] = $data->namaproduct;
 		$rowData[] = $data->jumlah;
 		$rowData[] = $data->jumlah - $data->sisa;
 		$rowData[] = $data->sisa;
-		$rowData[] = number_format($data->hargajual,$DDigit,$dSep,$tSep);
-		$rowData[] = number_format($data->subtotal,$DDigit,$dSep,$tSep);
-		$rowData[] = date('d M H:i',$data->perkiraan_ambil);
-		if (!empty($data->diambil)){
-			$rowData[] = date('d M H:i',$data->diambil);
-		}else{
+		$rowData[] = number_format($data->hargajual, $DDigit, $dSep, $tSep);
+		$rowData[] = number_format($data->subtotal, $DDigit, $dSep, $tSep);
+		$rowData[] = date('d M H:i', $data->perkiraan_ambil);
+		if (!empty($data->diambil)) {
+			$rowData[] = date('d M H:i', $data->diambil);
+		} else {
 			$rowData[] = '-';
 		}
-        $PrintButton = '<img title="Klik untuk mencetak detail order ditempat produksi" onclick="print_detail_order('.$idCustomerOrder.','.$data->id.',\''.$data->namaproduct.'\');" src="'.$baseDirectory.'/misc/media/images/print.png" width="22">';
-        $rowData[] = $PrintButton;
-        $rowData[] = $data->id;
+		$rowData[] = $data->qty_pcs;
+		$rowData[] = urldecode($data->keterangan);
+		$PrintQty = '<input style="text-align: right;" type="text" id="qtyprint-' . $data->id . '" name="qtyprint-' . $data->id . '" size="2" value="' . $data->jumlah . '">';
+		$rowData[] = $PrintQty;
+		$PrintButton = '<img title="Klik untuk mencetak detail order ditempat produksi" onclick="print_detail_order(' . $idCustomerOrder . ',' . $data->id . ',\'' . $data->namaproduct . '\');" src="' . $baseDirectory . '/misc/media/images/print.png" width="22">';
+		$rowData[] = $PrintButton;
+		$rowData[] = $data->id;
 		$output[] = $rowData;
 	}
 	$recordsTotal = db_result(db_query("SELECT COUNT(id) FROM detailcustomerorder"));
@@ -1270,6 +2234,7 @@ function serverSideDetailCustomerOrder($request){
 		"data"            => $output
 	);
 }
+
 function serverSideGetProduct($request){
 	$items = array();
 	if ($_GET["term"]){
@@ -1408,12 +2373,20 @@ function serverSideDetailPenjualan($request){
     }
     $strSQLFilteredTotal .= $strCriteria;
     if (!empty($searchQuery)) {
-        $result = db_query($strSQL, $idPenjualan, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
+        if ($pageLength != -1) {
+            $result = db_query($strSQL, $idPenjualan, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
+        }else{
+            $result = db_query($strSQL, $idPenjualan, $searchQuery, $searchQuery);
+        }
         $recordsFiltered = db_result(
             db_query($strSQLFilteredTotal, $idPenjualan, $searchQuery, $searchQuery)
         );
     }else{
-        $result = db_query($strSQL,$idPenjualan,$firstRecord,$lastRecord);
+        if ($pageLength != -1) {
+            $result = db_query($strSQL, $idPenjualan, $firstRecord, $lastRecord);
+        }else{
+            $result = db_query($strSQL, $idPenjualan);
+        }
         $recordsFiltered = db_result(db_query($strSQLFilteredTotal,$idPenjualan));
     }
     $output = array();
@@ -1602,7 +2575,7 @@ function saveCustomerOrderAndroid($postData = null, $Keterangan = ''){
 		$savedData['penjualan']['tglorder'] = $waktujual;
 		$savedData['penjualan']['idpelanggan'] = 0;
 		$savedData['penjualan']['idmeja'] = $idMeja;
-		$savedData['penjualan']['totalmodal'] = $totalModals;
+		$savedData['penjualan']['totalmodal'] = $totalModal;
         $savedData['penjualan']['keterangan'] = $Keterangan;
         $savedData['penjualan']['ppn'] = $dataPremis->ppn_value;
         $savedData['penjualan']['total_plus_ppn'] = $totalBelanja + ($totalBelanja*($dataPremis->ppn_value/100));
@@ -1610,7 +2583,7 @@ function saveCustomerOrderAndroid($postData = null, $Keterangan = ''){
 		tglorder, idpelanggan, keterangan, idmeja, totalmodal, android_order, ppn, total_plus_ppn)
 		VALUES ('%s', '%d', '%f', '%s', '%f', '%s', '%s', '%d', '%s','%d','%f','%d','%f','%f')",
 		$no_nota, 4, $totalBelanja, $carabayar, 0, $nokartu, $waktujual,0,$Keterangan.' => Android Order',
-            $idMeja,$totalModals,1, $dataPremis->ppn_value, $savedData['penjualan']['total_plus_ppn']);
+            $idMeja,$totalModal,1, $dataPremis->ppn_value, $savedData['penjualan']['total_plus_ppn']);
 		$idOrder = db_result(db_query("SELECT id FROM customer_order WHERE nonota='%s'", $no_nota));
 		for ($i = 0;$i < count($postData);$i++){
 			$detailData = array();
@@ -1727,6 +2700,18 @@ function serverSideArrayGrupMenu($request){
     $strSQL = 'SELECT id_grup_menu FROM product WHERE idproduct=%d';
     $idGrup = db_result(db_query($strSQL, $request['idproduk']));
     $output['selected'] =  $idGrup;
+    return $output;
+}
+function serverSideArrayGrupPelanggan($request){
+    $strSQL = 'SELECT id, nama_grup FROM {grup_pelanggan}';
+    $result = db_query($strSQL);
+    $output = array();
+    while($data = db_fetch_object($result)){
+        $output[$data->id] = $data->nama_grup;
+    }
+    $strSQL = 'SELECT id_grup FROM pelanggan WHERE idpelanggan=%d';
+    $IdGrup = db_result(db_query($strSQL, $request['idpelanggan']));
+    $output['selected'] =  $IdGrup;
     return $output;
 }
 function serverSideCheckLogin($request){
@@ -2770,9 +3755,386 @@ function ServerSidePettyCashData($request)
         "recordsFiltered" => intval($recordsFiltered),
         "data" => $output,
         "StrSql" => $strSQL,
-        "Today" => $Today,
-        "Now" => $Now,
+        /*"Today" => $Today,
+        "Now" => $Now,*/
     );
+}
+
+function serverSideDetailProductDiscount($request)
+{
+    get_number_format_server_side($currSym, $tSep, $dSep);
+    //$DataPremis = get_data_premis_server_side();
+    //$DDigit = $DataPremis->decimal_digit;
+    global $baseDirectory;
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $idProduct = $_REQUEST['idproduct'];
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        1 => 'date_from',
+        2 => 'date_thru',
+        3 => 'price',
+        4 => 'normal_price',
+    );
+    $orderColumnArray = isset($_REQUEST['order']) && !empty($_REQUEST['order']) ? $_REQUEST['order'] : array(0 => array('column' => 1, 'dir' => 'ASC'));
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']] . ' ' . $orderColumnArray[0]['dir'];
+    if (is_null($pageStart)) {
+        $pageStart = 0;
+    }
+    if (is_null($pageLength) || $pageLength == -1) {
+        $pageLength = 100;
+    }
+    $firstRecord = $pageStart;
+    $lastRecord = $pageStart + $pageLength;
+    $strSQL = 'SELECT idproduct,id, idproduct, date_from, date_thru, price, normal_price FROM product_discount ';
+    $strSQL .= 'WHERE idproduct = %d ';
+    $strSQLFilteredTotal = 'SELECT COUNT(id) FROM ';
+    $strSQLFilteredTotal .= 'product_discount WHERE idproduct = %d ';
+    $strCriteria = "";
+    if (!empty($searchQuery)) {
+        $strCriteria .= "AND (date_from LIKE '%%%s%%' OR ";
+        $strCriteria .= "date_thru LIKE '%%%s%%'";
+        $strCriteria .= ")";
+    }
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    } else {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)) {
+        $result = db_query($strSQL, $idProduct, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
+        $recordsFiltered = db_result(
+            db_query($strSQLFilteredTotal, $idProduct, $searchQuery, $searchQuery)
+        );
+    } else {
+        $result = db_query($strSQL, $idProduct, $firstRecord, $lastRecord);
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $idProduct));
+    }
+    $output = array();
+    while ($DataDiscount = db_fetch_object($result)) {
+        $rowData = array();
+        $deletebutton = '<img id="hapus-' . $DataDiscount->id .' title="Klik untuk menghapus diskaun produk" onclick="hapus_diskon(' . $DataDiscount->id . ', ' . $DataDiscount->idproduct . ')" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+        $rowData[] = $DataDiscount->date_from;
+        $rowData[] = $DataDiscount->date_thru;
+        $rowData[] = $DataDiscount->price;
+        $rowData[] = $DataDiscount->normal_price;
+        $rowData[] = $deletebutton;
+        $rowData[] = $DataDiscount->id;
+        $output[] = $rowData;
+    }
+    $recordsTotal = db_result(db_query('SELECT COUNT(id) FROM product_discount WHERE idproduct = %d', $idProduct));
+    return array(
+        "draw" => isset ($request['draw']) ?
+            intval($request['draw']) :
+            0,
+        "recordsTotal" => intval($recordsTotal),
+        "recordsFiltered" => intval($recordsFiltered),
+        "data" => $output
+    );
+}
+
+function serverSideProductDiscountTable($request){
+    get_number_format_server_side($currSym, $tSep, $dSep);
+    $DataPremis = get_data_premis_server_side();
+    $DDigit = $DataPremis->decimal_digit;
+    global $baseDirectory;
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $idProduct = $_REQUEST['idproduct'];
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        0 => 'prod.barcode',
+        1 => 'prod.namaproduct',
+        2 => 'prod.hargapokok',
+        3 => 'pd.date_from',
+        4 => 'pd.date_thru',
+        5 => 'pd.price',
+        6 => 'pd.normal_price',
+        7 => 'prod.stok',
+    );
+    $orderColumnArray = isset($_REQUEST['order']) && !empty($_REQUEST['order']) ? $_REQUEST['order'] : array(0 => array('column' => 2, 'dir' => 'ASC'));
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']] . ' ' . $orderColumnArray[0]['dir'];
+    if (is_null($pageStart)) {
+        $pageStart = 0;
+    }
+    if (is_null($pageLength) || $pageLength == -1) {
+        $pageLength = 100;
+    }
+    $firstRecord = $pageStart;
+    $lastRecord = $pageStart + $pageLength;
+    $strSQL = 'SELECT pd.id, pd.idproduct, pd.date_from, pd.date_thru, pd.price, pd.normal_price, ';
+    $strSQL .= 'prod.barcode, prod.namaproduct, prod.stok, prod.hargapokok, pd.active ';
+    $strSQL .= 'FROM product_discount AS pd ';
+    $strSQL .= 'LEFT JOIN product AS prod ON pd.idproduct = prod.idproduct ';
+    $strSQL .= 'WHERE pd.active = 1 ';
+    $strSQLFilteredTotal = 'SELECT COUNT(id) FROM ';
+    $strSQLFilteredTotal .= 'product_discount WHERE active = 1 ';
+    $strCriteria = "";
+    if (!empty($searchQuery)) {
+        $strCriteria .= "AND (pd.date_from LIKE '%%%s%%' OR ";
+        $strCriteria .= "pd.date_thru LIKE '%%%s%%' OR ";
+        $strCriteria .= "prod.barcode LIKE '%%%s%%' OR ";
+        $strCriteria .= "prod.namaproduct LIKE '%%%s%%'";
+        $strCriteria .= ")";
+    }
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    } else {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)) {
+        if ($pageLength != -1) {
+            $result = db_query($strSQL, $searchQuery, $searchQuery, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
+        }else{
+            $result = db_query($strSQL, $searchQuery, $searchQuery, $searchQuery, $searchQuery);
+        }
+        $recordsFiltered = db_result(
+            db_query($strSQLFilteredTotal, $idProduct, $searchQuery, $searchQuery, $searchQuery, $searchQuery)
+        );
+    } else {
+        if ($pageLength != -1) {
+            $result = db_query($strSQL, $firstRecord, $lastRecord);
+        }else{
+            $result = db_query($strSQL);
+        }
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal));
+    }
+    $output = array();
+    while ($DataDiscount = db_fetch_object($result)) {
+        $rowData = array();
+        $deletebutton = '<img id="hapus-' . $DataDiscount->id .' title="Klik untuk menghapus diskaun produk" onclick="hapus_diskon(' . $DataDiscount->id . ', ' . $DataDiscount->idproduct . ')" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+        $rowData[] = $DataDiscount->barcode;
+        $rowData[] = $DataDiscount->namaproduct;
+        $rowData[] = $DataDiscount->hargapokok;
+        $rowData[] = $DataDiscount->date_from;
+        $rowData[] = $DataDiscount->date_thru;
+        $rowData[] = $DataDiscount->price;
+        $rowData[] = $DataDiscount->normal_price;
+        $rowData[] = $DataDiscount->stok;
+        $rowData[] = $deletebutton;
+        $rowData[] = $DataDiscount->id;
+        $output[] = $rowData;
+    }
+    $recordsTotal = db_result(db_query('SELECT COUNT(id) FROM product_discount WHERE active = 1'));
+    return array(
+        "draw" => isset ($request['draw']) ?
+            intval($request['draw']) :
+            0,
+        "recordsTotal" => intval($recordsTotal),
+        "recordsFiltered" => intval($recordsFiltered),
+        "data" => $output,
+        "SQL" => $strSQL,
+    );
+}
+
+function serverSidePenjualanTemp($request){
+	$DataPremis = get_data_premis_server_side();
+	$DDigit = $DataPremis->decimal_digit;
+	get_number_format_server_side($currSym,$tSep,$dSep);
+	global $baseDirectory;
+	$pageStart = $_GET['start'];
+	$pageLength = $_GET['length'];
+	$searchArray = $_REQUEST['search'];
+	$tglAwal = $_REQUEST['tglawal'].' 00:00';
+	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
+	$idpelanggan = null;
+	$searchQuery = $searchArray['value'];
+	$arrayColumn = array(
+		'penj.idpenjualan','penj.nonota','penj.tglpenjualan','penj.tglpenjualan',
+		'penj.total','penj.ppn_value','penj.total_plus_ppn','penj.totalmodal','(penj.total - penj.totalmodal)','penj.carabayar',
+		'penj.bayar','penj.kembali','user.name','plg.namapelanggan','penj.nokartu'
+	);
+	$orderColumnArray = $_REQUEST['order'];
+	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+	if (is_null($pageStart)){
+		$pageStart = 0;
+	}
+	if (is_null($pageLength) || $pageLength != -1){
+		$pageLength = 100;
+	}
+	$firstRecord = $pageStart;
+	$lastRecord = $pageStart + $pageLength;
+	$strSQL = "SELECT penj.idpenjualan,penj.nonota,SUBSTR(penj.tglpenjualan,1,10) AS tanggal,penj.nokartu, ";
+	$strSQL .= "SUBSTR(penj.tglpenjualan,11,9) AS waktu, penj.idpemakai,penj.total,penj.totalmodal,";
+	$strSQL .= "(penj.total-penj.totalmodal) AS laba, penj.carabayar,penj.bayar,penj.kembali,";
+	$strSQL .= "(penj.total * (penj.ppn/100)) AS ppn_value, penj.total_plus_ppn, ";
+	$strSQL .= "penj.nokartu,penj.keterangan,penj.insert_date, user.name, ";
+	$strSQL .= "penj.idpelanggan, plg.namapelanggan, penj.synced,  penj.sync_process ";
+	$strSQL .= "FROM penjualan_temp AS penj ";
+	$strSQL .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
+	$strSQL .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
+	if (empty($idpelanggan)){
+		$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	}else{
+		$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND penj.idpelanggan=%d ";
+	}
+	$strSQLFilteredTotal = "SELECT COUNT(penj.idpenjualan) ";
+	$strSQLFilteredTotal .= "FROM penjualan_temp AS penj ";
+	$strSQLFilteredTotal .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
+	$strSQLFilteredTotal .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
+	if (empty($idpelanggan)){
+		$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	}else{
+		$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND penj.idpelanggan=%d ";
+	}
+	$strCriteria = "";
+	if (!empty($searchQuery)){
+		$strCriteria .= "AND (penj.nonota LIKE '%%%s%%' OR SUBSTR(penj.tglpenjualan,1,10) LIKE '%%%s%%' ";
+		$strCriteria .= "OR SUBSTR(penj.tglpenjualan,11,9) LIKE '%%%s%%' OR user.name LIKE '%%%s%%' ";
+		$strCriteria .= "OR plg.namapelanggan LIKE '%%%s%%' OR penj.carabayar LIKE '%%%s%%' ";
+		$strCriteria .= "OR penj.nokartu LIKE '%%%s%%' ";
+		$strCriteria .= ")";
+	}
+	if ($pageLength != -1) {
+		$strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+	}else{
+		$strSQL .= $strCriteria . " ORDER BY $orderColumn";
+	}
+	$strSQLFilteredTotal .= $strCriteria;
+	if (!empty($searchQuery)){
+		if (empty($idpelanggan)) {
+			$result = db_query(
+				$strSQL,
+				$tglAwal,
+				$tglAkhir,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$firstRecord,
+				$lastRecord
+			);
+			$recordsFiltered = db_result(
+				db_query(
+					$strSQLFilteredTotal,
+					$tglAwal,
+					$tglAkhir,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery
+				)
+			);
+		}else {
+			$result = db_query(
+				$strSQL,
+				$tglAwal,
+				$tglAkhir,
+				$idpelanggan,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$firstRecord,
+				$lastRecord
+			);
+			$recordsFiltered = db_result(
+				db_query(
+					$strSQLFilteredTotal,
+					$tglAwal,
+					$tglAkhir,
+					$idpelanggan,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery
+				)
+			);
+		}
+	}else{
+		if (empty($idpelanggan)) {
+			$result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
+		}else{
+			$result = db_query($strSQL, $tglAwal, $tglAkhir, $idpelanggan, $firstRecord, $lastRecord);
+			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $idpelanggan, $tglAwal, $tglAkhir));
+		}
+	}
+	$output = array();
+	$ArraySyncStatus = array(
+		'Not Sync',
+		'Synced'
+	);
+	while ($data = db_fetch_object($result)){
+		$rowData = array();
+		$imgDetail = "<img title=\"Klik untuk melihat detail penjualan\" onclick=\"view_detail(".$data->idpenjualan.",'".$data->nonota."',".$data->idpelanggan.");\" src=\"$baseDirectory/misc/media/images/forward_enabled.ico\">";
+		$rowData[] = $imgDetail;
+		$rowData[] = $data->nonota;
+		$rowData[] = $data->tanggal;
+		$rowData[] = $data->waktu;
+		$rowData[] = number_format($data->total,$DDigit,$dSep,$tSep);
+		$rowData[] = number_format($data->ppn_value,$DDigit,$dSep,$tSep);
+		$rowData[] = number_format($data->total_plus_ppn,$DDigit,$dSep,$tSep);
+		$rowData[] = number_format($data->totalmodal,$DDigit,$dSep,$tSep);
+		$rowData[] = number_format($data->laba,$DDigit,$dSep,$tSep);
+		$rowData[] = $data->carabayar;
+		$rowData[] = number_format($data->bayar,$DDigit,$dSep,$tSep);
+		$rowData[] = number_format($data->kembali,$DDigit,$dSep,$tSep);
+		$rowData[] = $data->name;
+		$rowData[] = $data->namapelanggan;
+		$rowData[] = $data->nokartu;
+		$tombolprint = "<img title=\"Klik untuk mencetak nota penjualan\" onclick=\"print_penjualan(".$data->idpenjualan.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
+		$rowData[] = $tombolprint;
+		$tombolprint2 = "<img title=\"Klik untuk mencetak faktur penjualan\" onclick=\"print_faktur(".$data->idpenjualan.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/printer2.png\" width=\"22\">";
+		$rowData[] = $tombolprint2;
+		if (isset($ArraySyncStatus[$data->synced])) {
+			$rowData[] = $ArraySyncStatus[$data->synced];
+		}else{
+			$rowData[] = '-';
+		}
+		$rowData[] = $data->idpenjualan;
+		$output[] = $rowData;
+	}
+	if (empty($idpelanggan)) {
+		$recordsTotal = db_result(
+			db_query(
+				"SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s'",
+				$tglAwal,
+				$tglAkhir
+			)
+		);
+	}else{
+		$recordsTotal = db_result(
+			db_query(
+				"SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s' AND idpelanggan=%d",
+				$tglAwal,
+				$tglAkhir,
+				$idpelanggan
+			)
+		);
+	}
+	return array(
+		"draw"            => isset ( $request['draw'] ) ?
+			intval( $request['draw'] ) :
+			0,
+		"recordsTotal"    => intval( $recordsTotal ),
+		"recordsFiltered" => intval( $recordsFiltered ),
+		"data"            => $output,
+		"sql"			  => $strSQL,
+		"tglawal"		  => $tglAwal,
+		"tglakhir"		  => $tglAkhir,
+	);
+}
+
+/* TODO : Server Side Price Change */
+function serverSidePriceChangeTable($request){
+    
 }
 
 function array_payment_status_serverside(){
@@ -2780,6 +4142,471 @@ function array_payment_status_serverside(){
         'BELUM BAYAR',
         'BAYAR SEBAGIAN',
         'LUNAS'
+    );
+}
+
+function array_date_range_serverside($date_from = null, $date_thru = null){
+    if (empty($date_from) || empty($date_thru)){
+        $date_from = date('Y-m-').'01';
+        $date_thru = date("Y-m-t", strtotime($date_from));
+    }
+    $begin = new DateTime( $date_from );
+    $end = new DateTime( $date_thru );
+    $interval = new DateInterval('P1D');
+    $daterange = new DatePeriod($begin, $interval ,$end);
+    $NewDate = array();
+    foreach($daterange as $date){
+        $NewDate[] = $date->format("Y-m-d");
+    }
+    return $NewDate;
+}
+
+function server_side_cek_field_exists($TableCheck = 'penjualan', $FieldName = 'payment_status'){
+    $StrSql = "SHOW COLUMNS FROM $TableCheck LIKE '$FieldName';";
+    $FieldExists = db_result(db_query($StrSql));
+    if (!empty($FieldExists)){
+        $FieldExists = true;
+    }else{
+        $FieldExists = false;
+    }
+    return $FieldExists;
+}
+
+function serverSideArrayPelanggan($request){
+    $strSQL = 'SELECT idpelanggan, namapelanggan FROM pelanggan';
+    $result = db_query($strSQL);
+    $output = array();
+    while($data = db_fetch_object($result)){
+        $output[$data->idpelanggan] = $data->namapelanggan;
+    }
+    $output['selected'] =  $request['idpelanggan'];
+    return $output;
+}
+
+function data_produk_size_server(){
+    $ArraySize = array('2','4','6','8','10','12','XS','S','M','L','XL','XXL','XXXL','4L','5L');
+    return $ArraySize;
+}
+
+function create_size_selection_server($array_size = null, $id_produk = 0){
+    $Selection = '';
+    if (!empty($array_size)){
+        $Selection = '<select id="saiz-selection-'.$id_produk.'" name="saiz-selection-'.$id_produk.'" style="width: 55px;">';
+        for ($i = 0;$i < count($array_size);$i++){
+            $Selection .= '<option value="'.$i.'">'.$array_size[$i].'</option>';
+        }
+        $Selection .= '</select>';
+    }
+    return $Selection;
+}
+
+function serverSideGstSeparator($request)
+{
+    $DataPremis = get_data_premis_server_side();
+    $DDigit = $DataPremis->decimal_digit;
+    get_number_format_server_side($currSym, $tSep, $dSep);
+    global $baseDirectory;
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $tglAwal = $_REQUEST['tglawal'] . ' 00:00';
+    $tglAkhir = $_REQUEST['tglakhir'] . ' 23:59';
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        'penj.idpenjualan','penj.nonota', 'penj.tglpenjualan', 'penj.total', 'penj.ppn_value',
+        'penj.ppn_value','penj.ppn_value', 'penj.total_plus_ppn', 'penj.gst_flag'
+    );
+    $orderColumnArray = $_REQUEST['order'];
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']] . ' ' . $orderColumnArray[0]['dir'];
+    if (is_null($pageStart)) {
+        $pageStart = 0;
+    }
+    if (is_null($pageLength) || $pageLength != -1) {
+        $pageLength = 100;
+    }
+    $firstRecord = $pageStart;
+    $lastRecord = $pageStart + $pageLength;
+    $strSQL = "SELECT penj.idpenjualan,penj.nonota,penj.tglpenjualan, ";
+    $strSQL .= "penj.total,penj.totalmodal, penj.ppn, penj.ppn_value, penj.total_plus_ppn, penj.gst_flag ";
+    $strSQL .= "FROM penjualan AS penj ";
+    $strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+    $strSQLFilteredTotal = "SELECT COUNT(penj.idpenjualan) ";
+    $strSQLFilteredTotal .= "FROM penjualan AS penj ";
+    $strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+    $strCriteria = "";
+    if (!empty($searchQuery)) {
+        $strCriteria .= "AND (penj.nonota LIKE '%%%s%%' OR SUBSTR(penj.tglpenjualan,1,10) LIKE '%%%s%%' ";
+        $strCriteria .= "OR SUBSTR(penj.tglpenjualan,11,9) LIKE '%%%s%%' ";
+        $strCriteria .= ")";
+    }
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    } else {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)) {
+        $result = db_query(
+            $strSQL,
+            $tglAwal,
+            $tglAkhir,
+            $searchQuery,
+            $searchQuery,
+            $searchQuery,
+            $firstRecord,
+            $lastRecord
+        );
+        $recordsFiltered = db_result(
+            db_query(
+                $strSQLFilteredTotal,
+                $tglAwal,
+                $tglAkhir,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery
+                )
+        );
+    } else {
+        $result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
+    }
+    $output = array();
+    while ($data = db_fetch_object($result)) {
+        $rowData = array();
+        $rowData[] = '<input class="penjualan-select" type="checkbox" id="check-' . $data->idpenjualan . '" name="check-' . $data->idpenjualan . '" value="' . $data->idpenjualan . '">';
+        $rowData[] = $data->nonota;
+        $rowData[] = $data->tglpenjualan;
+        $rowData[] = number_format($data->total, $DDigit, $dSep, $tSep);
+        $rowData[] = number_format($data->ppn_value, $DDigit, $dSep, $tSep);
+        $GstFlag = $data->gst_flag;
+        $PpnValue = 0;
+        //$TotalPpn = $data->total;
+        $TotalPpn = $data->total_plus_ppn;
+        if ($GstFlag == 1) {
+            $PpnValue = $data->ppn_value;
+            //$TotalPpn = $data->total_plus_ppn;
+        }
+        $rowData[] = number_format($PpnValue, $DDigit, $dSep, $tSep);
+        $Difference = $data->ppn_value - $PpnValue;
+        $rowData[] = number_format($Difference, $DDigit, $dSep, $tSep);
+        $rowData[] = number_format($TotalPpn, $DDigit, $dSep, $tSep);
+        if ($GstFlag == 1) {
+            $GstFlagIco = '<img src="' . $baseDirectory . '/misc/media/images/complete-small.png" height="20">';
+        } else {
+            $GstFlagIco = '<img src="' . $baseDirectory . '/misc/media/images/close.ico" height="20">';
+        }
+        $rowData[] = $GstFlagIco;
+        $rowData[] = $data->idpenjualan;
+        $output[] = $rowData;
+    }
+    $recordsTotal = db_result(
+        db_query(
+            "SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s'",
+            $tglAwal,
+            $tglAkhir
+        )
+    );
+    return array(
+        "draw" => isset ($request['draw']) ?
+            intval($request['draw']) :
+            0,
+        "recordsTotal" => intval($recordsTotal),
+        "recordsFiltered" => intval($recordsFiltered),
+        "data" => $output,
+        "sql" => $strSQL,
+        "tglawal" => $tglAwal,
+        "tglakhir" => $tglAkhir,
+    );
+}
+
+function serverSideDataEdc($request){
+    global $baseDirectory;
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        1 => 'kode_bank_edc',
+        2 => 'nomer_rekening_edc',
+        3 => 'nama_rekening_edc',
+        4 => 'telpon',
+    );
+    $orderColumnArray = isset($_REQUEST['order']) && !empty($_REQUEST['order']) ? $_REQUEST['order'] : array( 0 => array('column' => 1, 'dir' => 'ASC'));
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+    if (is_null($pageStart)){
+        $pageStart = 0;
+    }
+    if (is_null($pageLength)){
+        $pageLength = 25;
+    }
+
+    $firstRecord = $pageStart;
+    $lastRecord = $pageStart + $pageLength;
+    $strSQL = 'SELECT id, kode_bank_edc,nomer_rekening_edc, nama_rekening_edc, telpon ';
+    $strSQL .= 'FROM {edc_data} ';
+    $strSQL .= 'WHERE 1=1 ';
+    $strSQLFilteredTotal = 'SELECT COUNT(id) FROM ';
+    $strSQLFilteredTotal .= '{edc_data} ';
+    $strSQLFilteredTotal .= 'WHERE 1=1 ';
+    $strCriteria = "";
+    if (!empty($searchQuery)){
+        $strCriteria .= "AND (kode_bank_edc LIKE '%%%s%%' OR ";
+        $strCriteria .= "nomer_rekening_edc LIKE '%%%s%%' OR ";
+        $strCriteria .= "nama_rekening_edc LIKE '%%%s%%' OR ";
+        $strCriteria .= "telpon LIKE '%%%s%%' OR ";
+        $strCriteria .= ")";
+    }
+    if ($pageLength == -1){
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }else {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)) {
+        if ($pageLength == -1){
+            $result = db_query(
+                $strSQL,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery
+            );
+        }else {
+            $result = db_query(
+                $strSQL,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $firstRecord,
+                $lastRecord
+            );
+        }
+        $recordsFiltered = db_result(
+            db_query(
+                $strSQLFilteredTotal,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery,
+                $searchQuery
+            )
+        );
+    }else{
+        if ($pageLength == -1) {
+            $result = db_query($strSQL);
+        }else {
+            $result = db_query($strSQL, $firstRecord, $lastRecord);
+        }
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal));
+    }
+    $output = array();
+    while($data = db_fetch_object($result)){
+        $rowData = array();
+        $EditButton = '<img title="Klik untuk mengubah data edc" onclick="edit_edc_integration('.$data->id.', this.parentNode.parentNode);" src="'.$baseDirectory.'/misc/media/images/edit.ico" width="22">';
+        $DeleteButton = '<img title="Klik untuk menghapus data edc" onclick="hapus_edc_integration('.$data->id.');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+        $rowData[] = $EditButton;
+        $rowData[] = $DeleteButton;
+        $rowData[] = $data->kode_bank_edc;
+        $rowData[] = $data->nomer_rekening_edc;
+        $rowData[] = $data->nama_rekening_edc;
+        $rowData[] = $data->telpon;
+        $rowData[] = $data->id;
+        $output[] = $rowData;
+    }
+    $recordsTotal = db_result(db_query("SELECT COUNT(id) FROM {edc_data}"));
+    return array(
+        "draw"            => isset ( $request['draw'] ) ?
+            intval( $request['draw'] ) :
+            0,
+        "recordsTotal"    => intval( $recordsTotal ),
+        "recordsFiltered" => intval( $recordsFiltered ),
+        "data"            => $output
+    );
+}
+
+function serverSideDataGrupPelanggan($request){
+    global $baseDirectory;
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        1 => 'nama_grup',
+        2 => 'keterangan_grup',
+    );
+    $orderColumnArray = isset($_REQUEST['order']) && !empty($_REQUEST['order']) ? $_REQUEST['order'] : array( 0 => array('column' => 1, 'dir' => 'ASC'));
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+    if (is_null($pageStart)){
+        $pageStart = 0;
+    }
+    if (is_null($pageLength)){
+        $pageLength = 25;
+    }
+
+    $firstRecord = $pageStart;
+    $lastRecord = $pageStart + $pageLength;
+    $strSQL = 'SELECT id, nama_grup,keterangan_grup ';
+    $strSQL .= 'FROM {grup_pelanggan} ';
+    $strSQL .= 'WHERE 1=1 ';
+    $strSQLFilteredTotal = 'SELECT COUNT(id) FROM ';
+    $strSQLFilteredTotal .= '{grup_pelanggan} ';
+    $strSQLFilteredTotal .= 'WHERE 1=1 ';
+    $strCriteria = "";
+    if (!empty($searchQuery)){
+        $strCriteria .= "AND (nama_grup LIKE '%%%s%%' OR ";
+        $strCriteria .= "keterangan_grup LIKE '%%%s%%'";
+        $strCriteria .= ")";
+    }
+    if ($pageLength == -1){
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }else {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)) {
+        if ($pageLength == -1){
+            $result = db_query(
+                $strSQL,
+                $searchQuery,
+                $searchQuery
+            );
+        }else {
+            $result = db_query(
+                $strSQL,
+                $searchQuery,
+                $searchQuery,
+                $firstRecord,
+                $lastRecord
+            );
+        }
+        $recordsFiltered = db_result(
+            db_query(
+                $strSQLFilteredTotal,
+                $searchQuery,
+                $searchQuery
+            )
+        );
+    }else{
+        if ($pageLength == -1) {
+            $result = db_query($strSQL);
+        }else {
+            $result = db_query($strSQL, $firstRecord, $lastRecord);
+        }
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal));
+    }
+    $output = array();
+    while($data = db_fetch_object($result)){
+        $rowData = array();
+        $EditButton = '<img title="Klik untuk mengubah data grup pelanggan" onclick="edit_grup_pelanggan('.$data->id.', this.parentNode.parentNode);" src="'.$baseDirectory.'/misc/media/images/edit.ico" width="22">';
+        $DeleteButton = '<img title="Klik untuk menghapus data grup pelanggan" onclick="hapus_grup_pelanggan('.$data->id.');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+        $rowData[] = $EditButton;
+        $rowData[] = $DeleteButton;
+        $rowData[] = $data->nama_grup;
+        $rowData[] = $data->keterangan_grup;
+        $rowData[] = $data->id;
+        $output[] = $rowData;
+    }
+    $recordsTotal = db_result(db_query("SELECT COUNT(id) FROM {grup_pelanggan}"));
+    return array(
+        "draw"            => isset ( $request['draw'] ) ?
+            intval( $request['draw'] ) :
+            0,
+        "recordsTotal"    => intval( $recordsTotal ),
+        "recordsFiltered" => intval( $recordsFiltered ),
+        "data"            => $output
+    );
+}
+
+function serverSideDataUploadServer($request){
+    global $baseDirectory;
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        1 => 'url_server',
+        2 => 'port',
+    );
+    $orderColumnArray = isset($_REQUEST['order']) && !empty($_REQUEST['order']) ? $_REQUEST['order'] : array( 0 => array('column' => 1, 'dir' => 'ASC'));
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+    if (is_null($pageStart)){
+        $pageStart = 0;
+    }
+    if (is_null($pageLength)){
+        $pageLength = 25;
+    }
+
+    $firstRecord = $pageStart;
+    $lastRecord = $pageStart + $pageLength;
+    $strSQL = 'SELECT id, url_server,port ';
+    $strSQL .= 'FROM {upload_server} ';
+    $strSQL .= 'WHERE 1=1 ';
+    $strSQLFilteredTotal = 'SELECT COUNT(id) FROM ';
+    $strSQLFilteredTotal .= '{upload_server} ';
+    $strSQLFilteredTotal .= 'WHERE 1=1 ';
+    $strCriteria = "";
+    if (!empty($searchQuery)){
+        $strCriteria .= "AND (url_server LIKE '%%%s%%' OR ";
+        $strCriteria .= "port LIKE '%%%s%%'";
+        $strCriteria .= ")";
+    }
+    if ($pageLength == -1){
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }else {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    }
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)) {
+        if ($pageLength == -1){
+            $result = db_query(
+                $strSQL,
+                $searchQuery,
+                $searchQuery
+            );
+        }else {
+            $result = db_query(
+                $strSQL,
+                $searchQuery,
+                $searchQuery,
+                $firstRecord,
+                $lastRecord
+            );
+        }
+        $recordsFiltered = db_result(
+            db_query(
+                $strSQLFilteredTotal,
+                $searchQuery,
+                $searchQuery
+            )
+        );
+    }else{
+        if ($pageLength == -1) {
+            $result = db_query($strSQL);
+        }else {
+            $result = db_query($strSQL, $firstRecord, $lastRecord);
+        }
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal));
+    }
+    $output = array();
+    while($data = db_fetch_object($result)){
+        $rowData = array();
+        $EditButton = '<img title="Klik untuk mengubah data upload server" onclick="edit_upload_server('.$data->id.', this.parentNode.parentNode);" src="'.$baseDirectory.'/misc/media/images/edit.ico" width="22">';
+        $DeleteButton = '<img title="Klik untuk menghapus data upload server" onclick="hapus_upload_server('.$data->id.');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+        $rowData[] = $EditButton;
+        $rowData[] = $DeleteButton;
+        $rowData[] = $data->url_server;
+        $rowData[] = $data->port;
+        $rowData[] = $data->id;
+        $output[] = $rowData;
+    }
+    $recordsTotal = db_result(db_query("SELECT COUNT(id) FROM {upload_server}"));
+    return array(
+        "draw"            => isset ( $request['draw'] ) ?
+            intval( $request['draw'] ) :
+            0,
+        "recordsTotal"    => intval( $recordsTotal ),
+        "recordsFiltered" => intval( $recordsFiltered ),
+        "data"            => $output
     );
 }
 
@@ -2793,6 +4620,8 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePenjualan2($_GET);
 }else if($_GET['request_data'] == 'penjualan3'){
 	$returnArray = serverSidePenjualan3($_GET);
+}else if($_GET['request_data'] == 'penjualan4'){
+    $returnArray = serverSidePenjualan6($_GET);
 }else if($_GET['request_data'] == 'laundry'){
     $returnArray = serverSideLaundry($_GET);
 }else if($_GET['request_data'] == 'kategoripengeluaran'){
@@ -2814,6 +4643,7 @@ if ($_GET['request_data'] == 'pelanggan'){
 }else if($_GET['request_data'] == 'kategoriproduct'){
 	$returnArray = serverSideGetCategoryProduct($_GET);
 }else if($_GET['request_data'] == 'productbykategori'){
+    header('Access-Control-Allow-Origin: *');
     $SearchText = null;
     if (isset($_GET['search_text']) && !empty($_GET['search_text'])){
         $SearchText = $_GET['search_text'];
@@ -2901,6 +4731,26 @@ if ($_GET['request_data'] == 'pelanggan'){
     $returnArray = ServerSidePettyCash($_GET);
 }else if($_GET['request_data'] == 'cashierlog'){
     $returnArray = ServerSidePettyCashData($_GET);
+}else if($_GET['request_data'] == 'detailproductdiscount'){
+    $returnArray = serverSideDetailProductDiscount($_GET);
+}else if($_GET['request_data'] == 'tabelproductdiscount'){
+    $returnArray = serverSideProductDiscountTable($_GET);
+}else if($_GET['request_data'] == 'tabelperubahanharga'){
+    $returnArray = serverSidePriceChangeTable($_GET);
+}else if($_GET['request_data'] == 'penjualan_temp'){
+	$returnArray = serverSidePenjualanTemp($_GET);
+}else if($_GET['request_data'] == 'opsipelanggan'){
+    $returnArray = serverSideArrayPelanggan($_GET);
+}else if($_GET['request_data'] == 'gst_separator'){
+    $returnArray = serverSideGstSeparator($_GET);
+}else if($_GET['request_data'] == 'edc_integration'){
+    $returnArray = serverSideDataEdc($_GET);
+}else if($_GET['request_data'] == 'grup_pelanggan'){
+    $returnArray = serverSideDataGrupPelanggan($_GET);
+}else if($_GET['request_data'] == 'option-grup-pelanggan'){
+    $returnArray = serverSideArrayGrupPelanggan($_GET);
+}else if($_GET['request_data'] == 'upload_server'){
+    $returnArray = serverSideDataUploadServer($_GET);
 }
 header('Access-Control-Allow-Origin: *');
 echo json_encode($returnArray);

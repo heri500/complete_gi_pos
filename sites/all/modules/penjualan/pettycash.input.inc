@@ -55,5 +55,6 @@ function petty_cash_input_form_submit($form, &$form_state)
     db_query("INSERT INTO user_petty_cash (uid, login, petty_cash, ip) VALUES (%d, %d, '%f','%s')",
         $user->uid, $user->login, $formValues['petty_cash'], ip_address());
     drupal_set_message(t('Petty cash berhasil disimpan...!!'));
+    delete_all_temp_penjualan();
     drupal_goto('penjualan/kasir');
 }

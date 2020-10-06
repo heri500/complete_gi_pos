@@ -2,6 +2,11 @@
 
 function laundry(){
 	createLogoImagePath();
+    get_number_format($currencySym, $thousandSep, $decimalSep);
+    $gstSym = get_gst_symbols(false);
+    $dataPremis = get_data_premis();
+    $DecDigit = $dataPremis->decimal_digit;
+    $CurrSym = $dataPremis->currency_symbol;
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
  	drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -18,9 +23,21 @@ function laundry(){
 	drupal_add_js('misc/media/datatables/js/dataTables.addtr.js');
 	drupal_add_js('misc/media/datatables/js/number.format.js');
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
-	_addChosenJqueryPlugins();
-	$tglsekarang = date("Y-m-d");
-	$tgltampil = date("d-m-Y");
+	//_addChosenJqueryPlugins();
+    _add_chosen_jquery_plugins_old();
+    $tglsekarang = date("Y-m-d");
+    $tgltampil = date("d-m-Y");
+    $DecDigitCashier = variable_get('decimal_digit_cashier',0);
+    drupal_add_js(
+        array(
+            'tglsekarang' => $tglsekarang,
+            'tgltampil' => $tgltampil,
+            //'logo' => $logoPath,
+            //'upload_data' => $uploadData,
+            'dec_digit' => $DecDigit,
+            'dec_digit_cashier' => $DecDigitCashier,
+        ),
+        'setting');
 	$js_path = drupal_get_path('module','penjualan').'/js/laundry.form.js';
 	drupal_add_js($js_path);
 	if (isset($_GET['tanggal'])){
@@ -76,7 +93,7 @@ function laundry(){
 	$penjualan .= '</div>';
 	$penjualan .= '</div>';
 	$penjualan .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : <input type="text" id="barcode" name="barcode" class="barcodekasir"></div>';
-	$penjualan .= '<div id="tempattotal"><div id="totalbelanja">Total Laundry : Rp. 0</div></div>';
+	$penjualan .= '<div id="tempattotal"><div id="totalbelanja">Total Laundry : '.$CurrSym.' 0</div></div>';
 	$penjualan .= '<div id="tempattabelkasir">'.view_kasir_laundry().'</div>';
 	$penjualan .= '<input type="hidden" id="last_id" name="last_id">';
 	$penjualan .= '<input type="hidden" id="lastqty" name="lastqty" value="1">';
@@ -147,6 +164,16 @@ function laundry(){
 	$penjualan .= '<div id="field_no_kartu" class="barisbayar" style="display: none;"><label>No. Kartu/Giro</label>'.$nokartudebit.'</div>';
 	$penjualan .= '<div id="field_bayar" class="barisbayar"><label>Pembayaran</label>'.$nilaibayar.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Keterangan</label>'.$keterangan.'</div>';
+    $JumlahPrint = '<select id="total_print" name="total_print">';
+    for ($i = 0;$i < 20;$i++){
+        if ($i == 0){
+            $JumlahPrint .= '<option selected="selected" value="'.($i + 1).'">'.($i + 1).'</option>';
+        }else{
+            $JumlahPrint .= '<option value="'.($i + 1).'">'.($i + 1).'</option>';
+        }
+    }
+    $JumlahPrint .= '</select>';
+    $penjualan .= '<div class="barisbayar"><label>Jumlah Print</label>'.$JumlahPrint.'</div>';
 	//$penjualan .= '<div id="field_kembali" class="barisbayar" style="display: none;"><label>Kembali</label>'.$kembali.'</div>';
 	$penjualan .= '<div class="barisbayar" style="text-align: center;">';
 	$penjualan .= '<button id="simpan-cetak-laundry" style="margin-top: 10px;font-size: 0.8em;">SIMPAN & PRINT</button>&nbsp;&nbsp;';
@@ -291,15 +318,16 @@ function cari_nota_laundry(){
         titipan.total,plg.namapelanggan,plg.telp FROM titipanlaundry AS titipan LEFT JOIN
         pelanggan AS plg ON titipan.idpelanggan=plg.idpelanggan WHERE
         LOWER(titipan.nonota) LIKE '%s' OR LOWER(plg.namapelanggan) LIKE '%s'
+        OR LOWER(plg.telp) LIKE '%s'
         AND titipan.status_laundry < 2
-        ORDER BY titipan.tglpenjualan DESC LIMIT 50",$KATACARI,$KATACARI);
+        ORDER BY titipan.tglpenjualan DESC LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
 		$items = array();
 		while ($rowDb = db_fetch_object($result)){
 			$valueData = $rowDb->nonota.' - '.$rowDb->namapelanggan;
 			if (!empty($rowDb->telp)){
 				$valueData .= ' - '.$rowDb->telp;
 			}
-			$valueData .= ' - '.number_format($rowDb->total,0,',','.');
+			$valueData .= ' - '.number_format($rowDb->total,0,',','.').' - '. $rowDb->tglpenjualan;
 			$items[] = array(
 				'id'    => $rowDb->idtitipanlaundry,
 				'label' => $valueData,

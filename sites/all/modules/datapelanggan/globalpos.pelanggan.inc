@@ -34,6 +34,7 @@ function data_pelanggan(){
     drupal_add_js('misc/media/datatables/js/number.format.js');
     _addChosenJqueryPlugins();
     _addJeditablePlugins();
+    _addBlockUiPlugins(true);
 	drupal_add_js(
 		array(
 			'filepath' => file_directory_path(),
@@ -44,14 +45,29 @@ function data_pelanggan(){
 	$modulePath = drupal_get_path('module','datapelanggan');
 	$jsPath = $modulePath.'/js/datapelanggan.js';
 	drupal_add_js($jsPath);
-	$viewtabelpelanggan = '<form id="formpelanggan" action="'.base_path().'datapelanggan/simpanpelanggan" method="post"><div id="formplace" class="pelanggan">';
+	$viewtabelpelanggan = '<form id="formpelanggan" action="'.base_path().'datapelanggan/simpanpelanggan" method="post">';
+    $viewtabelpelanggan .= '<div id="formplace" class="pelanggan">';
 	$viewtabelpelanggan .= '<label>'.strtoupper(trans('kode', $dataPremis->bahasa)).'</label><input type="text" class=\"validate[required]\" id="kodepelanggan" name="kodepelanggan">';
 	$viewtabelpelanggan .= '<label>PELANGGAN</label><input class=\"validate[required]\" type="text" id="namapelanggan" name="namapelanggan">';
 	$viewtabelpelanggan .= '<label>TELEPON</label><input type="text" id="telp" name="telp">';
 	$viewtabelpelanggan .= '<label>ALAMAT</label><input type="text" id="alamat" name="alamat">';
 	$viewtabelpelanggan .= '<label>EMAIL</label><input type="text" id="email" name="email">';
-	$viewtabelpelanggan .= '<button style="font-size: 12px;">Tambah Pelanggan</button></div></form>';
-	$viewtabelpelanggan .= '<div class="button-sync"><button id="sync-hutang-pelanggan" style="font-size: 12px;">Sync Hutang Pelanggan</button></div>';
+	if (module_exists('grup_pelanggan')){
+	    $OptionGrup = get_array_data_grup_pelanggan(true);
+	    $SelectGrup = '<select id="grup-pelanggan" name="grup-pelanggan">';
+	    foreach ($OptionGrup as $Idx => $NamaGrup){
+            $SelectGrup .= '<option value="'.$Idx.'">'.$NamaGrup.'</option>';
+        }
+        $SelectGrup .= '</select>';
+        $viewtabelpelanggan .= '<label>GRUP</label>'.$SelectGrup;
+    }
+	$viewtabelpelanggan .= '<div class="float-left-full"><button style="font-size: 12px;">Tambah Pelanggan</button></div>';
+    $viewtabelpelanggan .= '</div></form>';
+	$viewtabelpelanggan .= '<div class="button-sync">';
+    $viewtabelpelanggan .= '<button id="sync-hutang-pelanggan" style="font-size: 12px;">Sync Hutang Pelanggan</button>';
+    $viewtabelpelanggan .= '&nbsp;&nbsp;';
+    $viewtabelpelanggan .= '<button id="sync-selected-pelanggan" style="font-size: 12px;">Sync Selected</button>';
+    $viewtabelpelanggan .= '</div>';
 	$viewtabelpelanggan .= '<div style="width: 80%;">'.tabel_pelanggan($dataPremis).'</div>';
 	$viewtabelpelanggan .= '<div id="dialogdetailhutang" title="DETAIL HUTANG DAN PEMBAYARAN"><div id="tempatnilaihutang"></div><div id="detailpiutang"></div><div id="detailpembayaran">a</div></div>';
 	$viewtabelpelanggan .= '<div id="dialogdetail" title="DETAIL PENJUALAN"></div>';
@@ -241,13 +257,22 @@ function tabel_pelanggan($dataPremis = null){
 	$tabelPelanggan .= '<th>PIUTANG</th>';
 	$tabelPelanggan .= '<th>AKHIR</th>';
 	$tabelPelanggan .= '<th class="tanggal">UPDATE</th>';
+	$ModuleGrupExist = module_exists('grup_pelanggan');
+    if ($ModuleGrupExist){
+        $tabelPelanggan .= '<th>GRUP</th>';
+    }
+    $tabelPelanggan .= '<th class="tablebutton">&nbsp;</th>';
 	$tabelPelanggan .= '</tr>';
 	$tabelPelanggan .= '</thead>';
 	$tabelPelanggan .= '<tfoot>';
 	$tabelPelanggan .= '<tr>';
 	$tabelPelanggan .= '<th style="text-align:right;" colspan="8">Total:&nbsp;&nbsp;</th>';
 	$totalhutang = getTotalHutangPelanggan();
-	$tabelPelanggan .= '<th class="angka" colspan="3">'.$currencySym.' '.number_format($totalhutang,2,$decimalSep,$thousandSep).'</th>';
+    if ($ModuleGrupExist){
+        $tabelPelanggan .= '<th class="angka" colspan="5">'.$currencySym.' '.number_format($totalhutang,2,$decimalSep,$thousandSep).'</th>';
+    }else{
+        $tabelPelanggan .= '<th class="angka" colspan="4">'.$currencySym.' '.number_format($totalhutang,2,$decimalSep,$thousandSep).'</th>';
+    }
 	$tabelPelanggan .= '</tr>';
 	$tabelPelanggan .= '</tfoot>';
 	$tabelPelanggan .= '</table>';
@@ -259,8 +284,15 @@ function tabel_pelanggan($dataPremis = null){
  */
 function simpan_pelanggan(){
 	if (isset($_POST['kodepelanggan']) AND isset($_POST['namapelanggan'])){
-		db_query("INSERT INTO pelanggan(kodepelanggan,namapelanggan,telp,alamat,email) VALUES('%s','%s','%s','%s','%s')",
-		strtoupper($_POST['kodepelanggan']),$_POST['namapelanggan'],$_POST['telp'],$_POST['alamat'],$_POST['email']);
+	    if (module_exists('grup_pelanggan') && isset($_POST['grup-pelanggan'])){
+            db_query("INSERT INTO pelanggan(kodepelanggan,namapelanggan,telp,alamat,email, id_grup) 
+            VALUES('%s','%s','%s','%s','%s',%d)",
+                strtoupper($_POST['kodepelanggan']),$_POST['namapelanggan'],$_POST['telp'],$_POST['alamat'],
+                $_POST['email'], $_POST['grup-pelanggan']);
+        }else{
+            db_query("INSERT INTO pelanggan(kodepelanggan,namapelanggan,telp,alamat,email) VALUES('%s','%s','%s','%s','%s')",
+                strtoupper($_POST['kodepelanggan']),$_POST['namapelanggan'],$_POST['telp'],$_POST['alamat'],$_POST['email']);
+        }
 		if (isset($_POST['asal'])){
 			$result = db_query("SELECT idpelanggan FROM pelanggan WHERE kodepelanggan='%s' AND namapelanggan='%s'",
 			strtoupper($_POST['kodepelanggan']),$_POST['namapelanggan']);
@@ -280,6 +312,7 @@ function update_pelanggan(){
 	$NILAI = $_POST['value'];
 	$KOLOM = $_POST['kol_id'];
 	$PELANGGAN_ID = $_POST['row_id'];
+	$ModuleGrupExist = module_exists('grup_pelanggan');
 	if ($KOLOM == '3'){
 		$NILAI = strtoupper($NILAI);
 		$sql_update = "UPDATE pelanggan SET kodepelanggan='%s' WHERE idpelanggan='%d'";
@@ -291,8 +324,14 @@ function update_pelanggan(){
 		$sql_update = "UPDATE pelanggan SET alamat='%s' WHERE idpelanggan='%d'";
 	}elseif ($KOLOM == '7'){
 		$sql_update = "UPDATE pelanggan SET email='%s' WHERE idpelanggan='%d'";
-	}
+	}elseif ($KOLOM == '11'){
+        $sql_update = "UPDATE pelanggan SET id_grup='%d' WHERE idpelanggan='%d'";
+    }
 	db_query($sql_update,$NILAI,$PELANGGAN_ID);
+    if ($ModuleGrupExist && $KOLOM == '11'){
+        $ArrGrup = get_array_data_grup_pelanggan(true);
+        $NILAI = $ArrGrup[$NILAI];
+    }
 	echo $NILAI;
 	exit();
 }
@@ -468,6 +507,7 @@ function detail_pembayaran(){
 
 function syncHutangPelangganAjax(){
 	if (isset($_POST['idpelanggan'])){
+        $idPelanggan = $_REQUEST['idpelanggan'];
 		$totalSync = syncHutangPelanggan($idPelanggan);
 	}else{
 		$totalSync = syncHutangPelanggan();

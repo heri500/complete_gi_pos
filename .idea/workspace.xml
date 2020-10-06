@@ -2,236 +2,85 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6fe2c211-812b-4cf4-9fad-ff907f8ba638" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/175448f5-3ea3-40fa-9049-b93be80ec5bc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/e5c13b61-d4c5-4361-ae71-13a1607704c6.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/libraries/images-update/user_petty_cash_table.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/libraries/images-update/user_petty_cash_table.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/libraries/images-update/product_discount.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/libraries/images-update/product_discount.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/datapelanggan/datapelanggan.api.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/datapelanggan/datapelanggan.api.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/datapelanggan/datapelanggan.module" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/datapelanggan/datapelanggan.module" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/datapelanggan/globalpos.pelanggan.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/datapelanggan/globalpos.pelanggan.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/datapelanggan/js/datapelanggan.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/datapelanggan/js/datapelanggan.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.module" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.module" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/datapremis/kumpulankata.json.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/datapremis/kumpulankata.json.inc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.kategori.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.kategori.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.meja.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.meja.inc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/dataproduk/tabelkategori.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/dataproduk/tabelkategori.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/dataproduk/tabelproduknew.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/dataproduk/tabelproduknew.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/datasupplier/datasupplier.module" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/datasupplier/datasupplier.module" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/datasupplier/globalpos.supplier.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/datasupplier/globalpos.supplier.inc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/datasupplier/js/supplier.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/datasupplier/js/supplier.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/front-6.x-2.0-rc1.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/pembelian.7z" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/pembelian/globalpos.pembelian.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/pembelian/globalpos.pembelian.inc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/pembelian/js/pembelian.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/pembelian/js/pembelian.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/pembelian/js/tabel.pembelian.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/pembelian/js/tabel.pembelian.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/pembelian/globalpos.return.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/pembelian/globalpos.return.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/pembelian/js/returnsupplier.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/pembelian/js/returnsupplier.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/pembelian/pembelian.api.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/pembelian/pembelian.api.inc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/pembelian/pembelian.module" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/pembelian/pembelian.module" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/pembelian/pembelian.update.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/pembelian/pembelian.update.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/android.monitor.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/android.monitor.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/attachplugins.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/attachplugins.inc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.customerorder.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.customerorder.inc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.kasir.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.kasir.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.laundry.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.laundry.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.penjualan.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.penjualan.inc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.tabelcustomerorder.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.tabelcustomerorder.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.tabellaundry.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.tabellaundry.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/android.monitor.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/android.monitor.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/customerorder.form.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/customerorder.form.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/direct.print.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/direct.print.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/direct.print.order.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/direct.print.order.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/kasir.form.new.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/kasir.form.new.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/price.checker.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/price.checker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/return.form.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/return.form.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/soundplay.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/soundplay.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/laundry.form.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/laundry.form.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.customerorder.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.customerorder.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.laundry.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.laundry.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.penjualan.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.penjualan.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.api.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.api.inc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.delete.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.delete.inc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.module" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.module" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.update.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.update.inc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/table.return.pelanggan.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/table.return.pelanggan.inc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/reproduksi/globalpos.kasirrepro.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/reproduksi/globalpos.kasirrepro.inc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/reproduksi/globalpos.reproduksi.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/reproduksi/globalpos.reproduksi.inc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/modules/reproduksi/js/kasirrepro.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/reproduksi/js/kasirrepro.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/pettycash.input.inc" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/pettycash.input.inc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/modules/print/css/print.css" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/print/css/print.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/themes/cti_flex/css/custom-style.css" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/themes/cti_flex/css/custom-style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/themes/cti_flex/css/navigation.css" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/themes/cti_flex/css/navigation.css" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
     <option name="GROUP_SCHEMA" value="true" />
     <option name="GROUP_CONTENTS" value="false" />
     <option name="SORT_POSITIONED" value="false" />
-    <option name="SHOW_TABLE_DETAILS" value="true" />
     <option name="SHOW_EMPTY_GROUPS" value="false" />
     <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="gipos_ghc_new@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+    </expand>
+    <select />
   </component>
   <component name="DrupalConfiguration" enabled="true" version="6">
     <drupalPath>C:\Development\WebRoot\complete_gi_pos</drupalPath>
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23953">
-              <caret line="1421" column="97" selection-start-line="1421" selection-start-column="85" selection-end-line="1421" selection-end-column="97" />
-              <folding>
-                <marker date="1548121097302" expanded="true" signature="4525:4565" ph="SELECT COUNT... pelanggan" />
-                <marker date="1548121097302" expanded="true" signature="12511:12547" ph="SELECT COUNT... product" />
-                <marker date="1548121097302" expanded="true" signature="19135:19216" ph="SELECT COUNT... penjualan" />
-                <marker date="1548121097302" expanded="true" signature="19312:19412" ph="SELECT COUNT... penjualan" />
-                <marker date="1548121097302" expanded="true" signature="26407:26574" ph="SELECT COUNT... detailpenjualan" />
-                <marker date="1548121097302" expanded="true" signature="30289:30634" ph="SELECT COUNT... detailpenjualan" />
-                <marker date="1548121097302" expanded="true" signature="36546:36637" ph="SELECT COUNT... titipanlaundry" />
-                <marker date="1548121097302" expanded="true" signature="43920:43993" ph="SELECT COUNT... customer_order" />
-                <marker date="1548121097302" expanded="true" signature="46627:46672" ph="SELECT COUNT... cms_kategoripengeluaran" />
-                <marker date="1548121097302" expanded="true" signature="50526:50563" ph="SELECT COUNT... cms_pengeluaran" />
-                <marker date="1548121097302" expanded="true" signature="54335:54370" ph="SELECT COUNT... cms_pemasukan" />
-                <marker date="1548121097302" expanded="true" signature="56293:56321" ph="SELECT COUNT... " />
-                <marker date="1548121097302" expanded="true" signature="58589:58630" ph="SELECT COUNT... detailcustomerorder" />
-                <marker date="1548121097302" expanded="true" signature="59016:59244" ph="SELECT idpro... product" />
-                <marker date="1548121097302" expanded="true" signature="59630:59711" ph="SELECT besar... diskonkategori" />
-                <marker date="1548121097302" expanded="true" signature="60470:60686" ph="SELECT idpro... product" />
-                <marker date="1548121097302" expanded="true" signature="61063:61144" ph="SELECT besar... diskonkategori" />
-                <marker date="1548121097302" expanded="true" signature="63933:63967" ph="SELECT COUNT... " />
-                <marker date="1548121097302" expanded="true" signature="66233:66276" ph="SELECT COUNT... detailpenjualan" />
-                <marker date="1548121097302" expanded="true" signature="66632:66699" ph="SELECT idkat... kategori" />
-                <marker date="1548121097302" expanded="true" signature="66999:67322" ph="SELECT idpro... product" />
-                <marker date="1548121097302" expanded="true" signature="67366:67550" ph="SELECT idpro... product" />
-                <marker date="1548121097302" expanded="true" signature="67803:67884" ph="SELECT besar... diskonkategori" />
-                <marker date="1548121097302" expanded="true" signature="68336:68435" ph="SELECT idpro... product" />
-                <marker date="1548121097302" expanded="true" signature="68682:68763" ph="SELECT besar... diskonkategori" />
-                <marker date="1548121097302" expanded="true" signature="69161:69220" ph="SELECT id,ba... meja" />
-                <marker date="1548121097302" expanded="true" signature="69393:69564" ph="SELECT idpro... product" />
-                <marker date="1548121097302" expanded="true" signature="69811:69892" ph="SELECT besar... diskonkategori" />
-                <marker date="1548121097302" expanded="true" signature="72385:72648" ph="INSERT INTO customer_order... " />
-                <marker date="1548121097302" expanded="true" signature="72889:72936" ph="SELECT id FR... customer_order" />
-                <marker date="1548121097302" expanded="true" signature="73536:73768" ph="INSERT INTO detailcustomerorder... " />
-                <marker date="1548121097302" expanded="true" signature="75831:75886" ph="SELECT idkat... kategori" />
-                <marker date="1548121097302" expanded="true" signature="76092:76141" ph="SELECT idkat... product" />
-                <marker date="1548121097302" expanded="true" signature="76338:76387" ph="SELECT idkat... product" />
-                <marker date="1548121097302" expanded="true" signature="76475:76562" ph="SELECT idsub... subkategori" />
-                <marker date="1548121097302" expanded="true" signature="76789:76841" ph="SELECT idsub... product" />
-                <marker date="1548121097302" expanded="true" signature="77041:77107" ph="SELECT id, k... grup_menu" />
-                <marker date="1548121097302" expanded="true" signature="77303:77354" ph="SELECT id_gr... product" />
-                <marker date="1548121097302" expanded="true" signature="77627:77682" ph="SELECT uid F... cms_users" />
-                <marker date="1548121097302" expanded="true" signature="77942:77983" ph="SELECT satua... satuan" />
-                <marker date="1548121097302" expanded="true" signature="78156:78201" ph="SELECT satua... product" />
-                <marker date="1548121097302" expanded="true" signature="81808:81867" ph="SELECT idsup... supplier" />
-                <marker date="1548121097302" expanded="true" signature="82050:82108" ph="SELECT idsup... product_supplier" />
-                <marker date="1548121097302" expanded="true" signature="91639:91720" ph="SELECT COUNT... pembelian" />
-                <marker date="1548121097302" expanded="true" signature="91885:91984" ph="SELECT COUNT... pembelian" />
-                <marker date="1548121097302" expanded="true" signature="98698:98874" ph="SELECT COUNT... detailpembelian" />
-                <marker date="1548121097302" expanded="true" signature="100881:100915" ph="SELECT COUNT... " />
-                <marker date="1548121097302" expanded="true" signature="103374:103438" ph="SELECT COUNT... detailpembelian" />
-                <marker date="1548121097302" expanded="true" signature="105978:106033" ph="SELECT uid F... cms_users" />
-                <marker date="1548121097302" expanded="true" signature="106228:106276" ph="SELECT timez... cms_users" />
-                <marker date="1548121097302" expanded="true" signature="106768:106835" ph="SELECT idpen... penjualan" />
-                <marker date="1548121097302" expanded="true" signature="107808:108028" ph="INSERT INTO penjualan... " />
-                <marker date="1548121097302" expanded="true" signature="108211:108262" ph="SELECT idpen... penjualan" />
-                <marker date="1548121097302" expanded="true" signature="109043:109182" ph="INSERT INTO detailpenjualan... " />
-                <marker date="1548121097302" expanded="true" signature="109386:109456" ph="SELECT type_... product" />
-                <marker date="1548121097302" expanded="true" signature="109726:109775" ph="UPDATE produ... " />
-                <marker date="1548121097302" expanded="true" signature="109889:110039" ph="INSERT INTO transaksistock... " />
-                <marker date="1548121097302" expanded="true" signature="111169:111245" ph="UPDATE produ... " />
-                <marker date="1548121097302" expanded="true" signature="111356:111441" ph="INSERT INTO historyhargajual... " />
-                <marker date="1548121097302" expanded="true" signature="111788:111831" ph="SELECT stok product" />
-                <marker date="1548121097302" expanded="true" signature="111891:111962" ph="UPDATE produ... " />
-                <marker date="1548121097302" expanded="true" signature="112305:112432" ph="INSERT INTO transaksistock... " />
-                <marker date="1548121097302" expanded="true" signature="112678:112804" ph="INSERT INTO transaksistock... " />
-                <marker date="1548121097302" expanded="true" signature="114080:114111" ph="SELECT carab... carabayar" />
-                <marker date="1548121097302" expanded="true" signature="114287:114347" ph="SELECT SUM(t... penjualan_bayar" />
-                <marker date="1548121097302" expanded="true" signature="114867:114946" ph="SELECT SUM(k... penjualan" />
-                <marker date="1548121097302" expanded="true" signature="115609:115661" ph="SELECT COUNT... user_petty_cash" />
-                <marker date="1548121097302" expanded="true" signature="117842:117943" ph="SELECT COUNT... user_petty_cash" />
-                <marker date="1548121097302" expanded="true" signature="120061:120092" ph="SELECT carab... carabayar" />
-                <marker date="1548121097302" expanded="true" signature="120268:120328" ph="SELECT SUM(t... penjualan_bayar" />
-                <marker date="1548121097302" expanded="true" signature="120849:120928" ph="SELECT SUM(k... penjualan" />
-                <marker date="1548121097302" expanded="true" signature="121670:121722" ph="SELECT COUNT... user_petty_cash" />
-                <marker date="1548121097302" expanded="true" signature="123924:124082" ph="SELECT COUNT... user_petty_cash" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/kasir.form.new.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1190">
-              <caret line="70" column="19" selection-start-line="70" selection-start-column="12" selection-end-line="70" selection-end-column="19" />
-              <folding>
-                <marker date="1548745952890" expanded="true" signature="3693:3707" ph="..." />
-                <marker date="1548745952890" expanded="true" signature="5265:5279" ph="..." />
-                <marker date="1548745952890" expanded="true" signature="9750:9764" ph="..." />
-                <marker date="1548745952890" expanded="true" signature="12011:12025" ph="..." />
-                <marker date="1548745952890" expanded="true" signature="16765:16779" ph="..." />
-                <marker date="1548745952890" expanded="true" signature="19158:19172" ph="..." />
-                <marker date="1548745952890" expanded="true" signature="31420:31434" ph="..." />
-                <marker date="1548745952890" expanded="true" signature="46519:46533" ph="..." />
-                <marker date="1548745952890" expanded="true" signature="48319:48333" ph="..." />
-                <marker date="1548745952890" expanded="true" signature="49779:49793" ph="..." />
-                <marker date="1548745952890" expanded="true" signature="51061:51075" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.retur.jual.inc">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/return.form.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="41">
-              <caret line="739" column="83" selection-start-line="739" selection-start-column="83" selection-end-line="739" selection-end-column="83" />
-              <folding>
-                <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/table.return.pelanggan.inc">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-357">
-              <caret line="54" column="82" selection-start-line="54" selection-start-column="82" selection-end-line="54" selection-end-column="82" />
-              <folding>
-                <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-                <element signature="e#47#53#0" expanded="true" />
-                <element signature="e#53#59#0" expanded="true" />
-                <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-                <element signature="e#95#101#0" expanded="true" />
-                <element signature="e#101#107#0" expanded="true" />
-                <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-                <element signature="e#110#116#0" expanded="true" />
-                <element signature="e#116#122#0" expanded="true" />
-                <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-                <element signature="e#112#118#0" expanded="true" />
-                <element signature="e#118#124#0" expanded="true" />
-                <element signature="e#4#10#1" expanded="true" />
-                <element signature="e#4#10#1" expanded="true" />
-                <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-                <element signature="e#47#53#0" expanded="true" />
-                <element signature="e#53#59#0" expanded="true" />
-                <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-                <element signature="e#95#101#0" expanded="true" />
-                <element signature="e#101#107#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.penjualan.inc">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="43" lean-forward="true" selection-start-line="3" selection-start-column="4" selection-end-line="6" selection-end-column="43" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -242,190 +91,90 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>delete_pembayaran_supplier</find>
-      <find>$('#idproduct').</find>
-      <find>cari</find>
-      <find>getpelanggandiskon</find>
-      <find>get_pelanggan_diskon</find>
-      <find>KAD</find>
-      <find>if (dDigC</find>
-      <find>addCommas</find>
-      <find>number_format</find>
-      <find>number</find>
-      <find>detailcustomerorder'</find>
-      <find>idghordermultiprint</find>
-      <find>print_detail_order</find>
-      <find>panggil_pelanggan</find>
-      <find>alamatupdatepenjualan</find>
-      <find>round5</find>
-      <find>function round5(</find>
-      <find>update_detail_penjualan</find>
-      <find>penjualan/updatepenjualan</find>
-      <find>detailpenjualan</find>
-      <find>hapus_detail</find>
+      <find>nidlaundry</find>
+      <find>penjualan/getdefaultprinter</find>
+      <find>get_default_printer_ajax</find>
+      <find>hapus_penjualan</find>
       <find>penjualan/deletedetailpenjualan</find>
-      <find>update_penjualan</find>
       <find>delete_detail_penjualan_ajax</find>
-      <find>dataproduk/updatekategori</find>
-      <find>get_customer_order_printer</find>
-      <find>penjualan/getcoarrayprinter</find>
-      <find>update_kategori</find>
-      <find>isNan</find>
-      <find>toga</find>
+      <find>$('#dialogbayar').parent()</find>
+      <find>gst_separator</find>
+      <find>edc_integration</find>
+      <find>penjualan/kasir</find>
+      <find>gipos.dev</find>
+      <find>rest_getTotalHutang</find>
+      <find>grup pelanggan</find>
+      <find>grup_pelanggan</find>
+      <find>databank</find>
+      <find>export_stok_to_csv</find>
+      <find>export_stok_to_csv_r</find>
+      <find>syncHutangPelangganAjax</find>
+      <find>datapelanggan/synchutangpelanggan</find>
+      <find>pembayaran_piutang_nota</find>
+      <find>pembayaran piutang nota</find>
+      <find>grup.pelanggan</find>
+      <find>Grup Pelanggan</find>
+      <find>nama_grup</find>
+      <find>$IdDataGrup</find>
+      <find>keterangan-grup</find>
+      <find>edit-idurl</find>
+      <find>data grup</find>
+      <find>gruppelanggan</find>
+      <find>idpenjualangh</find>
     </findStrings>
     <replaceStrings>
       <replace>toFixed(dDigit)</replace>
       <replace>isNaN</replace>
+      <replace>dataproduck_size</replace>
+      <replace>,</replace>
+      <replace>','</replace>
+      <replace>gst separator</replace>
+      <replace>gst_separator</replace>
+      <replace>grup_pelanggan</replace>
+      <replace>csv templates</replace>
+      <replace>CSV Templates</replace>
+      <replace>csv_templates</replace>
+      <replace>upload server</replace>
+      <replace>Upload Server</replace>
+      <replace>upload_server</replace>
+      <replace>url_server</replace>
+      <replace>$IdUrlServer</replace>
+      <replace>port</replace>
+      <replace>edit-url-server</replace>
+      <replace>data upload server</replace>
+      <replace>uploadserver</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.penjualan.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/pembelian/pembelian.module" />
-        <option value="$PROJECT_DIR$/sites/all/modules/pembelian/pembelian.api.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/pembelian/pembelian.update.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/pembelian/js/tabel.pembelian.js" />
-        <option value="$PROJECT_DIR$/sites/all/modules/datasupplier/datasupplier.module" />
-        <option value="$PROJECT_DIR$/sites/all/modules/reproduksi/js/kasirrepro.js" />
-        <option value="$PROJECT_DIR$/sites/all/modules/reproduksi/globalpos.kasirrepro.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/reproduksi/globalpos.reproduksi.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.penjualan.js" />
-        <option value="$PROJECT_DIR$/sites/all/modules/pembelian/js/pembelian.js" />
-        <option value="$PROJECT_DIR$/sites/all/modules/pembelian/globalpos.pembelian.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/price.checker.js" />
-        <option value="$PROJECT_DIR$/sites/all/libraries/images-update/diskon_pelanggan_update.sql" />
-        <option value="$PROJECT_DIR$/sites/all/libraries/images-update/konsimen_margin.sql" />
-        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/e5c13b61-d4c5-4361-ae71-13a1607704c6/console.sql" />
-        <option value="$PROJECT_DIR$/sites/all/themes/cti_flex/css/custom-style.css" />
-        <option value="$PROJECT_DIR$/sites/all/modules/datasupplier/js/supplier.js" />
-        <option value="$PROJECT_DIR$/sites/all/libraries/images-update/payment_status.sql" />
-        <option value="$PROJECT_DIR$/sites/all/libraries/images-update/user_petty_cash_table.sql" />
-        <option value="$PROJECT_DIR$/sites/all/libraries/images-update/payment_by_voucher.sql" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/android.monitor.js" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/android.monitor.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.module" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/android.monitor.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.tabelcustomerorder.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/direct.print.order.js" />
-        <option value="$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/customerorder.form.js" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.customerorder.js" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/soundplay.js" />
-        <option value="$PROJECT_DIR$/sites/all/modules/datasupplier/globalpos.supplier.inc" />
-        <option value="$PROJECT_DIR$/sites/all/libraries/images-update/product_discount.sql" />
-        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/tabelproduknew.js" />
-        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc" />
-        <option value="$PROJECT_DIR$/sites/all/libraries/images-update/kategori_printer.sql" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.kasir.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.delete.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.update.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.module" />
-        <option value="$USER_HOME$/Downloads/gipos_nml.sql" />
-        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.kategori.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.customerorder.inc" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/kasir.form.new.js" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.api.inc" />
-        <option value="$PROJECT_DIR$/phpinfo.php" />
-        <option value="$PROJECT_DIR$/sites/default/settings.php" />
-        <option value="$PROJECT_DIR$/../report_toga/sites/default/settings.php" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/return.form.js" />
-        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/table.return.pelanggan.inc" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="-10" />
-    <option name="y" value="-10" />
-    <option name="width" value="1939" />
-    <option name="height" value="1059" />
-  </component>
+  <component name="ProjectId" id="1iVMCtnroEqgxj9tpjDvZuGpKtq" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="complete_gi_pos" type="b2602c69:ProjectViewProjectNode" />
-              <item name="complete_gi_pos" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="complete_gi_pos" type="b2602c69:ProjectViewProjectNode" />
-              <item name="complete_gi_pos" type="462c0819:PsiDirectoryNode" />
-              <item name="sites" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="complete_gi_pos" type="b2602c69:ProjectViewProjectNode" />
-              <item name="complete_gi_pos" type="462c0819:PsiDirectoryNode" />
-              <item name="sites" type="462c0819:PsiDirectoryNode" />
-              <item name="all" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="complete_gi_pos" type="b2602c69:ProjectViewProjectNode" />
-              <item name="complete_gi_pos" type="462c0819:PsiDirectoryNode" />
-              <item name="sites" type="462c0819:PsiDirectoryNode" />
-              <item name="all" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="complete_gi_pos" type="b2602c69:ProjectViewProjectNode" />
-              <item name="complete_gi_pos" type="462c0819:PsiDirectoryNode" />
-              <item name="sites" type="462c0819:PsiDirectoryNode" />
-              <item name="all" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-              <item name="penjualan" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="complete_gi_pos" type="b2602c69:ProjectViewProjectNode" />
-              <item name="complete_gi_pos" type="462c0819:PsiDirectoryNode" />
-              <item name="sites" type="462c0819:PsiDirectoryNode" />
-              <item name="all" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-              <item name="penjualan" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
     <property name="SearchEverywhereHistoryKey" value="cara_bayar_penjualan_mod.sql&#9;FILE&#9;file://C:/Development/WebRoot/complete_gi_pos/sites/all/libraries/images-update/cara_bayar_penjualan_mod.sql&#10;pembelian.update.inc&#9;FILE&#9;file://C:/Development/WebRoot/complete_gi_pos/sites/all/modules/pembelian/pembelian.update.inc&#10;globalpos.supplier.inc&#9;FILE&#9;file://C:/Development/WebRoot/complete_gi_pos/sites/all/modules/datasupplier/globalpos.supplier.inc" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL&#10;DDL Data Source" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="TEXT&#10;PHP&#10;JavaScript" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="PHP&#10;MySQL" />
+    <property name="database.console.LAST_STATE" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Development\WebRoot\complete_gi_pos\sites\all\modules\penjualan\js" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Development\WebRoot\complete_gi_pos\sites\all\modules\penjualan" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration default="true" type="js.build_tools.gulp">
@@ -626,7 +375,194 @@
       <workItem from="1549710773360" duration="30000" />
       <workItem from="1550540130405" duration="453000" />
       <workItem from="1550543359505" duration="2932000" />
-      <workItem from="1550583441973" duration="1306000" />
+      <workItem from="1550583441973" duration="1779000" />
+      <workItem from="1550625325186" duration="1260000" />
+      <workItem from="1550821042107" duration="707000" />
+      <workItem from="1550823026492" duration="608000" />
+      <workItem from="1550925101306" duration="1940000" />
+      <workItem from="1550992262586" duration="2044000" />
+      <workItem from="1551186999774" duration="1327000" />
+      <workItem from="1551245891947" duration="593000" />
+      <workItem from="1551275948447" duration="150000" />
+      <workItem from="1551276381922" duration="2040000" />
+      <workItem from="1551306699869" duration="1210000" />
+      <workItem from="1551310818047" duration="18000" />
+      <workItem from="1551312161777" duration="7860000" />
+      <workItem from="1551334609188" duration="4769000" />
+      <workItem from="1551424400687" duration="3903000" />
+      <workItem from="1551450979310" duration="1030000" />
+      <workItem from="1551582383353" duration="1188000" />
+      <workItem from="1551666860356" duration="1850000" />
+      <workItem from="1551749596056" duration="10565000" />
+      <workItem from="1551796764022" duration="2001000" />
+      <workItem from="1551836655613" duration="29161000" />
+      <workItem from="1552181721809" duration="5367000" />
+      <workItem from="1552217741735" duration="3023000" />
+      <workItem from="1552255771557" duration="241000" />
+      <workItem from="1552256792904" duration="383000" />
+      <workItem from="1552261960355" duration="463000" />
+      <workItem from="1552262619525" duration="4762000" />
+      <workItem from="1552549393583" duration="42000" />
+      <workItem from="1552555757345" duration="1767000" />
+      <workItem from="1552639744080" duration="7530000" />
+      <workItem from="1552696425421" duration="1943000" />
+      <workItem from="1553222355392" duration="595000" />
+      <workItem from="1553393397497" duration="599000" />
+      <workItem from="1553480688016" duration="1205000" />
+      <workItem from="1553758381290" duration="599000" />
+      <workItem from="1553875930610" duration="617000" />
+      <workItem from="1553879562007" duration="1902000" />
+      <workItem from="1553901218495" duration="3849000" />
+      <workItem from="1553946782332" duration="3617000" />
+      <workItem from="1554017970680" duration="16000" />
+      <workItem from="1554172513774" duration="650000" />
+      <workItem from="1554564049010" duration="2681000" />
+      <workItem from="1554620980659" duration="4102000" />
+      <workItem from="1555467783233" duration="11059000" />
+      <workItem from="1555571657574" duration="4466000" />
+      <workItem from="1555639300323" duration="538000" />
+      <workItem from="1555768730684" duration="1950000" />
+      <workItem from="1555814824377" duration="2021000" />
+      <workItem from="1555897511304" duration="2445000" />
+      <workItem from="1555920479208" duration="1061000" />
+      <workItem from="1556023250204" duration="593000" />
+      <workItem from="1556067286578" duration="601000" />
+      <workItem from="1556761419029" duration="963000" />
+      <workItem from="1556854193690" duration="606000" />
+      <workItem from="1557025499312" duration="26125000" />
+      <workItem from="1557128328494" duration="2461000" />
+      <workItem from="1557144569933" duration="4315000" />
+      <workItem from="1557450329691" duration="21040000" />
+      <workItem from="1558016552712" duration="2325000" />
+      <workItem from="1558166463315" duration="1022000" />
+      <workItem from="1558230301273" duration="915000" />
+      <workItem from="1558486046774" duration="13363000" />
+      <workItem from="1559180886056" duration="643000" />
+      <workItem from="1560063469972" duration="13000" />
+      <workItem from="1561464681313" duration="831000" />
+      <workItem from="1561565365229" duration="548000" />
+      <workItem from="1561587871328" duration="752000" />
+      <workItem from="1562589245951" duration="2674000" />
+      <workItem from="1563023972698" duration="2974000" />
+      <workItem from="1563408989822" duration="615000" />
+      <workItem from="1563884930873" duration="2400000" />
+      <workItem from="1564662773629" duration="1494000" />
+      <workItem from="1564665650977" duration="69000" />
+      <workItem from="1564703611187" duration="615000" />
+      <workItem from="1564735366362" duration="2270000" />
+      <workItem from="1564996415822" duration="4360000" />
+      <workItem from="1565166657216" duration="2175000" />
+      <workItem from="1565311617000" duration="1641000" />
+      <workItem from="1565354450751" duration="37000" />
+      <workItem from="1565405650155" duration="2080000" />
+      <workItem from="1566027255848" duration="1222000" />
+      <workItem from="1566042972409" duration="23367000" />
+      <workItem from="1567388082175" duration="6321000" />
+      <workItem from="1567602735648" duration="88000" />
+      <workItem from="1567644119375" duration="3876000" />
+      <workItem from="1567820320334" duration="3481000" />
+      <workItem from="1567862718813" duration="598000" />
+      <workItem from="1567907535226" duration="7761000" />
+      <workItem from="1568209306256" duration="3105000" />
+      <workItem from="1568338786133" duration="4937000" />
+      <workItem from="1568464703858" duration="4659000" />
+      <workItem from="1568551601905" duration="1340000" />
+      <workItem from="1568596136078" duration="8506000" />
+      <workItem from="1568850374464" duration="2757000" />
+      <workItem from="1569116901976" duration="1879000" />
+      <workItem from="1569152845689" duration="598000" />
+      <workItem from="1569220844270" duration="31000" />
+      <workItem from="1569504440215" duration="101000" />
+      <workItem from="1570021527445" duration="2471000" />
+      <workItem from="1570341297702" duration="637000" />
+      <workItem from="1570449753017" duration="659000" />
+      <workItem from="1570610644298" duration="536000" />
+      <workItem from="1570934523691" duration="2072000" />
+      <workItem from="1570971606356" duration="1939000" />
+      <workItem from="1571011899397" duration="744000" />
+      <workItem from="1571142679990" duration="1730000" />
+      <workItem from="1571230049840" duration="716000" />
+      <workItem from="1571365163077" duration="1222000" />
+      <workItem from="1571629052184" duration="12129000" />
+      <workItem from="1571842665903" duration="595000" />
+      <workItem from="1571905935411" duration="20000" />
+      <workItem from="1571969176446" duration="10856000" />
+      <workItem from="1572424153381" duration="848000" />
+      <workItem from="1572485064490" duration="4105000" />
+      <workItem from="1572749119478" duration="3003000" />
+      <workItem from="1572830291583" duration="5028000" />
+      <workItem from="1572925218112" duration="19000" />
+      <workItem from="1573808940971" duration="579000" />
+      <workItem from="1573954965097" duration="576000" />
+      <workItem from="1574334604944" duration="593000" />
+      <workItem from="1574385205942" duration="1230000" />
+      <workItem from="1574499189031" duration="734000" />
+      <workItem from="1574561473679" duration="570000" />
+      <workItem from="1574759926373" duration="22000" />
+      <workItem from="1574773972843" duration="898000" />
+      <workItem from="1574831561379" duration="697000" />
+      <workItem from="1574902607147" duration="40291000" />
+      <workItem from="1575268363072" duration="598000" />
+      <workItem from="1575271798213" duration="1768000" />
+      <workItem from="1575359341006" duration="5382000" />
+      <workItem from="1576135818514" duration="1569000" />
+      <workItem from="1576138047513" duration="1758000" />
+      <workItem from="1576218867309" duration="155000" />
+      <workItem from="1576221021658" duration="654000" />
+      <workItem from="1576456125981" duration="634000" />
+      <workItem from="1577326702995" duration="30000" />
+      <workItem from="1578532531597" duration="841000" />
+      <workItem from="1578987068489" duration="189000" />
+      <workItem from="1581844466747" duration="1631000" />
+      <workItem from="1581846675842" duration="460000" />
+      <workItem from="1582425752845" duration="1392000" />
+      <workItem from="1582427925322" duration="317000" />
+      <workItem from="1582687880807" duration="18000" />
+      <workItem from="1582707018462" duration="3419000" />
+      <workItem from="1582722943128" duration="312000" />
+      <workItem from="1582723597439" duration="636000" />
+      <workItem from="1582766990916" duration="212000" />
+      <workItem from="1582767741700" duration="3186000" />
+      <workItem from="1582796604017" duration="9000" />
+      <workItem from="1583312384676" duration="664000" />
+      <workItem from="1584240461120" duration="1862000" />
+      <workItem from="1584275524533" duration="13000" />
+      <workItem from="1584524328421" duration="1453000" />
+      <workItem from="1584848803142" duration="9543000" />
+      <workItem from="1585446903664" duration="11000" />
+      <workItem from="1586569701987" duration="3941000" />
+      <workItem from="1586654193213" duration="1734000" />
+      <workItem from="1586746252404" duration="212000" />
+      <workItem from="1586752695324" duration="597000" />
+      <workItem from="1586848763661" duration="594000" />
+      <workItem from="1587457768176" duration="4594000" />
+      <workItem from="1588065851626" duration="719000" />
+      <workItem from="1588203666774" duration="9000" />
+      <workItem from="1588760067980" duration="2439000" />
+      <workItem from="1588903640959" duration="1289000" />
+      <workItem from="1589186324303" duration="9772000" />
+      <workItem from="1589463986564" duration="3044000" />
+      <workItem from="1589523481600" duration="21676000" />
+      <workItem from="1589876713829" duration="8172000" />
+      <workItem from="1589969083584" duration="7697000" />
+      <workItem from="1590487567942" duration="6098000" />
+      <workItem from="1590632872349" duration="23040000" />
+      <workItem from="1591624686970" duration="13000" />
+      <workItem from="1592194139618" duration="196000" />
+      <workItem from="1593935566221" duration="624000" />
+      <workItem from="1594557927572" duration="2834000" />
+      <workItem from="1594720606393" duration="599000" />
+      <workItem from="1595035110315" duration="592000" />
+      <workItem from="1595131425752" duration="34000" />
+      <workItem from="1596352085681" duration="5389000" />
+      <workItem from="1596460921621" duration="1658000" />
+      <workItem from="1596507719830" duration="610000" />
+      <workItem from="1598349589864" duration="648000" />
+      <workItem from="1598516590172" duration="469000" />
+      <workItem from="1598968974778" duration="10000" />
+      <workItem from="1599360421042" duration="679000" />
+      <workItem from="1599384860287" duration="746000" />
+      <workItem from="1601988189619" duration="330000" />
     </task>
     <task id="LOCAL-00001" summary="- update multi payment">
       <created>1538535850949</created>
@@ -701,78 +637,15 @@
     <option name="localTasksCounter" value="11" />
     <servers />
   </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="653931000" />
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1551" height="847" extended-state="0" />
-    <editor active="true" />
-    <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2615694" />
-      <window_info id="Structure" order="1" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Database Console" order="7" weight="0.32941177" />
-      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" weight="0.32867134" />
-      <window_info anchor="bottom" id="Terminal" order="9" />
-      <window_info anchor="bottom" id="Version Control" order="10" weight="0.3295583" />
-      <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" order="12" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" weight="0.21965629" />
-    </layout>
-    <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28249195" />
-      <window_info id="Structure" order="1" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" weight="0.3295583" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.3295583" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" />
-    </layout-to-restore>
-  </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="2" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="RECENTLY_FILTERED_USER_GROUPS">
-                <collection />
-              </option>
-              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-                <collection />
-              </option>
-              <option name="COLUMN_ORDER">
-                <list>
-                  <option value="0" />
-                  <option value="1" />
-                  <option value="2" />
-                  <option value="3" />
-                </list>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -791,6 +664,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
@@ -805,984 +679,10 @@
     <MESSAGE value="- Add supplier &amp; harga pokok at product export xls" />
     <option name="LAST_COMMIT_MESSAGE" value="- Add supplier &amp; harga pokok at product export xls" />
   </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/customer_table_open.sql">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/update-android-integration.sql.inc">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/id_pembayaran_supplier.sql">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/update-reproduksi.sql.inc">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/penjualan_bayar.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="75" lean-forward="true" selection-end-line="2" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/po_exp_arrive.sql">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/petty_cash_logout.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="1" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/payment_by_voucher.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/android.monitor.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1342">
-          <caret line="86" column="5" selection-start-line="86" selection-start-column="5" selection-end-line="86" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/android.monitor.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="14" column="41" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/direct.multi.print.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="12" column="25" lean-forward="true" selection-end-line="12" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/direct.print.order.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="56" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.tabelcustomerorder.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4158">
-          <caret line="198" column="49" selection-start-line="198" selection-start-column="49" selection-end-line="198" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/customerorder.form.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6048">
-          <caret line="288" column="10" selection-start-line="288" selection-start-column="10" selection-end-line="288" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.customerorder.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6027">
-          <caret line="287" column="40" selection-start-line="287" selection-start-column="40" selection-end-line="287" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/HTML5.js" />
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/soundplay.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/cara_bayar_penjualan_mod.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" lean-forward="true" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/datasupplier/globalpos.supplier.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3297">
-          <caret line="157" column="39" selection-start-line="157" selection-start-column="39" selection-end-line="157" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/tabelproduknew.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5061">
-          <caret line="241" column="29" selection-start-line="241" selection-start-column="29" selection-end-line="241" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7245">
-          <caret line="345" column="65" selection-start-line="345" selection-start-column="65" selection-end-line="345" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.kasir.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="94" column="63" selection-start-line="94" selection-start-column="4" selection-end-line="94" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.module">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51">
-          <caret line="599" column="28" lean-forward="true" selection-start-line="599" selection-start-column="28" selection-end-line="599" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.update.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="348" column="39" selection-start-line="348" selection-start-column="39" selection-end-line="348" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.delete.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="182" column="39" selection-start-line="182" selection-start-column="39" selection-end-line="182" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Downloads/gipos_nml.sql" />
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.penjualan.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="487" column="61" selection-start-line="487" selection-start-column="30" selection-end-line="487" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/tabelkategori.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="19" column="57" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="24" column="43" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/175448f5-3ea3-40fa-9049-b93be80ec5bc/console.sql" />
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.customerorder.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="500">
-          <caret line="463" column="5" lean-forward="true" selection-start-line="463" selection-start-column="5" selection-end-line="463" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.module">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="368" column="54" selection-start-line="368" selection-start-column="28" selection-end-line="368" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/direct.print.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="17" column="57" lean-forward="true" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.kategori.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="62" column="79" selection-start-line="62" selection-start-column="79" selection-end-line="62" selection-end-column="79" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/product_discount.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/payment_status.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/kategori_printer.sql">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/konsimen_margin.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="91" selection-start-column="91" selection-end-column="91" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Documents/pisb.sql">
-      <provider selected="true" editor-type-id="LargeFileEditor">
-        <state relative-caret-position="-714" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../report_toga/sites/default/settings.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="257" column="25" lean-forward="true" selection-start-line="257" selection-start-column="25" selection-end-line="257" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Downloads/u3799115_report(1).sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-357" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Tools/Apache24/conf/extra/httpd-vhosts.conf">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="281" column="41" lean-forward="true" selection-start-line="281" selection-start-column="27" selection-end-line="281" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/default/settings.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="91" column="48" selection-start-line="91" selection-start-column="48" selection-end-line="91" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/phpinfo.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="10" selection-start-line="1" selection-start-column="10" selection-end-line="1" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.api.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="519">
-          <caret line="962" column="205" selection-start-line="962" selection-start-column="205" selection-end-line="962" selection-end-column="205" />
-          <folding>
-            <marker date="1549670934238" expanded="true" signature="491:894" ph="SELECT a.idt... titipanlaundry" />
-            <marker date="1549670934238" expanded="true" signature="1243:1547" ph="SELECT iddet... detaillaundry" />
-            <marker date="1549670934238" expanded="true" signature="1971:2506" ph="SELECT idpen... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="4769:5130" ph="SELECT iddet... detailpenjualan" />
-            <marker date="1549670934238" expanded="true" signature="6412:6418" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="7233:7272" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="7373:7467" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="7549:7612" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="7627:7638" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="7710:7732" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="7734:7740" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="7780:7792" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="7869:7891" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="7893:7899" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="7924:7930" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="7930:7936" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="8005:8039" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="8085:8091" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="8091:8097" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="8164:8198" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="8212:8235" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="8259:8282" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="8333:8339" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="8339:8345" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="8418:8452" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="8466:8489" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="8517:8540" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="8574:8580" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="8580:8586" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="8719:8753" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="8767:8790" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="8816:8839" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="8854:8866" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="8911:8924" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="8959:8965" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="9112:9177" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="9191:9214" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="9241:9264" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="9279:9291" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="9335:9348" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="9370:9376" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="9636:9670" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="9834:9865" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="9942:9986" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="10288:10332" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="10427:10497" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="10512:10524" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="10549:10562" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="10635:10641" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="11124:11186" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="11232:11311" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="11326:11338" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="11363:11376" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="11420:11426" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="11560:11594" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="11642:11693" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="11708:11720" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="11745:11758" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="11801:11807" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="11919:11953" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="11999:12050" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="12065:12077" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="12102:12115" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="12157:12163" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="12270:12335" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="12380:12462" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="12477:12489" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="12514:12527" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="12579:12585" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="12693:12728" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="12753:12759" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="12759:12765" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="13485:13519" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="13614:13648" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="13738:13772" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="13853:13887" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="14615:14654" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="14755:14842" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="14911:15021" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="15103:15168" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="15193:15199" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="15199:15205" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="15426:15461" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="15476:15487" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="15512:15524" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="15560:15566" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="15566:15572" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="15692:15727" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="15742:15753" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="15781:15793" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="15836:15842" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="15842:15848" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="15917:15982" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="15997:16008" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="16037:16049" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="16091:16097" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="16097:16103" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="16210:16275" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="16290:16301" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="16382:16394" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="16447:16453" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="16453:16459" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="16525:16590" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="16605:16616" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="16652:16664" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="16727:16733" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="16733:16739" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="16959:16993" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="17114:17166" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="17274:17326" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="17433:17485" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="17575:17581" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="17581:17587" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="17906:17986" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="18001:18012" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="18039:18051" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="18114:18120" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="18120:18126" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="18215:18268" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="18283:18294" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="18339:18351" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="18412:18418" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="18418:18424" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="18490:18543" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="18558:18569" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="18600:18612" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="18677:18683" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="18683:18689" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="18758:18811" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="18826:18837" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="18908:18920" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="18997:19003" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="19003:19009" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="19294:19347" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="19362:19373" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="19407:19419" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="19479:19485" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="19485:19491" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="19646:19680" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="19854:19907" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="19922:19933" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="19990:20002" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="20081:20087" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="20087:20093" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="20162:20224" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="20295:20330" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="20413:20475" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="20571:20624" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="20639:20650" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="20722:20744" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="20746:20752" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="20792:20804" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="20881:20903" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="20905:20911" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="20936:20942" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="20942:20948" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="21013:21078" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="22321:22419" ph="SELECT SUM($... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="22509:22588" ph="SELECT SUM($... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="22729:22847" ph="SELECT SUM($... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="22950:23087" ph="SELECT SUM($... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="23228:23296" ph="SELECT SUM(b... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="23487:23555" ph="SELECT SUM(b... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="23947:24017" ph="SELECT SUM(k... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="24206:24276" ph="SELECT SUM(k... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="24638:24751" ph="SELECT SUM($... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="24865:24997" ph="SELECT SUM($... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="25245:25350" ph="SELECT SUM($... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="25464:25588" ph="SELECT SUM($... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="26058:26251" ph="SELECT SUM($... detailpenjualan" />
-            <marker date="1549670934238" expanded="true" signature="26357:26641" ph="SELECT SUM($... detailpenjualan" />
-            <marker date="1549670934238" expanded="true" signature="27094:27193" ph="SELECT SUM($... customer_order" />
-            <marker date="1549670934238" expanded="true" signature="27287:27367" ph="SELECT SUM($... customer_order" />
-            <marker date="1549670934238" expanded="true" signature="27508:27627" ph="SELECT SUM($... customer_order" />
-            <marker date="1549670934238" expanded="true" signature="27734:27872" ph="SELECT SUM($... customer_order" />
-            <marker date="1549670934238" expanded="true" signature="28017:28086" ph="SELECT SUM(b... customer_order" />
-            <marker date="1549670934238" expanded="true" signature="28283:28352" ph="SELECT SUM(b... customer_order" />
-            <marker date="1549670934238" expanded="true" signature="28767:28838" ph="SELECT SUM(k... customer_order" />
-            <marker date="1549670934238" expanded="true" signature="29033:29104" ph="SELECT SUM(k... customer_order" />
-            <marker date="1549670934238" expanded="true" signature="29476:29590" ph="SELECT SUM($... customer_order" />
-            <marker date="1549670934238" expanded="true" signature="29708:29841" ph="SELECT SUM($... customer_order" />
-            <marker date="1549670934238" expanded="true" signature="31270:31309" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="31476:31495" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="32392:32431" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="32514:32553" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="32643:32659" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="32661:32667" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="32915:32927" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="33061:33080" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="33186:33205" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="33220:33232" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="33234:33240" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="33240:33246" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="33246:33252" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="33306:33319" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="33417:33423" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="33423:33429" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="33429:33435" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="34394:34433" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="34516:34555" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="34657:34672" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="34674:34680" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="35085:35097" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="36377:36416" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="36502:36541" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="36645:36660" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="36662:36668" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="37079:37091" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="38295:38334" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="38417:38456" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="38558:38573" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="38575:38581" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="38975:38987" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="40279:40318" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="40401:40440" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="40542:40557" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="40559:40565" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="40971:40983" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="41994:42000" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="42056:42062" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="42236:42283" ph="UPDATE custo... " />
-            <marker date="1549670934238" expanded="true" signature="42892:42898" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="42954:42960" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="43140:43187" ph="UPDATE custo... " />
-            <marker date="1549670934238" expanded="true" signature="44196:44202" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="44253:44300" ph="UPDATE custo... " />
-            <marker date="1549670934238" expanded="true" signature="44842:44881" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="45015:45102" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="45171:45281" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="45376:45441" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="45466:45472" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="45472:45478" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="45702:45795" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="45952:45987" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="46135:46170" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="46185:46196" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="46224:46236" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="46267:46273" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="46273:46279" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="46416:46469" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="46484:46495" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="46521:46533" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="46772:46807" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="46886:46951" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="47011:47022" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="47125:47137" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="47427:47492" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="47542:47553" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="47662:47674" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="48023:48039" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="48341:48373" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="48584:48631" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="48891:48971" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="48986:48997" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="49024:49036" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="49392:49445" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="49460:49471" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="49524:49536" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="49684:49737" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="49752:49763" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="49802:49814" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="50028:50081" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="50096:50107" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="50182:50194" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="50358:50411" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="50426:50437" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="50523:50535" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="50824:50877" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="50892:50903" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="50936:50948" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="51927:51980" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="51995:52006" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="52046:52058" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="52156:52209" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="52224:52235" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="52310:52322" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="52484:52546" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="52750:52785" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="52877:52939" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="53038:53091" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="53185:53196" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="53542:53554" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="53911:53923" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="54896:54909" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="55496:55531" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="55660:55695" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="55710:55721" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="55749:55761" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="55792:55798" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="55798:55804" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="55922:55975" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="55990:56001" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="56027:56039" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="56147:56182" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="56197:56208" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="56280:56292" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="56524:56540" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="56753:56800" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="57041:57094" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="57109:57120" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="57147:57159" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="57500:57553" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="57568:57579" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="57632:57644" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="57773:57826" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="57841:57852" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="57891:57903" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="58046:58099" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="58114:58125" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="58152:58164" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="58305:58358" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="58373:58384" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="58459:58471" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="58614:58649" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="58834:58869" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="58942:58977" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="59057:59110" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="59204:59215" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="59563:59575" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="59932:59943" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="61065:61104" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="61226:61313" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="61649:61714" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="61739:61745" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="61745:61751" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="61993:62028" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="62043:62054" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="62079:62091" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="62127:62133" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="62133:62139" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="62274:62309" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="62324:62335" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="62363:62375" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="62418:62424" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="62424:62430" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="62511:62576" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="62591:62602" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="62674:62686" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="62728:62734" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="62734:62740" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="62862:62927" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="62942:62953" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="63034:63046" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="63099:63105" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="63105:63111" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="63186:63251" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="63266:63277" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="63313:63325" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="63388:63394" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="63394:63400" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="63665:63699" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="63847:63899" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="64019:64071" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="64187:64239" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="64332:64338" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="64338:64344" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="64690:64770" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="64785:64796" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="64823:64835" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="64898:64904" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="64904:64910" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="64999:65052" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="65067:65078" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="65147:65159" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="65221:65227" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="65227:65233" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="65299:65352" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="65367:65378" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="65433:65445" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="65510:65516" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="65516:65522" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="65597:65650" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="65665:65676" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="65747:65759" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="65836:65842" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="65842:65848" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="66157:66210" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="66225:66236" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="66270:66282" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="66342:66348" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="66348:66354" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="66536:66570" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="66765:66818" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="66833:66844" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="66947:66959" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="67038:67044" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="67044:67050" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="67131:67193" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="67270:67305" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="67394:67456" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="67551:67604" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="67640:67651" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="68366:68372" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="68437:68443" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="68499:68505" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="68556:68595" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="68694:68747" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="68762:68773" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="68803:68815" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="68921:68974" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="68989:69000" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="69031:69043" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="69142:69195" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="69210:69221" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="69247:69259" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="69368:69433" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="69448:69459" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="69488:69500" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="69733:69749" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="69845:69909" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="70440:70446" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="70511:70517" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="70573:70579" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="70630:70669" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="70768:70821" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="70836:70847" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="70877:70889" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="70995:71048" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="71063:71074" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="71105:71117" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="71216:71269" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="71284:71295" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="71321:71333" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="71442:71507" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="71522:71533" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="71608:71620" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="71853:71869" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="71965:72029" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="72348:72408" ph="SELECT id, b... meja" />
-            <marker date="1549670934238" expanded="true" signature="81796:81843" ph="UPDATE custo... " />
-            <marker date="1549670934238" expanded="true" signature="82279:82318" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="82417:82470" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="82485:82496" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="82526:82538" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="82644:82697" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="82712:82723" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="82754:82766" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="82865:82918" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="82933:82944" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="82970:82982" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="83091:83156" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="83171:83182" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="83257:83269" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="83516:83532" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="83628:83692" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="83839:83904" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="83919:83930" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="83962:83974" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="84134:84140" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="84267:84273" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="85436:85475" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="85614:85653" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="85781:85796" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="85798:85804" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="86140:86152" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="89137:89148" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="89150:89156" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="89367:89382" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="89384:89390" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="90323:90334" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="90336:90342" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="90853:90864" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="90866:90872" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="91955:91966" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="91968:91974" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="94837:94848" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="94850:94856" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="95407:95418" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="95420:95426" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="96194:96205" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="96207:96213" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="96676:96687" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="96689:96695" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="97898:98105" ph="SELECT iddet... detailpembelian" />
-            <marker date="1549670934238" expanded="true" signature="98844:98899" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="99038:99077" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="99219:99225" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="99746:99758" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="99780:99786" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="99786:99792" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="100845:100896" ph="SELECT nonot... reproduksi" />
-            <marker date="1549670934238" expanded="true" signature="100983:101041" ph="SELECT tglre... reproduksi" />
-            <marker date="1549670934238" expanded="true" signature="101161:101216" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="101652:101664" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="102305:102369" ph="SELECT petty... user_petty_cash" />
-            <marker date="1549670934238" expanded="true" signature="102487:102543" ph="SELECT id FR... user_petty_cash" />
-            <marker date="1549670934238" expanded="true" signature="102615:102680" ph="SELECT total... penjualan" />
-            <marker date="1549670934238" expanded="true" signature="105488:105531" ph="SELECT uid F... user_petty_cash" />
-            <marker date="1549670934238" expanded="true" signature="105600:105645" ph="SELECT login... user_petty_cash" />
-            <marker date="1549670934238" expanded="true" signature="105714:105761" ph="SELECT log_o... user_petty_cash" />
-            <marker date="1549670934238" expanded="true" signature="106008:106047" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="106170:106257" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="106330:106440" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="106535:106600" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="106629:106635" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="106635:106641" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="106715:106750" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="106854:106887" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="106902:106913" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="106959:106971" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="107090:107141" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="107156:107167" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="107194:107206" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="107305:107386" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="107401:107412" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="107439:107451" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="107551:107602" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="107617:107628" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="107655:107667" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="107819:107870" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="107885:107896" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="107922:107934" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="108122:108173" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="108188:108199" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="108231:108243" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="108406:108457" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="108472:108483" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="108514:108526" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="108688:108769" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="108784:108795" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="108823:108835" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="108994:109045" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="109060:109071" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="109103:109115" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="109272:109353" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="109368:109379" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="109405:109417" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="109603:109684" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="109699:109710" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="109742:109754" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="110139:110188" ph="UPDATE user_... " />
-            <marker date="1549670934238" expanded="true" signature="111286:111325" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="111440:111493" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="111508:111519" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="111549:111561" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="111679:111732" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="111747:111758" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="111789:111801" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="111912:111965" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="111980:111991" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="112017:112029" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="112150:112215" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="112230:112241" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="112320:112332" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="112499:112515" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="112619:112683" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="112832:112897" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="112912:112923" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="112955:112967" ph="..." />
-            <marker date="1549670934238" expanded="true" signature="113155:113161" ph=" " />
-            <marker date="1549670934238" expanded="true" signature="113229:113235" ph=" " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23953">
-          <caret line="1421" column="97" selection-start-line="1421" selection-start-column="85" selection-end-line="1421" selection-end-column="97" />
-          <folding>
-            <marker date="1548121097302" expanded="true" signature="4525:4565" ph="SELECT COUNT... pelanggan" />
-            <marker date="1548121097302" expanded="true" signature="12511:12547" ph="SELECT COUNT... product" />
-            <marker date="1548121097302" expanded="true" signature="19135:19216" ph="SELECT COUNT... penjualan" />
-            <marker date="1548121097302" expanded="true" signature="19312:19412" ph="SELECT COUNT... penjualan" />
-            <marker date="1548121097302" expanded="true" signature="26407:26574" ph="SELECT COUNT... detailpenjualan" />
-            <marker date="1548121097302" expanded="true" signature="30289:30634" ph="SELECT COUNT... detailpenjualan" />
-            <marker date="1548121097302" expanded="true" signature="36546:36637" ph="SELECT COUNT... titipanlaundry" />
-            <marker date="1548121097302" expanded="true" signature="43920:43993" ph="SELECT COUNT... customer_order" />
-            <marker date="1548121097302" expanded="true" signature="46627:46672" ph="SELECT COUNT... cms_kategoripengeluaran" />
-            <marker date="1548121097302" expanded="true" signature="50526:50563" ph="SELECT COUNT... cms_pengeluaran" />
-            <marker date="1548121097302" expanded="true" signature="54335:54370" ph="SELECT COUNT... cms_pemasukan" />
-            <marker date="1548121097302" expanded="true" signature="56293:56321" ph="SELECT COUNT... " />
-            <marker date="1548121097302" expanded="true" signature="58589:58630" ph="SELECT COUNT... detailcustomerorder" />
-            <marker date="1548121097302" expanded="true" signature="59016:59244" ph="SELECT idpro... product" />
-            <marker date="1548121097302" expanded="true" signature="59630:59711" ph="SELECT besar... diskonkategori" />
-            <marker date="1548121097302" expanded="true" signature="60470:60686" ph="SELECT idpro... product" />
-            <marker date="1548121097302" expanded="true" signature="61063:61144" ph="SELECT besar... diskonkategori" />
-            <marker date="1548121097302" expanded="true" signature="63933:63967" ph="SELECT COUNT... " />
-            <marker date="1548121097302" expanded="true" signature="66233:66276" ph="SELECT COUNT... detailpenjualan" />
-            <marker date="1548121097302" expanded="true" signature="66632:66699" ph="SELECT idkat... kategori" />
-            <marker date="1548121097302" expanded="true" signature="66999:67322" ph="SELECT idpro... product" />
-            <marker date="1548121097302" expanded="true" signature="67366:67550" ph="SELECT idpro... product" />
-            <marker date="1548121097302" expanded="true" signature="67803:67884" ph="SELECT besar... diskonkategori" />
-            <marker date="1548121097302" expanded="true" signature="68336:68435" ph="SELECT idpro... product" />
-            <marker date="1548121097302" expanded="true" signature="68682:68763" ph="SELECT besar... diskonkategori" />
-            <marker date="1548121097302" expanded="true" signature="69161:69220" ph="SELECT id,ba... meja" />
-            <marker date="1548121097302" expanded="true" signature="69393:69564" ph="SELECT idpro... product" />
-            <marker date="1548121097302" expanded="true" signature="69811:69892" ph="SELECT besar... diskonkategori" />
-            <marker date="1548121097302" expanded="true" signature="72385:72648" ph="INSERT INTO customer_order... " />
-            <marker date="1548121097302" expanded="true" signature="72889:72936" ph="SELECT id FR... customer_order" />
-            <marker date="1548121097302" expanded="true" signature="73536:73768" ph="INSERT INTO detailcustomerorder... " />
-            <marker date="1548121097302" expanded="true" signature="75831:75886" ph="SELECT idkat... kategori" />
-            <marker date="1548121097302" expanded="true" signature="76092:76141" ph="SELECT idkat... product" />
-            <marker date="1548121097302" expanded="true" signature="76338:76387" ph="SELECT idkat... product" />
-            <marker date="1548121097302" expanded="true" signature="76475:76562" ph="SELECT idsub... subkategori" />
-            <marker date="1548121097302" expanded="true" signature="76789:76841" ph="SELECT idsub... product" />
-            <marker date="1548121097302" expanded="true" signature="77041:77107" ph="SELECT id, k... grup_menu" />
-            <marker date="1548121097302" expanded="true" signature="77303:77354" ph="SELECT id_gr... product" />
-            <marker date="1548121097302" expanded="true" signature="77627:77682" ph="SELECT uid F... cms_users" />
-            <marker date="1548121097302" expanded="true" signature="77942:77983" ph="SELECT satua... satuan" />
-            <marker date="1548121097302" expanded="true" signature="78156:78201" ph="SELECT satua... product" />
-            <marker date="1548121097302" expanded="true" signature="81808:81867" ph="SELECT idsup... supplier" />
-            <marker date="1548121097302" expanded="true" signature="82050:82108" ph="SELECT idsup... product_supplier" />
-            <marker date="1548121097302" expanded="true" signature="91639:91720" ph="SELECT COUNT... pembelian" />
-            <marker date="1548121097302" expanded="true" signature="91885:91984" ph="SELECT COUNT... pembelian" />
-            <marker date="1548121097302" expanded="true" signature="98698:98874" ph="SELECT COUNT... detailpembelian" />
-            <marker date="1548121097302" expanded="true" signature="100881:100915" ph="SELECT COUNT... " />
-            <marker date="1548121097302" expanded="true" signature="103374:103438" ph="SELECT COUNT... detailpembelian" />
-            <marker date="1548121097302" expanded="true" signature="105978:106033" ph="SELECT uid F... cms_users" />
-            <marker date="1548121097302" expanded="true" signature="106228:106276" ph="SELECT timez... cms_users" />
-            <marker date="1548121097302" expanded="true" signature="106768:106835" ph="SELECT idpen... penjualan" />
-            <marker date="1548121097302" expanded="true" signature="107808:108028" ph="INSERT INTO penjualan... " />
-            <marker date="1548121097302" expanded="true" signature="108211:108262" ph="SELECT idpen... penjualan" />
-            <marker date="1548121097302" expanded="true" signature="109043:109182" ph="INSERT INTO detailpenjualan... " />
-            <marker date="1548121097302" expanded="true" signature="109386:109456" ph="SELECT type_... product" />
-            <marker date="1548121097302" expanded="true" signature="109726:109775" ph="UPDATE produ... " />
-            <marker date="1548121097302" expanded="true" signature="109889:110039" ph="INSERT INTO transaksistock... " />
-            <marker date="1548121097302" expanded="true" signature="111169:111245" ph="UPDATE produ... " />
-            <marker date="1548121097302" expanded="true" signature="111356:111441" ph="INSERT INTO historyhargajual... " />
-            <marker date="1548121097302" expanded="true" signature="111788:111831" ph="SELECT stok product" />
-            <marker date="1548121097302" expanded="true" signature="111891:111962" ph="UPDATE produ... " />
-            <marker date="1548121097302" expanded="true" signature="112305:112432" ph="INSERT INTO transaksistock... " />
-            <marker date="1548121097302" expanded="true" signature="112678:112804" ph="INSERT INTO transaksistock... " />
-            <marker date="1548121097302" expanded="true" signature="114080:114111" ph="SELECT carab... carabayar" />
-            <marker date="1548121097302" expanded="true" signature="114287:114347" ph="SELECT SUM(t... penjualan_bayar" />
-            <marker date="1548121097302" expanded="true" signature="114867:114946" ph="SELECT SUM(k... penjualan" />
-            <marker date="1548121097302" expanded="true" signature="115609:115661" ph="SELECT COUNT... user_petty_cash" />
-            <marker date="1548121097302" expanded="true" signature="117842:117943" ph="SELECT COUNT... user_petty_cash" />
-            <marker date="1548121097302" expanded="true" signature="120061:120092" ph="SELECT carab... carabayar" />
-            <marker date="1548121097302" expanded="true" signature="120268:120328" ph="SELECT SUM(t... penjualan_bayar" />
-            <marker date="1548121097302" expanded="true" signature="120849:120928" ph="SELECT SUM(k... penjualan" />
-            <marker date="1548121097302" expanded="true" signature="121670:121722" ph="SELECT COUNT... user_petty_cash" />
-            <marker date="1548121097302" expanded="true" signature="123924:124082" ph="SELECT COUNT... user_petty_cash" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/kasir.form.new.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1190">
-          <caret line="70" column="19" selection-start-line="70" selection-start-column="12" selection-end-line="70" selection-end-column="19" />
-          <folding>
-            <marker date="1548745952890" expanded="true" signature="3693:3707" ph="..." />
-            <marker date="1548745952890" expanded="true" signature="5265:5279" ph="..." />
-            <marker date="1548745952890" expanded="true" signature="9750:9764" ph="..." />
-            <marker date="1548745952890" expanded="true" signature="12011:12025" ph="..." />
-            <marker date="1548745952890" expanded="true" signature="16765:16779" ph="..." />
-            <marker date="1548745952890" expanded="true" signature="19158:19172" ph="..." />
-            <marker date="1548745952890" expanded="true" signature="31420:31434" ph="..." />
-            <marker date="1548745952890" expanded="true" signature="46519:46533" ph="..." />
-            <marker date="1548745952890" expanded="true" signature="48319:48333" ph="..." />
-            <marker date="1548745952890" expanded="true" signature="49779:49793" ph="..." />
-            <marker date="1548745952890" expanded="true" signature="51061:51075" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.retur.jual.inc">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/return.form.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="41">
-          <caret line="739" column="83" selection-start-line="739" selection-start-column="83" selection-end-line="739" selection-end-column="83" />
-          <folding>
-            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.penjualan.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="43" lean-forward="true" selection-start-line="3" selection-start-column="4" selection-end-line="6" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/table.return.pelanggan.inc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-357">
-          <caret line="54" column="82" selection-start-line="54" selection-start-column="82" selection-end-line="54" selection-end-column="82" />
-          <folding>
-            <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-            <element signature="e#47#53#0" expanded="true" />
-            <element signature="e#53#59#0" expanded="true" />
-            <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-            <element signature="e#95#101#0" expanded="true" />
-            <element signature="e#101#107#0" expanded="true" />
-            <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-            <element signature="e#110#116#0" expanded="true" />
-            <element signature="e#116#122#0" expanded="true" />
-            <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-            <element signature="e#112#118#0" expanded="true" />
-            <element signature="e#118#124#0" expanded="true" />
-            <element signature="e#4#10#1" expanded="true" />
-            <element signature="e#4#10#1" expanded="true" />
-            <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-            <element signature="e#47#53#0" expanded="true" />
-            <element signature="e#53#59#0" expanded="true" />
-            <element signature="n#style#0;n#th#0;n#!!top" expanded="true" />
-            <element signature="e#95#101#0" expanded="true" />
-            <element signature="e#101#107#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+  <component name="WindowStateProjectService">
+    <state x="454" y="304" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1601988492600">
+      <screen x="0" y="0" width="1463" height="783" />
+    </state>
+    <state x="454" y="304" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1463.783@0.0.1463.783" timestamp="1601988492600" />
   </component>
 </project>

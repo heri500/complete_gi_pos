@@ -15,6 +15,7 @@ function customerorder(){
     drupal_add_css('misc/media/css/validationEngine.jquery.css');
     //drupal_add_js('misc/media/jquery-1.4.4.min.js');
     _addJqueryPlugins();
+    _addJeditablePlugins();
     drupal_add_js('misc/media/jqClock.min.js');
     drupal_add_js('misc/media/jquery.validationEngine-en.js');
     drupal_add_js('misc/media/jquery.validationEngine.js');
@@ -253,11 +254,12 @@ function simpan_customerorder(){
             $HARGAPOKOK = $data->hargapokok;
             $totalmodal = $totalmodal + ($HARGAPOKOK*$QTY);
             $detailbarcode = createEAN13Code(getRandomString(9));
+            $Keterangan = !empty($pecahnilai[6]) ? $pecahnilai[6] : null;
             db_query("INSERT INTO detailcustomerorder(idcustomerorder, idproduct, jumlah,
 			hargapokok, hargajual, diskon, sisa, masuk, perkiraan_ambil, detailbarcode,
-			outstanding) VALUES ('%d', '%d', '%f', '%f', '%f', '%f', '%f','%d','%d','%s','%d')",
+			outstanding, qty_pcs, keterangan) VALUES ('%d', '%d', '%f', '%f', '%f', '%f', '%f', '%d', '%d', '%s', '%d', '%d', '%s')",
                 $next_id,$IDPRODUK,$QTY,$HARGAPOKOK,$HARGAJUAL,$DISKON,$QTY,$intTanggal,$pecahnilai[4],
-                $detailbarcode,$QTY);
+                $detailbarcode,$QTY,$pecahnilai[5],$Keterangan);
         }
         db_query("UPDATE customer_order SET totalmodal='%f' WHERE id='%d'",$totalmodal,$next_id);
     }else{
@@ -281,6 +283,8 @@ function view_kasir_customerorder(){
     $kasirtabel .= '<th class="diskon2">QTY</th>';
     $kasirtabel .= '<th class="subtotal">SUBTOTAL</th>';
     $kasirtabel .= '<th>AMBIL</th>';
+    $kasirtabel .= '<th>PCS</th>';
+    $kasirtabel .= '<th class="tablebutton"></th>';
     $kasirtabel .= '</tr>';
     $kasirtabel .= '</thead>';
     $kasirtabel .= '<tbody>';
@@ -454,7 +458,7 @@ function get_customer_order_printer(){
         $StrSql = 'SELECT ('.$StrSqlPrn.') AS chosen_printer  FROM detailcustomerorder AS dco ';
         $StrSql .= 'LEFT JOIN product AS prod ON dco.idproduct = prod.idproduct ';
         $StrSql .= 'LEFT JOIN kategori AS kat ON prod.idkategori = kat.idkategori ';
-        $StrSql .= 'WHERE idcustomerorder=%d GROUP BY chosen_printer';
+        $StrSql .= 'WHERE idcustomerorder=%d AND ('.$StrSqlPrn.') IS NOT NULL GROUP BY chosen_printer';
         $SelectedPrinter = array();
         $Result = db_query($StrSql, $_POST['idorder']);
         while ($DataPrinter = db_fetch_object($Result)){
@@ -471,6 +475,19 @@ function cari_nota_order_android_pending(){
     if ($idOrder > 0){
         db_query('UPDATE customer_order SET pending_print = 0 WHERE id = %d', $idOrder);
         print $idOrder;
+    }
+    exit();
+}
+
+function update_customer_order_ajax(){
+    if (isset($_POST['row_id']) && isset($_POST['value']) && isset($_POST['ubah'])){
+        $IdOrder = $_POST['row_id'];
+        $RetVal = $_POST['value'];
+        if ($_POST['ubah'] == 'meja'){
+            db_query('UPDATE customer_order SET idmeja=%d WHERE id=%d', $_POST['value'], $IdOrder);
+            $RetVal = db_result(db_query('SELECT meja FROM meja WHERE id=%d', $_POST['value']));
+        }
+        print $RetVal;
     }
     exit();
 }

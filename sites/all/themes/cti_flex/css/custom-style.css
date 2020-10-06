@@ -43,7 +43,7 @@ table th.qty{
 	width: 80px;
 }
 table th.subtotal{
-	width: 180px;
+	width: 120px;
 }
 #tabel_kasir th,#tabel_kasir td{
 	font-size: 14px;
@@ -392,7 +392,7 @@ input[type="text"].barcodekasir{
 	cursor: pointer;
 	outline: none;
 }
-#main #formplace{
+#main #formplace, form.form_style{
 	padding: .6em;
 	border: 1px solid red;
 	-webkit-border-radius: 6px;
@@ -407,18 +407,26 @@ input[type="text"].barcodekasir{
 	float: left;
     margin-bottom: 20px;
 }
-
+form.form_style{
+	width: 475px !important;
+}
 #main #formplace.supplier input[type="text"],
 #main #formplace.supplier input[type="password"],
 #main #formplace.supplier select,
 #main #formplace.pelanggan input[type="text"],
 #main #formplace.pelanggan input[type="password"],
-#main #formplace.pelanggan select{
+#main #formplace.pelanggan select,
+form.form_style input[type="text"],
+form.form_style input[type="password"],
+form.form_style select
+{
 	margin-bottom: 4px;
 	float: left;
 }
 
-#main #formplace.supplier select{
+#main #formplace.supplier select,
+form.form_style select
+{
 	width: 145px;
 	margin-right: 10px;
 	height: 25px;
@@ -444,18 +452,24 @@ input[type="text"].barcodekasir{
 	font-size: 12px;
 	margin-right: 6px;
 }
-#main #formplace.supplier label,#main #formplace.pelanggan label{
+#main #formplace.supplier label,
+#main #formplace.pelanggan label
+{
 	width: 75px;
 	margin-bottom: 6px;
 	float: left;
 	padding-top: 4px;
 }
-#main #formplace input[type="text"] {
+#main #formplace input[type="text"],
+form.form_style input[type="text"]
+{
 	margin-right: 10px;
 	height: 20px;
 	margin-top:0;
 }
-#main #formplace.supplier input[type="text"],#main #formplace.pelanggan input[type="text"]{
+#main #formplace.supplier input[type="text"],
+#main #formplace.pelanggan input[type="text"]
+{
 	margin-bottom: 4px;
 	float: left;
 }
@@ -480,7 +494,13 @@ input[type="text"].barcodekasir{
 #main #formplace.produk{
 	width: 450px;	
 }
-#main #formplace.produk label{
+#form_diskon
+{
+	height: 220px;
+}
+#main #formplace.produk label,
+form.form_style label
+{
 	font-size: 12px;
 	float: left;	
 	margin-top:4px;
@@ -492,12 +512,19 @@ input[type="text"].barcodekasir{
 	margin-top:4px;
 	font-size:10px;
 }
-#main #formplace.produk input[type="text"] {
+#main #formplace.produk input[type="text"],
+form.form_style input[type="text"]
+{
 	margin-right: 10px;
 	height: 20px;
 	float: left;
 	margin-top:4px;
 	width: 50%;
+}
+form.form_style .button-form {
+	margin-top: 10px;
+	float: left;
+	width: 100%;
 }
 #main #formplace.produk img{
 	float: left;
@@ -774,8 +801,19 @@ input.hasDatepicker{
 	padding-right: 10px;
 	vertical-align: top;
 }
+.small-table-wrapper-more{
+	width: 45%;
+	display: table-cell;
+	padding-right: 10px;
+	vertical-align: top;
+}
 .small-form-wrapper{
 	width: 20%;	
+	display: table-cell;
+	vertical-align: top;
+}
+.small-form-wrapper-more{
+	width: 15%;
 	display: table-cell;
 	vertical-align: top;
 }
@@ -977,9 +1015,12 @@ form.form-item-lined-up, .form-item-lined-up{
 	float: left;
 	width: 100%;
 }
-#katdiv {
+#katdiv, #katstock {
 	float: left;
 	margin-left: 10px;
+}
+#katstock {
+	margin-top: -3px;
 }
 .file-selection{
 	margin-right: 5px;
@@ -1018,4 +1059,90 @@ blink {
 	float: left;
 	width: 100%;
 	margin-top: 4px !important;
+}
+h5#product-title{
+	margin: 0 0 10px 0;
+}
+.table-product-discount th,
+.table-product-discount td,
+#table-diskon-wrapper label,
+#table-diskon-wrapper div,
+#table-diskon-wrapper a
+{
+	font-size: 13px !important;
+}
+th.center, td.center{
+	text-align: center !important;
+}
+#form-filter-penjualan .chosen-container{
+	float: left;
+	margin-right: 6px !important;
+	min-height: 27px !important;
+}
+#form-filter-penjualan .chosen-container .chosen-search input[type="text"]{
+	width: 100%;
+}
+th.date-col{
+	width: 180px !important;
+}
+th.stock-col{
+	width: 100px !important;
+}
+th.desc-col{
+	width: 300px !important;
+}
+input.date_field{
+	float: left;
+	width: 90px;
+	margin-right: 10px;
+	margin-top: 4px;
+}
+select#kategori-filter{
+	height: 23px !important;
+}
+#tabel_produk_length select{
+	height: 23px !important;
+}
+#multidiv{
+	float: left;
+	margin-top: -3px;
+	margin-left: 10px;
+}
+#multidiv a{
+	float: left;
+}
+form.editable-select select{
+	width : 150px !important;
+	margin: 0 !important;
+}
+form.gst-separator{
+	padding: 10px;
+	border: 2px solid #999;
+	width: 100%;
+	border-radius: 6px;
+}
+.gst-form-wrapper{
+	float: left;
+	width: 100%;
+	margin-bottom: 15px;
+}
+.gst-from-wrapper-all{
+	width: 25%;
+	float: left;
+	padding: 0px 0px 0px 20px;
+}
+.gst-table-wrapper{
+	width: 70%;
+	float: left;
+	padding-bottom: 20px;
+}
+.float-left-full{
+	float: left !important;
+	width: 100% !important;
+}
+.group{
+	background-color: #FCE09F !important;
+}
+.group-total{
+	background-color: #FCF7CF !important;
 }

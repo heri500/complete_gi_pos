@@ -15,9 +15,15 @@ var currSym = '';
 var tSep = '.';
 var dSep = ',';
 var dDigit = 0;
-
+var PilihanPelanggan = '';
 function tampiltabeljual(){
 	if (tampilData == 0){
+        var TargetDisabled = [ 0,3,12,14,15,16, 17, 18 ];
+        if (Drupal.settings.module_piutang_exists){
+            var ArrayColumn = [1,2,3,4,5,6,7,8,9,10,11,12,13];
+        }else{
+            var ArrayColumn = [1,2,3,4,5,6,7,8,9,10,11,12];
+        }
 		oTable = $('#tabel_penjualan').dataTable( {
 			'bJQueryUI': true,
 			'bAutoWidth': false,
@@ -28,16 +34,17 @@ function tampiltabeljual(){
 			'aaSorting': [[urutan, 'desc']],
 			'processing': true,
 			'serverSide': true,
-			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan&tglawal='+ tglAwal +'&tglakhir='+ tglAkhir +'&idpelanggan='+ Drupal.settings.filterId,
+			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan&tglawal='+ tglAwal +'&tglakhir='+ tglAkhir +'&idpelanggan='+ Drupal.settings.filterId +'&gst_access='+ Drupal.settings.gst_access,
 			buttons: [
 				{
 					extend: 'colvis',
-					columns: [1,2,3,4,5,6,7,8,9,10,11]
+					columns: ArrayColumn
 				}, 'copy', 'excel', 'print'
 			],
-			'sDom': '<"button-div"B><"H"lfr>t<"F"ip>',
+			'sDom': '<"button-div"B><"H"l<"#multidiv">fr>t<"F"ip>',
 			'createdRow': function ( row, data, index ) {
 				row.id = data[(data.length - 1)];
+				row.idpelanggan = data[(data.length - 2)];
 				$('td', row).eq(1).addClass('center');
 				$('td', row).eq(2).addClass('center');
 				$('td', row).eq(3).addClass('center');
@@ -66,12 +73,33 @@ function tampiltabeljual(){
                 }).attr('id','bayar-'+ row.id);
 				$('td', row).eq(11).addClass('angka');
 				$('td', row).eq(12).addClass('center');
-				$('td', row).eq(13).addClass('center');
+				var PilihanPelanggan = Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=opsipelanggan&idpelanggan='+ row.idpelanggan;
+				$('td', row).eq(13).addClass('center').editable(alamatupdate,{
+					submitdata : function(value, settings) {
+						var idpenjualan = row.id;
+						var idpelanggan = row.idpelanggan;
+						return { ubah: 'pelanggan' };
+					},
+					name    : 'pelanggan',
+					loadurl : PilihanPelanggan,
+					width   : 120,
+					height  : 20,
+					type    : 'select',
+					style : 'width: 200px',
+					cssclass : 'editable-select',
+					submit  : 'Ok',
+					tooltip   : 'Klik untuk mengubah pelanggan',
+					indicator : 'Saving...',
+					callback : function(value, settings) {
+						oTable.fnDraw();
+					}
+				}).attr('id',row.id +'-'+ row.idpelanggan);
 				$('td', row).eq(14).addClass('center');
                 $('td', row).eq(15).addClass('center');
+				$('td', row).eq(16).addClass('center');
 			},
             'aoColumnDefs': [
-                { 'bSortable': false, 'aTargets': [ 0,3,12,14,15,16 ] }
+                { 'bSortable': false, 'aTargets': TargetDisabled }
             ],
 			'footerCallback': function ( row, data, start, end, display ) {
 				var api = this.api(), data;
@@ -171,7 +199,11 @@ function tampiltabeljual(){
 			'aaSorting': [[urutan, 'desc']],
 			'processing': true,
 			'serverSide': true,
-			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan2&tglawal='+ tglAwal +'&tglakhir='+ tglAkhir +'&idsupplier='+ Drupal.settings.filterId,
+			'language' : {
+				decimal   : dSep,
+				thousands : tSep,
+			},
+			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan2&tglawal='+ tglAwal +'&tglakhir='+ tglAkhir +'&idpelanggan='+ Drupal.settings.filterId +'&gst_access='+ Drupal.settings.gst_access,
 			buttons: [
 				{
 					extend: 'colvis'
@@ -181,6 +213,7 @@ function tampiltabeljual(){
 			'createdRow': function ( row, data, index ) {
 				row.id = data[(data.length - 1)];
 				$('td', row).eq(0).addClass('center');
+				$('td', row).eq(2).addClass('angka');
 				$('td', row).eq(3).addClass('angka');
 				$('td', row).eq(4).addClass('angka');
 				$('td', row).eq(5).addClass('angka');
@@ -188,7 +221,6 @@ function tampiltabeljual(){
 				$('td', row).eq(7).addClass('angka');
 				$('td', row).eq(8).addClass('angka');
 				$('td', row).eq(9).addClass('angka');
-				$('td', row).eq(10).addClass('angka');
 			},
 			'footerCallback': function ( row, data, start, end, display ) {
 				var api = this.api(), data;
@@ -205,6 +237,16 @@ function tampiltabeljual(){
                     return parseFloat(i);
                 };
                 // Total over all pages
+				total = api
+					.column( 7 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 7 ).footer() ).html(
+					currSym +' '+ number_format(total,dDigit,dSep,tSep)
+				).addClass('angka');
 				total = api
 					.column( 8 )
 					.data()
@@ -225,16 +267,6 @@ function tampiltabeljual(){
 				$( api.column( 9 ).footer() ).html(
 					currSym +' '+ number_format(total,dDigit,dSep,tSep)
 				).addClass('angka');
-				total = api
-					.column( 10 )
-					.data()
-					.reduce( function (a, b) {
-						return intVal(a) + intVal(b);
-					}, 0 );
-				// Update footer
-				$( api.column( 10 ).footer() ).html(
-					currSym +' '+ number_format(total,dDigit,dSep,tSep)
-				).addClass('angka');
 			},
 		});
 	}else if (tampilData == 2){
@@ -248,7 +280,7 @@ function tampiltabeljual(){
 			'aaSorting': [[urutan, 'desc']],
 			'processing': true,
 			'serverSide': true,
-			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan3&tglawal='+ tglAwal +'&tglakhir='+ tglAkhir,
+			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan3&tglawal='+ tglAwal +'&tglakhir='+ tglAkhir +'&gst_access='+ Drupal.settings.gst_access,
 			buttons: [
 				{
 					extend: 'colvis'
@@ -535,6 +567,18 @@ function delete_penjualan(idpenjualan, nonota){
 	}
 }
 
+function SyncRequest(){
+    var AlamatSync = pathutama + 'penjualan/syncpenjualan';
+    $.ajax({
+        url: AlamatSync,
+        type: 'POST',
+        cache: false,
+        success: function(data){
+            oTable.fnDraw();
+        },
+    });
+}
+
 $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
 	alamatupdatepenjualan = pathutama + 'penjualan/updatedetailpenjualan';
@@ -562,6 +606,9 @@ $(document).ready(function(){
 	$('button').button();
 	/*TableToolsInit.sSwfPath = pathutama +'misc/media/datatables/swf/ZeroClipboard.swf';*/
 	tampiltabeljual();
+
+	setInterval(oTable.fnDraw(), 120000);
+	
 	$('#tgl1').datepicker({
 		changeMonth: true,
 		changeYear: true,
@@ -673,6 +720,8 @@ $(document).ready(function(){
 	$('#print-slip').on('click', function(){
 		print_penjualan(selectedPenjualan,selectedNota);
 	});
+
+	/* Upload data to report server */
 	alamat = pathutama + 'datapremis/uploaddata';
 	$.ajax({
 		type: 'POST',
@@ -680,6 +729,27 @@ $(document).ready(function(){
 		cache: false,
 		success: function (data) {
 
+		}
+	});
+	var SyncButton = '<a onclick="SyncRequest()" class="dt-button" tabindex="0" aria-controls="tabel_penjualan"><span>Sync Penjualan</span></a>';
+    $('.button-div .dt-buttons').append(SyncButton);
+	/* End upload data */
+    $('#idpelanggan').chosen();
+	$('#multidiv').append($('#print-multi-nota'));
+	$('#print-multi-nota').on('click', function(){
+		var selected_nota = '';
+		var counterData = 0;
+		$('.penjualan-select').each(function(){
+			if ($(this).is(':checked')){
+				var strID = $(this).val();
+				selected_nota += '<option value="'+ strID +'" selected>'+ strID +'</option>';
+				counterData++;
+			}
+		});
+		if (selected_nota != ''){
+			$('#idpenjualan-select').empty();
+			$('#idpenjualan-select').append(selected_nota);
+			$('#print-multi-form').submit();
 		}
 	});
 })

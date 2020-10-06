@@ -512,6 +512,57 @@ function penjualan_menu()
         'type' => MENU_CALLBACK,
         'file' => 'android.monitor.inc'
     );
+    $items['penjualan/getdefaultprinter'] = array(
+        'title' => t('Get Default Printer'),
+        'description' => 'Get default printer',
+        'page callback' => 'get_default_printer_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Customer Order'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['penjualan/syncpenjualan'] = array(
+        'title' => t('Get Default Printer'),
+        'description' => 'Get default printer',
+        'page callback' => 'sync_penjualan_temp_rest',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['penjualan/viewpenjualantemp'] = array(
+        'title' => t('Data Penjualan Temporary'),
+        'description' => 'Data Penjualan Temporary',
+        'page callback' => 'table_penjualan_temp_view',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'table.penjualan.temp.inc'
+    );
+    $items['penjualan/updatecustomerorder'] = array(
+        'title' => t('Update customer order'),
+        'description' => 'Update customer order',
+        'page callback' => 'update_customer_order_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/printmulti'] = array(
+        'title' => t('Print Multi Nota'),
+        'description' => 'Print Multi Nota',
+        'page callback' => 'print_multi_nota',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['penjualan/penjualanbypelanggan'] = array(
+        'title' => t('Total Penjualan Per Pelanggan'),
+        'description' => 'Total Penjualan Per Pelanggan',
+        'page callback' => 'total_penjualan_by_pelanggan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Penjualan Produk'),
+        'type' => MENU_CALLBACK,
+        'file' => 'penjualan.bypelanggan.inc'
+    );
     return $items;
 } // end hook menu
 
@@ -521,7 +572,7 @@ function penjualan_perm() {
 		'Input Laundry','Input Customer Order','Admin Data Customer Order',
 		'Access Data Customer Order','Rest Insert Customer Order',
         'Admin Form Kasir','Access Check Product','Delete Data Penjualan Produk',
-        'Delete Petty Cash'
+        'Delete Petty Cash', 'Admin Return Penjualan Produk'
 	);
 }
 
@@ -536,7 +587,7 @@ function get_updated_penjualan(){
 	$strSQL = 'SELECT idpenjualan, nonota, idtitipanlaundry, idcustomerorder, tglpenjualan, idpemakai, ';
 	$strSQL .= 'idpelanggan, total, totalmodal, carabayar, bayar, kembali, perlakuankembalian, ';
 	$strSQL .= 'nokartu, keterangan, insert_date ';
-	$strSQL .= 'FROM penjualan WHERE uploaded=0';
+	$strSQL .= 'FROM penjualan WHERE uploaded = 0 AND process_upload = 0';
 	$result = db_query($strSQL);
 	$dataPenjualan = array();
 	while ($data = db_fetch_array($result)){
@@ -782,6 +833,9 @@ function hapus_penjualan(){
             db_query('DELETE FROM detailpenjualan WHERE iddetail = %d', $IdDetail);
         }
         db_query('DELETE FROM penjualan WHERE idpenjualan = %d', $IdPenjualan);
+        if (!empty($DataPenjualan['info']->idpelanggan)){
+            syncHutangPelanggan($DataPenjualan['info']->idpelanggan);
+        }
     }
     exit();
 }
@@ -860,4 +914,15 @@ function fix_penjualan_bayar(){
         }
     }
     return $FixedData;
+}
+
+function get_default_printer_ajax(){
+    $IpAddress = ip_address();
+    $StrSql = "SELECT printer_name FROM default_printer WHERE ip_address='%s'";
+    $DefaultPrinter = db_result(db_query($StrSql, $IpAddress));
+    if (empty($DefaultPrinter)){
+        $DefaultPrinter = 'none';
+    }
+    print $DefaultPrinter;
+    exit();
 }

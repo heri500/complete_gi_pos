@@ -10,6 +10,8 @@ var currSym = '';
 var tSep = '.';
 var dSep = ',';
 var dDigit = 0;
+var alamatupdate = '';
+var AlamatMeja = '';
 
 function tampiltabelcustomerorder(){
 	if (Drupal.settings.urutan == 1){
@@ -20,38 +22,50 @@ function tampiltabelcustomerorder(){
 			'bInfo': true,
 			'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
 			'iDisplayLength': 100,
-			'order': [[ 9, "desc" ]],
+			'order': [[ 4, "desc" ]],
 			'processing': true,
 			'serverSide': true,
 			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=customerorder&tglawal='+ Drupal.settings.tglawal +'&tglakhir='+ Drupal.settings.tglakhir,
 			buttons: [
 				{
 					extend: 'colvis',
-					columns: [4,5,6,7,8,9,10,11,12,13,14,15]
+					columns: [4,5,6,7,8,9,10,11,12,13,14,15,16]
 				}, 'copy', 'excel', 'print'
 			],
-			'sDom': '<"button-div"B><"H"lfr>t<"F"ip>',
+			'sDom': '<"button-div"B><"H"l<"#multidiv">fr>t<"F"ip>',
 			'createdRow': function ( row, data, index ) {
 				row.id = data[(data.length - 1)];
 				$('td', row).eq(1).addClass('center');
 				$('td', row).eq(2).addClass('center');
 				$('td', row).eq(3).addClass('center');
 				$('td', row).eq(4).addClass('center');
-				$('td', row).eq(5).addClass('center');
+				$('td', row).eq(5).addClass('center').editable(alamatupdate, {
+					'submitdata': function ( value, settings ) {
+						return { 'row_id': this.parentNode.getAttribute('id'), 'ubah': 'meja' };
+					},
+					'loadurl' : AlamatMeja,
+					'width': '100px',
+					'height': '20px',
+					'submit': 'Ok',
+					'type': 'select',
+					'indicator': 'Menyimpan...',
+					'tooltip': 'Klik untuk mengubah meja...'
+				});
 				$('td', row).eq(6).addClass('center');
 				$('td', row).eq(7).addClass('center');
 				$('td', row).eq(8).addClass('center');
-				$('td', row).eq(9).addClass('angka');
+				$('td', row).eq(9).addClass('center');
 				$('td', row).eq(10).addClass('angka');
-                $('td', row).eq(11).addClass('angka');
-                $('td', row).eq(12).addClass('angka');
-				$('td', row).eq(13).addClass('center');
-				$('td', row).eq(14).addClass('angka');
+				$('td', row).eq(11).addClass('angka');
+				$('td', row).eq(12).addClass('angka');
+				$('td', row).eq(13).addClass('angka');
+				$('td', row).eq(14).addClass('center');
 				$('td', row).eq(15).addClass('angka');
-				$('td', row).eq(16).addClass('center');
+				$('td', row).eq(16).addClass('angka');
 				$('td', row).eq(17).addClass('center');
 				$('td', row).eq(18).addClass('center');
 				$('td', row).eq(19).addClass('center');
+				$('td', row).eq(20).addClass('center');
 			},
 			'drawCallback': function( settings ) {
 				var renderer = "bmp";
@@ -67,7 +81,14 @@ function tampiltabelcustomerorder(){
 				});
 			},
 			"aoColumnDefs": [
-				{ "bSortable": false, "aTargets": [ 0,1,2,3,4,6,8,12,13,16,18 ] }
+                {
+                    "bSortable": false,
+                    "aTargets": [0, 1, 2, 3, 5, 9, 13, 14, 17, 19, 22, 23]
+                },
+                {
+                    "targets": [6, 8, 17, 20],
+                    "visible": false
+                }
 			],
 			'footerCallback': function ( row, data, start, end, display ) {
 				var api = this.api(), data;
@@ -85,28 +106,16 @@ function tampiltabelcustomerorder(){
                 };
 				// Total over all pages
 				total = api
-					.column( 10 )
+					.column( 11 )
 					.data()
 					.reduce( function (a, b) {
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
                 total = parseFloat(Math.abs(total)).toFixed(2);
-				$( api.column( 10 ).footer() ).html(
+				$( api.column( 11 ).footer() ).html(
 					currSym +' '+ number_format(total,dDigit,dSep,tSep)
 				).addClass('angka');
-
-                total = api
-                    .column( 11 )
-                    .data()
-                    .reduce( function (a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0 );
-                // Update footer
-                total = parseFloat(Math.abs(total)).toFixed(2);
-                $( api.column( 11 ).footer() ).html(
-                    currSym +' '+ number_format(total,dDigit,dSep,tSep)
-                ).addClass('angka');
 
                 total = api
                     .column( 12 )
@@ -120,18 +129,19 @@ function tampiltabelcustomerorder(){
                     currSym +' '+ number_format(total,dDigit,dSep,tSep)
                 ).addClass('angka');
 
+                total = api
+                    .column( 13 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+                // Update footer
+                total = parseFloat(Math.abs(total)).toFixed(2);
+                $( api.column( 13 ).footer() ).html(
+                    currSym +' '+ number_format(total,dDigit,dSep,tSep)
+                ).addClass('angka');
 
-				total = api
-					.column( 14 )
-					.data()
-					.reduce( function (a, b) {
-						return intVal(a) + intVal(b);
-					}, 0 );
-				// Update footer
-				total = parseFloat(Math.abs(total)).toFixed(2);
-				$( api.column( 14 ).footer() ).html(
-					currSym +' '+ number_format(total,dDigit,dSep,tSep)
-				).addClass('angka');
+
 				total = api
 					.column( 15 )
 					.data()
@@ -141,6 +151,17 @@ function tampiltabelcustomerorder(){
 				// Update footer
 				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 15 ).footer() ).html(
+					currSym +' '+ number_format(total,dDigit,dSep,tSep)
+				).addClass('angka');
+				total = api
+					.column( 16 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
+				$( api.column( 16 ).footer() ).html(
 					currSym +' '+ number_format(total,dDigit,dSep,tSep)
 				).addClass('angka');
 			},
@@ -192,7 +213,15 @@ function tampiltabelcustomerorderdetail(selectedId){
 				tooltip   : 'Klik untuk mengubah jumlah barang',
 				indicator : 'Saving...',
 				callback : function(value, settings) {
+					var QtyPrint = parseFloat(value) - $('#qtyprint-'+ row.id).val();
 					oTable2.fnDraw();
+					setTimeout(function(){
+						if (QtyPrint > 0){
+							$('#qtyprint-'+ row.id).val(QtyPrint);
+						}else{
+							$('#qtyprint-'+ row.id).val(value);
+						}
+					},500);
 				}
 			});
 			$('td', row).eq(4).addClass('angka');
@@ -201,6 +230,15 @@ function tampiltabelcustomerorderdetail(selectedId){
 			$('td', row).eq(7).addClass('angka');
 			$('td', row).eq(8).addClass('center');
 			$('td', row).eq(9).addClass('center');
+			$('td', row).eq(11).attr('id','keterangan-'+ data[(data.length - 1)]).editable(alamatupdatedetailorder,{
+				name : 'keterangan',
+				width : 100,
+				height : 18,
+				select: true,
+				style   : 'margin: 0',
+				tooltip   : 'Klik untuk mengisi keterangan',
+				indicator : 'Saving...'
+			});
 		},
 		'footerCallback': function ( row, data, start, end, display ) {
 			var api = this.api(), data;
@@ -303,7 +341,8 @@ function panggil_pelanggan(nopanggil){
 function print_detail_order(id_order, id_detail_order, namaproduct){
     var konfirmasi = confirm('Yakin ingin mencetak order '+ namaproduct +' ini di tempat produksi nya..??!');
     if (konfirmasi){
-        window.open(pathutama + "print/6?id_order=" + id_order +'&id_detail_order='+ id_detail_order);
+    	var QtyPrint = $('#qtyprint-'+ id_detail_order).val();
+        window.open(pathutama + "print/6?id_order=" + id_order +'&id_detail_order='+ id_detail_order +'&qtyprint='+ QtyPrint);
     }
 }
 
@@ -311,7 +350,8 @@ $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
 	alamatupdatetanggaljual = pathutama + 'penjualan/updatecustomerorder';
 	alamatupdatedetailorder = pathutama + 'penjualan/updatedetailcustomerorder';
-
+	AlamatMeja = pathutama + 'dataproduk/mejaoption';
+	alamatupdate = pathutama + 'penjualan/updatecustomerorder';
 	currSym = Drupal.settings.currSym;
 	tSep = Drupal.settings.tSep;
 	dSep = Drupal.settings.dSep;
@@ -320,7 +360,7 @@ $(document).ready(function(){
 	urutan = Drupal.settings.urutan;
 	$('#dialogdetail').dialog({
 		modal: true,
-		width: 900,
+		width: 1024,
 		resizable: false,
 		autoOpen: false,
 		position: ['middle','center'],
@@ -516,4 +556,21 @@ $(document).ready(function(){
 
 		}
 	});
+    $('#multidiv').append($('#bayar-multi-order'));
+    $('#bayar-multi-order').on('click', function(){
+        var selected_nota = '';
+        var counterData = 0;
+        $('.custord-select').each(function(){
+            if ($(this).is(':checked')){
+                var strID = $(this).val();
+                selected_nota += '<option value="'+ strID +'" selected>'+ strID +'</option>';
+                counterData++;
+            }
+        });
+        if (selected_nota != ''){
+            $('#idcustomerorder-select').empty();
+            $('#idcustomerorder-select').append(selected_nota);
+            $('#bayar-multi-form').submit();
+        }
+    });
 })

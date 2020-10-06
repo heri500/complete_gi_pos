@@ -1,7 +1,7 @@
 <?php
 
 function android_monitor_page(){
-    update_opened_customer_order_table(1);
+    db_query('UPDATE cust_view_open SET table_open = 1');
     $path = drupal_get_path('theme', 'cti_flex');
     $form_style = $path.'/css/custom-style.css';
     drupal_add_css($form_style, 'theme', 'all', FALSE);

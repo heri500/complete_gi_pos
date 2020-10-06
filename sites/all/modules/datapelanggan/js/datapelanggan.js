@@ -13,7 +13,7 @@ function tampilkantabelpelanggan(){
     oTable = $('#tabel_pelanggan').DataTable( {
         'bJQueryUI': true,
         'bAutoWidth': false,
-        'lengthMenu': [[25, 50, 100, -1], [25, 50, 100, 'All']],
+        'lengthMenu': [[100, 200, 500, -1], [100, 200, 500, 'All']],
         'processing': true,
         'serverSide': true,
         'aoColumnDefs': [
@@ -76,6 +76,19 @@ function tampilkantabelpelanggan(){
             $('td', row).eq(8).addClass('angka');
             $('td', row).eq(9).addClass('angka');
             $('td', row).eq(10).addClass('center');
+            var AlamatGrup = Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=option-grup-pelanggan&idpelanggan='+ row.id;
+            $('td', row).eq(11).addClass('editable').editable(alamatupdate, {
+                'submitdata': function ( value, settings ) {
+                    return { 'row_id': this.parentNode.getAttribute('id'), 'kol_id': 11 };
+                },
+                'loadurl' : AlamatGrup,
+                'width': '140px',
+                'height': '20px',
+                'submit': 'Ok',
+                'type': 'select',
+                'indicator': 'Menyimpan...',
+                'tooltip': 'Klik untuk mengubah...'
+            });
         },
         buttons: [
             'copy', 'excel', 'print'
@@ -369,7 +382,7 @@ function tabeldiskon(idpelanggan,namapelanggan){
     });
 }
 function tambahdiskon(){
-    if ($('#idpelanggan').val() > 0 && $('#diskon').val() >= 0){
+    if ($('#idpelanggan').val() > 0 && $('#diskon').val() != 0){
         var request = new Object();
         request.idpelanggan = $('#idpelanggan').val();
         request.idkategori = $('#idkategori').val();
@@ -653,6 +666,7 @@ $(document).ready(function() {
         }
     });
     $('#sync-hutang-pelanggan').on('click', function(){
+        $('#content-area').block();
         alamat = pathutama + 'datapelanggan/synchutangpelanggan';
         $.ajax({
             type: 'POST',
@@ -660,8 +674,35 @@ $(document).ready(function() {
             cache: false,
             success: function(){
                 oTable.draw(false);
+                $('#content-area').unblock();
             }
         });
+    });
+    $('#sync-selected-pelanggan').on('click', function(){
+        $('#content-area').block();
+        var selected_pelanggan = new Array;
+        var counterData = 0;
+        $('.pelanggan-select').each(function(){
+            if ($(this).is(':checked')){
+                selected_pelanggan.push($(this).val());
+                counterData++;
+            }
+        });
+        if (counterData > 0){
+            var request = new Object();
+            request.idpelanggan = selected_pelanggan;
+            alamat = pathutama + 'datapelanggan/synchutangpelanggan';
+            $.ajax({
+                type: 'POST',
+                url: alamat,
+                data: request,
+                cache: false,
+                success: function(){
+                    oTable.draw(false);
+                    $('#content-area').unblock();
+                }
+            });
+        }
     });
     get_product();
 })

@@ -84,6 +84,7 @@ function view_tabel_customerorder(){
     $pilihperiode .= '</div>';
     $pilihperiode .= '</form>';
     $viewcustomerorder = $pilihperiode.'<div id="viewcustomerorder">'.$tabeltampil.'</div>';
+    $viewcustomerorder .= '<a class="dt-button buttons-collection" id="bayar-multi-order">BAYAR YANG DIPILIH</a>';
 	$viewcustomerorder .= '<div id="dialogdetail" title="DETAIL CUSTOMER ORDER">';
 	$viewcustomerorder .= '<div id="table-detail-wrapper"></div>';
 	$viewcustomerorder .= '<div id="add-new-item">';
@@ -102,7 +103,12 @@ function view_tabel_customerorder(){
 	$buttonPrintSlip = '<button id="print-slip">Print Slip</button>';
 	$viewcustomerorder .= $buttonAddNew.'</div>'.$buttonPrintSlip;
 	$viewcustomerorder .= '</div>';
-
+    //Hidden Form untuk submit multi order ke pembayaran
+    $viewcustomerorder .= '<form id="bayar-multi-form" method="post" action="'.base_path().'penjualan/kasir" target="_blank" style="display:none;">';
+    $viewcustomerorder .= '<select id="idcustomerorder-select" name="idcustomerorder-select[]" multiple></select>';
+    $viewcustomerorder .= '<input type="submit" value="Bayar">';
+    $viewcustomerorder .= '</form>';
+    //End Hidden Form
 	return $viewcustomerorder;
 }
 
@@ -114,6 +120,7 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
 	$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
 	$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
+    $tabelcustomerorder .= '<th>ID</th>';
 	$tabelcustomerorder .= '<th>MEJA</th>';
 	$tabelcustomerorder .= '<th>BARCODE</th>';
 	$tabelcustomerorder .= '<th>NO. NOTA</th>';
@@ -131,6 +138,7 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th>STATUS</th>';
 	$tabelcustomerorder .= '<th>PERKIRAAN</th>';
 	$tabelcustomerorder .= '<th>KETERANGAN</th>';
+    $tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
     $tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
 	$tabelcustomerorder .= '</tr>';
 	$tabelcustomerorder .= '</thead>';
@@ -158,6 +166,8 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
+    $tabelcustomerorder .= '<th>&nbsp;</th>';
+    $tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '</tr>';
 	$tabelcustomerorder .= '</tfoot>';
 	$tabelcustomerorder .= '</table>';
@@ -165,46 +175,56 @@ function tabel_customerorder($tgl1,$tgl2){
 }
 
 function detail_customerorder(){
-	if ($_POST["idcustomerorder"]){
-		$tabelcustomerorder ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_customerorder">';
-		$tabelcustomerorder .= '<thead>';
-		$tabelcustomerorder .= '<tr>';
-		$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
-		$tabelcustomerorder .= '<th>BARCODE</th>';
-		$tabelcustomerorder .= '<th>PRODUK</th>';
-		$tabelcustomerorder .= '<th>QTY</th>';
-		$tabelcustomerorder .= '<th>DIAMBIL</th>';
-		$tabelcustomerorder .= '<th>SISA</th>';
-		$tabelcustomerorder .= '<th>H.JUAL</th>';
-		$tabelcustomerorder .= '<th>SUBTOTAL</th>';
-		$tabelcustomerorder .= '<th class="qty">PERKIRAAN</th>';
-		$tabelcustomerorder .= '<th class="qty">TGL AMBIL</th>';
+	if ($_POST["idcustomerorder"]) {
+        $tabelcustomerorder = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_customerorder">';
+        $tabelcustomerorder .= '<thead>';
+        $tabelcustomerorder .= '<tr>';
         $tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
-		$tabelcustomerorder .= '</tr>';
-		$tabelcustomerorder .= '</thead>';
-		$tabelcustomerorder .= '<tbody>';
-		$tabelcustomerorder .= '</tbody>';
-		$tabelcustomerorder .= '<tfoot>';
-		$tabelcustomerorder .= '<tr>';
-		$tabelcustomerorder .= '<th>&nbsp;</th>';
-		$tabelcustomerorder .= '<th>&nbsp;</th>';
-		$tabelcustomerorder .= '<th>&nbsp;</th>';
-		$tabelcustomerorder .= '<th>&nbsp;</th>';
-		$tabelcustomerorder .= '<th>&nbsp;</th>';
-		$tabelcustomerorder .= '<th>&nbsp;</th>';
-		$tabelcustomerorder .= '<th>&nbsp;</th>';
-		$tabelcustomerorder .= '<th>&nbsp;</th>';
-		$tabelcustomerorder .= '<th>&nbsp;</th>';
-		$tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>BARCODE</th>';
+        $tabelcustomerorder .= '<th>PRODUK</th>';
+        $tabelcustomerorder .= '<th>QTY</th>';
+        $tabelcustomerorder .= '<th>DIAMBIL</th>';
+        $tabelcustomerorder .= '<th>SISA</th>';
+        $tabelcustomerorder .= '<th>H.JUAL</th>';
+        $tabelcustomerorder .= '<th>SUBTOTAL</th>';
+        $tabelcustomerorder .= '<th class="qty">PERKIRAAN</th>';
+        $tabelcustomerorder .= '<th class="qty">TGL AMBIL</th>';
+        $tabelcustomerorder .= '<th class="qty">PCS</th>';
+        $tabelcustomerorder .= '<th class="qty">KETERANGAN</th>';
+        $tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
+        $tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
+        $tabelcustomerorder .= '</tr>';
+        $tabelcustomerorder .= '</thead>';
+        $tabelcustomerorder .= '<tbody>';
+        $tabelcustomerorder .= '</tbody>';
+        $tabelcustomerorder .= '<tfoot>';
+        $tabelcustomerorder .= '<tr>';
         $tabelcustomerorder .= '<th>&nbsp;</th>';
-		$tabelcustomerorder .= '</tr>';
-		$tabelcustomerorder .= '</tfoot>';
-		$tabelcustomerorder .= '</table>';
-		print $tabelcustomerorder;
-	}
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '<th>&nbsp;</th>';
+        $tabelcustomerorder .= '</tr>';
+        $tabelcustomerorder .= '</tfoot>';
+        $tabelcustomerorder .= '</table>';
+        print $tabelcustomerorder;
+    }
 	exit();
 }
 function customerorder_produk($tgl1,$tgl2){
+    get_number_format($currencySym, $thousandSep, $decimalSep, false );
+    $gstSym = get_gst_symbols(false);
+    $dataPremis = get_data_premis(false);
+    $DecDigit = $dataPremis->decimal_digit;
 	$tgl1 = date('Y-m-d', strtotime($tgl1)).' 00:00';
 	$tgl2 = date('Y-m-d', strtotime($tgl2)).' 23:59';
 	$tabelcustomerorder ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_customerorder">';
@@ -213,13 +233,14 @@ function customerorder_produk($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th>BARCODE</th>';
 	$tabelcustomerorder .= '<th>PRODUCT</th>';
 	$tabelcustomerorder .= '<th class="qty">QTY</th>';
+    $tabelcustomerorder .= '<th class="qty">EKOR/PCS</th>';
 	$tabelcustomerorder .= '<th>H.JUAL</th>';
 	$tabelcustomerorder .= '<th>SUBTOTAL</th>';
 	$tabelcustomerorder .= '</tr>';
 	$tabelcustomerorder .= '</thead>';
 	$tabelcustomerorder .= '<tbody>';
 	$result = db_query("SELECT d.namasupplier, a.tglorder, c.barcode, c.namaproduct, SUM(b.jumlah) AS totalqty, c.hargajual,
-	SUM(b.hargajual*b.jumlah) AS subtotal FROM detailcustomerorder b LEFT JOIN customer_order a ON a.id=b.idcustomerorder
+	SUM(b.hargajual*b.jumlah) AS subtotal, SUM(b.qty_pcs) AS total_pcs, c.satuan FROM detailcustomerorder b LEFT JOIN customer_order a ON a.id=b.idcustomerorder
 	LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN supplier d ON c.idsupplier=d.idsupplier WHERE  a.tglorder BETWEEN '%s' AND '%s'
 	GROUP BY b.idproduct",$tgl1,$tgl2);
 	$totaljual = 0;
@@ -229,7 +250,8 @@ function customerorder_produk($tgl1,$tgl2){
 		$tabelcustomerorder .= '<tr>';
 		$tabelcustomerorder .= '<td>'.$data->barcode.'</td>';
 		$tabelcustomerorder .= '<td>'.$data->namaproduct.'</td>';
-		$tabelcustomerorder .= '<td class="angka">'.$data->totalqty.'</td>';
+		$tabelcustomerorder .= '<td class="angka">'.$data->totalqty.' '.$data->satuan.'</td>';
+        $tabelcustomerorder .= '<td class="angka">'.$data->total_pcs.'</td>';
 		$tabelcustomerorder .= '<td class="angka">'.$data->hargajual.'</td>';
 		$tabelcustomerorder .= '<td class="angka">'.$data->subtotal.'</td>';
 		$tabelcustomerorder .= '</tr>';
@@ -238,8 +260,8 @@ function customerorder_produk($tgl1,$tgl2){
 	$tabelcustomerorder .= '</tbody>';
 	$tabelcustomerorder .= '<tfoot>';
 	$tabelcustomerorder .= '<tr>';
-	$tabelcustomerorder .= '<th style="text-align:right" colspan="4">Total:&nbsp;&nbsp;</th>';
-	$tabelcustomerorder .= '<th style="text-align: right">Rp. '.number_format($totaljual,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelcustomerorder .= '<th style="text-align:right" colspan="5">Total:&nbsp;&nbsp;</th>';
+	$tabelcustomerorder .= '<th style="text-align: right">'.$currencySym.' '.number_format($totaljual,$DecDigit,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
 	$tabelcustomerorder .= '</tr>';
 	$tabelcustomerorder .= '</tfoot>';
 	$tabelcustomerorder .= '</table>';

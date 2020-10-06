@@ -121,4 +121,19 @@ $TerjemahKata = array(
         'Malaysia' => 'baucher',
         'English' => 'voucher',
     ),
+    'lunas' => array(
+        'Indonesia' => 'lunas',
+        'Malaysia' => 'paid',
+        'English' => 'paid',
+    ),
+    'belum lunas' => array(
+        'Indonesia' => 'belum lunas',
+        'Malaysia' => 'unpaid',
+        'English' => 'unpaid',
+    ),
+    'sisa' => array(
+        'Indonesia' => 'sisa',
+        'Malaysia' => 'baki',
+        'English' => 'remaining',
+    ),
 );

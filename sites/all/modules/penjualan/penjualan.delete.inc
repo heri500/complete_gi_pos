@@ -139,11 +139,11 @@ function delete_detail_penjualan($iddetail = null, $idPenjualan = null){
 		$qtyJual = db_result(db_query('SELECT jumlah FROM detailpenjualan WHERE iddetail=%d', $iddetail));
 		$idproduct = db_result(db_query('SELECT idproduct FROM detailpenjualan WHERE iddetail=%d', $iddetail));
 		$stokproduct = db_result(db_query('SELECT stok FROM product WHERE idproduct=%d',$idproduct));
-		$stoksekarang = $stockproduct + $qtyJual;
+		$stoksekarang = $stokproduct + $qtyJual;
 		if (!empty($idproduct)){
 			db_query("UPDATE product SET stok = stok + '%f', uploaded=0, changed=1 WHERE idproduct='%d'",$qtyJual,$idproduct);
 			$keterangan = 'Revisi Penjualan - Hapus Detail Penjualan';
-			db_query("INSERT INTO transaksistock (idproduk, idpenjualan, stocksebelum, keluar, stocksetelah, keterangan) VALUES
+			db_query("INSERT INTO transaksistock (idproduk, idpenjualan, stocksebelum, masuk, stocksetelah, keterangan) VALUES
 				('%d', '%d', '%f', '%f', '%f', '%s')",$idproduct,$idPenjualan,$stokproduct,$qtyJual,$stoksekarang,$keterangan);
 		}
 		/* End Update Stok Product */
@@ -154,13 +154,19 @@ function delete_detail_penjualan($iddetail = null, $idPenjualan = null){
 		/* Update Penjualan */
 		$strSQL = 'SELECT SUM(hargajual*jumlah) AS total_order FROM detailpenjualan WHERE idpenjualan=%d';
 		$totalOrder = db_result(db_query($strSQL,$idPenjualan));
+        $VaucherVal = db_result(db_query('SELECT voucher_value FROM penjualan WHERE idpenjualan=%d',$idPenjualan));
+        $TotalAfterVoucher = $totalOrder - $VaucherVal;
 		$strSQL = 'SELECT SUM(hargapokok*jumlah) AS total_modal FROM detailpenjualan WHERE idpenjualan=%d';
 		$totalModal = db_result(db_query($strSQL,$idPenjualan));
         $strSQL = 'SELECT ppn FROM customer_order WHERE id=%d';
         $PpnValue = db_result(db_query($strSQL));
-        $TotalPlusPpn = $totalOrder + ($totalOrder * $PpnValue/100);
-        $TotalAfterVoucher = $TotalPlusPpn;
-        $TotalRound = round5($TotalPlusPpn);
+        $TotalPlusPpn = $TotalAfterVoucher + ($TotalAfterVoucher * $PpnValue/100);
+        $DecDigitCashier = variable_get('decimal_digit_cashier',0);
+        if ($DecDigitCashier) {
+            $TotalRound = penggenapan($TotalPlusPpn);
+        }else{
+            $TotalRound =  $TotalPlusPpn;
+        }
         $strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\', total_plus_ppn=\'%f\', ';
         $strSQL .= 'total_after_voucher = \'%f\', total_round = \'%f\', ';
         $strSQL .= 'uploaded=0, changed=1  WHERE idpenjualan=%d';

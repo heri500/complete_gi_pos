@@ -118,8 +118,13 @@ function syncHutangPelanggan($idPelanggan = null){
     global $user;
     $strSql = 'SELECT idpelanggan FROM pelanggan';
     if (!empty($idPelanggan)){
-        $strSql .= ' WHERE idpelanggan=%d';
-        $result = db_query($strSql, $idPelanggan);
+        if (!is_array($idPelanggan)) {
+            $strSql .= ' WHERE idpelanggan=%d';
+            $result = db_query($strSql, $idPelanggan);
+        }else{
+            $strSql .= " WHERE idpelanggan IN ('%s')";
+            $result = db_query($strSql, implode(',',$idPelanggan));
+        }
     }else{
         $result = db_query($strSql);
     }
@@ -177,21 +182,26 @@ function getTotalPembayaranHutang(){
 function sync_penjualan_hutang($idPelanggan = null, $periode = null){
     if (!empty($idPelanggan)){
         global $user;
-        $strSQL = "SELECT jual.idpenjualan, jual.total, jual.kembali, jual.carabayar, jual.tglpenjualan ";
-        $strSQL .= "FROM penjualan jual LEFT JOIN detailpiutang piutang ON piutang.idpenjualan = jual.idpenjualan ";
-        $strSQL .= "WHERE jual.idpenjualan NOT IN (SELECT idpenjualan FROM detailpiutang WHERE idpelanggan = %d) ";
-        $strSQL .= "AND jual.idpelanggan = %d AND jual.kembali < 0 ";
+        /* Delete detail piutang */
+        db_query("DELETE FROM detailpiutang WHERE idpelanggan=%d", $idPelanggan);
+        $StrSql = "SELECT jual.idpenjualan, jual.total_plus_ppn, jual.total_after_voucher ";
+        $strSQL = "SELECT jual.idpenjualan, jual.total, jual.total_plus_ppn, jual.total_after_voucher, ";
+        $strSQL .= "jual.kembali, jual.carabayar, jual.tglpenjualan, jual.bayar ";
+        $strSQL .= "FROM penjualan jual ";
+        $strSQL .= "WHERE jual.idpelanggan = %d AND jual.kembali < 0 ";
         if (!empty($periode) && isset($periode['tglawal']) && isset($periode['tglakhir'])){
             $strSQL .= "AND (jual.tglpenjualan BETWEEN '%s' AND '%s')";
         }
         if (!empty($periode) && isset($periode['tglawal']) && isset($periode['tglakhir'])) {
-            $syncResult = db_query($strSQL, $idPelanggan, $idPelanggan, $periode['tglawal'], $periode['tglakhir']);
+            $syncResult = db_query($strSQL, $idPelanggan, $periode['tglawal'], $periode['tglakhir']);
         }else{
-            $syncResult = db_query($strSQL, $idPelanggan, $idPelanggan);
+            $syncResult = db_query($strSQL, $idPelanggan);
         }
         while ($dataPenjualan = db_fetch_object($syncResult)){
+            $TotalHutang = !empty($dataPenjualan->total_after_voucher) ? $dataPenjualan->total_after_voucher : $dataPenjualan->total_plus_ppn;
+            $TotalHutang = $TotalHutang - $dataPenjualan->bayar;
             db_query("INSERT INTO detailpiutang (idpelanggan, idpenjualan, besarhutang) VALUES ('%d','%d','%f')",
-                $idPelanggan,$dataPenjualan->idpenjualan,abs($dataPenjualan->kembali));
+                $idPelanggan,$dataPenjualan->idpenjualan,abs($TotalHutang));
             //$resultpiutang = db_query("SELECT idpelanggan, besarhutang  FROM piutang WHERE idpelanggan='%d'",
             //   $idPelanggan);
             //$datapiutang = db_fetch_object($resultpiutang);

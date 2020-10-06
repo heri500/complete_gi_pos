@@ -6,6 +6,10 @@
  * @return string
  */
 function penjualan($idtitipanlaundry = null, $alamatasal = null){
+    if (isset($_POST['idcustomerorder-select'])){
+        $idtitipanlaundry = $_POST['idcustomerorder-select'];
+        $alamatasal = 'viewcustomerorder';
+    }
 	get_number_format($currencySym, $thousandSep, $decimalSep);
     $gstSym = get_gst_symbols(false);
 	$dataPremis = get_data_premis();
@@ -61,29 +65,82 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 				$labelTgl = 'MASUK';
 			}
 		}else if($alamatasal == 'viewcustomerorder' || $alamatasal == 'orderkeluar'){
-			$titipanlaundry = db_fetch_array(db_query("SELECT custord.id, nonota, tglorder, idpemakai,idmeja,
-			idpelanggan, total, totalmodal, carabayar, bayar, kembali, nokartu, custord.keterangan, insert_date, status_order,
-			users.name,m.meja AS namameja FROM customer_order custord 
-			LEFT JOIN cms_users users ON custord.idpemakai = users.uid
-			LEFT JOIN meja m ON custord.idmeja = m.id 
-			WHERE custord.id=%d",$idtitipanlaundry));
-			if (count($titipanlaundry)){
-				$tgllaundry = explode(' ', $titipanlaundry['tglorder']);
-				$splittgllaundry = explode('-',$tgllaundry[0]);
-				$tglTampilLaundry = $splittgllaundry[2].'-'.$splittgllaundry[1].'-'.$splittgllaundry[0];
-				$idPelanggan = $titipanlaundry['idpelanggan'];
-				$kasirlaundry = $titipanlaundry['name'];
-                $idMeja = $titipanlaundry['idmeja'];
-                $namaMeja = $titipanlaundry['namameja'];
-				$labelKasir = 'ORDER';
-				$labelTgl = 'ORDER';
+            if (!is_array($idtitipanlaundry)) {
+                $titipanlaundry = db_fetch_array(db_query("SELECT custord.id, nonota, tglorder, idpemakai,idmeja,
+			    idpelanggan, total, totalmodal, carabayar, bayar, kembali, nokartu, custord.keterangan, insert_date, status_order,
+			    users.name,m.meja AS namameja FROM customer_order custord 
+			    LEFT JOIN cms_users users ON custord.idpemakai = users.uid
+			    LEFT JOIN meja m ON custord.idmeja = m.id 
+			    WHERE custord.id=%d", $idtitipanlaundry));
+                if (count($titipanlaundry)) {
+                    $tgllaundry = explode(' ', $titipanlaundry['tglorder']);
+                    $splittgllaundry = explode('-', $tgllaundry[0]);
+                    $tglTampilLaundry = $splittgllaundry[2] . '-' . $splittgllaundry[1] . '-' . $splittgllaundry[0];
+                    $idPelanggan = $titipanlaundry['idpelanggan'];
+                    $kasirlaundry = $titipanlaundry['name'];
+                    $idMeja = $titipanlaundry['idmeja'];
+                    $namaMeja = $titipanlaundry['namameja'];
+                    $labelKasir = 'ORDER';
+                    $labelTgl = 'ORDER';
+                    drupal_add_js(
+                        array(
+                            'idmeja' => $idMeja,
+                            'namaMeja' => $namaMeja,
+                        ),
+                        'setting');
+                }
+            }else{
+                $tglTampilLaundry = '';
+                $kasirlaundry = '';
+                $idMeja = array();
+                $namaMeja = array();
+                $labelKasir = 'ORDER';
+                $labelTgl = 'ORDER';
+                $ArrayTgl = array();
+                $ArrayCashier = array();
+                for ($i = 0;$i < count($idtitipanlaundry);$i++){
+                    $titipanlaundry = db_fetch_array(
+                        db_query(
+                            "SELECT custord.id, nonota, tglorder, idpemakai,idmeja,
+			                idpelanggan, total, totalmodal, carabayar, bayar, kembali, nokartu, custord.keterangan, 
+                            insert_date, status_order, users.name,m.meja AS namameja FROM customer_order custord 
+			                LEFT JOIN cms_users users ON custord.idpemakai = users.uid
+			                LEFT JOIN meja m ON custord.idmeja = m.id 
+			                WHERE custord.id=%d", $idtitipanlaundry[$i]
+                        )
+                    );
+                    if (count($titipanlaundry)) {
+                        $idMeja[] = $titipanlaundry['idmeja'];
+                        $namaMeja[] = $titipanlaundry['namameja'];
+                        $idPelanggan = $titipanlaundry['idpelanggan'];
+                        $tgllaundry = explode(' ', $titipanlaundry['tglorder']);
+                        if (!in_array($tgllaundry[0],$ArrayTgl)){
+                            $ArrayTgl[] = $tgllaundry[0];
+                            $splittgllaundry = explode('-', $tgllaundry[0]);
+                            if ($tglTampilLaundry == ''){
+                                $tglTampilLaundry = $splittgllaundry[2] . '-' . $splittgllaundry[1] . '-' . $splittgllaundry[0];
+                            }else{
+                                $tglTampilLaundry .= ', '.$splittgllaundry[2] . '-' . $splittgllaundry[1] . '-' . $splittgllaundry[0];
+                            }
+                        }
+                        if (!in_array($titipanlaundry['name'],$ArrayCashier)){
+                            $ArrayCashier[] = $titipanlaundry['name'];
+                            if ($kasirlaundry == ''){
+                                $kasirlaundry = $titipanlaundry['name'];
+                            }else{
+                                $kasirlaundry .= ', '.$titipanlaundry['name'];
+                            }
+                        }
+                    }
+                }
                 drupal_add_js(
                     array(
                         'idmeja' => $idMeja,
                         'namaMeja' => $namaMeja,
                     ),
                     'setting');
-			}
+            }
+
 		}
 	}
 	$uploadData = false;
@@ -101,7 +158,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 			'upload_data' => $uploadData,
             'dec_digit' => $DecDigit,
             'dec_digit_cashier' => $DecDigitCashier,
-		), 
+		),
 	'setting');
 	$js_path = drupal_get_path('module','penjualan').'/js/kasir.form.new.js';
 	drupal_add_js($js_path);
@@ -168,8 +225,8 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 		$penjualan .= '<a style="padding: 0.4em 0.3em;margin-top: 2px;margin-bottom: 4px;" class="buttonprint" onclick="preventDefault();">NO.RAK : '.$nomerRak.'</a>';
 	}else{
 		$penjualan .= '<div id="tempattombolkasir">';
+        $penjualan .= $panduantombol;
 	}
-	$penjualan .= $panduantombol;
 	$penjualan .= $tombolcari;
 	$penjualan .= $tombolqty;
 	$penjualan .= $tombolhapus;
@@ -294,7 +351,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
     $penjualan .= '<div id="baris_bayar_kredit" class="barisbayar" style="display: none;"><label style="width: 250px;">KAD KREDIT</label>'.$NilaiBayarKredit.'</div>';
     $penjualan .= '<div id="baris_bayar_deposit" class="barisbayar" style="display: none;"><label style="width: 250px;">USE DEPOSIT</label>'.$NilaiBayarDeposit.'</div>';
 	$penjualan .= '<div id="field_kembali" class="barisbayar"><label style="width: 250px;">'.strtoupper(trans('kembali', $dataPremis->bahasa)).'</label>'.$kembali.'</div>';
-	$penjualan .= '<div id="field_kembalian" class="barisbayar" style="display: none;"><label style="width: 250px;">Kembalian</label>'.$perlakuankembalian.'</div>';
+	//$penjualan .= '<div id="field_kembalian" class="barisbayar" style="display: none;"><label style="width: 250px;">Kembalian</label>'.$perlakuankembalian.'</div>';
     $penjualan .= '<div align="center"><button id="simpan-transaksi">'.strtoupper(trans('simpan', $dataPremis->bahasa)).'</button>&nbsp;&nbsp;<button id="selesai-transaksi">SELESAI</button></div>';
 	$penjualan .= '</div>';
 	return $penjualan;
@@ -302,338 +359,289 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 
 function simpan_penjualan(){
     global $user;
-	//nonota, idpemakai, total, bayar, kembali
-	if (isset($_POST["detail_produk"]) AND isset($_POST["bayar"]) >= 0 AND
+    //nonota, idpemakai, total, bayar, kembali
+    if (isset($_POST["detail_produk"]) AND isset($_POST["bayar"]) >= 0 AND
         isset($_POST["totalbelanja"]) AND isset($_POST['totalbelanjappn'])
     ){
-		global $user;
-		if (!empty($user->timezone_name)) {
+        global $user;
+        if (!empty($user->timezone_name)) {
             date_default_timezone_set($user->timezone_name);
         }else{
-		    set_default_time_zone();
+            set_default_time_zone();
         }
-		$waktujual = $_POST["tgljual"]." ".date("H:i:s");
-		$splitTanggal = explode('-', $_POST["tgljual"]);
-		$splitJam = explode(':',date("H:i:s"));
-		$intTanggal = mktime($splitJam[0],$splitJam[1],$splitJam[2],$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
-		$result = db_query("SELECT idpenjualan FROM penjualan ORDER BY idpenjualan DESC LIMIT 1");
-		$data = db_fetch_object($result);
-		if ($data->idpenjualan > 0){
-			$next_id = $data->idpenjualan + 1;
-		}else{
-			$next_id = 1;
-		}
-		$no_nota = buat_nota($next_id);
-		$kembali = $_POST["bayar"] - $_POST["totalbelanjaround"];
-		$perkuankembalian = isset($_POST["perlakuankembalian"]) ? $_POST["perlakuankembalian"] : 0;
-		$idtitipanlaundry = 0;
-		if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){
-			$idtitipanlaundry = $_POST['idtitipanlaundry'];
-		}
-		//$idMeja = $_POST['idmeja'];
+        $waktujual = $_POST["tgljual"]." ".date("H:i:s");
+        $splitTanggal = explode('-', $_POST["tgljual"]);
+        $splitJam = explode(':',date("H:i:s"));
+        $intTanggal = mktime($splitJam[0],$splitJam[1],$splitJam[2],$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
+        $result = db_query("SELECT idpenjualan FROM penjualan_temp ORDER BY idpenjualan DESC LIMIT 1");
+        $data = db_fetch_object($result);
+        if ($data->idpenjualan > 0){
+            $next_id = $data->idpenjualan + 1;
+        }else{
+            $next_id = 1;
+        }
+        $no_nota = buat_nota($next_id);
+        $kembali = $_POST["bayar"] - $_POST["totalbelanjaround"];
+        $perkuankembalian = isset($_POST["perlakuankembalian"]) ? $_POST["perlakuankembalian"] : 0;
+        $idtitipanlaundry = 0;
+        if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){
+            $idtitipanlaundry = $_POST['idtitipanlaundry'];
+        }
+
+        if (isset($_POST['idcustomerorder']) && !empty($_POST['idcustomerorder'])){
+            $IdCustomerOrder = $_POST['idcustomerorder'];
+        }
+        //$idMeja = $_POST['idmeja'];
         $PpnType = variable_get('ppn_type',1);
         if ($PpnType == 1){
             $PpnValue = $_POST["totalbelanja"] * $_POST["ppn"]/100;
         }else{
             $PpnValue = $_POST["totalbelanjappn"] - ($_POST["totalbelanja"] / ((100 + $_POST["ppn"])/100));
         }
-		db_query("INSERT INTO penjualan (nonota, idpemakai, total, bayar, kembali, tglpenjualan, idpelanggan, 
+        $NomerKartu = '';
+        if (isset($_POST['nomerkartu'])){
+            $NomerKartu = $_POST['nomerkartu'];
+        }
+        if (isset($_POST['nomer_kartu_kredit']) && !isset($_POST['nomerkartu'])){
+            $NomerKartu = $_POST['nomer_kartu_kredit'];
+        }else if (isset($_POST['nomer_kartu_kredit']) && isset($_POST['nomerkartu'])){
+            $NomerKartu .= '-'.$_POST['nomer_kartu_kredit'];
+        }
+        if (module_exists('gst_separator')){
+            $StrSql = "SELECT gst_flag FROM penjualan_temp WHERE tglpenjualan BETWEEN '%s' AND '%s' ";
+            $StrSql .= "ORDER BY idpenjualan DESC LIMIT 1";
+            $UseGst = db_result(db_query($StrSql, $_POST["tgljual"].' 00:00', $_POST["tgljual"].' 23:59'));
+            $GstFlag = 1;
+            if ($UseGst == 1 && $PpnValue > 0){
+                $GstFlag = 0;
+            }else if($PpnValue <= 0){
+                $GstFlag = 0;
+            }
+            db_query("INSERT INTO penjualan_temp (nonota, idpemakai, total, bayar, kembali, tglpenjualan, idpelanggan, 
         carabayar, idtitipanlaundry, perlakuankembalian, ppn, total_plus_ppn, ppn_value,bayar_multiple,total_round,
-        voucher_value,voucher_number,total_after_voucher) 
+        voucher_value,voucher_number,total_after_voucher, nokartu, gst_flag) 
 		VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%d', '%s', '%d', '%d', '%f', '%f', '%f', '%s', '%f',
-		'%f','%s','%f')",
-		$no_nota, $user->uid, $_POST["totalbelanja"], $_POST["bayar"], $kembali, $waktujual,
-		$_POST["idpelanggan"],$_POST["carabayar"], $idtitipanlaundry,$perkuankembalian,
-        $_POST["ppn"],$_POST["totalbelanjappn"],$PpnValue,$_POST["bayar_multiple"],$_POST["totalbelanjaround"],
-        $_POST["voucher_value"], $_POST["voucher_number"], $_POST["total_after_voucher"]);
-		$next_id = db_last_insert_id('penjualan', 'idpenjualan');
-		$ExplodeBayar = explode(';',$_POST["bayar_multiple"]);
-		for ($i = 0;$i < count($ExplodeBayar);$i++){
-		    $ExplodeCaraBayar = explode(':',$ExplodeBayar[$i]);
-            $StrSqlCek = "SELECT COUNT(*) FROM penjualan_bayar WHERE idpenjualan=%d AND carabayar='%s'";
-		    $DataBayarExists = db_result(db_query($StrSqlCek, $next_id, $ExplodeCaraBayar[0]));
-		    if (empty($DataBayarExists)) {
-                $StrSqlInsertBayar = "INSERT INTO penjualan_bayar (idpenjualan, carabayar, total_bayar) VALUES (%d, '%s', '%f')";
+		'%f','%s','%f','%s','%d')",
+                $no_nota, $user->uid, $_POST["totalbelanja"], $_POST["bayar"], $kembali, $waktujual,
+                $_POST["idpelanggan"],$_POST["carabayar"], $idtitipanlaundry,$perkuankembalian,
+                $_POST["ppn"],$_POST["totalbelanjappn"],$PpnValue,$_POST["bayar_multiple"],$_POST["totalbelanjaround"],
+                $_POST["voucher_value"], $_POST["voucher_number"], $_POST["total_after_voucher"],$NomerKartu, $GstFlag);
+        }else{
+            db_query("INSERT INTO penjualan_temp (nonota, idpemakai, total, bayar, kembali, tglpenjualan, idpelanggan, 
+        carabayar, idtitipanlaundry, perlakuankembalian, ppn, total_plus_ppn, ppn_value,bayar_multiple,total_round,
+        voucher_value,voucher_number,total_after_voucher, nokartu) 
+		VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%d', '%s', '%d', '%d', '%f', '%f', '%f', '%s', '%f',
+		'%f','%s','%f','%s')",
+                $no_nota, $user->uid, $_POST["totalbelanja"], $_POST["bayar"], $kembali, $waktujual,
+                $_POST["idpelanggan"],$_POST["carabayar"], $idtitipanlaundry,$perkuankembalian,
+                $_POST["ppn"],$_POST["totalbelanjappn"],$PpnValue,$_POST["bayar_multiple"],$_POST["totalbelanjaround"],
+                $_POST["voucher_value"], $_POST["voucher_number"], $_POST["total_after_voucher"],$NomerKartu);
+        }
+
+        $next_id = db_last_insert_id('penjualan_temp', 'idpenjualan');
+        $ExplodeBayar = explode(';',$_POST["bayar_multiple"]);
+        for ($i = 0;$i < count($ExplodeBayar);$i++){
+            $ExplodeCaraBayar = explode(':',$ExplodeBayar[$i]);
+            $StrSqlCek = "SELECT COUNT(*) FROM penjualan_bayar_temp WHERE idpenjualan=%d AND carabayar='%s'";
+            $DataBayarExists = db_result(db_query($StrSqlCek, $next_id, $ExplodeCaraBayar[0]));
+            if (empty($DataBayarExists)) {
+                $StrSqlInsertBayar = "INSERT INTO penjualan_bayar_temp (idpenjualan, carabayar, total_bayar) VALUES (%d, '%s', '%f')";
                 db_query($StrSqlInsertBayar, $next_id, $ExplodeCaraBayar[0], $ExplodeCaraBayar[1]);
-                if (trim($ExplodeCaraBayar[0]) == 'DEPOSIT'){
-                    if (isset($_POST["idpelanggan"]) && !empty($_POST["idpelanggan"])){
-                        $idpelanggan = $_POST["idpelanggan"];
-                        $sisaDeposit = getTotalHutang($idpelanggan) + getTotalPenggunaanDeposit($idpelanggan) - getTotalPembayaran($idpelanggan);
-                        if ($sisaDeposit < 0) {
-                            if (abs($sisaDeposit) < $ExplodeCaraBayar[1]){
-                                $variables['penggunaan'] = abs($sisaDeposit);
-                                $sisaDeposit = 0;
-                            }else{
-                                $variables['penggunaan'] = $ExplodeCaraBayar[1];
-                                $sisaDeposit = abs($sisaDeposit) - $ExplodeCaraBayar[1];
-                            }
-                            $variables['idpelanggan'] = $idpelanggan;
-                            $variables['deposit'] = $sisaDeposit;
-                            $variables['tglbayar'] = $waktujual;
-                            $variables['keterangan'] = 'Penggunaan deposit untuk pembayaran nota : ' . $no_nota . ' Tanggal : ' . $waktujual;
-                            $variables['idpenjualan'] = $next_id;
-                            penggunaandeposit($variables);
-                            syncHutangPelanggan($_POST["idpelanggan"]);
-                        }
+            }
+        }
+        print $next_id;
+        //Hitungan Deposit
+        if ($_POST["carabayar"] == "DEPOSIT") {
+            if (isset($_POST["idpelanggan"]) && !empty($_POST["idpelanggan"])) {
+                $sisaDeposit = getTotalPembayaran($_POST["idpelanggan"]) - (getTotalHutang($_POST["idpelanggan"]) + getTotalPenggunaanDeposit($_POST["idpelanggan"]));
+                $variables['idpelanggan'] = $_POST["idpelanggan"];
+                $variables['deposit'] = $sisaDeposit;
+                $variables['penggunaan'] = $_POST["bayar"];
+                $variables['tglbayar'] = $waktujual;
+                $variables['keterangan'] = 'Penggunaan deposit untuk pembayaran nota : ' . $no_nota . ' Tanggal : ' . $waktujual;
+                $variables['idpenjualan'] = $next_id;
+                penggunaandeposit($variables);
+                syncHutangPelanggan($_POST["idpelanggan"]);
+            }
+        }
+        //End Hitungan deposit
+
+        $pecahdetail = explode("&",$_POST["detail_produk"]);
+        $totalmodal = 0;
+        $StrSqlExecute = "";
+        $StrSqlUpdate = "";
+        $PostPpn = $_POST['ppn'];
+        $Counter = 0;
+        $detailTitipanLaundry = null;
+        $detailCustomerOrder = null;
+        if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){
+            $result = db_query("SELECT iddetail, idproduct, sisa, diambil FROM 
+			detaillaundry WHERE idtitipanlaundry='%d' AND sisa > 0",$_POST['idtitipanlaundry']);
+            while ($data = db_fetch_object($result)){
+                $detailTitipanLaundry[$data->idproduct] = $data;
+            }
+        }else if (isset($_POST['idcustomerorder']) && !empty($_POST['idcustomerorder'])){
+            $IdCustomerOrder = $_POST['idcustomerorder'];
+            if (!is_array($IdCustomerOrder)) {
+                $result = db_query("SELECT id, idproduct, sisa, diambil FROM
+			    detailcustomerorder WHERE idcustomerorder='%d' AND sisa > 0", $IdCustomerOrder);
+                while ($data = db_fetch_object($result)) {
+                    $detailCustomerOrder[$IdCustomerOrder][$data->idproduct] = $data;
+                }
+            }else{
+                for ($i = 0;$i < count($IdCustomerOrder);$i++){
+                    $result = db_query("SELECT id, idproduct, sisa, diambil FROM
+			        detailcustomerorder WHERE idcustomerorder='%d' AND sisa > 0", $IdCustomerOrder[$i]);
+                    while ($data = db_fetch_object($result)) {
+                        $detailCustomerOrder[$IdCustomerOrder[$i]][$data->idproduct] = $data;
                     }
                 }
             }
         }
-		print $next_id;
-		if ($kembali > 0 && $perkuankembalian == 2){
-			if (isset($_POST["idpelanggan"]) && !empty($_POST["idpelanggan"])){
-				$variables['idpelanggan'] = $_POST["idpelanggan"];
-				$variables['hutang'] = getTotalHutang($_POST["idpelanggan"]);
-				$variables['pembayaran'] = $kembali;
-				$variables['tglbayar'] = $waktujual;
-				$variables['idpenjualan'] = $next_id;
-				$variables['idtitipanlaundry'] = $idtitipanlaundry;
-				$variables['keterangan'] = 'Deposit Uang Dari Kembalian Nota Penjualan : '.$no_nota.' Tanggal : '.$waktujual;
-				pembayaranhutang($variables);	
-			}
-		}else if ($kembali < 0 && isset($_POST["idpelanggan"]) && !empty($_POST["idpelanggan"])){
-			db_query("INSERT INTO detailpiutang (idpelanggan, idpenjualan, besarhutang) VALUES ('%d','%d','%f')",
-			$_POST["idpelanggan"],$next_id,abs($kembali));
-			$resultpiutang = db_query("SELECT idpelanggan, besarhutang  FROM piutang WHERE idpelanggan='%d'",
-			$_POST["idpelanggan"]);
-			$datapiutang = db_fetch_object($resultpiutang);
-			if ($datapiutang->idpelanggan){
-				$besarhutangskrg = $datapiutang->besarhutang + abs($kembali);
-				db_query("UPDATE piutang SET besarhutang='%f',uid='%d' WHERE idpelanggan='%d'",
-				$besarhutangskrg,$user->uid,$_POST["idpelanggan"]);
-			}else{
-				db_query("INSERT INTO piutang(idpelanggan,besarhutang,uid)VALUES('%d','%f','%d')",
-				$_POST["idpelanggan"],abs($kembali),$user->uid);	
-			}
-		}
-		/*if ($_POST["carabayar"] == "DEPOSIT"){
-			if (isset($_POST["idpelanggan"]) && !empty($_POST["idpelanggan"])){
-				$sisaDeposit = getTotalPembayaran($_POST["idpelanggan"]) - (getTotalHutang($_POST["idpelanggan"]) + getTotalPenggunaanDeposit($_POST["idpelanggan"]));
-				$variables['idpelanggan'] = $_POST["idpelanggan"];
-				$variables['deposit'] = $sisaDeposit;
-				$variables['penggunaan'] = $_POST["bayar"];
-				$variables['tglbayar'] = $waktujual;
-				$variables['keterangan'] = 'Penggunaan deposit untuk pembayaran nota : '.$no_nota.' Tanggal : '.$waktujual;
-				$variables['idpenjualan'] = $next_id;
-				penggunaandeposit($variables);
-				syncHutangPelanggan($_POST["idpelanggan"]);
-			}
-		}*/
-		$detailTitipanLaundry = null;
-		if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){
-			$result = db_query("SELECT iddetail, idproduct, sisa, diambil FROM 
-			detaillaundry WHERE idtitipanlaundry='%d' AND sisa > 0",$_POST['idtitipanlaundry']);
-			while ($data = db_fetch_object($result)){
-				$detailTitipanLaundry[$data->idproduct] = $data;
-			}
-		}else if (isset($_POST['idcustomerorder']) && !empty($_POST['idcustomerorder'])){
-			$result = db_query("SELECT id, idproduct, sisa, diambil FROM
-			detailcustomerorder WHERE idcustomerorder='%d' AND sisa > 0",$_POST['idcustomerorder']);
-			while ($data = db_fetch_object($result)){
-				$detailCustomerOrder[$data->idproduct] = $data;
-			}
-		}
-		$pecahdetail = explode("&",$_POST["detail_produk"]);
-		$totalmodal = 0;
-		foreach ($pecahdetail as $parameter){
-			$pecahparameter = explode("=",$parameter);
-			$pecahnilai = explode("___",$pecahparameter[1]);
-			$IDPRODUK =	$pecahnilai[0];
-			$QTY = $pecahnilai[1];
-			$HARGAJUAL = $pecahnilai[2];
-			$DISKON = $pecahnilai[3];
-            $batchCode = $pecahnilai[4];
-            $IdSupplier = db_result(db_query('SELECT idsupplier FROM product_supplier WHERE idproduct=%d LIMIT 1', $IDPRODUK));
-			$result = db_query("SELECT type_product, hargapokok,stok FROM product WHERE idproduct='%d'",$IDPRODUK);	
-			$data = db_fetch_object($result);
-			$HARGAPOKOK = $data->hargapokok;
-			$totalmodal = $totalmodal + ($HARGAPOKOK*$QTY);
-			$STOKSEBELUM = $data->stok;
-			db_query("INSERT INTO detailpenjualan(idpenjualan, idproduct, jumlah, hargapokok, hargajual, diskon, ppn, idsupplier) VALUES
-			('%d', '%d', '%f', '%f', '%f', '%f', '%f','%d')",
-			$next_id, $IDPRODUK, $QTY, $HARGAPOKOK, $HARGAJUAL, $DISKON, $_POST["ppn"],$IdSupplier);
-			if ($data->type_product == 0){
-				$STOKSEKARANG = $STOKSEBELUM - $QTY;
-				db_query("UPDATE product SET stok='%f' WHERE idproduct='%d'",$STOKSEKARANG,$IDPRODUK);
-				$KETERANGAN = 'Penjualan';
-				db_query("INSERT INTO transaksistock (idproduk, idpenjualan, stocksebelum, keluar, stocksetelah, keterangan) VALUES 
-				('%d', '%d', '%f', '%f', '%f', '%s')",$IDPRODUK,$next_id,$STOKSEBELUM,$QTY,$STOKSEKARANG,$KETERANGAN);
-			}
-			if (!empty($detailTitipanLaundry) && isset($detailTitipanLaundry[$IDPRODUK])){
-				if ($detailTitipanLaundry[$IDPRODUK]->sisa - $QTY <= 0){
-					$statusDetail = 2;
-				}else{
-					$statusDetail = 1;
-				}
-				$strSQL = "UPDATE detaillaundry SET sisa = sisa - %f, diambil = %d, status_laundry = %d WHERE iddetail = %d";	
-				db_query($strSQL, $QTY, $intTanggal, $statusDetail, $detailTitipanLaundry[$IDPRODUK]->iddetail);
-			}else if(!empty($detailCustomerOrder) && isset($detailCustomerOrder[$IDPRODUK])){
-				if ($detailCustomerOrder[$IDPRODUK]->sisa - $QTY <= 0){
-					$statusDetail = 2;
-				}else{
-					$statusDetail = 1;
-				}
-				$strSQL = "UPDATE detailcustomerorder SET sisa = sisa - %f, diambil = %d, status_order = %d WHERE id = %d";
-				db_query($strSQL, $QTY, $intTanggal, $statusDetail, $detailCustomerOrder[$IDPRODUK]->id);
-			}
-			//Process Check Batch Code pembelian jika ada, jika tidak asumsi FIFO
-            if ($batchCode != 0){
-                $strSQL = "SELECT jumlah FROM detailpembelian WHERE barcode_batch='%s'";
-                $qtyBuy = db_result(db_query($strSQL,$batchCode));
-                $strSQL = "SELECT qty_sell FROM detailpembelian WHERE barcode_batch='%s'";
-                $qtySell = db_result(db_query($strSQL,$batchCode));
-                $qtyLeft = $qtyBuy - $qtySell;
-                $strSQL = "SELECT idpenjualan FROM detailpembelian WHERE barcode_batch='%s'";
-                $idPenjualan = db_result(db_query($strSQL,$batchCode));
-                if ($qtyLeft >= $QTY){
-                    if (!empty($idPenjualan)){
-                        $idPenjualan .= ';'.$next_id;
-                    }else{
-                        $idPenjualan = $next_id;
-                    }
-                    $qtySell = $qtySell + $QTY;
-                    $strSQL = "UPDATE detailpembelian SET qty_sell = '%f', idpenjualan = '%s' WHERE barcode_batch='%s'";
-                    db_query($strSQL,$qtySell,$idPenjualan,$batchCode);
-                }else{
-                    if (!empty($idPenjualan)){
-                        $idPenjualan .= ';'.$next_id;
-                    }else{
-                        $idPenjualan = $next_id;
-                    }
-                    $qtyOther = $qtySell + $QTY - $qtyBuy;
-                    $qtySell = $qtyBuy;
-                    $strSQL = "UPDATE detailpembelian SET qty_sell = '%f', idpenjualan = '%s' WHERE barcode_batch='%s'";
-                    db_query($strSQL,$qtySell,$idPenjualan,$batchCode);
-                    while ($qtyOther > 0){
-                        $strSQL = "SELECT barcode_batch FROM detailpembelian WHERE jumlah > qty_sell AND (barcode_batch != '' AND  barcode_batch IS NOT NULL) ORDER BY expired_date LIMIT 1";
-                        $batchCodeOther = db_result(db_query($strSQL));
-                        if (!empty($batchCodeOther)) {
-                            $strSQL = "SELECT jumlah FROM detailpembelian WHERE barcode_batch='%s'";
-                            $qtyBuy = db_result(db_query($strSQL, $batchCodeOther));
-                            $strSQL = "SELECT qty_sell FROM detailpembelian WHERE barcode_batch='%s'";
-                            $qtySell = db_result(db_query($strSQL, $batchCodeOther));
-                            $qtyLeft = $qtyBuy - $qtySell;
-                            $strSQL = "SELECT idpenjualan FROM detailpembelian WHERE barcode_batch='%s'";
-                            $idPenjualan = db_result(db_query($strSQL, $batchCodeOther));
-                            if ($qtyLeft >= $qtyOther) {
-                                if (!empty($idPenjualan)) {
-                                    $idPenjualan .= ';' . $next_id;
-                                } else {
-                                    $idPenjualan = $next_id;
-                                }
-                                $qtySell = $qtySell + $qtyOther;
-                                $strSQL = "UPDATE detailpembelian SET qty_sell = '%f', idpenjualan = '%s' WHERE barcode_batch='%s'";
-                                db_query($strSQL, $qtySell, $idPenjualan, $batchCodeOther);
-                                $qtyOther = 0;
-                            } else {
-                                if (!empty($idPenjualan)) {
-                                    $idPenjualan .= ';' . $next_id;
-                                } else {
-                                    $idPenjualan = $next_id;
-                                }
-                                $qtyOther = $qtySell + $qtyOther - $qtyBuy;
-                                $qtySell = $qtyBuy;
-                                $strSQL = "UPDATE detailpembelian SET qty_sell = '%f', idpenjualan = '%s' WHERE barcode_batch='%s'";
-                                db_query($strSQL, $qtySell, $idPenjualan, $batchCodeOther);
-                            }
-                        }else{
-                            $qtyOther = 0;
-                        }
-                    }
-                }
+        foreach ($pecahdetail as $parameter){
+            $pecahparameter = explode("=",$parameter);
+            $pecahnilai = explode("___",$pecahparameter[1]);
+            $IDPRODUK =	(int)$pecahnilai[0];
+            $QTY = $pecahnilai[1];
+            $HARGAJUAL = $pecahnilai[2];
+            $DISKON = $pecahnilai[3];
+            $Barcode = $pecahnilai[4];
+            $IdSupplier = $pecahnilai[7];
+            $HARGAPOKOK = $pecahnilai[6];
+            $totalmodal = $totalmodal + ($HARGAPOKOK*$QTY);
+            if ($Counter == 0) {
+                $StrSqlInsert = "INSERT INTO detailpenjualan_temp (idpenjualan, idproduct, jumlah, hargapokok, hargajual, diskon, ppn, idsupplier, qty_pcs) ";
+                $StrSqlInsert .= " VALUES ";
             }else{
-                $qtyOther = $QTY;
-                while ($qtyOther > 0){
-                    $strSQL = "SELECT barcode_batch FROM detailpembelian WHERE jumlah > qty_sell AND (barcode_batch != '' AND  barcode_batch IS NOT NULL) ORDER BY expired_date LIMIT 1";
-                    $batchCodeOther = db_result(db_query($strSQL));
-                    if (!empty($batchCodeOther)) {
-                        $strSQL = "SELECT jumlah FROM detailpembelian WHERE barcode_batch='%s'";
-                        $qtyBuy = db_result(db_query($strSQL, $batchCodeOther));
-                        $strSQL = "SELECT qty_sell FROM detailpembelian WHERE barcode_batch='%s'";
-                        $qtySell = db_result(db_query($strSQL, $batchCodeOther));
-                        $qtyLeft = $qtyBuy - $qtySell;
-                        $strSQL = "SELECT idpenjualan FROM detailpembelian WHERE barcode_batch='%s'";
-                        $idPenjualan = db_result(db_query($strSQL, $batchCodeOther));
-                        if ($qtyLeft >= $qtyOther) {
-                            if (!empty($idPenjualan)) {
-                                $idPenjualan .= ';' . $next_id;
+                $StrSqlInsert = ",";
+            }
+            $StrSqlInsert .= "('".$next_id."', '".$IDPRODUK."', '".$QTY."', '".$HARGAPOKOK."', '";
+            $StrSqlInsert .= $HARGAJUAL."', '".$DISKON."', '".$PostPpn."','".$IdSupplier."','".$pecahnilai[5]."')";
+            $StrSqlExecute .= $StrSqlInsert;
+            if (!empty($detailTitipanLaundry) && isset($detailTitipanLaundry[$IDPRODUK])){
+                if ($detailTitipanLaundry[$IDPRODUK]->sisa - $QTY <= 0){
+                    $statusDetail = 2;
+                }else{
+                    $statusDetail = 1;
+                }
+                $strSQL = "UPDATE detaillaundry SET sisa = sisa - ".$QTY.", diambil = ".$intTanggal.", status_laundry = ".$statusDetail ;
+                $strSQL .= " WHERE iddetail = ".$detailTitipanLaundry[$IDPRODUK]->iddetail.";";
+                db_query($strSQL);
+            }else if(!empty($detailCustomerOrder)){
+                $IdCustomerOrder = $_POST['idcustomerorder'];
+                if (!is_array($IdCustomerOrder) && isset($detailCustomerOrder[$IdCustomerOrder][$IDPRODUK])) {
+                    if ($detailCustomerOrder[$IdCustomerOrder][$IDPRODUK]->sisa - $QTY <= 0) {
+                        $statusDetail = 2;
+                    } else {
+                        $statusDetail = 1;
+                    }
+                    $strSQL = "UPDATE detailcustomerorder SET sisa = sisa - %f, diambil = %d, status_order = %d WHERE id = %d";
+                    db_query($strSQL, $QTY, $intTanggal, $statusDetail, $detailCustomerOrder[$IdCustomerOrder][$IDPRODUK]->id);
+                }else{
+                    $QtyAll = $QTY;
+                    for ($i = 0;$i < count($IdCustomerOrder);$i++){
+                        if (isset($detailCustomerOrder[$IdCustomerOrder[$i]][$IDPRODUK])){
+                            if ($detailCustomerOrder[$IdCustomerOrder[$i]][$IDPRODUK]->sisa - $QtyAll <= 0) {
+                                $statusDetail = 2;
                             } else {
-                                $idPenjualan = $next_id;
+                                $statusDetail = 1;
                             }
-                            $qtySell = $qtySell + $qtyOther;
-                            $strSQL = "UPDATE detailpembelian SET qty_sell = '%f', idpenjualan = '%s' WHERE barcode_batch='%s'";
-                            db_query($strSQL, $qtySell, $idPenjualan, $batchCodeOther);
-                            $qtyOther = 0;
-                        } else {
-                            if (!empty($idPenjualan)) {
-                                $idPenjualan .= ';' . $next_id;
-                            } else {
-                                $idPenjualan = $next_id;
-                            }
-                            $qtyOther = $qtySell + $qtyOther - $qtyBuy;
-                            $qtySell = $qtyBuy;
-                            $strSQL = "UPDATE detailpembelian SET qty_sell = '%f', idpenjualan = '%s' WHERE barcode_batch='%s'";
-                            db_query($strSQL, $qtySell, $idPenjualan, $batchCodeOther);
+                            $strSQL = "UPDATE detailcustomerorder SET sisa = sisa - %f, diambil = %d, status_order = %d WHERE id = %d";
+                            db_query($strSQL, $QTY, $intTanggal, $statusDetail, $detailCustomerOrder[$IdCustomerOrder[$i]][$IDPRODUK]->id);
+                            $QtyAll = $QtyAll - $detailCustomerOrder[$IdCustomerOrder[$i]][$IDPRODUK]->sisa;
                         }
-                    }else{
-                        $qtyOther = 0;
                     }
                 }
             }
-		}
-		if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){
-			$totalLaundry = db_result(db_query("SELECT COUNT(*) FROM detaillaundry WHERE idtitipanlaundry='%d'",$_POST['idtitipanlaundry']));
-			$totalSelesai = db_result(db_query("SELECT COUNT(*) FROM detaillaundry WHERE idtitipanlaundry='%d' AND status_laundry=2",$_POST['idtitipanlaundry']));
-			if ($totalSelesai > 0 && $totalSelesai == $totalLaundry){
-				$statusLaundry = 2;	
-			}else if($totalSelesai > 0 && $totalSelesai < $totalLaundry){
-				$statusLaundry = 1;	
-			}else{
-				$statusLaundry = 0;	
-			}
-			$strSQL = "UPDATE titipanlaundry SET status_laundry=%d WHERE idtitipanlaundry=%d";
-			db_query($strSQL, $statusLaundry, $_POST['idtitipanlaundry']);
-		}else if(isset($_POST['idcustomerorder']) && !empty($_POST['idcustomerorder'])){
-			$totalOrder = db_result(db_query("SELECT COUNT(*) FROM detailcustomerorder WHERE idcustomerorder='%d'",$_POST['idcustomerorder']));
-			$totalSelesai = db_result(db_query("SELECT COUNT(*) FROM detailcustomerorder WHERE idcustomerorder='%d' AND status_order=2",$_POST['idcustomerorder']));
-			if ($totalSelesai > 0 && $totalSelesai == $totalOrder){
-				$statusOrder = 2;
-			}else if($totalSelesai > 0 && $totalSelesai < $totalOrder){
-				$statusOrder = 1;
-			}else{
-				$statusOrder = 0;
-			}
-			$strSQL = "UPDATE customer_order SET status_order=%d WHERE id=%d";
-			db_query($strSQL, $statusOrder, $_POST['idcustomerorder']);
-		}
-		db_query("UPDATE penjualan SET totalmodal='%f' WHERE idpenjualan='%d'",$totalmodal,$next_id);
-		/*if (function_exists('is_connected') && is_connected()){
-			if (function_exists('do_upload_premisdata')){
-				do_upload_premisdata();
-			}
-		}*/
-	}else{
-		print 'error';	
-	}
-	exit();
+            $Counter++;
+        }
+        if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){
+            $totalLaundry = db_result(db_query("SELECT COUNT(*) FROM detaillaundry WHERE idtitipanlaundry='%d'",$_POST['idtitipanlaundry']));
+            $totalSelesai = db_result(db_query("SELECT COUNT(*) FROM detaillaundry WHERE idtitipanlaundry='%d' AND status_laundry=2",$_POST['idtitipanlaundry']));
+            if ($totalSelesai > 0 && $totalSelesai == $totalLaundry){
+                $statusLaundry = 2;
+            }else if($totalSelesai > 0 && $totalSelesai < $totalLaundry){
+                $statusLaundry = 1;
+            }else{
+                $statusLaundry = 0;
+            }
+            $strSQL = "UPDATE titipanlaundry SET status_laundry=".$statusLaundry." WHERE idtitipanlaundry = ".$_POST['idtitipanlaundry'].";";
+            db_query($strSQL);
+        }else if(isset($_POST['idcustomerorder']) && !empty($_POST['idcustomerorder'])){
+            $IdCustomerOrder = $_POST['idcustomerorder'];
+            if (!is_array($IdCustomerOrder)) {
+                $totalOrder = db_result(db_query("SELECT COUNT(*) FROM detailcustomerorder WHERE idcustomerorder='%d'", $IdCustomerOrder));
+                $totalSelesai = db_result(db_query("SELECT COUNT(*) FROM detailcustomerorder WHERE idcustomerorder='%d' AND status_order=2", $IdCustomerOrder));
+                if ($totalSelesai > 0 && $totalSelesai == $totalOrder) {
+                    $statusOrder = 2;
+                } else if ($totalSelesai > 0 && $totalSelesai < $totalOrder) {
+                    $statusOrder = 1;
+                } else {
+                    $statusOrder = 0;
+                }
+                $strSQL = "UPDATE customer_order SET status_order=%d WHERE id=%d";
+                db_query($strSQL, $statusOrder, $IdCustomerOrder);
+            }else{
+                for ($i = 0;$i < count($IdCustomerOrder);$i++){
+                    $totalOrder = db_result(db_query("SELECT COUNT(*) FROM detailcustomerorder WHERE idcustomerorder='%d'", $IdCustomerOrder[$i]));
+                    $totalSelesai = db_result(db_query("SELECT COUNT(*) FROM detailcustomerorder WHERE idcustomerorder='%d' AND status_order=2", $IdCustomerOrder[$i]));
+                    if ($totalSelesai > 0 && $totalSelesai == $totalOrder) {
+                        $statusOrder = 2;
+                    } else if ($totalSelesai > 0 && $totalSelesai < $totalOrder) {
+                        $statusOrder = 1;
+                    } else {
+                        $statusOrder = 0;
+                    }
+                    $strSQL = "UPDATE customer_order SET status_order=%d WHERE id=%d";
+                    db_query($strSQL, $statusOrder, $IdCustomerOrder[$i]);
+                }
+            }
+        }
+        $StrSql = "UPDATE penjualan_temp SET totalmodal='".$totalmodal."' WHERE idpenjualan = ".$next_id.";";
+        db_query($StrSql);
+        db_query($StrSqlExecute);
+    }else{
+        print 'error';
+    }
+    exit();
 }
-function buat_nota($idpenjualan){
+
+function buat_nota_05052019($idpenjualan){
 	if ($idpenjualan > 0 AND $idpenjualan < 10){
-		$no_nota = "N000000".$idpenjualan;	
+		$no_nota = "N000000".$idpenjualan;
 	}elseif ($idpenjualan >= 10 AND $idpenjualan < 100){
 		$no_nota = "N00000".$idpenjualan;	
 	}elseif ($idpenjualan >= 100 AND $idpenjualan < 1000){
 		$no_nota = "N0000".$idpenjualan;	
 	}elseif ($idpenjualan >= 1000 AND $idpenjualan < 10000){
-		$no_nota = "N000".$idpenjualan;	
+		$no_nota = "N000".$idpenjualan;
 	}elseif ($idpenjualan >= 10000 AND $idpenjualan < 100000){
-		$no_nota = "N00".$idpenjualan;	
+		$no_nota = "N00".$idpenjualan;
 	}elseif ($idpenjualan >= 100000 AND $idpenjualan < 1000000){
-		$no_nota = "N0".$idpenjualan;	
+		$no_nota = "N0".$idpenjualan;
 	}elseif ($idpenjualan >= 1000000){
-		$no_nota = "N".$idpenjualan;	
+		$no_nota = "N".$idpenjualan;
 	}
 	return $no_nota;
+}
+function buat_nota($idpenjualan){
+    global $user;
+    if (!empty($user->timezone_name)) {
+        date_default_timezone_set($user->timezone_name);
+    }else{
+        set_default_time_zone();
+    }
+    $DateToday = date('ymd');
+    if ($idpenjualan > 0 AND $idpenjualan < 10){
+        $no_nota = "N".$DateToday."000".$idpenjualan;
+    }elseif ($idpenjualan >= 10 AND $idpenjualan < 100){
+        $no_nota = "N".$DateToday."00".$idpenjualan;
+    }elseif ($idpenjualan >= 100 AND $idpenjualan < 1000){
+        $no_nota = "N".$DateToday."0".$idpenjualan;
+    }elseif ($idpenjualan >= 1000){
+        $no_nota = "N".$DateToday.$idpenjualan;
+    }
+    return $no_nota;
 }
 function hitung_omset($tgl = null){
     global $user;
@@ -651,7 +659,20 @@ function hitung_omset($tgl = null){
 			$tglomset = $tgl;
 		}
 	}
-	$result = db_query("SELECT SUM(total_round) AS totalbelanja FROM penjualan WHERE SUBSTR(tglpenjualan,1,10)='%s'",$tglomset);
+	if (module_exists('gst_separator')){
+        $GstStatus = variable_get('gst_separator_status', 1);
+        if ($GstStatus == 1){
+            if (user_access('Access GST Separator')){
+                $result = db_query("SELECT SUM(total_round) AS totalbelanja FROM penjualan WHERE SUBSTR(tglpenjualan,1,10)='%s'",$tglomset);
+            }else{
+                $result = db_query("SELECT SUM(total_round) AS totalbelanja FROM penjualan WHERE SUBSTR(tglpenjualan,1,10)='%s' AND gst_flag = 1",$tglomset);
+            }
+        }else{
+            $result = db_query("SELECT SUM(total_round) AS totalbelanja FROM penjualan WHERE SUBSTR(tglpenjualan,1,10)='%s'",$tglomset);
+        }
+    }else{
+        $result = db_query("SELECT SUM(total_round) AS totalbelanja FROM penjualan WHERE SUBSTR(tglpenjualan,1,10)='%s'",$tglomset);
+    }
 	$data = db_fetch_object($result);
 	if ($_POST["tglpost"]){
 		print $data->totalbelanja;
@@ -668,7 +689,7 @@ function cari_produk(){
         if (!empty($idBarang)){
             //$result = db_query("SELECT barcode, alt_code, namaproduct, stok, hargajual FROM product WHERE idproduct=%d", $idBarang);
             $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
-		    berlaku_sebelum_zuhur, barcode FROM product WHERE idproduct=%d", $idBarang);
+		    berlaku_sebelum_zuhur, barcode,hargapokok,type_product FROM product WHERE idproduct=%d LIMIT 1", $idBarang);
             $data = db_fetch_object($result);
             if ($data->idproduct) {
                 if (isset($_POST["idpelanggan"]) && !empty($_POST['idpelanggan'])) {
@@ -680,7 +701,11 @@ function cari_produk(){
                     $DISKON = 0;
                 }
                 $takeTime = calculateTakeTime($data->lead_time, $_POST["waktumasuk"], $data->aturan_jam_kerja, $data->berlaku_sebelum_zuhur);
-                print $data->idproduct . ';' . $data->namaproduct . ';' . $data->hargajual . ';' . $DISKON . ';' . $takeTime[0] . ';' . $takeTime[1] .';'. $_POST["katacari"].';'.$data->barcode;
+                $IdSupplier = db_result(db_query('SELECT idsupplier FROM product_supplier WHERE idproduct=%d LIMIT 1', $idBarang));
+                $RetVal = $data->idproduct . ';' . $data->namaproduct . ';' . $data->hargajual . ';' . $DISKON;
+                $RetVal .= ';' . $takeTime[0] . ';' . $takeTime[1] .';'. $_POST["katacari"].';'.$data->barcode;
+                $RetVal .= ';' . $data->hargapokok .';'. $IdSupplier;
+                print $RetVal;
             } else {
                 print "error";
             }
@@ -691,11 +716,11 @@ function cari_produk(){
             }
             if (isset($_POST['freshproduct']) && !empty($_POST['freshproduct'])){
                 $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
-		        berlaku_sebelum_zuhur, barcode FROM product WHERE barcode = '%s' AND status_product = 1 LIMIT 1", $Barcode);
+		        berlaku_sebelum_zuhur, barcode, hargapokok,type_product FROM product WHERE barcode = '%s' AND status_product = 1 LIMIT 1", $Barcode);
             }else {
                 //$sql = "SELECT idproduct,idkategori,namaproduct,hargajual FROM product WHERE alt_code LIKE '$KATACARI' OR barcode LIKE '$KATACARI' OR namaproduct LIKE '$KATACARI'";
                 $result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
-		        berlaku_sebelum_zuhur, barcode FROM product WHERE barcode = '%s' AND status_product = 1 LIMIT 50",
+		        berlaku_sebelum_zuhur, barcode, hargapokok,type_product FROM product WHERE barcode = '%s' AND status_product = 1 LIMIT 50",
                 $Barcode);
             }
             $data = db_fetch_object($result);
@@ -709,7 +734,11 @@ function cari_produk(){
                     $DISKON = 0;
                 }
                 $takeTime = calculateTakeTime($data->lead_time, $_POST["waktumasuk"], $data->aturan_jam_kerja, $data->berlaku_sebelum_zuhur);
-                print $data->idproduct . ';' . $data->namaproduct . ';' . $data->hargajual . ';' . $DISKON . ';' . $takeTime[0] . ';' . $takeTime[1] .';0;'.$data->barcode;
+                $IdSupplier = db_result(db_query('SELECT idsupplier FROM product_supplier WHERE idproduct=%d LIMIT 1', $data->idproduct));
+                $RetVal = $data->idproduct . ';' . $data->namaproduct . ';' . $data->hargajual . ';' . $DISKON;
+                $RetVal .= ';' . $takeTime[0] . ';' . $takeTime[1] .';0;'.$data->barcode;
+                $RetVal .= ';' . $data->hargapokok .';'. $IdSupplier;
+                print $RetVal;
             } else {
                 print "error";
             }
@@ -811,7 +840,7 @@ function view_kasir($idtitipanlaundry = null, $alamatasal = null){
 	if (!empty($idtitipanlaundry)){
 		if (empty($alamatasal) || $alamatasal == 'viewlaundry' || $alamatasal == 'laundrykeluar'){
 			$result = db_query("SELECT b.iddetail, b.idproduct, b.iddetail,c.barcode, c.namaproduct, b.jumlah,
-			b.hargajual, (b.hargajual*b.jumlah) AS subtotal, sisa, diambil FROM
+			b.hargajual, (b.hargajual*b.jumlah) AS subtotal, sisa, diambil, b.detail_nomer_rak FROM
 			detaillaundry b LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN
 			supplier a ON c.idsupplier=a.idsupplier WHERE b.idtitipanlaundry='%d' AND sisa > 0",$idtitipanlaundry);
 			$dataLaundry = array();
@@ -824,15 +853,41 @@ function view_kasir($idtitipanlaundry = null, $alamatasal = null){
 				),
 				'setting');
 		}else if ($alamatasal == 'viewcustomerorder' || $alamatasal == 'orderkeluar'){
-			$result = db_query("SELECT b.id, b.idproduct, c.barcode, c.namaproduct, b.jumlah,
-			b.hargajual, (b.hargajual*b.jumlah) AS subtotal, sisa, diambil FROM
+			if (!is_array($idtitipanlaundry)) {
+                $result = db_query("SELECT b.id, b.idproduct, c.barcode, c.namaproduct, b.jumlah,
+			b.hargajual, (b.hargajual*b.jumlah) AS subtotal, sisa, diambil, b.qty_pcs, c.satuan FROM
 			detailcustomerorder b LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN
 			supplier a ON c.idsupplier=a.idsupplier WHERE b.idcustomerorder='%d' AND
-			sisa > 0",$idtitipanlaundry);
-			$dataOrder = array();
-			while ($data = db_fetch_object($result)){
-				$dataOrder[] = $data;
-			}
+			sisa > 0", $idtitipanlaundry);
+                $dataOrder = array();
+                while ($data = db_fetch_object($result)) {
+                    $dataOrder[] = $data;
+                }
+            }else{
+                $dataOrder = array();
+                $DataOrderDetail = array();
+                $ProductOrder = array();
+                for ($i = 0;$i < count($idtitipanlaundry);$i++){
+                    $result = db_query("SELECT b.id, b.idproduct, c.barcode, c.namaproduct, b.jumlah,
+			        b.hargajual, (b.hargajual*b.jumlah) AS subtotal, sisa, diambil, b.qty_pcs, c.satuan FROM
+			        detailcustomerorder b LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN
+			        supplier a ON c.idsupplier=a.idsupplier WHERE b.idcustomerorder='%d' AND
+			        sisa > 0", $idtitipanlaundry[$i]);
+                    while ($data = db_fetch_object($result)) {
+                        if (!in_array($data->idproduct,$ProductOrder)){
+                            $ProductOrder[] = $data->idproduct;
+                            $DataOrderDetail[$data->idproduct] = $data;
+                        }else{
+                            $DataOrderDetail[$data->idproduct]->sisa = $DataOrderDetail[$data->idproduct]->sisa + $data->sisa;
+                            $DataOrderDetail[$data->idproduct]->jumlah = $DataOrderDetail[$data->idproduct]->jumlah + $data->jumlah;
+                            $DataOrderDetail[$data->idproduct]->qty_pcs = $DataOrderDetail[$data->idproduct]->qty_pcs + $data->qty_pcs;
+                        }
+                    }
+                }
+                foreach ($DataOrderDetail as $IdKey => $DataDetail){
+                    $dataOrder[] = $DataDetail;
+                }
+            }
 			drupal_add_js(
 				array(
 					'data_order' => $dataOrder,
